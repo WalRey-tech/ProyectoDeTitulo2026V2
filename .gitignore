@@ -1,0 +1,20 @@
+# Entorno virtual
+Lib/
+Scripts/
+Include/
+pyvenv.cfg
+
+# Python
+__pycache__/
+*.pyc
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Datos generados (NO subir)
+data/raw/
+data/processed/
