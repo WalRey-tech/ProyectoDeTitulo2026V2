@@ -1,11 +1,11 @@
 SITES = [
     {
-        "universidad": "DUOC",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingeniería en Informática",
+        "universidad": "Universidad de Santiago de Chile",
+        "tipo_institucion": "Universidad",
+        "carrera": "Ingeniería de Ejecución en Computación e Informática",
         "tipo_carrera": "Profesional",
-        "url": "https://www.duoc.cl/carreras/ingenieria-en-informatica/",
+        "url": "https://admision.usach.cl/carreras/ingenieria-de-ejecucion-en-computacion-e-informatica",
         "tipo_extraccion": "css",
-        "selector": "#ficha-tecnica"  # provisional
-    }
+        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+    },
 ]
