@@ -1,79 +1,127 @@
 from bs4 import BeautifulSoup
 from utils import limpiar_texto
 
-# El diccionario de palabras que el "sabueso" buscará en los títulos de las webs
-PALABRAS_CLAVE = [
-    "perfil de egreso", 
-    "perfil del egresado", 
-    "perfil profesional", 
-    "competencias", 
-    "el titulado", 
-    "campo ocupacional",
-    "campo laboral",
-    "descripción de la carrera"
+
+PALABRAS_CLAVE_PRIORITARIAS = [
+    "perfil de egreso",
+    "perfil del egresado",
+    "perfil profesional",
 ]
 
-def buscar_por_palabras_clave(soup):
+PALABRAS_CLAVE_SECUNDARIAS = [
+    "competencias",
+    "el titulado",
+    "descripción de la carrera",
+]
+
+ETIQUETAS_TITULO = ["h1", "h2", "h3", "h4", "h5", "h6", "strong", "b"]
+ETIQUETAS_CONTENIDO = ["p", "ul", "ol", "li", "div"]
+
+
+def extraer_texto_nodo(nodo) -> str:
+    if not nodo:
+        return ""
+
+    texto = nodo.get_text(" ", strip=True)
+    return limpiar_texto(texto)
+
+
+def buscar_contenido_cercano(titulo) -> str:
     """
-    Busca automáticamente el texto rastreando títulos que contengan palabras clave
-    y extrae los párrafos que le siguen.
+    Busca contenido cercano después de un título.
+    Sirve para estructuras tipo:
+    <h2>Perfil de egreso</h2>
+    <div class="list-content"><p>Texto...</p></div>
     """
-    # 1. Buscar en todas las etiquetas que suelen ser títulos o subtítulos
-    etiquetas_titulos = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'strong', 'b'])
-    
-    for etiqueta in etiquetas_titulos:
-        texto_etiqueta = etiqueta.get_text().lower()
-        
-        # Si el título tiene alguna de nuestras palabras clave...
-        if any(palabra in texto_etiqueta for palabra in PALABRAS_CLAVE):
-            contenido = []
-            # Buscar los elementos hermanos que vienen justo debajo del título
-            hermano = etiqueta.find_next_sibling()
-            
-            while hermano:
-                # Si topamos con otro título principal, dejamos de extraer
-                if hermano.name in ['h1', 'h2', 'h3']:
-                    break
-                
-                # Si es un párrafo o una lista de competencias, lo guardamos
-                if hermano.name in ['p', 'ul', 'li', 'div']:
-                    texto_limpio = limpiar_texto(hermano.get_text(separator=" "))
-                    if texto_limpio:
-                        contenido.append(texto_limpio)
-                        
-                hermano = hermano.find_next_sibling()
-            
-            # Si logró recolectar texto debajo del título, lo une y lo devuelve
-            if contenido:
-                return " ".join(contenido)
-                
+
+    contenido = []
+
+    # 1. Buscar hermanos posteriores
+    hermano = titulo.find_next_sibling()
+
+    while hermano:
+        if hermano.name in ["h1", "h2", "h3"]:
+            break
+
+        if hermano.name in ETIQUETAS_CONTENIDO:
+            texto = extraer_texto_nodo(hermano)
+            if texto:
+                contenido.append(texto)
+
+        hermano = hermano.find_next_sibling()
+
+    if contenido:
+        return " ".join(contenido)
+
+    # 2. Si no hay hermanos útiles, buscar el siguiente bloque de contenido
+    siguiente = titulo.find_next(["p", "ul", "ol", "div"])
+
+    if siguiente:
+        return extraer_texto_nodo(siguiente)
+
     return ""
 
-def extraer_por_css(html: str, selector: str) -> str:
+
+def buscar_por_contexto(soup, palabras_clave) -> str:
     """
-    Función híbrida: Intenta usar el buscador automático primero. 
-    Si falla y hay un selector manual, usa el selector.
+    Busca títulos que contengan palabras clave y extrae el contenido asociado.
     """
+
+    titulos = soup.find_all(ETIQUETAS_TITULO)
+
+    for titulo in titulos:
+        texto_titulo = titulo.get_text(" ", strip=True).lower()
+
+        if any(palabra in texto_titulo for palabra in palabras_clave):
+            texto_extraido = buscar_contenido_cercano(titulo)
+
+            if texto_extraido:
+                return texto_extraido
+
+    return ""
+
+
+def extraer_por_css(html: str, selector: str = "") -> str:
+    """
+    Extracción híbrida:
+    1. Si hay selector manual, intenta extraer con CSS.
+    2. Si falla, busca por contexto usando palabras clave.
+    3. Prioriza Perfil de egreso antes que competencias/campo laboral.
+    """
+
     if not html:
         return ""
 
     try:
         soup = BeautifulSoup(html, "lxml")
-        
-        # 1. BÚSQUEDA AUTOMÁTICA INTELIGENTE
-        # Se activa si dejas el selector vacío ("") o le pones un guión ("-") en config.py
-        if not selector or selector.strip() in ["", "-"]:
-            texto_automatico = buscar_por_palabras_clave(soup)
-            if texto_automatico:
-                return texto_automatico
-        
-        # 2. PLAN B: BÚSQUEDA MANUAL (Solo si pusiste algo en config.py y el automático falló)
+
+        # 1. Selector manual
         if selector and selector.strip() not in ["", "-"]:
-            nodo = soup.select_one(selector)
-            if nodo:
-                return limpiar_texto(nodo.get_text(separator=" "))
-                
+            nodos = soup.select(selector)
+
+            if nodos:
+                texto = " ".join(
+                    extraer_texto_nodo(nodo)
+                    for nodo in nodos
+                    if extraer_texto_nodo(nodo)
+                )
+
+                if texto:
+                    return limpiar_texto(texto)
+
+        # 2. Contexto prioritario
+        texto_contexto = buscar_por_contexto(soup, PALABRAS_CLAVE_PRIORITARIAS)
+
+        if texto_contexto:
+            return texto_contexto
+
+        # 3. Contexto secundario
+        texto_secundario = buscar_por_contexto(soup, PALABRAS_CLAVE_SECUNDARIAS)
+
+        if texto_secundario:
+            return texto_secundario
+
     except Exception as e:
         print(f"   [Error en extracción: {e}]")
-        
+
     return ""

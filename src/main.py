@@ -37,8 +37,8 @@ def validar_dataframe(df):
     # Menos que eso, probablemente solo capturó un subtítulo y arruinará el análisis.
     perfiles_cortos = ((df["perfil"].str.len() > 0) & (df["perfil"].str.len() < 150)).sum()
     
-    print(f"✅ Perfiles listos para análisis: {len(df) - perfiles_vacios - perfiles_cortos}")
-    print(f"⚠️ Perfiles vacíos (Revisar selector CSS): {perfiles_vacios}")
+    print(f"✅ Perfiles listos para análisis: {len(df) - perfiles_vacios - perfiles_cortos}") 
+    print(f"⚠️ Perfiles vacíos (Revisar selector CSS): {perfiles_vacios}") 
     print(f"⚠️ Perfiles muy cortos (< 150 caracteres): {perfiles_cortos}")
     print("="*40)
 
