@@ -45,24 +45,6 @@ SITES = [
         "selector": "-"  # Walter
     },
     {
-        "universidad": "Universidad de Playa Ancha",
-        "tipo_institucion": "Universidad",
-        "carrera": "Ingeniería en Informática",
-        "tipo_carrera": "Profesional",
-        "url": "https://www.upla.cl/admision/carreras-profesionales/facultad-de-ingenieria/ingenieria-en-informatica/",
-        "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
-    },
-    {
-        "universidad": "Universidad de Playa Ancha",
-        "tipo_institucion": "Universidad",
-        "carrera": "Ingeniería Civil en Informática",
-        "tipo_carrera": "Profesional",
-        "url": "https://www.upla.cl/admision/carreras-profesionales/facultad-de-ingenieria/ingenieria-civil-informatica/",
-        "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
-    },
-    {
         "universidad": "Universidad de Atacama",
         "tipo_institucion": "Universidad",
         "carrera": "Ingeniería Civil en Computación e Informática",
@@ -554,15 +536,6 @@ SITES = [
         "carrera": "Ingenieria en Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://www.iacc.cl/carrera/ingenieria-en-informatica/?origen=google_ads_carreras&utm_campaign=39844489-_Search_CARRERA_ING_INFORMATICA&utm_source=ppc&utm_medium=google&utm_term=cpl&utm_content=ingenieria-en-informatica&utm_term=ingenier%C3%ADa%20en%20sistemas%20universidades&utm_campaign=IACC_Search_Carrera_Ingenieria_Inform%C3%A1tica&utm_source=adwords&utm_medium=ppc&hsa_acc=3643935547&hsa_cam=21457092417&hsa_grp=167767224914&hsa_ad=705590150535&hsa_src=g&hsa_tgt=kwd-589776510461&hsa_kw=ingenier%C3%ADa%20en%20sistemas%20universidades&hsa_mt=b&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=21457092417&gbraid=0AAAAAqi2tcnc4mlF6prfKC1hCFytIsM7a&gclid=CjwKCAjw46HPBhAMEiwASZpLRHfuoZDNIblNry7ovo2v8t2FkJLsAKlMxZYtNTqT4XptYu05OZwVSxoCjDsQAvD_BwE",
-        "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
-    },
-    {
-        "universidad": "IP Chile",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria en Informatica con mencion en Analitica Avanzada",
-        "tipo_carrera": "Profesional",
-        "url": "https://ipp.cl/carrera/ingenieria-en-informatica-con-mencion-en-analitica-avanzada/",
         "tipo_extraccion": "css",
         "selector": ""  # Lo dejas TOTALMENTE VACÍO
     },
