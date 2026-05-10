@@ -1,20 +1,41 @@
-# Entorno virtual
+# =========================
+# Entorno Virtual
+# =========================
+venv/
+env/
 Lib/
 Scripts/
 Include/
 pyvenv.cfg
 
-# Python
+# =========================
+# Python y Caché
+# =========================
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.pytest_cache/
 
-# Archivos de sistema
+# =========================
+# Archivos de sistema y Editores
+# =========================
 .DS_Store
 Thumbs.db
-
-# VS Code
 .vscode/
+.idea/
 
+# =========================
 # Datos generados (NO subir)
-data/raw/
-data/processed/
+# =========================
+# Ignoramos la carpeta data que está dentro de src
+src/data/raw/
+src/data/processed/
+src/data/
+
+# =========================
+# Variables de Entorno y Seguridad
+# =========================
+# Súper importante para la Fase 4 cuando conectemos PostgreSQL
+.env
+.env.local

@@ -3,7 +3,15 @@ import pandas as pd
 from config import SITES
 from scraper import scrapear_sitio
 
-RUTA_SALIDA = "data/raw/perfiles_egreso_raw.csv"
+# ==========================================
+# CONFIGURACIÓN DE RUTA ABSOLUTA
+# ==========================================
+# 1. Obtenemos la ruta exacta de la carpeta donde está este script (Fase1_Recoleccion)
+DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
+
+# 2. Construimos la ruta: Subimos un nivel ("..") hacia 'src', y luego a 'data/raw'
+RUTA_SALIDA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "raw", "perfiles_egreso_raw.csv"))
+
 
 def limpiar_dataframe(df):
     # Limpieza secundaria por seguridad en Pandas
