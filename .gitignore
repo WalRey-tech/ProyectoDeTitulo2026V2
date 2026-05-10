@@ -26,7 +26,7 @@ Thumbs.db
 .idea/
 
 # =========================
-# Datos generados (NO subir)
+# Datos generados
 # =========================
 # Ignoramos la carpeta data que está dentro de src
 src/data/raw/

@@ -3,14 +3,14 @@
 
 ---
 
-## 🏗️ Estado Actual y Arquitectura
+Estado Actual y Arquitectura
 Recientemente, el proyecto fue reestructurado por completo para pasar de scripts sueltos a un **Pipeline de Datos Industrial**. 
 
 Se crearon 4 fases aisladas con **rutas absolutas**. Esto significa que ahora hay un Data Lake centralizado (`src/data/`) que se genera automáticamente al ejecutar el código. La IA lingüística (spaCy) y la IA matemática (Scikit-Learn) ahora trabajan en cadena hasta generar un archivo `master_data.json`, el cual será la base para nuestra futura aplicación web.
 
 ---
 
-## ⚙️ 1. Preparación del Entorno (Instalación)
+1. Preparación del Entorno (Instalación)
 Antes de ejecutar cualquier código, debes preparar tu entorno local:
 
 1. **Clona el repositorio** y abre la terminal en la raíz del proyecto.
