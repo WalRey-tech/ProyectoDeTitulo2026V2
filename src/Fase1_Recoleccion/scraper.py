@@ -36,7 +36,7 @@ def extraer_con_requests(site):
         site["url"],
         headers=headers,
         timeout=10,
-        verify=False
+        verify=verificar_ssl
     )
 
     response.raise_for_status()
