@@ -2,7 +2,7 @@ import requests
 import time
 import random
 import urllib3
-import urllib3
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from selenium import webdriver
@@ -71,19 +71,34 @@ def extraer_con_selenium(site):
 
 def scrapear_sitio(site):
     perfil = ""
-    metodo_usado = "requests"
+    metodo_usado = ""
 
     try:
-        perfil = extraer_con_requests(site)
+        tipo_extraccion = site.get("tipo_extraccion", "css")
 
-        if not perfil:
-            print(
-                f"⚠️ Requests no extrajo texto para {site.get('universidad')}. "
-                f"Probando Selenium..."
-            )
-
+        if tipo_extraccion == "selenium":
             perfil = extraer_con_selenium(site)
             metodo_usado = "selenium"
+
+            if not perfil:
+                print(
+                    f"⚠️ Selenium no extrajo texto para {site.get('universidad')}. "
+                    f"Probando requests..."
+                )
+                perfil = extraer_con_requests(site)
+                metodo_usado = "requests"
+
+        else:
+            perfil = extraer_con_requests(site)
+            metodo_usado = "requests"
+
+            if not perfil:
+                print(
+                    f"⚠️ Requests no extrajo texto para {site.get('universidad')}. "
+                    f"Probando Selenium..."
+                )
+                perfil = extraer_con_selenium(site)
+                metodo_usado = "selenium"
 
         if not perfil:
             print(
