@@ -40,7 +40,7 @@ if __name__ == "__main__":
         print("❌ Error: No se encontró el archivo de clusters. Ejecuta '01_clustering.py' primero.")
         exit()
         
-    df = pd.read_csv(RUTA_ARCHIVO, sep=';', encoding='utf-8')
+    df = pd.read_csv(RUTA_ARCHIVO, sep=';', encoding='utf-8-sig')
 
     # Detectamos automáticamente cuántos clusters únicos creó el modelo
     num_clusters = df['Cluster'].nunique()
