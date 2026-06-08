@@ -558,8 +558,8 @@ SITES = [
         "selector": ""  # Lo dejas TOTALMENTE VACÍO
     },
     {
-        "universidad": "CTF Santo Tomás",
-        "tipo_institucion": "CTF",
+        "universidad": "CFT Santo Tomás",
+        "tipo_institucion": "CFT",
         "carrera": "Analista Programador",
         "tipo_carrera": "Profesional",
         "url": "https://www.tupuedes.cl/carreras/instituto-profesional/analista-programador-carrera-online/?utm_feeditemid=&utm_device=c&utm_term=estudiar%20informatica&utm_campaign=&utm_source=adwords&utm_medium=ppc&hsa_cam=21913899085&hsa_grp=172965132846&hsa_mt=b&hsa_src=g&hsa_ad=731263310533&hsa_acc=2000824545&hsa_net=adwords&hsa_kw=estudiar%20informatica&hsa_tgt=kwd-296857570521&hsa_ver=3&gad_source=1&gad_campaignid=21913899085&gbraid=0AAAAApT_O1_ofekrjXQ7jzaW0UdAIodUC&gclid=CjwKCAjw46HPBhAMEiwASZpLRCWjrI5f5wYHTi5jZDgbte3ihk4O-xzBMtVyrTXcs5Jw_Ss3kP_YuxoC6ToQAvD_BwE",
@@ -567,8 +567,8 @@ SITES = [
         "selector": ""  # Lo dejas TOTALMENTE VACÍO
     },
     {
-        "universidad": "CTF PUCV (Pontificia Universidad Catolica de Valparaiso)",
-        "tipo_institucion": "CTF",
+        "universidad": "CFT PUCV (Pontificia Universidad Catolica de Valparaiso)",
+        "tipo_institucion": "CFT",
         "carrera": "Tecnico de Nivel Superior en Computacion e Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://cftpucv.cl/computacion-e-informatica/",
