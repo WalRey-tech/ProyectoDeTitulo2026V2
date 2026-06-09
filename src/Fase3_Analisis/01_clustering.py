@@ -9,9 +9,7 @@ Propósito:
     de dimensionalidad y visualización gráfica.
 """
 
-# ==========================================
 # IMPORTACIÓN DE LIBRERÍAS
-# ==========================================
 import os
 import pandas as pd
 import numpy as np
@@ -24,10 +22,8 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# ==========================================
 # CONFIGURACIÓN DE RUTAS INTELIGENTES
-# ==========================================
-# Ubicamos la carpeta actual (Fase3_Analisis)
+# Ubicamos la carpeta actual
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Rutas apuntando al Data Lake central (src/data/processed/)
@@ -39,13 +35,11 @@ RUTA_GRAFICO = os.path.normpath(os.path.join(BASE_DIR, "..", "data", "processed"
 RUTA_FINAL = os.path.normpath(os.path.join(BASE_DIR, "..", "data", "processed", "perfiles_con_clusters.csv"))
 
 if __name__ == "__main__":
-    # ==========================================
     # 1. CARGA DE DATOS (Texto + Vectores)
-    # ==========================================
-    print(f"📂 Verificando archivos base en {os.path.dirname(RUTA_LIMPIOS)}...")
+    print(f"Verificando archivos base en {os.path.dirname(RUTA_LIMPIOS)}...")
     
     if not os.path.exists(RUTA_LIMPIOS) or not os.path.exists(RUTA_VECTORES):
-        print("❌ Error: Faltan archivos de la Fase 2. Ejecuta '01_limpieza_nlp.py' y '02_vectorizacion.py' primero.")
+        print("Error: Faltan archivos de la Fase 2. Ejecuta '01_limpieza_nlp.py' y '02_vectorizacion.py' primero.")
         exit()
 
     print("Cargando matriz de vectores y dataset limpio...")
@@ -56,23 +50,19 @@ if __name__ == "__main__":
     # Cargamos el espacio multidimensional generado por el Transformer
     vectores = np.load(RUTA_VECTORES)
 
-    # ==========================================
     # 2. ALGORITMO DE CLUSTERING (K-MEANS)
-    # ==========================================
-    # Definimos cuántos grupos queremos buscar (4 perfiles detectados).
+    # Definimos cuántos grupos queremos buscar (4 perfiles detectados)
     NUM_CLUSTERS = 4 
 
-    print(f"\n🧠 Aplicando algoritmo K-Means para descubrir {NUM_CLUSTERS} grupos ocultos...")
-    # Inicializamos el modelo. random_state=42 asegura que el resultado sea reproducible.
+    print(f"\nAplicando algoritmo K-Means para descubrir {NUM_CLUSTERS} grupos ocultos...")
+    # Inicializamos el modelo. random_state=42 asegura que el resultado sea REPRODUCIBLE.
     kmeans = KMeans(n_clusters=NUM_CLUSTERS, random_state=42, n_init=10)
 
-    # Entrenamos el modelo con nuestros vectores.
+    # Entrenamos el modelo con nuestros vectores
     df['Cluster'] = kmeans.fit_predict(vectores)
 
-    # ==========================================
     # 3. REDUCCIÓN DE DIMENSIONALIDAD (PCA)
-    # ==========================================
-    print("📉 Comprimiendo 384 dimensiones a 2D para visualización gráfica...")
+    print("Comprimiendo 384 dimensiones a 2D para visualización gráfica...")
     # PCA (Principal Component Analysis) busca los ángulos con mayor varianza
     pca = PCA(n_components=2, random_state=42)
     vectores_2d = pca.fit_transform(vectores)
@@ -81,10 +71,8 @@ if __name__ == "__main__":
     df['Coordenada_X'] = vectores_2d[:, 0]
     df['Coordenada_Y'] = vectores_2d[:, 1]
 
-    # ==========================================
     # 4. VISUALIZACIÓN DE LOS RESULTADOS (GRÁFICO)
-    # ==========================================
-    print("🎨 Generando gráfico de dispersión (Scatter Plot)...")
+    print("Generando gráfico de dispersión (Scatter Plot)")
     plt.figure(figsize=(12, 8))
     sns.set_style("whitegrid")
 
@@ -104,18 +92,16 @@ if __name__ == "__main__":
     plt.ylabel('Componente Principal 2 (Varianza Semántica)', fontsize=12)
     plt.legend(title='Grupo (Cluster)')
 
-    # ==========================================
     # 5. ALMACENAMIENTO DE RESULTADOS
-    # ==========================================
     os.makedirs(os.path.dirname(RUTA_GRAFICO), exist_ok=True)
     
     # Guardar imagen
     plt.savefig(RUTA_GRAFICO, dpi=300, bbox_inches='tight')
-    print(f"\n📸 Gráfico guardado en: {RUTA_GRAFICO}")
+    print(f"\nGráfico guardado en: {RUTA_GRAFICO}")
 
     # Guardar dataset con clusters asignados
     df.to_csv(RUTA_FINAL, index=False, sep=';', encoding='utf-8')
-    print(f"💾 Dataset analítico guardado en: {RUTA_FINAL}")
+    print(f"Dataset analítico guardado en: {RUTA_FINAL}")
 
     # Resumen por consola
     print("\n" + "="*40)

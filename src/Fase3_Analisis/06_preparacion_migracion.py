@@ -11,17 +11,13 @@ Propósito:
     para alimentar la base de datos PostgreSQL y la interfaz web en Next.js (Fase 4).
 """
 
-# ==========================================
 # IMPORTACIÓN DE LIBRERÍAS
-# ==========================================
 import os
 import json
 import pandas as pd
 import numpy as np
 
-# ==========================================
 # CONFIGURACIÓN DE RUTAS INTELIGENTES
-# ==========================================
 # Ubicamos la carpeta actual (Fase3_Analisis)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -30,13 +26,11 @@ RUTA_ENTRADA = os.path.normpath(os.path.join(BASE_DIR, "..", "data", "processed"
 RUTA_JSON = os.path.normpath(os.path.join(BASE_DIR, "..", "data", "processed", "master_data.json"))
 
 if __name__ == "__main__":
-    print("📦 Iniciando empaquetamiento y sellado del Data Pipeline...")
+    print("Iniciando empaquetamiento y sellado del Data Pipeline...")
 
-    # ==========================================
     # 1. CARGA DE DATOS DE DIVERSAS FUENTES
-    # ==========================================
     if not os.path.exists(RUTA_ENTRADA):
-        print("❌ Error: Faltan los datos de clustering. Ejecuta '01_clustering.py' primero.")
+        print("Error: Faltan los datos de clustering. Ejecuta '01_clustering.py' primero.")
         exit()
 
     df = pd.read_csv(RUTA_ENTRADA, sep=';', encoding='utf-8')
@@ -49,9 +43,7 @@ if __name__ == "__main__":
         3: "Ciberseguridad y Control de Riesgos"
     }
 
-    # ==========================================
     # 2. CONSOLIDACIÓN Y LIMPIEZA FINAL
-    # ==========================================
     # Mapeamos los nombres de los clusters
     df['perfil_nombre'] = df['Cluster'].map(nombres_perfiles)
 
@@ -67,9 +59,7 @@ if __name__ == "__main__":
         'coord_x', 'coord_y', 'cluster_id', 'perfil_nombre'
     ]
 
-    # ==========================================
     # 3. GENERACIÓN DE INSIGHTS (PARA EL SCROLL DE NEXT.JS)
-    # ==========================================
     # Estos datos nutrirán los textos destacados (storytelling) de la Landing Page
     insights = {
         "total_carreras": int(len(df_final)),
@@ -79,9 +69,7 @@ if __name__ == "__main__":
         "hallazgo_ciberseguridad": "El 100% de la oferta pura en Ciberseguridad es liderada por Institutos Profesionales."
     }
 
-    # ==========================================
     # 4. EXPORTACIÓN MAESTRA (JSON)
-    # ==========================================
     # Convertimos el DataFrame a una lista de diccionarios (Formato ideal para APIs y DBs)
     data_maestra = {
         "proyecto": "Análisis Semántico Informática Chile 2026",
@@ -96,8 +84,8 @@ if __name__ == "__main__":
         json.dump(data_maestra, f, indent=4, ensure_ascii=False)
 
     print("\n" + "="*60)
-    print("✅ ÉXITO: FASE 3 Y PIPELINE DE DATOS SELLADO.")
-    print(f"📄 Archivo Maestro generado: {RUTA_JSON}")
-    print(f"📊 Total de registros empaquetados: {len(df_final)}")
+    print("ÉXITO: FASE 3 Y PIPELINE DE DATOS SELLADO.")
+    print(f"Archivo Maestro generado: {RUTA_JSON}")
+    print(f"Total de registros empaquetados: {len(df_final)}")
     print("="*60)
-    print("🚀 Siguiente paso: Fase 4 -> Diseño de Tablas en PostgreSQL y Frontend en Next.js.")
+    print("Siguiente paso: Fase 4 -> Diseño de Tablas en PostgreSQL y Frontend en Next.js.")
