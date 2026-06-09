@@ -13,17 +13,13 @@ Propósito:
     Perfil Orientado a Ciberseguridad, Perfil de Desarrollo de Software, etc.).
 """
 
-# ==========================================
 # IMPORTACIÓN DE LIBRERÍAS
-# ==========================================
 import os
 import pandas as pd
 # TfidfVectorizer: Transforma texto en una matriz evaluando la importancia de cada palabra.
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# ==========================================
 # CONFIGURACIÓN DE RUTAS INTELIGENTES
-# ==========================================
 # Ubicamos la carpeta actual (Fase3_Analisis)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,13 +27,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 RUTA_ARCHIVO = os.path.normpath(os.path.join(BASE_DIR, "..", "data", "processed", "perfiles_con_clusters.csv"))
 
 if __name__ == "__main__":
-    # ==========================================
     # 1. CARGA DE DATOS AGRUPADOS
-    # ==========================================
-    print(f"📂 Buscando resultados de clustering en: {RUTA_ARCHIVO}")
+    print(f"Buscando resultados de clustering en: {RUTA_ARCHIVO}")
     
     if not os.path.exists(RUTA_ARCHIVO):
-        print("❌ Error: No se encontró el archivo de clusters. Ejecuta '01_clustering.py' primero.")
+        print("Error: No se encontró el archivo de clusters. Ejecuta '01_clustering.py' primero.")
         exit()
         
     df = pd.read_csv(RUTA_ARCHIVO, sep=';', encoding='utf-8-sig')
@@ -45,9 +39,7 @@ if __name__ == "__main__":
     # Detectamos automáticamente cuántos clusters únicos creó el modelo
     num_clusters = df['Cluster'].nunique()
 
-    # ==========================================
     # 2. CONFIGURACIÓN DEL EXTRACTOR DE PALABRAS (TF-IDF)
-    # ==========================================
     # TF-IDF (Term Frequency - Inverse Document Frequency) es un cálculo estadístico.
     # Premia las palabras que se repiten mucho dentro de un grupo específico, 
     # pero castiga (ignora) las palabras que son muy comunes en todos los grupos a la vez.
@@ -55,12 +47,10 @@ if __name__ == "__main__":
     vectorizador = TfidfVectorizer(max_features=8)
 
     print("\n" + "="*60)
-    print("🧠 ANÁLISIS SEMÁNTICO Y COMPOSICIÓN DE CLUSTERS")
+    print("ANÁLISIS SEMÁNTICO Y COMPOSICIÓN DE CLUSTERS")
     print("="*60)
 
-    # ==========================================
     # 3. ANÁLISIS ITERATIVO POR GRUPO (CLUSTER)
-    # ==========================================
     for i in range(num_clusters):
         # Filtramos el DataFrame para aislar solo las carreras de este cluster (i)
         filtro_cluster = df[df['Cluster'] == i]
@@ -87,11 +77,11 @@ if __name__ == "__main__":
             ejemplos = instituciones_y_carreras.sample(n=cantidad_muestra, random_state=42).tolist()
             
             # 3.3. Impresión de Resultados en Consola
-            print(f"📦 [CLUSTER {i}] - {len(textos_cluster)} programas formativos")
-            print(f"🔑 Top 8 Palabras Clave : {', '.join(palabras_clave)}")
-            print("🎓 Muestra de Ejemplos  :")
+            print(f"[CLUSTER {i}] - {len(textos_cluster)} programas formativos")
+            print(f"Top 8 Palabras Clave : {', '.join(palabras_clave)}")
+            print("Muestra de Ejemplos  :")
             for ej in ejemplos:
                 print(f"   - {ej}")
             print("-" * 60)
             
-    print("✅ Análisis finalizado. Revisa los resultados para 'bautizar' cada cluster.")
+    print("Análisis finalizado. Revisa los resultados para 'bautizar' cada cluster.")

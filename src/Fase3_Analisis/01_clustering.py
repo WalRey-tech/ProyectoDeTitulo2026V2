@@ -9,9 +9,7 @@ Propósito:
     de dimensionalidad y visualización gráfica.
 """
 
-# ==========================================
 # IMPORTACIÓN DE LIBRERÍAS
-# ==========================================
 import os
 import pandas as pd
 import numpy as np
