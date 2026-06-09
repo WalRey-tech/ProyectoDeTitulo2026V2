@@ -87,7 +87,8 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://ubiobio.cl/admision/Todas_las_Carreras/17/Ingenieria_Civil_en_Informatica_Concepcion/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": "",
+        "verificar_ssl": False  # Lo dejas TOTALMENTE VACÍO
     },
     {
         "universidad": "Universidad del Biobío",
@@ -96,7 +97,8 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://ubiobio.cl/admision/Ciencias_Empresariales/21/Ingenieria_de_Ejecucion_en_Computacion_e_Informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": "",
+        "verificar_ssl": False  # Lo dejas TOTALMENTE VACÍO
     },
     {
         "universidad": "Universidad de la Frontera",
@@ -132,7 +134,8 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.umag.cl/?page_id=35",
         "tipo_extraccion": "css",
-        "selector": "#nav-perfil p"  # Brayan
+        "selector": "#nav-perfil p",
+        "verificar_ssl": False  # Brayan
     },
     {
         "universidad": "Universidad de Magallanes",
@@ -141,7 +144,8 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.umag.cl/?page_id=27",
         "tipo_extraccion": "css",
-        "selector": ".elementor-element-516655f"  # Walter
+        "selector": ".elementor-element-516655f",
+        "verificar_ssl": False  # Walter
     },
     {
         "universidad": "Universidad Tecnologica Metropolitana",
@@ -339,7 +343,8 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://advance.umayor.cl/educacion-online/ingenieria-informatica-plan-regular?utm_source=google&utm_medium=cpa&utm_campaign=SNB_AD_00807156_ON_20267&utm_content=RSA1_ex&utm_term=&gad_source=1&gad_campaignid=23076000607&gbraid=0AAAAADtiOMI1iMfo5ZY2WadRR71Q1zVIJ&gclid=CjwKCAjwhqfPBhBWEiwAZo196q-QOm6zr2L98M0Gp4yAELJa9zXl4ci5MQzLJJrfvV5vChRPKrEUeBoCY6wQAvD_BwE",
         "tipo_extraccion": "css",
-        "selector": ".acordion-vespertino > div:nth-child(2)"  # Walter
+        "selector": ".box-acordeones > div:nth-child(1) p",  # Walter
+        "verificar_ssl": False
     },
     {
         "universidad": "Universidad Mayor",
@@ -402,7 +407,8 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://ingenieria.uft.cl/escuela-de-ingenieria/ingenieria-civil-en-informatica-y-telecomunicaciones/",
         "tipo_extraccion": "css",
-        "selector": ".fusion-text.fusion-text-4"  # Walter
+        "selector": ".fusion-text.fusion-text-4",  # Walter
+        "verificar_ssl": False
     },
     {
         "universidad": "Universidad Alberto Hurtado",
@@ -558,8 +564,8 @@ SITES = [
         "selector": ""  # Lo dejas TOTALMENTE VACÍO
     },
     {
-        "universidad": "CTF Santo Tomás",
-        "tipo_institucion": "CTF",
+        "universidad": "CFT Santo Tomás",
+        "tipo_institucion": "CFT",
         "carrera": "Analista Programador",
         "tipo_carrera": "Profesional",
         "url": "https://www.tupuedes.cl/carreras/instituto-profesional/analista-programador-carrera-online/?utm_feeditemid=&utm_device=c&utm_term=estudiar%20informatica&utm_campaign=&utm_source=adwords&utm_medium=ppc&hsa_cam=21913899085&hsa_grp=172965132846&hsa_mt=b&hsa_src=g&hsa_ad=731263310533&hsa_acc=2000824545&hsa_net=adwords&hsa_kw=estudiar%20informatica&hsa_tgt=kwd-296857570521&hsa_ver=3&gad_source=1&gad_campaignid=21913899085&gbraid=0AAAAApT_O1_ofekrjXQ7jzaW0UdAIodUC&gclid=CjwKCAjw46HPBhAMEiwASZpLRCWjrI5f5wYHTi5jZDgbte3ihk4O-xzBMtVyrTXcs5Jw_Ss3kP_YuxoC6ToQAvD_BwE",
@@ -567,8 +573,8 @@ SITES = [
         "selector": ""  # Lo dejas TOTALMENTE VACÍO
     },
     {
-        "universidad": "CTF PUCV (Pontificia Universidad Catolica de Valparaiso)",
-        "tipo_institucion": "CTF",
+        "universidad": "CFT PUCV (Pontificia Universidad Catolica de Valparaiso)",
+        "tipo_institucion": "CFT",
         "carrera": "Tecnico de Nivel Superior en Computacion e Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://cftpucv.cl/computacion-e-informatica/",

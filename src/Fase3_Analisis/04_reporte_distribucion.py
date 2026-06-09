@@ -31,16 +31,16 @@ if __name__ == "__main__":
         print("Error: Falta el archivo de clusters. Ejecuta '01_clustering.py' primero.")
         exit()
 
-    df = pd.read_csv(RUTA_ENTRADA, sep=';', encoding='utf-8')
+    df = pd.read_csv(RUTA_ENTRADA, sep=";", encoding="utf-8-sig")
 
     # 2. MAPEO DE NOMBRES HUMANOS
     # Bautizamos los clusters según los hallazgos del análisis TF-IDF (Script 02)
     nombres_oficiales = {
-        0: "Desarrollo de Software",
-        1: "Ciencia de Datos",
-        2: "Gestión de Sistemas",
-        3: "Ciberseguridad"
-    }
+    0: "Gestión Tecnológica y Sistemas Organizacionales",
+    1: "Ciencia de Datos y Desarrollo de Software",
+    2: "Ingeniería de Software y Computación Aplicada",
+    3: "Ciberseguridad y Gestión de Riesgos"
+}
     df['Perfil'] = df['Cluster'].map(nombres_oficiales)
 
     # 3. TABLA DE CONTINGENCIA (VOLUMEN)

@@ -108,7 +108,14 @@ if __name__ == "__main__":
         print("❌ Error: No se encontró el archivo raw. Ejecuta primero la Fase 1.")
         exit()
 
-    df = pd.read_csv(RUTA_ENTRADA, sep=';', encoding='utf-8')
+    df = pd.read_csv(
+    RUTA_ENTRADA,
+    sep=",",
+    encoding="utf-8-sig"
+)
+    print("Columnas detectadas:")
+    print(df.columns.tolist())
+    print("Filas cargadas:", len(df))
 
     print("🤖 1. Iniciando Limpieza Estructural (Regex)...")
     df['perfil_estructural'] = df['perfil'].apply(limpiar_texto_estructural)
@@ -118,7 +125,12 @@ if __name__ == "__main__":
 
     # GUARDADO ORGANIZADO
     os.makedirs(os.path.dirname(RUTA_SALIDA), exist_ok=True)
-    df.to_csv(RUTA_SALIDA, index=False, sep=';', encoding='utf-8')
+    df.to_csv(
+    RUTA_SALIDA,
+    index=False,
+    sep=";",
+    encoding="utf-8-sig"
+)
     
     print("\n" + "="*40)
     print("✅ FASE 2: PROCESAMIENTO FINALIZADO")

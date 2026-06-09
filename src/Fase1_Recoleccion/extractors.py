@@ -96,7 +96,7 @@ def extraer_por_css(html: str, selector: str = "") -> str:
         soup = BeautifulSoup(html, "lxml")
 
         # 1. Selector manual
-        if selector and selector.strip() not in ["", "-"]:
+        if selector and str(selector).strip() not in ["", "-"]:
             nodos = soup.select(selector)
 
             if nodos:

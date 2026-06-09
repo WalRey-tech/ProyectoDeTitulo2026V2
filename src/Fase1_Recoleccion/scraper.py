@@ -2,15 +2,14 @@ import requests
 import time
 import random
 import urllib3
-import urllib3
+
+# Desactiva las advertencias de seguridad en la consola
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 from extractors import extraer_por_css
-
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
@@ -30,13 +29,14 @@ def extraer_con_requests(site):
 
     time.sleep(random.uniform(2, 5))
 
+    # Lógica para requests (Ya la tenías perfecta)
     verificar_ssl = site.get("verificar_ssl", True)
 
     response = requests.get(
         site["url"],
         headers=headers,
         timeout=10,
-        verify=False
+        verify=verificar_ssl
     )
 
     response.raise_for_status()
@@ -52,6 +52,12 @@ def extraer_con_selenium(site):
     options.add_argument("--headless=new")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
+
+    # NUEVO: Lógica para que Selenium también ignore errores SSL
+    verificar_ssl = site.get("verificar_ssl", True)
+    if not verificar_ssl:
+        options.add_argument("--ignore-certificate-errors")
+        options.add_argument("--allow-insecure-localhost")
 
     driver = webdriver.Chrome(options=options)
 
@@ -71,19 +77,34 @@ def extraer_con_selenium(site):
 
 def scrapear_sitio(site):
     perfil = ""
-    metodo_usado = "requests"
+    metodo_usado = ""
 
     try:
-        perfil = extraer_con_requests(site)
+        tipo_extraccion = site.get("tipo_extraccion", "css")
 
-        if not perfil:
-            print(
-                f"⚠️ Requests no extrajo texto para {site.get('universidad')}. "
-                f"Probando Selenium..."
-            )
-
+        if tipo_extraccion == "selenium":
             perfil = extraer_con_selenium(site)
             metodo_usado = "selenium"
+
+            if not perfil:
+                print(
+                    f"⚠️ Selenium no extrajo texto para {site.get('universidad')}. "
+                    f"Probando requests..."
+                )
+                perfil = extraer_con_requests(site)
+                metodo_usado = "requests"
+
+        else:
+            perfil = extraer_con_requests(site)
+            metodo_usado = "requests"
+
+            if not perfil:
+                print(
+                    f"⚠️ Requests no extrajo texto para {site.get('universidad')}. "
+                    f"Probando Selenium..."
+                )
+                perfil = extraer_con_selenium(site)
+                metodo_usado = "selenium"
 
         if not perfil:
             print(
