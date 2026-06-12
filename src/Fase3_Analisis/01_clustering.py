@@ -21,9 +21,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-# ==========================================
+
 # CONFIGURACIÓN DE RUTAS INTELIGENTES
-# ==========================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 RUTA_LIMPIOS = os.path.normpath(
@@ -45,22 +44,20 @@ RUTA_FINAL = os.path.normpath(
 
 if __name__ == "__main__":
 
-    # ==========================================
     # 1. CARGA DE DATOS
-    # ==========================================
-    print(f"📂 Verificando archivos base en {os.path.dirname(RUTA_LIMPIOS)}...")
+    print(f"Verificando archivos base en {os.path.dirname(RUTA_LIMPIOS)}...")
 
     if not os.path.exists(RUTA_LIMPIOS):
-        print("❌ Error: No se encontró perfiles_limpios.csv.")
-        print("➡️ Ejecuta primero: python .\\01_limpieza_nlp.py")
+        print("Error: No se encontró perfiles_limpios.csv.")
+        print("Ejecuta primero: python .\\01_limpieza_nlp.py")
         exit()
 
     if not os.path.exists(RUTA_VECTORES):
-        print("❌ Error: No se encontró vectores_perfiles.npy.")
-        print("➡️ Ejecuta primero: python .\\02_vectorizacion.py")
+        print("Error: No se encontró vectores_perfiles.npy.")
+        print("Ejecuta primero: python .\\02_vectorizacion.py")
         exit()
 
-    print("📄 Cargando dataset limpio...")
+    print("Cargando dataset limpio...")
     df = pd.read_csv(
         RUTA_LIMPIOS,
         sep=";",
@@ -70,7 +67,7 @@ if __name__ == "__main__":
     df.columns = df.columns.str.strip()
 
     if "perfil_final" not in df.columns:
-        print("❌ Error: No existe la columna 'perfil_final'.")
+        print("Error: No existe la columna 'perfil_final'.")
         print("Columnas disponibles:")
         print(df.columns.tolist())
         exit()
@@ -79,25 +76,24 @@ if __name__ == "__main__":
     df["perfil_final"] = df["perfil_final"].fillna("").astype(str)
     df = df[df["perfil_final"].str.strip() != ""].reset_index(drop=True)
 
-    print("🧮 Cargando matriz de vectores...")
+    print("Cargando matriz de vectores...")
     vectores = np.load(RUTA_VECTORES)
 
-    print(f"📊 Filas válidas en metadata: {len(df)}")
-    print(f"📊 Vectores cargados: {len(vectores)}")
+    print(f"Filas válidas en metadata: {len(df)}")
+    print(f"Vectores cargados: {len(vectores)}")
 
     if len(df) != len(vectores):
-        print("❌ Error: El número de registros no coincide con la matriz de vectores.")
+        print("Error: El número de registros no coincide con la matriz de vectores.")
         print(f"Filas metadata: {len(df)}")
         print(f"Vectores: {len(vectores)}")
-        print("➡️ Regenera primero la vectorización con 02_vectorizacion.py.")
+        print("Regenera primero la vectorización con 02_vectorizacion.py.")
         exit()
 
-    # ==========================================
+
     # 2. ALGORITMO DE CLUSTERING K-MEANS
-    # ==========================================
     NUM_CLUSTERS = 4
 
-    print(f"\n🧠 Aplicando algoritmo K-Means para descubrir {NUM_CLUSTERS} grupos ocultos...")
+    print(f"\nAplicando algoritmo K-Means para descubrir {NUM_CLUSTERS} grupos ocultos...")
 
     kmeans = KMeans(
         n_clusters=NUM_CLUSTERS,
@@ -107,10 +103,8 @@ if __name__ == "__main__":
 
     df["Cluster"] = kmeans.fit_predict(vectores)
 
-    # ==========================================
     # 3. REDUCCIÓN DE DIMENSIONALIDAD PCA
-    # ==========================================
-    print("📉 Comprimiendo 384 dimensiones a 2D para visualización gráfica...")
+    print("Comprimiendo 384 dimensiones a 2D para visualización gráfica...")
 
     pca = PCA(
         n_components=2,
@@ -122,12 +116,10 @@ if __name__ == "__main__":
     df["Coordenada_X"] = vectores_2d[:, 0]
     df["Coordenada_Y"] = vectores_2d[:, 1]
 
-    print(f"📌 Varianza explicada por PCA: {pca.explained_variance_ratio_}")
+    print(f"Varianza explicada por PCA: {pca.explained_variance_ratio_}")
 
-    # ==========================================
     # 4. VISUALIZACIÓN DE RESULTADOS
-    # ==========================================
-    print("🎨 Generando gráfico de dispersión...")
+    print("Generando gráfico de dispersión...")
 
     plt.figure(figsize=(12, 8))
     sns.set_style("whitegrid")
@@ -153,9 +145,7 @@ if __name__ == "__main__":
     plt.legend(title="Cluster")
     plt.tight_layout()
 
-    # ==========================================
     # 5. GUARDADO DE RESULTADOS
-    # ==========================================
     os.makedirs(os.path.dirname(RUTA_GRAFICO), exist_ok=True)
 
     plt.savefig(
@@ -164,7 +154,7 @@ if __name__ == "__main__":
         bbox_inches="tight"
     )
 
-    print(f"\n📸 Gráfico guardado en: {RUTA_GRAFICO}")
+    print(f"\nGráfico guardado en: {RUTA_GRAFICO}")
 
     df.to_csv(
         RUTA_FINAL,
@@ -173,7 +163,7 @@ if __name__ == "__main__":
         encoding="utf-8-sig"
     )
 
-    print(f"💾 Dataset analítico guardado en: {RUTA_FINAL}")
+    print(f"Dataset analítico guardado en: {RUTA_FINAL}")
 
     # ==========================================
     # 6. RESUMEN POR CONSOLA
@@ -183,4 +173,4 @@ if __name__ == "__main__":
     print(df["Cluster"].value_counts().sort_index())
     print("=" * 50)
 
-    print("\n✅ FASE 3: CLUSTERING FINALIZADO CORRECTAMENTE")
+    print("\nFASE 3: CLUSTERING FINALIZADO CORRECTAMENTE")

@@ -29,13 +29,13 @@ def extraer_con_requests(site):
 
     time.sleep(random.uniform(2, 5))
 
-    # Lógica para requests (Ya la tenías perfecta)
+    # Lógica para requests 
     verificar_ssl = site.get("verificar_ssl", True)
 
     response = requests.get(
         site["url"],
         headers=headers,
-        timeout=10,
+        timeout=30,  # <-- Aumentado a 30 segundos
         verify=verificar_ssl
     )
 
@@ -53,7 +53,7 @@ def extraer_con_selenium(site):
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
 
-    # NUEVO: Lógica para que Selenium también ignore errores SSL
+    # Lógica para que Selenium también ignore errores SSL
     verificar_ssl = site.get("verificar_ssl", True)
     if not verificar_ssl:
         options.add_argument("--ignore-certificate-errors")
@@ -108,7 +108,7 @@ def scrapear_sitio(site):
 
         if not perfil:
             print(
-                f"⚠️ ALERTA: No se extrajo texto. "
+                f"ALERTA: No se extrajo texto. "
                 f"Revisa el selector '{site.get('selector')}' para {site.get('universidad')}."
             )
 

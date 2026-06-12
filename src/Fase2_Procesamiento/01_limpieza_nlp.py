@@ -13,17 +13,13 @@ Metodología:
     2. Capa Lingüística: Lematización y filtrado con spaCy.
 """
 
-# ==========================================
 # IMPORTACIÓN DE LIBRERÍAS
-# ==========================================
 import os
 import pandas as pd
 import re
 import spacy
 
-# ==========================================
 # CONFIGURACIÓN DE RUTAS INTELIGENTES
-# ==========================================
 # Ubicamos la carpeta donde vive este script (Fase2_Procesamiento)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,14 +27,12 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 RUTA_ENTRADA = os.path.normpath(os.path.join(BASE_DIR, "..", "data", "raw", "perfiles_egreso_raw.csv"))
 RUTA_SALIDA = os.path.normpath(os.path.join(BASE_DIR, "..", "data", "processed", "perfiles_limpios.csv"))
 
-# ==========================================
 # PREPARACIÓN DEL MODELO LINGÜÍSTICO (IA)
-# ==========================================
 try:
     # IA: Cargamos el motor de procesamiento en español
     nlp = spacy.load("es_core_news_sm")
 except OSError:
-    print("❌ Error: Falta descargar el modelo. Ejecuta: python -m spacy download es_core_news_sm")
+    print("Error: Falta descargar el modelo. Ejecuta: python -m spacy download es_core_news_sm")
     exit()
 
 # STOPWORDS PERSONALIZADAS: Palabras que la IA debe ignorar para no sesgar el análisis
@@ -56,9 +50,7 @@ stopwords_academicas = {
 for word in stopwords_academicas:
     nlp.vocab[word].is_stop = True
 
-# ==========================================
 # FUNCIONES DE PROCESAMIENTO
-# ==========================================
 
 def limpiar_texto_estructural(texto):
     """
@@ -97,15 +89,13 @@ def limpiar_texto_linguistico(texto):
             
     return " ".join(tokens_limpios)
 
-# ==========================================
 # EJECUCIÓN DEL PIPELINE
-# ==========================================
 
 if __name__ == "__main__":
-    print(f"📂 Cargando datos desde: {RUTA_ENTRADA}")
+    print(f"Cargando datos desde: {RUTA_ENTRADA}")
     
     if not os.path.exists(RUTA_ENTRADA):
-        print("❌ Error: No se encontró el archivo raw. Ejecuta primero la Fase 1.")
+        print("Error: No se encontró el archivo raw. Ejecuta primero la Fase 1.")
         exit()
 
     df = pd.read_csv(
@@ -117,10 +107,10 @@ if __name__ == "__main__":
     print(df.columns.tolist())
     print("Filas cargadas:", len(df))
 
-    print("🤖 1. Iniciando Limpieza Estructural (Regex)...")
+    print("1. Iniciando Limpieza Estructural (Regex)...")
     df['perfil_estructural'] = df['perfil'].apply(limpiar_texto_estructural)
 
-    print("🧠 2. Iniciando Limpieza Lingüística (NLP/spaCy)...")
+    print("2. Iniciando Limpieza Lingüística (NLP/spaCy)...")
     df['perfil_final'] = df['perfil_estructural'].apply(limpiar_texto_linguistico)
 
     # GUARDADO ORGANIZADO
@@ -133,6 +123,6 @@ if __name__ == "__main__":
 )
     
     print("\n" + "="*40)
-    print("✅ FASE 2: PROCESAMIENTO FINALIZADO")
-    print(f"💾 Archivo guardado en: {RUTA_SALIDA}")
+    print("FASE 2: PROCESAMIENTO FINALIZADO")
+    print(f"Archivo guardado en: {RUTA_SALIDA}")
     print("="*40)

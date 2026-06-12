@@ -14,9 +14,7 @@ import plotly.express as px
 import plotly.io as pio
 
 
-# ==========================================
 # RUTAS
-# ==========================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 RUTA_ENTRADA = os.path.normpath(
@@ -28,9 +26,7 @@ RUTA_HTML = os.path.normpath(
 )
 
 
-# ==========================================
 # CONFIGURACIÓN DE CLUSTERS
-# ==========================================
 NOMBRES_CLUSTERS = {
     0: "Gestión Tecnológica y Sistemas Organizacionales",
     1: "Ciencia de Datos y Desarrollo de Software",
@@ -71,9 +67,7 @@ PALABRAS_CLAVE = {
 }
 
 
-# ==========================================
 # FUNCIONES AUXILIARES
-# ==========================================
 def generar_tags(palabras, color):
     tags = ""
     for palabra in palabras:
@@ -112,15 +106,13 @@ def generar_leyenda_html(labels, values, color_map):
     return f'<div class="custom-legend">{bloques}</div>'
 
 
-# ==========================================
 # EJECUCIÓN PRINCIPAL
-# ==========================================
 if __name__ == "__main__":
-    print("🚀 Generando dashboard visual de clusters...")
+    print("Generando dashboard visual de clusters...")
 
     if not os.path.exists(RUTA_ENTRADA):
-        print("❌ Error: No existe perfiles_con_clusters.csv.")
-        print("➡️ Ejecuta primero: python .\\01_clustering.py")
+        print("Error: No existe perfiles_con_clusters.csv.")
+        print("Ejecuta primero: python .\\01_clustering.py")
         exit()
 
     df = pd.read_csv(
@@ -142,7 +134,7 @@ if __name__ == "__main__":
 
     for columna in columnas_requeridas:
         if columna not in df.columns:
-            print(f"❌ Error: Falta la columna requerida: {columna}")
+            print(f"Error: Falta la columna requerida: {columna}")
             print("Columnas disponibles:")
             print(df.columns.tolist())
             exit()
@@ -154,17 +146,13 @@ if __name__ == "__main__":
     total_tipos = df["tipo_institucion"].nunique()
     total_perfiles = df["Cluster"].nunique()
 
-    # ==========================================
     # CONFIGURACIÓN GENERAL DE PLOTLY
-    # ==========================================
     CONFIG_PLOTLY = {
         "displayModeBar": False,
         "responsive": True
     }
 
-    # ==========================================
     # DATOS PARA DONA 1
-    # ==========================================
     orden_instituciones = ["Universidad", "Instituto Profesional", "CFT"]
     tipo_counts = df["tipo_institucion"].value_counts().reindex(orden_instituciones, fill_value=0).reset_index()
     tipo_counts.columns = ["tipo_institucion", "cantidad"]
@@ -200,9 +188,7 @@ if __name__ == "__main__":
         COLORES_INSTITUCION
     )
 
-    # ==========================================
     # DATOS PARA DONA 2
-    # ==========================================
     orden_perfiles = [
         "Gestión Tecnológica y Sistemas Organizacionales",
         "Ciencia de Datos y Desarrollo de Software",
@@ -254,9 +240,7 @@ if __name__ == "__main__":
         mapa_colores_perfiles
     )
 
-    # ==========================================
     # MAPA PCA
-    # ==========================================
     fig_mapa = px.scatter(
         df,
         x="Coordenada_X",
@@ -315,9 +299,7 @@ if __name__ == "__main__":
         zerolinecolor="#64748B"
     )
 
-    # ==========================================
     # CONVERSIÓN DE GRÁFICOS A HTML
-    # ==========================================
     html_tipo = pio.to_html(
         fig_tipo,
         include_plotlyjs="cdn",
@@ -339,9 +321,7 @@ if __name__ == "__main__":
         config=CONFIG_PLOTLY
     )
 
-    # ==========================================
     # TABLA CRUZADA LIMPIA
-    # ==========================================
     tabla = pd.crosstab(
         df["tipo_institucion"],
         df["Perfil_Formativo"]
@@ -366,9 +346,7 @@ if __name__ == "__main__":
         border=0
     )
 
-    # ==========================================
     # TARJETAS POR CLUSTER
-    # ==========================================
     cards_clusters = ""
 
     for cluster_id, nombre in NOMBRES_CLUSTERS.items():
@@ -403,9 +381,7 @@ if __name__ == "__main__":
         </div>
         """
 
-    # ==========================================
     # HTML FINAL
-    # ==========================================
     html = f"""
     <!DOCTYPE html>
     <html lang="es">
@@ -859,7 +835,7 @@ if __name__ == "__main__":
         f.write(html)
 
     print("\n" + "=" * 60)
-    print("✅ DASHBOARD GENERADO CORRECTAMENTE")
-    print(f"🌐 Abre este archivo en tu navegador:")
+    print("DASHBOARD GENERADO CORRECTAMENTE")
+    print(f"Abre este archivo en tu navegador:")
     print(f"--> {RUTA_HTML}")
     print("=" * 60)

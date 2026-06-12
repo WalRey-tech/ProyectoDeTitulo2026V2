@@ -4,9 +4,7 @@ import pandas as pd
 from config import SITES
 from scraper import scrapear_sitio
 
-# ==========================================
 # CONFIGURACIÓN DE RUTA ABSOLUTA
-# ==========================================
 # 1. Obtenemos la ruta exacta de la carpeta donde está este script (Fase1_Recoleccion)
 DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
 
@@ -37,7 +35,7 @@ def ordenar_columnas(df):
 
 def validar_dataframe(df):
     print("\n" + "="*40)
-    print("📊 VALIDACIÓN PARA EL MODELO NLP")
+    print("VALIDACIÓN PARA EL MODELO NLP")
     print("="*40)
     print(f"Total de instituciones procesadas: {len(df)}")
     
@@ -47,9 +45,9 @@ def validar_dataframe(df):
     # Menos que eso, probablemente solo capturó un subtítulo y arruinará el análisis.
     perfiles_cortos = ((df["perfil"].str.len() > 0) & (df["perfil"].str.len() < 150)).sum()
     
-    print(f"✅ Perfiles listos para análisis: {len(df) - perfiles_vacios - perfiles_cortos}") 
-    print(f"⚠️ Perfiles vacíos (Revisar selector CSS): {perfiles_vacios}") 
-    print(f"⚠️ Perfiles muy cortos (< 150 caracteres): {perfiles_cortos}")
+    print(f"Perfiles listos para análisis: {len(df) - perfiles_vacios - perfiles_cortos}") 
+    print(f"Perfiles vacíos (Revisar selector CSS): {perfiles_vacios}") 
+    print(f"Perfiles muy cortos (< 150 caracteres): {perfiles_cortos}")
     print("="*40)
 
 def guardar_csv(df):
@@ -63,7 +61,7 @@ def guardar_csv(df):
         quoting=csv.QUOTE_ALL, 
         lineterminator="\n"
     )
-    print(f"\n🚀 Archivo maestro guardado en: {RUTA_SALIDA}\n")
+    print(f"\nArchivo maestro guardado en: {RUTA_SALIDA}\n")
 
 def main():
     resultados = []
@@ -74,11 +72,11 @@ def main():
         data = scrapear_sitio(site)
 
         if data.get("error"):
-            print(f"   ↳ Estado: ERROR ❌ ({data.get('error')})")
+            print(f"   ↳ Estado: ERROR ({data.get('error')})")
         elif not data.get("perfil"):
-            print("   ↳ Estado: ADVERTENCIA ⚠️ Sin texto extraído")
+            print("   ↳ Estado: ADVERTENCIA Sin texto extraído")
         else:
-            print(f"   ↳ Estado: OK ✅ usando {data.get('metodo_usado')}")
+            print(f"   ↳ Estado: OK usando {data.get('metodo_usado')}")
 
         resultados.append(data)
 

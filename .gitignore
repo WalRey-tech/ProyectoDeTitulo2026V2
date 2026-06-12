@@ -39,3 +39,9 @@ src/data/
 # Súper importante para la Fase 4 cuando conectemos PostgreSQL
 .env
 .env.local
+
+# Landing
+node_modules/
+.next/
+.env
+.env.local
