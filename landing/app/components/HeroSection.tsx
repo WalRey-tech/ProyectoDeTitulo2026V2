@@ -3,15 +3,15 @@
 import React from "react";
 
 const STATS = [
-  { value: "32", suffix: "+", label: "Instituciones analizadas", color: "from-cyan-400 to-blue-500" },
-  { value: "384", suffix: "D", label: "Dimensiones vectoriales", color: "from-purple-400 to-pink-500" },
-  { value: "4", suffix: "", label: "Clústeres descubiertos", color: "from-blue-400 to-cyan-400" },
-  { value: "96", suffix: "%", label: "Silhouette Score", color: "from-emerald-400 to-teal-500" },
+  { value: "73", suffix: "", label: "Perfiles Analizados", color: "from-cyan-400 to-blue-500" },
+  { value: "1500", suffix: "D", label: "Dimensiones Vectoriales (TF-IDF)", color: "from-purple-400 to-pink-500" },
+  { value: "58", suffix: "%", label: "Accuracy (Regresión Logística)", color: "from-blue-400 to-cyan-400" },
+  { value: "0.00", suffix: " p-val", label: "Significancia Estadística", color: "from-emerald-400 to-teal-500" },
 ];
 
 const TECH_TAGS = [
-  "Python", "spaCy", "Sentence Transformers", "K-Means", "PCA",
-  "BeautifulSoup", "Selenium", "PostgreSQL", "Next.js", "Recharts"
+  "Python", "spaCy", "TF-IDF", "Logistic Regression", "SVC RBF",
+  "LDA", "BeautifulSoup", "Selenium", "Next.js", "Recharts"
 ];
 
 export default function HeroSection() {
@@ -51,10 +51,11 @@ export default function HeroSection() {
 
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{ animationDelay: "0.2s" }}>
-          Aplicamos <span className="text-cyan-400 font-semibold">Aprendizaje No Supervisado</span> y{" "}
-          <span className="text-purple-400 font-semibold">Procesamiento de Lenguaje Natural</span> para
-          cartografiar semánticamente las competencias del egresado de Informática en Chile,
-          transformando miles de palabras en <span className="text-emerald-400 font-semibold">4 perfiles de carrera</span> accionables.
+          Aplicamos <span className="text-cyan-400 font-semibold">Procesamiento de Lenguaje Natural</span> y{" "}
+          <span className="text-purple-400 font-semibold">Aprendizaje Supervisado</span> para medir la
+          separabilidad y convergencia de las competencias del egresado en Chile,
+          transformando miles de palabras en{" "}
+          <span className="text-emerald-400 font-semibold">evidencia estadística</span>.
         </p>
 
         {/* Authors */}

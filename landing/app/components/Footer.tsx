@@ -19,8 +19,8 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-sm text-slate-500 leading-relaxed">
-              Investigación académica sobre el descubrimiento de patrones semánticos
-              en perfiles de egreso de Informática mediante aprendizaje no supervisado.
+              Investigación académica sobre separabilidad y convergencia semántica
+              en perfiles de egreso de Informática mediante Aprendizaje Supervisado y NLP.
             </p>
           </div>
 
@@ -34,7 +34,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-200">Brayan Pineda Poblete</p>
-                  <p className="text-xs text-slate-500">Ingeniería en Informática</p>
+                  <p className="text-xs text-slate-500">Ingeniería de Ejecución en Informática</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -43,7 +43,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-200">Walter Reyes Silva</p>
-                  <p className="text-xs text-slate-500">Ingeniería en Informática</p>
+                  <p className="text-xs text-slate-500">Ingeniería de Ejecución en Informática</p>
                 </div>
               </div>
             </div>
@@ -55,7 +55,7 @@ export default function Footer() {
             <div className="space-y-2">
               <p className="text-sm font-semibold text-slate-200">Universidad de las Américas</p>
               <p className="text-xs text-slate-500">Facultad de Ingeniería y Negocios</p>
-              <p className="text-xs text-slate-500">Carrera: Ingeniería en Informática</p>
+              <p className="text-xs text-slate-500">Carrera: Ingeniería de Ejecución en Informática</p>
               <div className="flex flex-wrap gap-2 mt-3">
                 <span className="badge badge-cyan text-xs">Python</span>
                 <span className="badge badge-purple text-xs">ML/NLP</span>

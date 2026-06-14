@@ -2,159 +2,295 @@
 
 import React from "react";
 
-const FUTURE_FEATURES = [
+const PHASES = [
   {
-    icon: "🗄️",
-    title: "Base de Datos PostgreSQL",
+    number: "01",
+    icon: "🕸️",
+    title: "Extracción Web",
+    subtitle: "Web Scraping Automatizado",
+    gradient: "from-cyan-400 to-blue-500",
+    glowColor: "rgba(6,182,212,0.3)",
+    borderColor: "border-cyan-500/30",
+    bgColor: "bg-cyan-500/5",
     description:
-      "Toda la metadata extraída (universidades, carreras, perfiles, clusters) se migra a tablas relacionales en PostgreSQL, permitiendo consultas SQL complejas y actualizaciones incrementales.",
-    detail: "Tablas: instituciones, programas, perfiles_vectores, clusters_asignados",
-    color: "border-blue-500/30 bg-blue-500/5",
-    badge: "Capa de Datos",
-    badgeColor: "badge-cyan",
+      "Scraping automatizado utilizando BeautifulSoup y Selenium para recolectar mallas curriculares desde portales universitarios.",
+    details: [
+      { label: "Sitios objetivo", value: "32+ portales universitarios chilenos" },
+      { label: "Estrategia", value: "Fallback automático Requests ↔ Selenium" },
+      { label: "Parser", value: "BeautifulSoup + selectores CSS personalizados" },
+      { label: "Output", value: "perfiles_egreso_raw.csv · ~73 registros válidos" },
+    ],
+    tools: ["BeautifulSoup", "Selenium", "Requests", "Pandas"],
   },
   {
-    icon: "🔄",
-    title: "Actualización Continua",
+    number: "02",
+    icon: "🧠",
+    title: "NLP y Limpieza Avanzada",
+    subtitle: "Procesamiento de Lenguaje Natural",
+    gradient: "from-blue-500 to-violet-500",
+    glowColor: "rgba(99,102,241,0.3)",
+    borderColor: "border-violet-500/30",
+    bgColor: "bg-violet-500/5",
     description:
-      "El pipeline de scraping puede programarse como un job periódico. Cuando una institución actualiza su malla curricular, el sistema detecta el cambio y re-vectoriza solo el perfil modificado.",
-    detail: "Trigger: comparación hash SHA-256 del texto nuevo vs. almacenado",
-    color: "border-purple-500/30 bg-purple-500/5",
-    badge: "Automatización",
-    badgeColor: "badge-purple",
+      "Procesamiento de Lenguaje Natural con spaCy. Remoción de stopwords, lematización y control de confusores institucionales.",
+    details: [
+      { label: "Motor NLP", value: "spaCy es_core_news_sm — Español" },
+      { label: "Técnica", value: "Lematización: 'optimizando' → 'optimizar'" },
+      { label: "Stopwords", value: "47 palabras académicas neutralizadas" },
+      { label: "Output", value: "perfiles_egreso_limpio_v1.csv" },
+    ],
+    tools: ["spaCy", "es_core_news_sm", "Regex", "NLTK"],
   },
   {
-    icon: "🚀",
-    title: "API REST con Next.js",
+    number: "03",
+    icon: "🧮",
+    title: "Vectorización TF-IDF",
+    subtitle: "Representación Matemática del Texto",
+    gradient: "from-violet-500 to-purple-500",
+    glowColor: "rgba(139,92,246,0.3)",
+    borderColor: "border-purple-500/30",
+    bgColor: "bg-purple-500/5",
     description:
-      "El frontend Next.js expone rutas de API que sirven los datos desde PostgreSQL. Esto permite que terceros (otras universidades, CNED, MINEDUC) consuman los resultados via HTTP.",
-    detail: "GET /api/clusters · GET /api/instituciones · GET /api/perfil/:id",
-    color: "border-cyan-500/30 bg-cyan-500/5",
-    badge: "Integración",
-    badgeColor: "badge-emerald",
+      "Transformación del texto limpio en una matriz matemática densa de 1500 dimensiones para el análisis de frecuencia relativa de términos (Z-Score).",
+    details: [
+      { label: "Algoritmo", value: "TF-IDF (Term Frequency · Inverse Document Frequency)" },
+      { label: "Dimensiones", value: "1500 características por perfil de egreso" },
+      { label: "Análisis semántico", value: "Z-Score para identificar términos distintivos" },
+      { label: "Output", value: "Matriz densa 73 × 1500 · top15_palabras_clave.csv" },
+    ],
+    tools: ["TF-IDF", "scikit-learn", "Z-Score", "NumPy"],
   },
   {
-    icon: "📈",
-    title: "Escalabilidad Nacional",
+    number: "04",
+    icon: "🤖",
+    title: "Machine Learning Supervisado",
+    subtitle: "Clasificación y Validación Estadística",
+    gradient: "from-purple-500 to-emerald-400",
+    glowColor: "rgba(16,185,129,0.3)",
+    borderColor: "border-emerald-500/30",
+    bgColor: "bg-emerald-500/5",
     description:
-      "La arquitectura actual (32 perfiles) puede escalar a cientos de instituciones. PostgreSQL + indices sobre columnas de texto y vectores garantizan respuesta < 200ms.",
-    detail: "Estimado: 500+ instituciones sin degradación del rendimiento",
-    color: "border-emerald-500/30 bg-emerald-500/5",
-    badge: "Escalabilidad",
-    badgeColor: "badge-cyan",
+      "Evaluación de clasificadores (Logistic Regression, SVC RBF) con validación cruzada estratificada (K-Fold=5) y reducción de dimensionalidad con LDA.",
+    details: [
+      { label: "Clasificadores", value: "Logistic Regression · SVC con kernel RBF" },
+      { label: "Validación", value: "Stratified K-Fold Cross-Validation (k=5)" },
+      { label: "Reducción dim.", value: "LDA (Linear Discriminant Analysis) → 2D" },
+      { label: "Validación final", value: "Test de Permutación · p < 0.05 · Similitud Coseno" },
+    ],
+    tools: ["Logistic Regression", "SVC RBF", "LDA", "K-Fold CV", "scikit-learn"],
   },
 ];
 
-const DB_SCHEMA = [
-  { table: "instituciones", columns: ["id", "nombre", "tipo", "region", "url"], color: "#06b6d4" },
-  { table: "programas", columns: ["id", "inst_id", "nombre", "tipo_carrera", "url_perfil"], color: "#8b5cf6" },
-  { table: "perfiles_vectores", columns: ["id", "prog_id", "texto_raw", "texto_limpio", "vector_384d"], color: "#3b82f6" },
-  { table: "clusters_asignados", columns: ["id", "perfil_id", "cluster_num", "cluster_nombre", "pca_x", "pca_y"], color: "#10b981" },
+const MODEL_METRICS = [
+  { label: "Modelo Principal", value: "Logistic Regression", sub: "Validación Cruzada 5-Folds", icon: "🎯", color: "#06b6d4" },
+  { label: "Accuracy", value: "57.7%", sub: "F1-Macro: 57.2%", icon: "📊", color: "#8b5cf6" },
+  { label: "Similitud Civil ↔ Info", value: "0.69", sub: "Cosine Similarity — Test Permutación p=0.00", icon: "🔬", color: "#10b981" },
+  { label: "Perfiles analizados", value: "73", sub: "4 grados · 32+ instituciones", icon: "📋", color: "#f59e0b" },
 ];
 
-export default function FutureSection() {
+export default function ArchitectureSection() {
+  const [activePhase, setActivePhase] = React.useState(0);
+  const phase = PHASES[activePhase];
+
   return (
     <section id="futuro" className="relative py-24 px-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto space-y-16">
+
         {/* Header */}
-        <div className="text-center mb-16 space-y-4">
-          <span className="badge badge-cyan">Escalabilidad y Futuro</span>
+        <div className="text-center space-y-4">
+          <span className="badge badge-purple">Stack Tecnológico</span>
           <h2 className="text-3xl md:text-5xl font-black text-white mt-4">
-            De prototipo a{" "}
-            <span className="gradient-text-cyan">sistema de producción</span>
+            Arquitectura del{" "}
+            <span className="gradient-text-purple">Pipeline de Análisis</span>
           </h2>
           <div className="section-divider mt-6" />
           <p className="text-slate-400 max-w-2xl mx-auto text-lg mt-6">
-            La integración con PostgreSQL transforma el proyecto de un análisis académico
-            a una plataforma escalable de inteligencia educativa para Chile.
+            4 fases modulares construidas en Python puro que transforman texto web
+            crudo en evidencia estadística reproducible y validada.
           </p>
         </div>
 
-        {/* Features grid */}
-        <div className="grid md:grid-cols-2 gap-6 mb-16">
-          {FUTURE_FEATURES.map((feat, i) => (
-            <div
+        {/* Phase tabs */}
+        <div className="flex flex-wrap justify-center gap-3">
+          {PHASES.map((p, i) => (
+            <button
               key={i}
-              className={`glass-card border ${feat.color} p-7 group transition-all duration-300 hover:scale-[1.02]`}
+              id={`arch-tab-${i}`}
+              onClick={() => setActivePhase(i)}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 border ${
+                activePhase === i
+                  ? `bg-gradient-to-r ${p.gradient} text-white border-transparent shadow-lg`
+                  : "text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-transparent"
+              }`}
             >
-              <div className="flex items-start gap-4">
-                <span className="text-3xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                  {feat.icon}
-                </span>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-bold text-white">{feat.title}</h3>
-                    <span className={`badge text-xs ${feat.badgeColor}`}>{feat.badge}</span>
-                  </div>
-                  <p className="text-slate-400 text-sm leading-relaxed">{feat.description}</p>
-                  <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800/50">
-                    <p className="font-mono text-xs text-slate-500">{feat.detail}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+              <span>{p.icon}</span>
+              <span className="hidden sm:inline">Fase {p.number}:</span>
+              {p.title}
+            </button>
           ))}
         </div>
 
-        {/* DB Schema visual */}
-        <div className="glass-card border border-white/5 p-8">
-          <div className="text-center mb-8">
-            <h3 className="text-xl font-bold text-white">Esquema PostgreSQL Propuesto</h3>
-            <p className="text-slate-500 text-sm mt-1">Estructura relacional para el sistema de producción</p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {DB_SCHEMA.map((table, i) => (
-              <div key={i} className="rounded-xl border border-slate-800/60 overflow-hidden">
-                {/* Table header */}
+        {/* Phase detail */}
+        <div
+          key={activePhase}
+          className={`glass-card border ${phase.borderColor} ${phase.bgColor} p-8 md:p-10 animate-slide-up`}
+        >
+          <div className="grid md:grid-cols-2 gap-10">
+            {/* Left */}
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
                 <div
-                  className="px-4 py-3 flex items-center gap-2"
-                  style={{ background: `${table.color}20`, borderBottom: `1px solid ${table.color}30` }}
+                  className={`w-14 h-14 rounded-xl bg-gradient-to-br ${phase.gradient} flex items-center justify-center text-2xl flex-shrink-0`}
+                  style={{ boxShadow: `0 0 20px ${phase.glowColor}` }}
                 >
-                  <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: table.color }}>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
-                  </svg>
-                  <span className="font-mono text-xs font-bold" style={{ color: table.color }}>
-                    {table.table}
-                  </span>
+                  {phase.icon}
                 </div>
-                {/* Columns */}
-                <div className="bg-slate-900/40 divide-y divide-slate-800/40">
-                  {table.columns.map((col, j) => (
-                    <div key={j} className="px-4 py-2 flex items-center gap-2">
-                      {j === 0 ? (
-                        <svg className="w-3 h-3 text-yellow-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ) : (
-                        <div className="w-3 h-3 rounded-sm border border-slate-700 flex-shrink-0" />
-                      )}
-                      <span className="font-mono text-xs text-slate-400">{col}</span>
-                    </div>
-                  ))}
+                <div>
+                  <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">
+                    Fase {phase.number}
+                  </p>
+                  <h3 className="text-2xl font-black text-white">{phase.title}</h3>
+                  <p
+                    className={`text-sm font-semibold bg-gradient-to-r ${phase.gradient} bg-clip-text text-transparent`}
+                  >
+                    {phase.subtitle}
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
 
-          {/* Relationship arrows */}
-          <div className="mt-6 text-center">
-            <p className="text-xs text-slate-600">
-              instituciones.id → programas.inst_id → perfiles_vectores.prog_id → clusters_asignados.perfil_id
-            </p>
+              <p className="text-slate-300 leading-relaxed">{phase.description}</p>
+
+              {/* Tool badges */}
+              <div className="flex flex-wrap gap-2">
+                {phase.tools.map((tool) => (
+                  <span
+                    key={tool}
+                    className="px-3 py-1 text-xs font-semibold rounded-full bg-slate-800 text-slate-300 border border-slate-700"
+                  >
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: step details */}
+            <div className="space-y-3">
+              <p className="text-xs text-slate-500 uppercase tracking-widest mb-4">
+                Detalles técnicos
+              </p>
+              {phase.details.map((d, j) => (
+                <div
+                  key={j}
+                  className="flex items-start gap-4 p-4 rounded-xl bg-slate-900/40 border border-slate-800/60 hover:border-slate-600/60 transition-colors duration-200"
+                >
+                  <div
+                    className={`w-6 h-6 rounded-full bg-gradient-to-br ${phase.gradient} flex items-center justify-center text-xs font-black text-white flex-shrink-0 mt-0.5`}
+                  >
+                    {j + 1}
+                  </div>
+                  <div>
+                    <p className="font-mono text-sm font-semibold text-slate-200">{d.label}</p>
+                    <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{d.value}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Architecture diagram text */}
-        <div className="mt-8 grid md:grid-cols-3 gap-4">
+        {/* Pipeline flow */}
+        <div className="flex flex-wrap items-center justify-center gap-2 text-sm">
+          {PHASES.map((p, i) => (
+            <React.Fragment key={i}>
+              <button
+                onClick={() => setActivePhase(i)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${
+                  activePhase === i
+                    ? "border-cyan-500/50 text-cyan-400 bg-cyan-500/10"
+                    : "border-slate-800 text-slate-500 hover:text-slate-300 hover:border-slate-600"
+                }`}
+              >
+                <span>{p.icon}</span>
+                <span className="font-medium">{p.title}</span>
+              </button>
+              {i < PHASES.length - 1 && (
+                <svg
+                  className="w-4 h-4 text-slate-600 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* Model metrics summary */}
+        <div className="glass-card border border-white/5 p-8">
+          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
+            <span className="w-1 h-6 rounded-full bg-gradient-to-b from-purple-400 to-cyan-500" />
+            Métricas del Modelo Final
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {MODEL_METRICS.map((m, i) => (
+              <div
+                key={i}
+                className="p-5 rounded-xl bg-slate-900/50 border border-slate-800/60 text-center hover:border-slate-700 transition-colors duration-200"
+              >
+                <span className="text-2xl block mb-2">{m.icon}</span>
+                <p className="text-xs text-slate-500 uppercase tracking-widest">{m.label}</p>
+                <p
+                  className="text-2xl font-black mt-1 leading-tight"
+                  style={{ color: m.color }}
+                >
+                  {m.value}
+                </p>
+                <p className="text-xs text-slate-600 mt-1 leading-tight">{m.sub}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Tech stack row */}
+        <div className="grid md:grid-cols-3 gap-4">
           {[
-            { label: "Frontend", value: "Next.js 15", desc: "React Server Components + API Routes", icon: "⚡", color: "text-cyan-400" },
-            { label: "Base de Datos", value: "PostgreSQL 16", desc: "Railway Managed · Backups automáticos", icon: "🗄️", color: "text-blue-400" },
-            { label: "Despliegue", value: "Railway", desc: "CI/CD automático desde GitHub · Gratis", icon: "🚂", color: "text-purple-400" },
+            {
+              label: "Lenguaje",
+              value: "Python 3.11",
+              desc: "Pipeline 100% reproducible · scripts modulares",
+              icon: "🐍",
+              color: "text-cyan-400",
+            },
+            {
+              label: "NLP & ML",
+              value: "scikit-learn + spaCy",
+              desc: "TF-IDF · LR · SVC RBF · LDA · K-Fold CV",
+              icon: "🧠",
+              color: "text-purple-400",
+            },
+            {
+              label: "Visualización",
+              value: "Matplotlib + Next.js",
+              desc: "Gráficos estáticos · Landing Page interactiva",
+              icon: "📊",
+              color: "text-emerald-400",
+            },
           ].map((item, i) => (
-            <div key={i} className="glass-card p-5 border border-slate-800/60 text-center">
+            <div
+              key={i}
+              className="glass-card p-5 border border-slate-800/60 text-center hover:border-slate-700/60 transition-colors duration-200"
+            >
               <span className="text-2xl">{item.icon}</span>
-              <p className="text-xs text-slate-500 mt-2 uppercase tracking-widest">{item.label}</p>
+              <p className="text-xs text-slate-500 mt-2 uppercase tracking-widest">
+                {item.label}
+              </p>
               <p className={`text-lg font-black mt-1 ${item.color}`}>{item.value}</p>
               <p className="text-xs text-slate-500 mt-1">{item.desc}</p>
             </div>

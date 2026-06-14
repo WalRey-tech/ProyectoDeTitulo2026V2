@@ -10,8 +10,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Descubrimiento de Patrones en Perfiles de Egreso | Tesis UDLA 2026",
-  description:
-    "Investigación de Machine Learning no supervisado para detectar patrones semánticos en perfiles de egreso de Ingeniería en Informática en Chile. Universidad de las Américas. Autores: Brayan Pineda Poblete y Walter Reyes Silva.",
+    description:
+    "Investigación de Machine Learning supervisado y NLP para medir separabilidad y convergencia semántica en perfiles de egreso de Ingeniería en Informática en Chile. Universidad de las Américas. Autores: Brayan Pineda Poblete y Walter Reyes Silva.",
   keywords: [
     "machine learning",
     "clustering",
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     { name: "Walter Reyes Silva" },
   ],
   openGraph: {
-    title: "Descubrimiento de Patrones en Perfiles de Egreso",
+    title: "Separabilidad Semántica en Perfiles de Egreso de Informática",
     description:
-      "Aprendizaje no supervisado para clasificar perfiles de egreso en Ingeniería Informática – Universidad de las Américas 2026",
+      "Aprendizaje Supervisado y NLP para clasificar y medir convergencia en perfiles de egreso – Universidad de las Américas 2026",
     type: "website",
   },
 };
