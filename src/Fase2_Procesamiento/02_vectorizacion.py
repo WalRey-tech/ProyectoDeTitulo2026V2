@@ -1,137 +1,78 @@
-"""
-02_VECTORIZACION.PY
------------------------------------------------------------------------
-Fase: 2. Procesamiento
-
-Propósito:
-    Convertir los perfiles de egreso procesados en embeddings semánticos.
-    Estos vectores serán utilizados posteriormente en la Fase 3 para aplicar
-    algoritmos de clustering como K-Means o DBSCAN.
-"""
-
-# IMPORTACIÓN DE LIBRERÍAS
-import os
 import pandas as pd
-import numpy as np
-from sentence_transformers import SentenceTransformer
+import os
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+# 1. Configuración de Rutas
+DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
+RUTA_ENTRADA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "perfiles_egreso_limpio_v1.csv"))
+# Aquí guardaremos la imagen gráfica de la matriz de confusión para tu tesis
+RUTA_MATRIZ_IMG = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "matriz_confusion.png"))
 
-# CONFIGURACIÓN DE RUTAS
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-RUTA_LIMPIOS = os.path.normpath(
-    os.path.join(BASE_DIR, "..", "data", "processed", "perfiles_limpios.csv")
-)
-
-RUTA_VECTORES = os.path.normpath(
-    os.path.join(BASE_DIR, "..", "data", "processed", "vectores_perfiles.npy")
-)
-
-RUTA_METADATA = os.path.normpath(
-    os.path.join(BASE_DIR, "..", "data", "processed", "metadata_vectores.csv")
-)
-
-
-# EJECUCIÓN PRINCIPAL
-if __name__ == "__main__":
-    print(f"Cargando dataset limpio desde: {RUTA_LIMPIOS}")
-
-    # 1. Validar existencia del archivo limpio
-    if not os.path.exists(RUTA_LIMPIOS):
-        print("Error: No se encontró el archivo limpio.")
-        print("Ejecuta primero: python .\\01_limpieza_nlp.py")
-        exit()
-
-    # 2. Leer dataset limpio
+def main():
+    print("⏳ Cargando dataset limpio...")
     try:
-        df = pd.read_csv(
-            RUTA_LIMPIOS,
-            sep=";",
-            encoding="utf-8-sig"
-        )
-    except Exception as e:
-        print("Error al leer perfiles_limpios.csv")
-        print(f"Detalle técnico: {e}")
-        print("\nRevisa que 01_limpieza_nlp.py esté guardando el CSV con:")
-        print('df.to_csv(RUTA_SALIDA, index=False, sep=";", encoding="utf-8-sig")')
-        exit()
+        df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
+    except FileNotFoundError:
+        print(f"❌ Error: No se encontró {RUTA_ENTRADA}.")
+        return
 
-    # 3. Normalizar nombres de columnas
-    df.columns = df.columns.str.strip()
+    # Eliminamos cualquier fila vacía accidental
+    df = df.dropna(subset=['perfil_limpio'])
 
-    print("\nColumnas detectadas:")
-    print(df.columns.tolist())
+    X = df['perfil_limpio']
+    y = df['grado']
 
-    print(f"\nFilas cargadas: {len(df)}")
+    print("🧮 1. Vectorizando textos (TF-IDF)...")
+    # TF-IDF: Extrae hasta 1500 características combinando palabras sueltas (1) y pares de palabras (2)
+    vectorizer = TfidfVectorizer(max_features=1500, ngram_range=(1, 2))
+    X_tfidf = vectorizer.fit_transform(X)
 
-    # 4. Definir columna de texto para embeddings
-    columna_texto = "perfil_final"
-
-    if columna_texto not in df.columns:
-        print(f"\nError: No existe la columna '{columna_texto}' en el archivo limpio.")
-        print("Columnas disponibles:")
-        print(df.columns.tolist())
-        print("\nVerifica que 01_limpieza_nlp.py esté creando la columna 'perfil_final'.")
-        exit()
-
-    # 5. Control de calidad del texto
-    df[columna_texto] = df[columna_texto].fillna("").astype(str)
-
-    df = df[df[columna_texto].str.strip() != ""]
-
-    if df.empty:
-        print("\nError: No hay perfiles válidos para vectorizar.")
-        print("La columna 'perfil_final' está vacía o solo contiene espacios.")
-        exit()
-
-    print(f"\nPerfiles válidos para vectorización: {len(df)}")
-
-    # 6. Inicializar modelo de embeddings
-    print("\nInicializando modelo de embeddings semánticos...")
-
-    try:
-        modelo = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
-    except Exception as e:
-        print("Error al cargar el modelo SentenceTransformer.")
-        print(f"Detalle técnico: {e}")
-        print("\nVerifica que sentence-transformers esté instalado:")
-        print("pip install sentence-transformers")
-        exit()
-
-    # 7. Vectorizar perfiles
-    print("\nVectorizando perfiles de egreso...")
-
-    try:
-        vectores = modelo.encode(
-            df[columna_texto].tolist(),
-            show_progress_bar=True,
-            normalize_embeddings=True
-        )
-    except Exception as e:
-        print("Error durante la vectorización.")
-        print(f"Detalle técnico: {e}")
-        exit()
-
-    # 8. Mostrar resultado
-    print("\n=== RESULTADO DE LA VECTORIZACIÓN ===")
-    print(f"Forma de la matriz: {vectores.shape}")
-    print("Primeras 5 coordenadas del primer perfil:")
-    print(vectores[0][:5])
-
-    # 9. Guardar resultados
-    os.makedirs(os.path.dirname(RUTA_VECTORES), exist_ok=True)
-
-    np.save(RUTA_VECTORES, vectores)
-
-    df.to_csv(
-        RUTA_METADATA,
-        index=False,
-        sep=";",
-        encoding="utf-8-sig"
+    print("🔀 2. Dividiendo en datos de Entrenamiento y Prueba (80/20)...")
+    # stratify=y asegura que la proporción de grados (especialmente Ejecución que son 6) se mantenga equilibrada
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_tfidf, y, test_size=0.2, random_state=42, stratify=y
     )
 
-    print("\n" + "=" * 50)
-    print("FASE 2: VECTORIZACIÓN FINALIZADA")
-    print(f"Vectores guardados en: {RUTA_VECTORES}")
-    print(f"Metadata alineada guardada en: {RUTA_METADATA}")
-    print("=" * 50)
+    print("🤖 3. Entrenando modelo de Regresión Logística...")
+    # class_weight='balanced' es crítico: penaliza más al modelo si se equivoca en las clases minoritarias (Ejecución)
+    modelo = LogisticRegression(class_weight='balanced', random_state=42, max_iter=1000)
+    modelo.fit(X_train, y_train)
+
+    print("🔮 4. Realizando predicciones...")
+    y_pred = modelo.predict(X_test)
+
+    # =========================================================================
+    # MÉTRICAS Y RESULTADOS PARA LA TESIS
+    # =========================================================================
+    print("\n" + "="*50)
+    print("📈 REPORTE DE CLASIFICACIÓN (Métricas de Separabilidad):")
+    print("="*50)
+    print(classification_report(y_test, y_pred))
+    print("="*50)
+
+    print("🎨 5. Generando Matriz de Confusión visual...")
+    cm = confusion_matrix(y_test, y_pred, labels=modelo.classes_)
+    
+    # Configuramos el gráfico
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                xticklabels=modelo.classes_,
+                yticklabels=modelo.classes_)
+    plt.title('Matriz de Confusión - Separabilidad de Grados')
+    plt.ylabel('Grado Real')
+    plt.xlabel('Grado Predicho por la IA')
+    plt.tight_layout()
+    
+    # Guardamos la imagen en alta calidad
+    plt.savefig(RUTA_MATRIZ_IMG, dpi=300)
+    
+    print(f"✅ ¡Modelo entrenado y evaluado exitosamente!")
+    print(f"📁 Gráfico de la Matriz de Confusión guardado en: {RUTA_MATRIZ_IMG}")
+
+if __name__ == "__main__":
+    main()

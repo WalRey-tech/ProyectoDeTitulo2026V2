@@ -64,7 +64,7 @@ export default function HeroSection() {
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 border-2 border-gray-950 flex items-center justify-center text-xs font-bold text-white">WR</div>
           </div>
           <div className="text-slate-400 text-sm">
-            <span className="text-slate-200 font-semibold">Brayan Pidena Poblete</span>
+            <span className="text-slate-200 font-semibold">Brayan Pineda Poblete</span>
             {" · "}
             <span className="text-slate-200 font-semibold">Walter Reyes Silva</span>
           </div>

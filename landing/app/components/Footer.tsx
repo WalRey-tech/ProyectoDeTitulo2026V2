@@ -33,7 +33,7 @@ export default function Footer() {
                   BP
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-slate-200">Brayan Pidena Poblete</p>
+                  <p className="text-sm font-semibold text-slate-200">Brayan Pineda Poblete</p>
                   <p className="text-xs text-slate-500">Ingeniería en Informática</p>
                 </div>
               </div>
@@ -68,7 +68,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-600">
-            © 2026 Brayan Pidena & Walter Reyes · Universidad de las Américas · Todos los derechos reservados
+            © 2026 Brayan Pineda & Walter Reyes · Universidad de las Américas · Todos los derechos reservados
           </p>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />

@@ -1,128 +1,76 @@
-"""
-01_LIMPIEZA_NLP.PY
------------------------------------------------------------------------
-Fase: 2. Procesamiento
-Propósito: 
-    Procesar los perfiles de egreso en bruto (raw) extraídos en la Fase 1.
-    Elimina ruido estructural (caracteres, símbolos) y semántico (palabras 
-    vacías) usando Inteligencia Artificial lingüística para preparar el 
-    texto para los modelos matemáticos.
-
-Metodología:
-    1. Capa Estructural: Limpieza con Expresiones Regulares (Regex).
-    2. Capa Lingüística: Lematización y filtrado con spaCy.
-"""
-
-# IMPORTACIÓN DE LIBRERÍAS
-import os
 import pandas as pd
-import re
 import spacy
+import os
+import csv
 
-# CONFIGURACIÓN DE RUTAS INTELIGENTES
-# Ubicamos la carpeta donde vive este script (Fase2_Procesamiento)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# 1. Configuración de Rutas
+DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
+RUTA_ENTRADA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "perfiles_egreso_etiquetado_v1.csv"))
+RUTA_SALIDA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "perfiles_egreso_limpio_v1.csv"))
 
-# Definimos las rutas subiendo un nivel hasta 'src' y luego entrando a 'data'
-RUTA_ENTRADA = os.path.normpath(os.path.join(BASE_DIR, "..", "data", "raw", "perfiles_egreso_raw.csv"))
-RUTA_SALIDA = os.path.normpath(os.path.join(BASE_DIR, "..", "data", "processed", "perfiles_limpios.csv"))
-
-# PREPARACIÓN DEL MODELO LINGÜÍSTICO (IA)
+# 2. Cargar el modelo NLP
+print("⏳ Cargando modelo de lenguaje de spaCy...")
 try:
-    # IA: Cargamos el motor de procesamiento en español
     nlp = spacy.load("es_core_news_sm")
 except OSError:
-    print("Error: Falta descargar el modelo. Ejecuta: python -m spacy download es_core_news_sm")
+    print("❌ Error: No se encontró el modelo. Ejecuta: python -m spacy download es_core_news_sm")
     exit()
 
-# STOPWORDS PERSONALIZADAS: Palabras que la IA debe ignorar para no sesgar el análisis
-stopwords_academicas = {
-    "universidad", "instituto", "carrera", "estudiante", "alumno", "profesional",
-    "egresado", "titulado", "malla", "semestre", "grado", "título", "formación",
-    "capacidad", "conocimiento", "habilidad", "permitir", "desarrollar", "capaz",
-    "preparado", "orientado", "año", "nivel", "superior", "programa",
-    "chile", "católico", "católica", "pontificia", "nacional", "santiago",
-    "valparaíso", "concepción", "temuco", "norte", "sur", "san", "federico",
-    "santa", "maría", "andrés", "bello", "autónomo", "autónoma",
-    "informático", "informática", "ingeniería", "ingeniero", "civil"
+# 3. Stopwords
+STOPWORDS_CUSTOM = {
+    "ufro", "duoc", "duocuc", "inacap", "aiep", "santo", "tomás", "tomas", 
+    "cft", "ip", "universidad", "instituto", "profesional", "centro", "formación", "tecnológica",
+    "ceduc", "ucn", "ipchile", "uss", "unab", "udp", "pucv", "usm", "usach", "uchile",
+    "magíster", "magister", "director", "directora", "licenciado", "licenciatura", 
+    "jefatura", "alumno", "estudiante", "egresado", "titulado"
 }
 
-for word in stopwords_academicas:
-    nlp.vocab[word].is_stop = True
-
-# FUNCIONES DE PROCESAMIENTO
-
-def limpiar_texto_estructural(texto):
-    """
-    IA ESTRUCTURAL: Usa Regex para estandarizar el formato.
-    """
-    if not isinstance(texto, str): return ""
-    
-    texto = texto.lower()
-    
-    # 1. Normalización de género y artículos
-    texto = re.sub(r'\b(el|un)/la\b', r'\1', texto)
-    texto = re.sub(r'\b(un)/a\b', r'\1', texto)
-    texto = re.sub(r'/(as?|os?|a|o)\b', '', texto)
-    
-    # 2. Eliminación de símbolos y números
-    texto = re.sub(r'[^\w\s]', ' ', texto) # Quita puntuación
-    texto = re.sub(r'\d+', '', texto)      # Quita números
-    
-    # 3. Colapsar espacios múltiples
-    texto = re.sub(r'\s+', ' ', texto).strip()
-    
-    return texto
-
-def limpiar_texto_linguistico(texto):
-    """
-    IA SEMÁNTICA: Usa spaCy para entender la raíz de las palabras.
-    """
+def limpiar_texto_avanzado(texto):
+    if not isinstance(texto, str):
+        return ""
     doc = nlp(texto)
     tokens_limpios = []
-    
     for token in doc:
-        # Filtros: No es stopword, no es pronombre y tiene más de 2 letras
-        if not token.is_stop and token.pos_ != "PRON" and len(token.text) > 2:
-            # LEMATIZACIÓN: "optimizando" -> "optimizar"
-            tokens_limpios.append(token.lemma_)
-            
+        if token.ent_type_ == "ORG":
+            continue
+        if token.is_stop or token.is_punct or token.is_digit:
+            continue
+        token_lower = token.text.lower()
+        if token_lower in STOPWORDS_CUSTOM:
+            continue
+        tokens_limpios.append(token.lemma_.lower())
     return " ".join(tokens_limpios)
 
-# EJECUCIÓN DEL PIPELINE
+def main():
+    print("⏳ Leyendo el dataset etiquetado...")
+    try:
+        # Leemos el archivo limpio generado por tu etiquetador.py
+        df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
+    except Exception as e:
+        print("❌ Archivo no encontrado o corrompido.")
+        return
+
+    # 🔥 CORRECCIÓN AUTOMÁTICA (Validación Manual en Código) 🔥
+    # Buscamos la carrera de AIEP y la cambiamos a 'Técnico' directamente en Python
+    mascara_aiep = df['carrera'] == 'Programacion y Analisis de Sistemas'
+    if mascara_aiep.any():
+        df.loc[mascara_aiep, 'grado'] = 'Técnico'
+        print("🔧 Corrección automática aplicada: 'Programacion y Analisis de Sistemas' asignada a Técnico.")
+
+    print("\n📊 Análisis del confusor en consola (Grado vs Tipo de Institución):")
+    print(pd.crosstab(df['grado'], df['tipo_institucion']))
+    print("-" * 50)
+
+    print("🧹 Iniciando limpieza avanzada con spaCy (NER y Stopwords)...")
+    print("☕ Esto tomará unos momentos...")
+    df['perfil_limpio'] = df['perfil_egreso'].apply(limpiar_texto_avanzado)
+
+    print("💾 Guardando el dataset limpio para la vectorización...")
+    os.makedirs(os.path.dirname(RUTA_SALIDA), exist_ok=True)
+    df.to_csv(RUTA_SALIDA, index=False, encoding='utf-8-sig', quoting=csv.QUOTE_ALL)
+    
+    print(f"✅ ¡Punto 3 completado! Limpieza exitosa.")
+    print(f"📁 Archivo final guardado en: {RUTA_SALIDA}")
 
 if __name__ == "__main__":
-    print(f"Cargando datos desde: {RUTA_ENTRADA}")
-    
-    if not os.path.exists(RUTA_ENTRADA):
-        print("Error: No se encontró el archivo raw. Ejecuta primero la Fase 1.")
-        exit()
-
-    df = pd.read_csv(
-    RUTA_ENTRADA,
-    sep=",",
-    encoding="utf-8-sig"
-)
-    print("Columnas detectadas:")
-    print(df.columns.tolist())
-    print("Filas cargadas:", len(df))
-
-    print("1. Iniciando Limpieza Estructural (Regex)...")
-    df['perfil_estructural'] = df['perfil'].apply(limpiar_texto_estructural)
-
-    print("2. Iniciando Limpieza Lingüística (NLP/spaCy)...")
-    df['perfil_final'] = df['perfil_estructural'].apply(limpiar_texto_linguistico)
-
-    # GUARDADO ORGANIZADO
-    os.makedirs(os.path.dirname(RUTA_SALIDA), exist_ok=True)
-    df.to_csv(
-    RUTA_SALIDA,
-    index=False,
-    sep=";",
-    encoding="utf-8-sig"
-)
-    
-    print("\n" + "="*40)
-    print("FASE 2: PROCESAMIENTO FINALIZADO")
-    print(f"Archivo guardado en: {RUTA_SALIDA}")
-    print("="*40)
+    main()

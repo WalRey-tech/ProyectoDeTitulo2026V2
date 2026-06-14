@@ -9,12 +9,14 @@ from scraper import scrapear_sitio
 DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
 
 # 2. Construimos la ruta: Subimos un nivel ("..") hacia 'src', y luego a 'data/raw'
+# NOTA: Asegúrate de que la carpeta data/raw esté lista en tu proyecto
 RUTA_SALIDA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "raw", "perfiles_egreso_raw.csv"))
 
 
 def limpiar_dataframe(df):
     # Limpieza secundaria por seguridad en Pandas
-    df["perfil"] = df["perfil"].str.replace(r"\s+", " ", regex=True).str.strip()
+    # CORRECCIÓN: Actualizado a 'perfil_egreso' para coincidir con scraper.py
+    df["perfil_egreso"] = df["perfil_egreso"].str.replace(r"\s+", " ", regex=True).str.strip()
     df = df.fillna("")
     return df
 
@@ -27,7 +29,7 @@ def ordenar_columnas(df):
         "url",
         "selector",
         "metodo_usado",
-        "perfil",
+        "perfil_egreso", # CORRECCIÓN: Nombre de columna correcto
         "error"
     ]
     columnas_presentes = [col for col in columnas_ordenadas if col in df.columns]
@@ -39,11 +41,12 @@ def validar_dataframe(df):
     print("="*40)
     print(f"Total de instituciones procesadas: {len(df)}")
     
-    perfiles_vacios = (df["perfil"].str.strip() == "").sum()
+    # CORRECCIÓN: Actualizado a 'perfil_egreso'
+    perfiles_vacios = (df["perfil_egreso"].str.strip() == "").sum()
     
     # Subimos la exigencia: un perfil de egreso real tiene más de 150 caracteres.
     # Menos que eso, probablemente solo capturó un subtítulo y arruinará el análisis.
-    perfiles_cortos = ((df["perfil"].str.len() > 0) & (df["perfil"].str.len() < 150)).sum()
+    perfiles_cortos = ((df["perfil_egreso"].str.len() > 0) & (df["perfil_egreso"].str.len() < 150)).sum()
     
     print(f"Perfiles listos para análisis: {len(df) - perfiles_vacios - perfiles_cortos}") 
     print(f"Perfiles vacíos (Revisar selector CSS): {perfiles_vacios}") 
@@ -73,7 +76,8 @@ def main():
 
         if data.get("error"):
             print(f"   ↳ Estado: ERROR ({data.get('error')})")
-        elif not data.get("perfil"):
+        # CORRECCIÓN: Actualizado a 'perfil_egreso'
+        elif not data.get("perfil_egreso"):
             print("   ↳ Estado: ADVERTENCIA Sin texto extraído")
         else:
             print(f"   ↳ Estado: OK usando {data.get('metodo_usado')}")

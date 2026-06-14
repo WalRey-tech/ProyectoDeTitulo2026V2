@@ -1,0 +1,90 @@
+{
+    "n_por_grado": {
+        "Civil": 29,
+        "Informática": 23,
+        "Técnico": 15,
+        "Ejecución": 6,
+        "Total": 73
+    },
+    "metricas_supervisadas": {
+        "modelo": "Logistic Regression (Validación Cruzada 5-Folds)",
+        "accuracy": 0.5771,
+        "f1_macro": 0.5723,
+        "matriz_confusion": "Ver imagen: matriz_confusion_LR.png"
+    },
+    "analisis_homogeneidad": {
+        "similitud_civil_informatica": 0.6927,
+        "test_permutacion_p_valor": 0.0,
+        "significancia": "Estadísticamente significativo (p < 0.05)"
+    },
+    "terminos_distintivos": {
+        "Civil": [
+            "ingeniería civil",
+            "acorde",
+            "gerencial",
+            "gerencia",
+            "generación conocimiento",
+            "forma colaborativo",
+            "adquirido",
+            "fundamento",
+            "visión integral",
+            "ámbito ciencia",
+            "ámbito disciplina",
+            "formativo desarrollar",
+            "experiencial",
+            "habilidad comunicación",
+            "habilidad identificar"
+        ],
+        "Ejecución": [
+            "él facilidad",
+            "área matemática",
+            "diseño mantención",
+            "eficiente resolver",
+            "ambiente laboral",
+            "efectivo eficiente",
+            "principio sello",
+            "alto capacidad",
+            "diversidad capaz",
+            "desempeñar institución",
+            "programación recurso",
+            "equipo respetar",
+            "permanente tenacidad",
+            "permitir desenvolver",
+            "informática comprometido"
+        ],
+        "Informática": [
+            "doctorado ingeniería",
+            "eficiencia operativo",
+            "género diversidad",
+            "egreso competencias",
+            "entorno digital",
+            "enmarcar",
+            "especialización",
+            "generar valor",
+            "desarrollo implemento",
+            "estándar industria",
+            "tomar consideración",
+            "género",
+            "gestión tecnología",
+            "informático eficiente",
+            "industria organización"
+        ],
+        "Técnico": [
+            "web aplicación",
+            "dato lan",
+            "técnico informática",
+            "existente",
+            "estructura",
+            "desarrollar sistema",
+            "dato seguro",
+            "escritorio",
+            "metodología trabajo",
+            "aplicación escritorio",
+            "sistema web",
+            "metodologíos",
+            "mención ciberseguridad",
+            "vida desarrollo",
+            "operativo servidor"
+        ]
+    }
+}

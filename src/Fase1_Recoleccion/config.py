@@ -6,7 +6,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.usach.cl/carreras/ingenieria-de-ejecucion-en-computacion-e-informatica",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""  
     },
     {
         "universidad": "Universidad de Santiago de Chile",
@@ -15,7 +15,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.admision.usach.cl/carreras/ingenieria-civil-en-informatica",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""  
     },
     {
         "universidad": "Universidad de Valparaíso",
@@ -24,7 +24,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.uv.cl/carreras/ingenieria-en-informatica",
         "tipo_extraccion": "css",
-        "selector": "#tm-main .uk-text-justify"  # Walter
+        "selector": "#tm-main .uk-text-justify"
     },
     {
         "universidad": "Universidad de Valparaíso",
@@ -33,7 +33,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.uv.cl/carreras/ingenieria-civil-informatica",
         "tipo_extraccion": "css",
-        "selector": ".uk-panel p"  # Brayan
+        "selector": ".uk-panel p"
     },
     {
         "universidad": "Universidad de Chile",
@@ -42,7 +42,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admisionuchile.cl/career/ingenieria-civil-en-computacion/",
         "tipo_extraccion": "css",
-        "selector": "-"  # Walter
+        "selector": "-"
     },
     {
         "universidad": "Universidad de Atacama",
@@ -51,7 +51,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.uda.cl/index.php/ingenieria-civil-en-computacion-e-informatica/",
         "tipo_extraccion": "css",
-        "selector": ".et_pb_toggle_content p"  # Brayan
+        "selector": ".et_pb_toggle_content p"
     },
     {
         "universidad": "Universidad de la Serena",
@@ -60,7 +60,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.userena.cl/carreras/ingenieria-civil-en-computacion-e-informatica",
         "tipo_extraccion": "css",
-        "selector": "#section-id-1724720371470"  # Brayan ok
+        "selector": "#section-id-1724720371470"
     },
     {
         "universidad": "Universidad de Talca",
@@ -69,7 +69,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.utalca.cl/carreras/ingenieria-civil-en-computacion/",
         "tipo_extraccion": "css",
-        "selector": "-"  # Walter
+        "selector": "-"
     },
     {
         "universidad": "Universidad de Talca",
@@ -78,7 +78,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.utalca.cl/carreras/ingenieria-en-informatica-empresarial/",
         "tipo_extraccion": "css",
-        "selector": ".elementor-widget-container p"  # Lo dejas TOTALMENTE VACÍO
+        "selector": ".elementor-widget-container p" 
     },
     {
         "universidad": "Universidad del Biobío",
@@ -88,7 +88,7 @@ SITES = [
         "url": "https://ubiobio.cl/admision/Todas_las_Carreras/17/Ingenieria_Civil_en_Informatica_Concepcion/",
         "tipo_extraccion": "css",
         "selector": "",
-        "verificar_ssl": False  # Lo dejas TOTALMENTE VACÍO
+        "verificar_ssl": False
     },
     {
         "universidad": "Universidad del Biobío",
@@ -98,7 +98,7 @@ SITES = [
         "url": "https://ubiobio.cl/admision/Ciencias_Empresariales/21/Ingenieria_de_Ejecucion_en_Computacion_e_Informatica/",
         "tipo_extraccion": "css",
         "selector": "",
-        "verificar_ssl": False  # Lo dejas TOTALMENTE VACÍO
+        "verificar_ssl": False
     },
     {
         "universidad": "Universidad de la Frontera",
@@ -107,7 +107,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.ufro.cl/ingenieria-informatica/",
         "tipo_extraccion": "css",
-        "selector": ".elementor-element-0713830"  # Walter
+        "selector": ".elementor-element-0713830"
     },
     {
         "universidad": "Universidad de la Frontera",
@@ -116,7 +116,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.ufro.cl/ingenieria-civil-informatica/",
         "tipo_extraccion": "css",
-        "selector": ".elementor-widget-container p"  # Lo dejas TOTALMENTE VACÍO
+        "selector": ".elementor-widget-container p"
     },
     {
         "universidad": "Universidad de los Lagos",
@@ -125,7 +125,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.ulagos.cl/Carreras/ingenieria-civil-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": ".row.perfil"  # Walter
+        "selector": ".row.perfil"
     },
     {
         "universidad": "Universidad de Magallanes",
@@ -135,7 +135,7 @@ SITES = [
         "url": "https://admision.umag.cl/?page_id=35",
         "tipo_extraccion": "css",
         "selector": "#nav-perfil p",
-        "verificar_ssl": False  # Brayan
+        "verificar_ssl": False
     },
     {
         "universidad": "Universidad de Magallanes",
@@ -145,7 +145,7 @@ SITES = [
         "url": "https://admision.umag.cl/?page_id=27",
         "tipo_extraccion": "css",
         "selector": ".elementor-element-516655f",
-        "verificar_ssl": False  # Walter
+        "verificar_ssl": False
     },
     {
         "universidad": "Universidad Tecnologica Metropolitana",
@@ -154,7 +154,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://conocetucarrera.utem.cl/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": "-"  # Brayan del futuro sino funciona usa este .elementor-widget-container p
+        "selector": "-"
     },
     {
         "universidad": "Universidad Tecnologica Metropolitana",
@@ -163,7 +163,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://conocetucarrera.utem.cl/ingenieria-civil-en-computacion-mencion-informatica/",
         "tipo_extraccion": "css",
-        "selector": "-"  # Walter
+        "selector": "-"
     },
     {
         "universidad": "Universidad de Ohiggins",
@@ -172,7 +172,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.uoh.cl/escuela-de-ingenieria/carreras/ingenieria-civil-en-computacion/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Universidad de Bernardo Ohiggins",
@@ -181,7 +181,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.ubo.cl/facultades/facultad-de-ingenieria-ciencia-y-tecnologia/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": ".tab-content p"  # Brayan - revisado 1:41
+        "selector": ".tab-content p"
     },
     {
         "universidad": "Universidad de Aysen",
@@ -190,7 +190,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://uaysen.cl/departamentos/ciencias-naturales-y-tecnologia/ingenieria-civil-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Pontificia Universidad Catolica de Valparaiso",
@@ -199,7 +199,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.pucv.cl/pucv/pregrado/ingenieria-en-informatica",
         "tipo_extraccion": "css",
-        "selector": "#menuPreguntas" # Walter: agregue selector
+        "selector": "#menuPreguntas"
     },
     {
         "universidad": "Universidad de Concepcion",
@@ -208,7 +208,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.udec.cl/ingenieria-civil-informatica/",
         "tipo_extraccion": "css",
-        "selector": ".fusion-builder-column-0"  # Brayan - revisado 1:41 
+        "selector": ".fusion-builder-column-0"
     },
     {
         "universidad": "Universidad Tecnica Federico Santa Maria",
@@ -217,7 +217,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://usm.cl/admision/carreras/ingenieria-civil-informatica/",
         "tipo_extraccion": "css",
-        "selector": "elementor-widget-container p"  # Brayan
+        "selector": "elementor-widget-container p"
     },
     {
         "universidad": "Universidad Tecnica Federico Santa Maria",
@@ -226,7 +226,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://usm.cl/admision/carreras/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": ".elementor-element-6c130331"  # Walter
+        "selector": ".elementor-element-6c130331"
     },
     {
         "universidad": "Universidad Catolica del Norte",
@@ -235,7 +235,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.ucn.cl/carreras/tecnologia-computacion/ingenieria-en-computacion-e-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Universidad Catolica del Norte",
@@ -244,16 +244,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.ucn.cl/carreras/tecnologia-computacion/ingenieria-civil-en-computacion-e-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
-    },
-    {
-        "universidad": "Universidad Catolica del Norte",
-        "tipo_institucion": "Universidad",
-        "carrera": "Ingenieria en Tecnologias de Informacion",
-        "tipo_carrera": "Profesional",
-        "url": "https://admision.ucn.cl/carreras/tecnologia-computacion/ingenieria-en-tecnologias-de-la-informacion/",
-        "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Universidad de la Santisima Concepcion",
@@ -262,7 +253,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://ingenieria.ucsc.cl/carreras/ingenieria-civil-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Universidad de la Santisima Concepcion",
@@ -271,7 +262,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://it.ucsc.cl/carreras/ingenieria-de-ejecucion-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Universidad Catolica de Temuco",
@@ -280,7 +271,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.uct.cl/ing-civil-informatica/",
         "tipo_extraccion": "css",
-        "selector": "#elementor-tab-content-1201"  # Walter
+        "selector": "#elementor-tab-content-1201"
     },
     {
         "universidad": "Universidad de las Américas",
@@ -289,7 +280,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.udla.cl/carreras/diurno/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": "#tab-2-pane"  # Walter
+        "selector": "#tab-2-pane"
     },
     {
         "universidad": "Universidad Andres Bello",
@@ -298,7 +289,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.unab.cl/carreras/ingenieria-en-computacion-e-informatica/",
         "tipo_extraccion": "css",
-        "selector": "#acordeon-3-2"  # Walter
+        "selector": "#acordeon-3-2"
     },
     {
         "universidad": "Universidad Autonoma de Chile",
@@ -307,7 +298,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.uautonoma.cl/carreras/ingenieria-civil-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Universidad Autonoma de Chile",
@@ -316,7 +307,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.uautonoma.cl/carreras/ingenieria-en-informatica-online-regular/",
         "tipo_extraccion": "css",
-        "selector": "#tab4"  # Walter
+        "selector": "#tab4"
     },
     {
         "universidad": "Universidad Central de Chile",
@@ -325,7 +316,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.ucentral.cl/carrera/ingenieria-civil-en-computacion-e-informatica/",
         "tipo_extraccion": "selenium",
-        "selector": "div[role='region']"  # Brayan
+        "selector": "div[role='region']"
     },
     {
         "universidad": "Universidad Central de Chile",
@@ -334,7 +325,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://advance.ucentral.cl/programas/ingenieria-en-informatica-y-sistemas-inteligentes/",
         "tipo_extraccion": "css",
-        "selector": "#e-n-accordion-item-1911"  # Walter
+        "selector": "#e-n-accordion-item-1911"
     },
     {
         "universidad": "Universidad Mayor",
@@ -343,7 +334,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://advance.umayor.cl/educacion-online/ingenieria-informatica-plan-regular?utm_source=google&utm_medium=cpa&utm_campaign=SNB_AD_00807156_ON_20267&utm_content=RSA1_ex&utm_term=&gad_source=1&gad_campaignid=23076000607&gbraid=0AAAAADtiOMI1iMfo5ZY2WadRR71Q1zVIJ&gclid=CjwKCAjwhqfPBhBWEiwAZo196q-QOm6zr2L98M0Gp4yAELJa9zXl4ci5MQzLJJrfvV5vChRPKrEUeBoCY6wQAvD_BwE",
         "tipo_extraccion": "css",
-        "selector": ".box-acordeones > div:nth-child(1) p",  # Walter
+        "selector": ".box-acordeones > div:nth-child(1) p",
         "verificar_ssl": False
     },
     {
@@ -353,7 +344,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.umayor.cl/um/carreras/ingenieria-civil-en-computacion-e-informatica-santiago",
         "tipo_extraccion": "css",
-        "selector": ".panel p"  # Lo dejas TOTALMENTE VACÍO
+        "selector": ".panel p"
     },
     {
         "universidad": "Universidad Diego Portales",
@@ -362,7 +353,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.udp.cl/carrera/ingenieria-civil-en-informatica-y-telecomunicaciones/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Universidad Diego Portales",
@@ -389,7 +380,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://ingenieria.udd.cl/carrera/ingenieria-civil-en-informatica-e-innovacion-tecnologica/perfil-del-alumno/",
         "tipo_extraccion": "css",
-        "selector": ".container.text"  # Walter
+        "selector": ".container.text"
     },
     {
         "universidad": "Universidad del Desarrollo",
@@ -398,7 +389,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://ingenieria.udd.cl/carrera/ingenieria-civil-en-informatica-e-inteligencia-artificial/malla/",
         "tipo_extraccion": "css",
-        "selector": ".text-row__content-inner p"  # Lo dejas TOTALMENTE VACÍO
+        "selector": ".text-row__content-inner p"
     },
     {
         "universidad": "Universidad Finis Terrae",
@@ -407,7 +398,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://ingenieria.uft.cl/escuela-de-ingenieria/ingenieria-civil-en-informatica-y-telecomunicaciones/",
         "tipo_extraccion": "css",
-        "selector": ".fusion-text.fusion-text-4",  # Walter
+        "selector": ".fusion-text.fusion-text-4",
         "verificar_ssl": False
     },
     {
@@ -417,7 +408,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.uahurtado.cl/carreras/ingenieria-civil-plan-comun-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Universidad de los Andes",
@@ -426,7 +417,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.uandes.cl/carreras/area-ingenieria-y-administracion/ingenieria-civil-en-ciencias-de-la-computacion",
         "tipo_extraccion": "css",
-        "selector": "#ContentplaceholderMain_C087_Col01 p"  # Lo dejas TOTALMENTE VACÍO
+        "selector": "#ContentplaceholderMain_C087_Col01 p"
     },
     {
         "universidad": "Universidad Gabriela Mistral",
@@ -435,7 +426,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.ugm.cl/carreras/ingenieria-civil-informatica/",
         "tipo_extraccion": "css",
-        "selector": "-"  # Brayan
+        "selector": "-" 
     },
     {
         "universidad": "INACAP",
@@ -444,52 +435,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://portal.inacap.cl/carreras/area-informatica-ciberseguridad-y-telecomunicaciones/ingenieria-en-informatica",
         "tipo_extraccion": "selenium",
-        "selector": "#perfil-egreso"  # Brayan
-    },
-    {
-        "universidad": "INACAP",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria en Ciberseguridad",
-        "tipo_carrera": "Profesional",
-        "url": "https://portal.inacap.cl/carreras/area-informatica-ciberseguridad-y-telecomunicaciones/ingenieria-en-ciberseguridad",
-        "tipo_extraccion": "selenium",
-        "selector": "#perfil-egreso"  # Walter
-    },
-    {
-        "universidad": "Duoc UC",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria en Ciberseguridad",
-        "tipo_carrera": "Profesional",
-        "url": "https://www.duoc.cl/carreras/ingenieria-en-ciberseguridad/",
-        "tipo_extraccion": "css",
-        "selector": "#ficha-tecnica"  # Brayan
-    },
-    {   # Walter: SE AGREGA SELECTOR YA QUE AL HACER WEB SCRAPING NO MUESTRA SU INFORMACIÓN
-        "universidad": "Duoc UC",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria en Ciencia de Datos",
-        "tipo_carrera": "Profesional",
-        "url": "https://www.duoc.cl/carreras/ingenieria-en-ciencia-de-datos/",
-        "tipo_extraccion": "css",
-        "selector": "#ficha-tecnica"
-    },
-    {
-        "universidad": "Duoc UC",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria en Desarrollo de Software",
-        "tipo_carrera": "Profesional",
-        "url": "https://www.duoc.cl/carreras/ingenieria-en-desarrollo-de-software-2/",
-        "tipo_extraccion": "css",
-        "selector": "#ficha-tecnica"  # Brayan 
-    },
-    {
-        "universidad": "Duoc UC",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria en Infraestructura Tecnologica",
-        "tipo_carrera": "Profesional",
-        "url": "https://www.duoc.cl/carreras/ingenieria-en-infraestructura-tecnologica/",
-        "tipo_extraccion": "css",
-        "selector": "#ficha-tecnica"  # Walter
+        "selector": "#perfil-egreso"
     },
     {
         "universidad": "Duoc UC",
@@ -498,7 +444,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.duoc.cl/carreras/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": "#ficha-tecnica"  # Brayan
+        "selector": "#ficha-tecnica"
     },
     {
         "universidad": "AIEP",
@@ -507,25 +453,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.aiep.cl/admision/carrera/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
-    },
-    {
-        "universidad": "AIEP",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria en Ciberseguridad",
-        "tipo_carrera": "Profesional",
-        "url": "https://www.aiep.cl/admision/carrera/ingenieria-en-ciberseguridad/",
-        "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
-    },
-    {
-        "universidad": "AIEP",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria en Data Science",
-        "tipo_carrera": "Profesional",
-        "url": "https://www.aiep.cl/admision/carrera/ingenieria-en-data-science/",
-        "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Santo Tomas",
@@ -534,7 +462,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.ipsantotomas.cl/carreras/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "IACC",
@@ -543,7 +471,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.iacc.cl/carrera/ingenieria-en-informatica/?origen=google_ads_carreras&utm_campaign=39844489-_Search_CARRERA_ING_INFORMATICA&utm_source=ppc&utm_medium=google&utm_term=cpl&utm_content=ingenieria-en-informatica&utm_term=ingenier%C3%ADa%20en%20sistemas%20universidades&utm_campaign=IACC_Search_Carrera_Ingenieria_Inform%C3%A1tica&utm_source=adwords&utm_medium=ppc&hsa_acc=3643935547&hsa_cam=21457092417&hsa_grp=167767224914&hsa_ad=705590150535&hsa_src=g&hsa_tgt=kwd-589776510461&hsa_kw=ingenier%C3%ADa%20en%20sistemas%20universidades&hsa_mt=b&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=21457092417&gbraid=0AAAAAqi2tcnc4mlF6prfKC1hCFytIsM7a&gclid=CjwKCAjw46HPBhAMEiwASZpLRHfuoZDNIblNry7ovo2v8t2FkJLsAKlMxZYtNTqT4XptYu05OZwVSxoCjDsQAvD_BwE",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "Iplacex",
@@ -552,7 +480,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.iplacex.cl/carreras/carreras-100-online/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
         "universidad": "IP Los Leones",
@@ -561,24 +489,177 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://ipleones.cl/carreras/ingenieria-en-informatica-y-ciberseguridad/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "selector": ""
     },
     {
-        "universidad": "CFT Santo Tomás",
+        "universidad": "IACC",
+        "tipo_institucion": "IP",
+        "carrera": "Tecnico en Informatica",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://www.iacc.cl/carrera/tecnico-de-nivel-superior-en-informatica/",
+        "tipo_extraccion": "css",
+        "selector": ""
+    },
+    {
+        "universidad": "Universidad Mayor",
+        "tipo_institucion": "Universidad",
+        "carrera": "Tecnico en Informatica",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://tec.umayor.cl/tecnico-en-informatica",
+        "tipo_extraccion": "selenium",
+        "selector": "body > div:nth-child(10) > div > div:nth-child(1) > div:nth-child(2) > p"
+    },
+    {
+        "universidad": "Universidad Catolica del Maule",
+        "tipo_institucion": "Universidad",
+        "carrera": "Ingenieria Ejecucion en Computacion e Informatica",
+        "tipo_carrera": "Profesional",
+        "url": "https://www.ucm.cl/prenovato/ingenieria-ejecucion-en-computacion-e-informatica/",
+        "tipo_extraccion": "css",
+        "selector": ""
+    },
+    {
+        "universidad": "Universidad del Bio Bio",
+        "tipo_institucion": "Universidad",
+        "carrera": "Ingenieria de Ejecucion en Computacion e Informatica",
+        "tipo_carrera": "Profesional",
+        "url": "https://ubiobio.cl/admision/Todas_las_Carreras/21/Ingenieria_de_Ejecucion_en_Computacion_e_Informatica/#perfilubb",
+        "tipo_extraccion": "selenium",
+        "selector": ""
+    },
+    {
+        "universidad": "Universidad Catolica de la Santisima Concepción",
+        "tipo_institucion": "Universidad",
+        "carrera": "Ingenieria de Ejecucion en Informatica",
+        "tipo_carrera": "Profesional",
+        "url": "https://advance.ucsc.cl/carreras/ingenieria-de-ejecucion-en-informatica/",
+        "tipo_extraccion": "css",
+        "selector": ""
+    },
+    {
+        "universidad": "Universidad Arturo Prat",
+        "tipo_institucion": "Universidad",
+        "carrera": "Tecnico en Computacion e Informatica",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://www.admisionunap.cl/detalle-carrera?carrera=44",
+        "tipo_extraccion": "selenium",
+        "selector": "body > div.sid.desk_root > div > div > div.col-lg-7.col-md-12 > div.desc_f.careerText > div:nth-child(1)"
+    },
+    {
+        "universidad": "Escuela de Comercio y Servicios",
+        "tipo_institucion": "Instituto Profesional",
+        "carrera": "Tecnico en Informatica",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://admision.escueladecomercio.cl/carrera/tecnico-en-informatica/?utm_term=&utm_campaign=Search+-+SEE+-+Admisi%C3%B3n+-+Carreras+Profesionales+Online+-++Administraci%C3%B3n+P%C3%BAblica&utm_source=adwords&utm_medium=ppc&hsa_acc=2101840378&hsa_cam=22849964134&hsa_grp=184816797764&hsa_ad=812261818770&hsa_src=g&hsa_tgt=dsa-1456167871416&hsa_kw=&hsa_mt=&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=22849964134&gbraid=0AAAAAqc5tiTENXzpFfar-pV-H7lfuu3KQ&gclid=Cj0KCQjw_7PRBhDcARIsAMjV7jmGkC0EH5BHtY1lsLdTyPyzmqIdpC4Cbb-R86i63GYwyt2Zsu9_vqwaAn4jEALw_wcB",
+        "tipo_extraccion": "selenium",
+        "selector": "#elementor-tab-content-2581 > p"
+    },
+    {
+        "universidad": "Universidad de los Lagos",
+        "tipo_institucion": "Universidad",
+        "carrera": "Tecnico Universitario en Informatica",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://admision.ulagos.cl/carreras-tecnicas/tecnico-universitario-en-informatica/",
+        "tipo_extraccion": "selenium",
+        "selector": "body > main > div > div.row.div_content_single > div > div > div.desktop_div > div:nth-child(1) > div.col-md-6.no-float > span.captionregular > p"
+    },
+    {
+        "universidad": "Iplacex",
+        "tipo_institucion": "Instituto Profesional",
+        "carrera": "Tecnico en Informática",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://www.iplacex.cl/carreras/carreras-100-online/tecnico-en-informatica/",
+        "tipo_extraccion": "css",
+        "selector": ""
+    },
+    {
+        "universidad": "Instituto Profesional Providencia",
+        "tipo_institucion": "Instituto Profesional",
+        "carrera": "Tecnico Superior en Informatica",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://instituto.ipp.cl/tecnico-en-informatica",
+        "tipo_extraccion": "css",
+        "selector": "" 
+    },
+    {
+        "universidad": "ENAC",
+        "tipo_institucion": "Instituto Profesional",
+        "carrera": "Tecnico en Informatica mención Ciberseguridad",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://enac.cl/carrera/tecnico-en-informatica-mencion-ciberseguridad/",
+        "tipo_extraccion": "selenium",
+        "selector": "#apus-main-content > div > div.elementor-element.elementor-element-22f30165.e-flex.e-con-boxed.e-con.e-parent.e-lazyloaded > div > div.elementor-element.elementor-element-5590ca3b.e-con-full.e-flex.e-con.e-child > div.elementor-element.elementor-element-47ce9870.e-con-full.e-flex.e-con.e-child > div.elementor-element.elementor-element-580bf415.descripcion.elementor-widget.elementor-widget-text-editor" 
+    },
+    {
+        "universidad": "Ceduc UCN",
         "tipo_institucion": "CFT",
+        "carrera": "Tecnico de Nivel Superior en Computacion e Informatica Mencion Programacion",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://www.ceduc.cl/carreras/computacion-e-informatica-mencion-programacion/#perfil",
+        "tipo_extraccion": "selenium",
+        "selector": "" 
+    },
+    {
+        "universidad": "Ceduc UCN",
+        "tipo_institucion": "CFT",
+        "carrera": "Tecnico de Nivel Superior en Computacion e Informatica Mencion Ciberseguridad",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://www.ceduc.cl/carreras/computacion-e-informatica-mencion-ciberseguridad/",
+        "tipo_extraccion": "selenium",
+        "selector": ".media-panel__content" 
+    },
+    {
+        "universidad": "Universidad Catolica de Temuco",
+        "tipo_institucion": "Universidad",
+        "carrera": "Tecnico Universitario en Informatica",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://admision.uct.cl/tec-informatica-vespertina/",
+        "tipo_extraccion": "css",
+        "selector": "#elementor-tab-content-1201"
+    },
+    {
+        "universidad": "AIEP",
+        "tipo_institucion": "Instituto Profesional",
+        "carrera": "Programacion y Analisis de Sistemas",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://www.aiep.cl/admision/carrera/programacion-y-analisis-de-sistemas/",
+        "tipo_extraccion": "css",
+        "selector": "" 
+    },
+    {
+        "universidad": "Duoc UC",
+        "tipo_institucion": "Instituto Profesional",
+        "carrera": "Analista Programador Computacional",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://www.duoc.cl/carreras/analista-programador-computacional/",
+        "tipo_extraccion": "css",
+        "selector": "" 
+    },
+    {
+        "universidad": "INACAP",
+        "tipo_institucion": "Instituto Profesional",
         "carrera": "Analista Programador",
-        "tipo_carrera": "Profesional",
-        "url": "https://www.tupuedes.cl/carreras/instituto-profesional/analista-programador-carrera-online/?utm_feeditemid=&utm_device=c&utm_term=estudiar%20informatica&utm_campaign=&utm_source=adwords&utm_medium=ppc&hsa_cam=21913899085&hsa_grp=172965132846&hsa_mt=b&hsa_src=g&hsa_ad=731263310533&hsa_acc=2000824545&hsa_net=adwords&hsa_kw=estudiar%20informatica&hsa_tgt=kwd-296857570521&hsa_ver=3&gad_source=1&gad_campaignid=21913899085&gbraid=0AAAAApT_O1_ofekrjXQ7jzaW0UdAIodUC&gclid=CjwKCAjw46HPBhAMEiwASZpLRCWjrI5f5wYHTi5jZDgbte3ihk4O-xzBMtVyrTXcs5Jw_Ss3kP_YuxoC6ToQAvD_BwE",
-        "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://portal.inacap.cl/carreras/area-informatica-ciberseguridad-y-telecomunicaciones/analista-programador",
+        "tipo_extraccion": "selenium",
+        "selector": "#perfil-egreso > div > div > div" 
     },
     {
-        "universidad": "CFT PUCV (Pontificia Universidad Catolica de Valparaiso)",
-        "tipo_institucion": "CFT",
-        "carrera": "Tecnico de Nivel Superior en Computacion e Informatica",
-        "tipo_carrera": "Profesional",
-        "url": "https://cftpucv.cl/computacion-e-informatica/",
+        "universidad": "Santo Tomas",
+        "tipo_institucion": "Instituto Profesional",
+        "carrera": "Analista Programador",
+        "tipo_carrera": "Tecnico de Nivel Superior",
+        "url": "https://www.ipsantotomas.cl/carreras/analista-programador/",
         "tipo_extraccion": "css",
-        "selector": ""  # Lo dejas TOTALMENTE VACÍO
-    }, 
+        "selector": "" 
+    },
+    {
+        "universidad": "IP Chile",
+        "tipo_institucion": "Instituto Profesional",
+        "carrera": "Ingenieria en Informatica",
+        "tipo_carrera": "Profesional",
+        "url": "https://www.ipchile.cl/carreras/ingenieria-en-informatica/",
+        "tipo_extraccion": "css",
+        "selector": "" 
+    },
 ]
