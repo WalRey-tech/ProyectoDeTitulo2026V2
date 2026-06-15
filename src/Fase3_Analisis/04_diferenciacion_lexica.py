@@ -11,11 +11,11 @@ RUTA_ENTRADA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "p
 RUTA_SALIDA_CSV = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "top15_palabras_clave.csv"))
 
 def main():
-    print("⏳ Cargando dataset para el Análisis de Diferenciación Léxica...")
+    print(" Cargando dataset para el Análisis de Diferenciación Léxica...")
     try:
         df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
     except FileNotFoundError:
-        print(f"❌ Error: No se encontró {RUTA_ENTRADA}.")
+        print(f" Error: No se encontró {RUTA_ENTRADA}.")
         return
 
     df = df.dropna(subset=['perfil_limpio'])
@@ -23,7 +23,7 @@ def main():
     # =============================================================================
     # 2. EXTRACCIÓN DE FRECUENCIAS ABSOLUTAS
     # =============================================================================
-    print("🧮 Contando palabras (Bigramas y Monogramas)...")
+    print(" Contando palabras (Bigramas y Monogramas)...")
     # Usamos CountVectorizer (no TF-IDF) porque el profesor pide frecuencias reales
     vec = CountVectorizer(ngram_range=(1, 2), min_df=2)
     X_counts = vec.fit_transform(df['perfil_limpio'])
@@ -39,7 +39,7 @@ def main():
     # =============================================================================
     # 3. CÁLCULO DE FRECUENCIA RELATIVA Y Z-SCORE (Keyness)
     # =============================================================================
-    print("⚖️ Calculando Keyness mediante Z-Score...")
+    print(" Calculando Keyness mediante Z-Score...")
     
     # 1. Frecuencia Relativa: porcentaje de uso de una palabra dentro de ese grado
     totales_por_grado = frecuencias_por_grado.sum(axis=1)
@@ -56,7 +56,7 @@ def main():
     # 4. EXTRACCIÓN Y REPORTE DEL TOP-15
     # =============================================================================
     print("\n" + "="*60)
-    print("🏆 TOP 15 TÉRMINOS DISTINTIVOS POR GRADO (Z-Score)")
+    print(" TOP 15 TÉRMINOS DISTINTIVOS POR GRADO (Z-Score)")
     print("="*60)
 
     resultados = []
@@ -65,7 +65,7 @@ def main():
         # Tomamos los 15 términos con el Z-score más alto para este grado
         top_terms = z_scores.loc[grado].sort_values(ascending=False).head(15)
         
-        print(f"\n📌 {grado.upper()}:")
+        print(f"\n {grado.upper()}:")
         for i, (termino, puntaje_z) in enumerate(top_terms.items(), 1):
             print(f"   {i}. {termino:<25} (Z-Score: {puntaje_z:.2f})")
             resultados.append({
@@ -80,7 +80,7 @@ def main():
     df_resultados.to_csv(RUTA_SALIDA_CSV, index=False, encoding='utf-8-sig')
     
     print("\n" + "="*60)
-    print(f"✅ ¡Punto 7 completado! Datos exportados a: {RUTA_SALIDA_CSV}")
+    print(f" ¡Punto 7 completado! Datos exportados a: {RUTA_SALIDA_CSV}")
 
 if __name__ == "__main__":
     main()

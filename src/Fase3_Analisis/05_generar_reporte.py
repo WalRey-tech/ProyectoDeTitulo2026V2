@@ -10,13 +10,13 @@ RUTA_TOP_WORDS = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", 
 RUTA_SALIDA_JSON = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "resultados.json"))
 
 def main():
-    print("⏳ Generando reporte final consolidado...")
+    print(" Generando reporte final consolidado...")
     
     # 1. Leer los términos distintivos del CSV anterior
     try:
         df_top = pd.read_csv(RUTA_TOP_WORDS, encoding='utf-8-sig')
     except FileNotFoundError:
-        print(f"❌ Error: No se encontró el archivo de palabras clave: {RUTA_TOP_WORDS}")
+        print(f" Error: No se encontró el archivo de palabras clave: {RUTA_TOP_WORDS}")
         return
 
     # Estructuramos las palabras por carrera
@@ -54,9 +54,9 @@ def main():
         json.dump(reporte, f, indent=4, ensure_ascii=False)
         
     print("\n" + "="*60)
-    print(f"✅ ¡Punto 8 completado! Archivo maestro generado en:\n{RUTA_SALIDA_JSON}")
+    print(f" ¡Punto 8 completado! Archivo maestro generado en:\n{RUTA_SALIDA_JSON}")
     print("="*60)
-    print("💡 Instrucción para tu Frontend (React/Next.js):")
+    print(" Instrucción para tu Frontend (React/Next.js):")
     print("Asegúrate de que 'ResultsSection.tsx' lea este archivo JSON para mostrar los datos,")
     print("o de lo contrario, agrega un comentario en tu código frontend diciendo:")
     print("// NOTA: Esta vista es ilustrativa. Los datos reales se encuentran en processed/resultados.json")

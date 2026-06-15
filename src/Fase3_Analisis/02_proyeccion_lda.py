@@ -15,11 +15,11 @@ RUTA_ENTRADA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "p
 RUTA_GRAFICO_SALIDA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "proyeccion_pca_vs_lda.png"))
 
 def main():
-    print("⏳ Cargando dataset limpio...")
+    print(" Cargando dataset limpio...")
     try:
         df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
     except FileNotFoundError:
-        print(f"❌ Error: No se encontró {RUTA_ENTRADA}.")
+        print(f" Error: No se encontró {RUTA_ENTRADA}.")
         return
 
     # Limpieza de seguridad
@@ -30,7 +30,7 @@ def main():
     # =============================================================================
     # 2. VECTORIZACIÓN (TF-IDF)
     # =============================================================================
-    print("🧮 Vectorizando textos...")
+    print(" Vectorizando textos...")
     vectorizer = TfidfVectorizer(max_features=1500, ngram_range=(1, 2))
     
     # TF-IDF genera una matriz dispersa (sparse). 
@@ -40,11 +40,11 @@ def main():
     # =============================================================================
     # 3. REDUCCIÓN DE DIMENSIONALIDAD (De 1500 dimensiones a 2)
     # =============================================================================
-    print("📉 Aplicando PCA (Exploratorio no supervisado)...")
+    print(" Aplicando PCA (Exploratorio no supervisado)...")
     pca = PCA(n_components=2, random_state=42)
     X_pca = pca.fit_transform(X_tfidf_denso)
 
-    print("🎯 Aplicando LDA (Separabilidad supervisada)...")
+    print(" Aplicando LDA (Separabilidad supervisada)...")
     # LDA busca la máxima separación entre clases. 
     # Soporta máximo (N_clases - 1) dimensiones. Tenemos 4 clases, así que 2D es perfecto.
     lda = LinearDiscriminantAnalysis(n_components=2)
@@ -53,7 +53,7 @@ def main():
     # =============================================================================
     # 4. VISUALIZACIÓN COMPARATIVA (Subplots)
     # =============================================================================
-    print("🎨 Generando gráficos de proyección 2D...")
+    print(" Generando gráficos de proyección 2D...")
     
     # Configuramos la paleta de colores para que sea consistente
     colores = {'Civil': '#1f77b4', 'Informática': '#ff7f0e', 'Ejecución': '#2ca02c', 'Técnico': '#d62728'}
@@ -88,8 +88,8 @@ def main():
     plt.tight_layout()
     plt.savefig(RUTA_GRAFICO_SALIDA, dpi=300)
     
-    print(f"✅ ¡Punto 5 completado exitosamente!")
-    print(f"📁 Gráfico guardado en: {RUTA_GRAFICO_SALIDA}")
+    print(f" ¡Punto 5 completado exitosamente!")
+    print(f" Gráfico guardado en: {RUTA_GRAFICO_SALIDA}")
 
 if __name__ == "__main__":
     main()

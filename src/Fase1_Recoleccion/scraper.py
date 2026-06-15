@@ -114,7 +114,7 @@ def scrapear_sitio(site):
             # Plan de Respaldo: Si Selenium no trajo nada, intenta con Requests
             if not perfil:
                 print(
-                    f"⚠️ Selenium no extrajo texto para {site.get('universidad')}. "
+                    f"Selenium no extrajo texto para {site.get('universidad')}. "
                     f"Probando requests..."
                 )
                 perfil = extraer_con_requests(site)
@@ -128,7 +128,7 @@ def scrapear_sitio(site):
             # Plan de Respaldo: Si Requests no trajo nada, intenta con Selenium
             if not perfil:
                 print(
-                    f"⚠️ Requests no extrajo texto para {site.get('universidad')}. "
+                    f"Requests no extrajo texto para {site.get('universidad')}. "
                     f"Probando Selenium..."
                 )
                 perfil = extraer_con_selenium(site)

@@ -43,7 +43,7 @@ def clasificar_grado(nombre_carrera):
 # 3. FLUJO PRINCIPAL
 # =============================================================================
 def main():
-    print("⏳ Leyendo el dataset crudo generado por el scraper...")
+    print("Leyendo el dataset crudo generado por el scraper...")
     try:
         # Leemos el archivo original. 
         # Pandas por defecto maneja bien las comillas si el archivo está limpio.
@@ -52,7 +52,7 @@ def main():
         print(f"❌ Error: No se encontró {RUTA_RAW}. Asegúrate de que main.py terminó.")
         return
 
-    print("🏷️ Creando la nueva columna 'grado'...")
+    print("Creando la nueva columna 'grado'...")
     # .apply() toma nuestra función clasificar_grado y la ejecuta fila por fila
     # sobre la columna 'carrera', guardando el resultado en la nueva columna 'grado'.
     df['grado'] = df['carrera'].apply(clasificar_grado)
@@ -67,14 +67,14 @@ def main():
     # Nos aseguramos de que la carpeta 'processed' exista antes de guardar
     os.makedirs(os.path.dirname(RUTA_VERSIONADA), exist_ok=True)
 
-    print("💾 Guardando y versionando el dataset...")
+    print(" Guardando y versionando el dataset...")
     # Guardamos el nuevo archivo con la etiqueta _v1
     # Usamos quoting=csv.QUOTE_ALL para mantener la misma estructura de seguridad del raw
     df.to_csv(RUTA_VERSIONADA, index=False, encoding='utf-8-sig', quoting=csv.QUOTE_ALL)
     
-    print(f"✅ ¡Etiquetado exitoso!")
-    print(f"📁 Archivo versionado guardado en: {RUTA_VERSIONADA}")
-    print("\n📊 Distribución final del dataset (Revisa si cuadra con lo esperado):")
+    print(f" ¡Etiquetado exitoso!")
+    print(f" Archivo versionado guardado en: {RUTA_VERSIONADA}")
+    print("\n Distribución final del dataset (Revisa si cuadra con lo esperado):")
     print(df['grado'].value_counts())
 
 if __name__ == "__main__":

@@ -35,11 +35,11 @@ def calcular_diferencia_intra_inter(sim_matrix, labels):
     return sim_intra - sim_inter
 
 def main():
-    print("⏳ Cargando dataset para el Análisis de Homogeneidad...")
+    print(" Cargando dataset para el Análisis de Homogeneidad...")
     try:
         df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
     except FileNotFoundError:
-        print(f"❌ Error: No se encontró {RUTA_ENTRADA}.")
+        print(f" Error: No se encontró {RUTA_ENTRADA}.")
         return
 
     df = df.dropna(subset=['perfil_limpio'])
@@ -52,14 +52,14 @@ def main():
     # =============================================================================
     # 2. VECTORIZACIÓN TF-IDF
     # =============================================================================
-    print("🧮 Vectorizando textos...")
+    print(" Vectorizando textos...")
     vectorizer = TfidfVectorizer(max_features=1500, ngram_range=(1, 2))
     X_tfidf = vectorizer.fit_transform(X).toarray()
 
     # =============================================================================
     # 3. CÁLCULO DE CENTROIDES Y SIMILITUD COSENO (Homogeneidad)
     # =============================================================================
-    print("🎯 Calculando los centroides de cada grado...")
+    print(" Calculando los centroides de cada grado...")
     centroides = []
     for grado in grados_unicos:
         # Filtramos los vectores que pertenecen a este grado y calculamos el promedio (centroide)
@@ -71,7 +71,7 @@ def main():
     similitud_centroides = cosine_similarity(centroides)
 
     print("\n" + "="*50)
-    print("📊 MATRIZ DE SIMILITUD COSENO ENTRE CENTROIDES")
+    print(" MATRIZ DE SIMILITUD COSENO ENTRE CENTROIDES")
     print("="*50)
     # Imprimimos los resultados en formato tabla legible en consola
     print(f"{'':>15} | " + " | ".join([f"{g:>12}" for g in grados_unicos]))
@@ -84,7 +84,7 @@ def main():
     idx_civil = grados_unicos.index('Civil')
     idx_info = grados_unicos.index('Informática')
     sim_civil_info = similitud_centroides[idx_civil, idx_info]
-    print(f"\n💡 [HALLAZGO TESIS] Similitud entre Civil e Informática: {sim_civil_info:.4f}")
+    print(f"\n [HALLAZGO TESIS] Similitud entre Civil e Informática: {sim_civil_info:.4f}")
 
     # Graficamos el Heatmap de los Centroides
     plt.figure(figsize=(8, 6))
@@ -93,13 +93,13 @@ def main():
     plt.title('Similitud Coseno entre Centroides de Grados', fontweight='bold')
     plt.tight_layout()
     plt.savefig(RUTA_GRAFICO_SALIDA, dpi=300)
-    print(f"📁 Heatmap guardado en: {RUTA_GRAFICO_SALIDA}")
+    print(f" Heatmap guardado en: {RUTA_GRAFICO_SALIDA}")
 
     # =============================================================================
     # 4. TEST DE PERMUTACIÓN (Significancia Estadística)
     # =============================================================================
     print("\n" + "="*50)
-    print("🎲 INICIANDO TEST DE PERMUTACIÓN (Significancia)")
+    print(" INICIANDO TEST DE PERMUTACIÓN (Significancia)")
     print("="*50)
     
     # Calculamos la matriz de similitud de TODOS los documentos (73x73)
@@ -107,14 +107,14 @@ def main():
     
     # 1. Calculamos la diferencia observada real (Intra vs Inter)
     diferencia_observada = calcular_diferencia_intra_inter(similitud_total, y)
-    print(f"📌 Diferencia observada (Intra - Inter) real: {diferencia_observada:.4f}")
+    print(f" Diferencia observada (Intra - Inter) real: {diferencia_observada:.4f}")
 
     # 2. Permutaciones
     N_PERMUTACIONES = 1000
     np.random.seed(42) # Semilla fija solicitada por el profesor
     diferencias_permutadas = np.zeros(N_PERMUTACIONES)
     
-    print(f"⏳ Revolviendo etiquetas {N_PERMUTACIONES} veces para validar significancia...")
+    print(f" Revolviendo etiquetas {N_PERMUTACIONES} veces para validar significancia...")
     
     for i in range(N_PERMUTACIONES):
         y_revuelto = np.random.permutation(y)
@@ -126,17 +126,17 @@ def main():
     p_valor = casos_extremos / N_PERMUTACIONES
 
     print("\n" + "="*50)
-    print("📈 RESULTADO FINAL DEL TEST ESTADÍSTICO")
+    print(" RESULTADO FINAL DEL TEST ESTADÍSTICO")
     print("="*50)
     print(f"   - Casos al azar que superaron la realidad: {casos_extremos} de {N_PERMUTACIONES}")
     print(f"   - p-valor final: {p_valor:.4f}")
     
     if p_valor < 0.05:
-        print("   ✅ CONCLUSIÓN: p < 0.05. Se rechaza la hipótesis nula ($H_0$).")
+        print("    CONCLUSIÓN: p < 0.05. Se rechaza la hipótesis nula ($H_0$).")
         print("      La estructura de los grados (la separación que logran los Técnicos y Ejecución)")
         print("      es ESTADÍSTICAMENTE SIGNIFICATIVA y no es producto del azar.")
     else:
-        print("   ❌ CONCLUSIÓN: p >= 0.05. La estructura es aleatoria.")
+        print("    CONCLUSIÓN: p >= 0.05. La estructura es aleatoria.")
         
     print("="*50 + "\n")
 

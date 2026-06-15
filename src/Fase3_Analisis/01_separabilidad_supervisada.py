@@ -32,11 +32,11 @@ def graficar_matriz(y_true, y_pred, clases, titulo, ruta_salida):
     plt.close()
 
 def main():
-    print("⏳ Cargando dataset limpio para Análisis de Separabilidad...")
+    print("Cargando dataset limpio para Análisis de Separabilidad...")
     try:
         df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
     except FileNotFoundError:
-        print(f"❌ Error: No se encontró {RUTA_ENTRADA}.")
+        print(f"Error: No se encontró {RUTA_ENTRADA}.")
         return
 
     df = df.dropna(subset=['perfil_limpio'])
@@ -47,11 +47,11 @@ def main():
     # =============================================================================
     # 2. VECTORIZACIÓN Y ESCALADO (Instrucción del profesor: StandardScaler)
     # =============================================================================
-    print("🧮 Vectorizando textos (TF-IDF)...")
+    print("Vectorizando textos (TF-IDF)...")
     vectorizer = TfidfVectorizer(max_features=1500, ngram_range=(1, 2))
     X_vec = vectorizer.fit_transform(X)
 
-    print("⚖️ Aplicando StandardScaler...")
+    print("Aplicando StandardScaler...")
     # with_mean=False es obligatorio porque TF-IDF genera una matriz dispersa (sparse matrix)
     scaler = StandardScaler(with_mean=False)
     X_scaled = scaler.fit_transform(X_vec)
@@ -70,7 +70,7 @@ def main():
     }
 
     print("\n" + "="*60)
-    print("🚀 INICIANDO VALIDACIÓN CRUZADA ESTRATIFICADA (5 Folds)")
+    print("INICIANDO VALIDACIÓN CRUZADA ESTRATIFICADA (5 Folds)")
     print("="*60)
 
     # =============================================================================
@@ -83,7 +83,7 @@ def main():
         acc_mean = scores['test_accuracy'].mean()
         f1_macro_mean = scores['test_f1_macro'].mean()
         
-        print(f"\n📊 Modelo: {nombre}")
+        print(f"\n Modelo: {nombre}")
         print(f"   - Accuracy Media: {acc_mean:.4f}")
         print(f"   - F1-Macro Media: {f1_macro_mean:.4f}")
 
@@ -102,7 +102,7 @@ def main():
             print("\n   Reporte de Clasificación Detallado:")
             print(classification_report(y, y_pred_cv))
 
-    print("\n✅ ¡Análisis 1 completado! Revisa las matrices generadas en la carpeta 'processed'.")
+    print("\n ¡Análisis 1 completado! Revisa las matrices generadas en la carpeta 'processed'.")
 
 if __name__ == "__main__":
     main()
