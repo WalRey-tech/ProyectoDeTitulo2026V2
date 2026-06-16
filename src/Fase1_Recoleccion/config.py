@@ -460,7 +460,7 @@ SITES = [
         "tipo_institucion": "Instituto Profesional",
         "carrera": "Ingenieria en Informatica",
         "tipo_carrera": "Profesional",
-        "url": "https://www.ipsantotomas.cl/carreras/ingenieria-en-informatica/",
+        "url": "https://www.tupuedes.cl/carreras/instituto-profesional/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
         "selector": ""
     },
@@ -492,24 +492,6 @@ SITES = [
         "selector": ""
     },
     {
-        "universidad": "IACC",
-        "tipo_institucion": "IP",
-        "carrera": "Tecnico en Informatica",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://www.iacc.cl/carrera/tecnico-de-nivel-superior-en-informatica/",
-        "tipo_extraccion": "css",
-        "selector": ""
-    },
-    {
-        "universidad": "Universidad Mayor",
-        "tipo_institucion": "Universidad",
-        "carrera": "Tecnico en Informatica",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://tec.umayor.cl/tecnico-en-informatica",
-        "tipo_extraccion": "selenium",
-        "selector": "body > div:nth-child(10) > div > div:nth-child(1) > div:nth-child(2) > p"
-    },
-    {
         "universidad": "Universidad Catolica del Maule",
         "tipo_institucion": "Universidad",
         "carrera": "Ingenieria Ejecucion en Computacion e Informatica",
@@ -537,128 +519,56 @@ SITES = [
         "selector": ""
     },
     {
-        "universidad": "Universidad Arturo Prat",
-        "tipo_institucion": "Universidad",
-        "carrera": "Tecnico en Computacion e Informatica",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://www.admisionunap.cl/detalle-carrera?carrera=44",
-        "tipo_extraccion": "selenium",
-        "selector": "body > div.sid.desk_root > div > div > div.col-lg-7.col-md-12 > div.desc_f.careerText > div:nth-child(1)"
-    },
-    {
-        "universidad": "Escuela de Comercio y Servicios",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Tecnico en Informatica",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://admision.escueladecomercio.cl/carrera/tecnico-en-informatica/?utm_term=&utm_campaign=Search+-+SEE+-+Admisi%C3%B3n+-+Carreras+Profesionales+Online+-++Administraci%C3%B3n+P%C3%BAblica&utm_source=adwords&utm_medium=ppc&hsa_acc=2101840378&hsa_cam=22849964134&hsa_grp=184816797764&hsa_ad=812261818770&hsa_src=g&hsa_tgt=dsa-1456167871416&hsa_kw=&hsa_mt=&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=22849964134&gbraid=0AAAAAqc5tiTENXzpFfar-pV-H7lfuu3KQ&gclid=Cj0KCQjw_7PRBhDcARIsAMjV7jmGkC0EH5BHtY1lsLdTyPyzmqIdpC4Cbb-R86i63GYwyt2Zsu9_vqwaAn4jEALw_wcB",
-        "tipo_extraccion": "selenium",
-        "selector": "#elementor-tab-content-2581 > p"
-    },
-    {
-        "universidad": "Universidad de los Lagos",
-        "tipo_institucion": "Universidad",
-        "carrera": "Tecnico Universitario en Informatica",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://admision.ulagos.cl/carreras-tecnicas/tecnico-universitario-en-informatica/",
-        "tipo_extraccion": "selenium",
-        "selector": "body > main > div > div.row.div_content_single > div > div > div.desktop_div > div:nth-child(1) > div.col-md-6.no-float > span.captionregular > p"
-    },
-    {
-        "universidad": "Iplacex",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Tecnico en Informática",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://www.iplacex.cl/carreras/carreras-100-online/tecnico-en-informatica/",
-        "tipo_extraccion": "css",
-        "selector": ""
-    },
-    {
-        "universidad": "Instituto Profesional Providencia",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Tecnico Superior en Informatica",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://instituto.ipp.cl/tecnico-en-informatica",
-        "tipo_extraccion": "css",
-        "selector": "" 
-    },
-    {
-        "universidad": "ENAC",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Tecnico en Informatica mención Ciberseguridad",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://enac.cl/carrera/tecnico-en-informatica-mencion-ciberseguridad/",
-        "tipo_extraccion": "selenium",
-        "selector": "#apus-main-content > div > div.elementor-element.elementor-element-22f30165.e-flex.e-con-boxed.e-con.e-parent.e-lazyloaded > div > div.elementor-element.elementor-element-5590ca3b.e-con-full.e-flex.e-con.e-child > div.elementor-element.elementor-element-47ce9870.e-con-full.e-flex.e-con.e-child > div.elementor-element.elementor-element-580bf415.descripcion.elementor-widget.elementor-widget-text-editor" 
-    },
-    {
-        "universidad": "Ceduc UCN",
-        "tipo_institucion": "CFT",
-        "carrera": "Tecnico de Nivel Superior en Computacion e Informatica Mencion Programacion",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://www.ceduc.cl/carreras/computacion-e-informatica-mencion-programacion/#perfil",
-        "tipo_extraccion": "selenium",
-        "selector": "" 
-    },
-    {
-        "universidad": "Ceduc UCN",
-        "tipo_institucion": "CFT",
-        "carrera": "Tecnico de Nivel Superior en Computacion e Informatica Mencion Ciberseguridad",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://www.ceduc.cl/carreras/computacion-e-informatica-mencion-ciberseguridad/",
-        "tipo_extraccion": "selenium",
-        "selector": ".media-panel__content" 
-    },
-    {
-        "universidad": "Universidad Catolica de Temuco",
-        "tipo_institucion": "Universidad",
-        "carrera": "Tecnico Universitario en Informatica",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://admision.uct.cl/tec-informatica-vespertina/",
-        "tipo_extraccion": "css",
-        "selector": "#elementor-tab-content-1201"
-    },
-    {
-        "universidad": "AIEP",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Programacion y Analisis de Sistemas",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://www.aiep.cl/admision/carrera/programacion-y-analisis-de-sistemas/",
-        "tipo_extraccion": "css",
-        "selector": "" 
-    },
-    {
-        "universidad": "Duoc UC",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Analista Programador Computacional",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://www.duoc.cl/carreras/analista-programador-computacional/",
-        "tipo_extraccion": "css",
-        "selector": "" 
-    },
-    {
-        "universidad": "INACAP",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Analista Programador",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://portal.inacap.cl/carreras/area-informatica-ciberseguridad-y-telecomunicaciones/analista-programador",
-        "tipo_extraccion": "selenium",
-        "selector": "#perfil-egreso > div > div > div" 
-    },
-    {
-        "universidad": "Santo Tomas",
-        "tipo_institucion": "Instituto Profesional",
-        "carrera": "Analista Programador",
-        "tipo_carrera": "Tecnico de Nivel Superior",
-        "url": "https://www.ipsantotomas.cl/carreras/analista-programador/",
-        "tipo_extraccion": "css",
-        "selector": "" 
-    },
-    {
         "universidad": "IP Chile",
         "tipo_institucion": "Instituto Profesional",
         "carrera": "Ingenieria en Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://www.ipchile.cl/carreras/ingenieria-en-informatica/",
+        "tipo_extraccion": "css",
+        "selector": "" 
+    },
+    {
+        "universidad": "Universidad Austral de Chile",
+        "tipo_institucion": "Universidad",
+        "carrera": "Ingenieria Civil en Informatica",
+        "tipo_carrera": "Profesional",
+        "url": "https://www.uach.cl/admision/valdivia/ingenieria-civil-en-informatica",
+        "tipo_extraccion": "css",
+        "selector": "" 
+    },
+    {
+        "universidad": "Instituto profesional Virgnio Gomez",
+        "tipo_institucion": "Instituto Profesional",
+        "carrera": "Ingenieria Civil en Informatica",
+        "tipo_carrera": "Profesional",
+        "url": "https://admision.virginiogomez.cl/carreras/ingenieria-en-informatica/",
+        "tipo_extraccion": "css",
+        "selector": "" 
+    },
+    {
+        "universidad": "Universidad de Playa Ancha",
+        "tipo_institucion": "Universidad",
+        "carrera": "Ingenieria Civil en Informatica",
+        "tipo_carrera": "Profesional",
+        "url": "https://www.upla.cl/admision/carreras-profesionales/facultad-de-ingenieria/ingenieria-civil-informatica/",
+        "tipo_extraccion": "css",
+        "selector": "" 
+    },
+    {
+        "universidad": "Universidad Gabriela Mistral",
+        "tipo_institucion": "Universidad",
+        "carrera": "Ingenieria en Computacion e Informatica",
+        "tipo_carrera": "Profesional",
+        "url": "https://advance.ugm.cl/carrera/ingenieria-en-computacion/",
+        "tipo_extraccion": "css",
+        "selector": "" 
+    },
+    {
+        "universidad": "Universidad San Sebastian",
+        "tipo_institucion": "Universidad",
+        "carrera": "Ingenieria en Computacion e Informatica",
+        "tipo_carrera": "Profesional",
+        "url": "https://advance.ugm.cl/carrera/ingenieria-en-computacion/",
         "tipo_extraccion": "css",
         "selector": "" 
     },

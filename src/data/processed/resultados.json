@@ -1,0 +1,72 @@
+{
+    "n_por_grado": {
+        "Civil": 32,
+        "Informática": 25,
+        "Ejecución": 6,
+        "Total": 63
+    },
+    "metricas_supervisadas": {
+        "modelo_ganador": "4. SVM (Kernel RBF)",
+        "accuracy": 0.8758,
+        "tecnica_balanceo": "SMOTE (Synthetic Minority Over-sampling Technique)",
+        "nota": "El modelo LDA se mantiene como base para la proyección espacial 2D."
+    },
+    "analisis_homogeneidad": {
+        "nota": "Revisar heatmap 'similitud_centroides.png' para métrica exacta.",
+        "test_permutacion_p_valor": 0.0,
+        "significancia": "Estadísticamente significativo (p < 0.05)"
+    },
+    "terminos_distintivos": {
+        "Civil": [
+            "ingeniería civil",
+            "civil computación",
+            "disciplina",
+            "ingeniera",
+            "admisión",
+            "identificar",
+            "comunicar él",
+            "institucional",
+            "responsable",
+            "problema complejo",
+            "civil informático",
+            "ciencia ingeniería",
+            "ético",
+            "comprender",
+            "región"
+        ],
+        "Ejecución": [
+            "área",
+            "persona humano",
+            "institución",
+            "tic",
+            "demostrar",
+            "matemática",
+            "adaptar",
+            "cristiano",
+            "comunidad",
+            "respeto",
+            "contribuir desarrollo",
+            "adaptar él",
+            "disciplinar",
+            "emergente",
+            "ingeniero ejecución"
+        ],
+        "Informática": [
+            "ciberseguridad",
+            "sector productivo",
+            "educación",
+            "cliente",
+            "respuesta",
+            "phd",
+            "chile",
+            "función",
+            "in",
+            "formar profesional",
+            "práctica industria",
+            "herramienta",
+            "metodología",
+            "empresarial",
+            "ingeniería informática"
+        ]
+    }
+}

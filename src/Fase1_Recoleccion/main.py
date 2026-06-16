@@ -29,7 +29,7 @@ def ordenar_columnas(df):
         "url",
         "selector",
         "metodo_usado",
-        "perfil_egreso", # CORRECCIÓN: Nombre de columna correcto
+        "perfil_egreso",
         "error"
     ]
     columnas_presentes = [col for col in columnas_ordenadas if col in df.columns]
