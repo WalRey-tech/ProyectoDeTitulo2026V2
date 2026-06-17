@@ -2,9 +2,9 @@
 
 > Evolucionando hacia un modelo híbrido de validación estadística y clasificación supervisada.
 
-**Tesis de Grado · Universidad de las Américas · Facultad de Ingeniería y Negocios · 2026**
+**Proyecto de Título · Universidad de las Américas · Facultad de Ingeniería y Negocios · 2026**
 
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
+[![Python](https://img.shields.io/badge/Python-3.13.7-3776AB?logo=python&logoColor=white)](https://python.org)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.4+-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
 [![spaCy](https://img.shields.io/badge/spaCy-3.x-09A3D5?logo=spacy&logoColor=white)](https://spacy.io)
 [![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=next.js&logoColor=white)](https://nextjs.org)
@@ -181,9 +181,9 @@ El benchmark de 11 clasificadores determinó al **Support Vector Machine con Ker
 
 | Grado | Perfiles | % del corpus |
 |---|---|---|
-| Ingeniería Civil Informática | 28 | 44.4% |
-| Ingeniería en Informática | 20 | 31.7% |
-| Ingeniería de Ejecución | 15 | 23.8% |
+| Ingeniería Civil Informática | 32 | 50.8% |
+| Ingeniería en Informática | 25 | 39.7% |
+| Ingeniería de Ejecución | 6 | 9.5% |
 | **Total** | **63** | **100%** |
 | **Instituciones cubiertas** | **47 IES** | — |
 
@@ -360,7 +360,7 @@ npm run dev
 
 | Herramienta | Uso |
 |---|---|
-| Python 3.11+ | Lenguaje principal del pipeline |
+| Python 3.13.7 | Lenguaje principal del pipeline |
 | spaCy (`es_core_news_sm`) | NLP: tokenización y lematización |
 | scikit-learn | TF-IDF, SVM, PCA, LDA, StratifiedKFold |
 | imbalanced-learn | SMOTE para balanceo de clases |
