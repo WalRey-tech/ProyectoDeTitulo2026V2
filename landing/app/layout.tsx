@@ -9,19 +9,21 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Descubrimiento de Patrones en Perfiles de Egreso | Tesis UDLA 2026",
+  title: "Descubrimiento de Patrones en Perfiles de Egreso de Informática | Proyecto de Título UDLA 2026",
     description:
-    "Investigación de Machine Learning supervisado y NLP para medir separabilidad y convergencia semántica en perfiles de egreso de Ingeniería en Informática en Chile. Universidad de las Américas. Autores: Brayan Pineda Poblete y Walter Reyes Silva.",
+    "Proyecto de Título en Machine Learning: pipeline NLP + SVM (Kernel RBF) con 87.58% de Accuracy para cuantificar la convergencia semántica entre perfiles de egreso de Informática en Chile. Universidad de las Américas. Autores: Brayan Pineda Poblete y Walter Reyes Silva.",
   keywords: [
     "machine learning",
-    "clustering",
+    "SVM",
     "NLP",
     "perfiles de egreso",
-    "K-Means",
+    "SMOTE",
     "PCA",
+    "LDA",
     "spaCy",
-    "tesis",
+    "proyecto de título",
     "UDLA",
+    "convergencia semántica",
     "informática",
   ],
   authors: [

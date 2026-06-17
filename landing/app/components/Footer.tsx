@@ -14,7 +14,7 @@ export default function Footer() {
                 ML
               </div>
               <div>
-                <p className="font-bold text-white text-sm">Tesis UDLA 2026</p>
+                <p className="font-bold text-white text-sm">Proyecto de Título UDLA 2026</p>
                 <p className="text-xs text-slate-500">Machine Learning Aplicado</p>
               </div>
             </div>
@@ -72,7 +72,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs text-slate-600">Tesis en evaluación · Junio 2026</span>
+            <span className="text-xs text-slate-600">Proyecto de Título en evaluación · Junio 2026</span>
           </div>
         </div>
       </div>

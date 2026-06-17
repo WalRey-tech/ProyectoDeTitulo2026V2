@@ -6,50 +6,39 @@ import Image from "next/image";
 // ─── Data real de resultados.json (public/assets/resultados.json) ────────
 const resultadosData = {
   n_por_grado: {
-    Civil: 29,
-    Informática: 23,
-    Técnico: 15,
+    Civil: 32,
+    Informática: 25,
     Ejecución: 6,
-    Total: 73,
+    Total: 63,
   },
   metricas_supervisadas: {
-    modelo: "Logistic Regression (Validación Cruzada 5-Folds)",
-    accuracy: 0.5771,
-    f1_macro: 0.5723,
+    modelo: "SVM · Kernel RBF (Validación Cruzada Estratificada 5-Folds)",
+    accuracy: 0.8758,
+    benchmark_size: 11,
   },
-  analisis_homogeneidad: {
-    similitud_civil_informatica: 0.6927,
-    test_permutacion_p_valor: 0.0,
-    significancia: "Estadísticamente significativo (p < 0.05)",
+  analisis_similitud: {
+    similitud_civil_informatica: 0.768,
+    solapamiento_pct: 76.8,
+    significancia: "Ejecución presenta similitud < 50% con los otros grados",
   },
   terminos_distintivos: {
     Civil: [
-      "ingeniería civil", "acorde", "gerencial", "gerencia",
-      "generación conocimiento", "forma colaborativo", "adquirido",
-      "fundamento", "visión integral", "ámbito ciencia",
-      "ámbito disciplina", "formativo desarrollar", "experiencial",
-      "habilidad comunicación", "habilidad identificar",
+      "ingeniería civil", "civil computación", "disciplina", "ingeniera",
+      "admisión", "identificar", "comunicar él", "institucional",
+      "responsable", "problema complejo", "civil informático",
+      "ciencia ingeniería", "ético", "comprender", "región",
     ],
     Ejecución: [
-      "él facilidad", "área matemática", "diseño mantención",
-      "eficiente resolver", "ambiente laboral", "efectivo eficiente",
-      "principio sello", "alto capacidad", "diversidad capaz",
-      "desempeñar institución", "programación recurso", "equipo respetar",
-      "permanente tenacidad", "permitir desenvolver", "informática comprometido",
+      "área", "persona humano", "institución", "tic",
+      "demostrar", "matemática", "adaptar", "cristiano",
+      "comunidad", "respeto", "contribuir desarrollo",
+      "adaptar él", "disciplinar", "emergente", "ingeniero ejecución",
     ],
     Informática: [
-      "doctorado ingeniería", "eficiencia operativo", "género diversidad",
-      "egreso competencias", "entorno digital", "enmarcar",
-      "especialización", "generar valor", "desarrollo implemento",
-      "estándar industria", "tomar consideración", "género",
-      "gestión tecnología", "informático eficiente", "industria organización",
-    ],
-    Técnico: [
-      "web aplicación", "dato lan", "técnico informática",
-      "existente", "estructura", "desarrollar sistema",
-      "dato seguro", "escritorio", "metodología trabajo",
-      "aplicación escritorio", "sistema web", "metodologíos",
-      "mención ciberseguridad", "vida desarrollo", "operativo servidor",
+      "ciberseguridad", "sector productivo", "educación", "cliente",
+      "respuesta", "phd", "chile", "función",
+      "in", "formar profesional", "práctica industria",
+      "herramienta", "metodología", "empresarial", "ingeniería informática",
     ],
   },
 } as const;
@@ -75,79 +64,52 @@ const GRADO_CONFIG: Record<
     icon: "💻",
     desc: "Lenguaje híbrido: tecnología + gestión empresarial",
   },
-  Técnico: {
-    color: "#10b981",
-    bg: "bg-emerald-500/10",
-    border: "border-emerald-500/30",
-    icon: "⚙️",
-    desc: "Identidad operativa pura — el más diferenciado",
-  },
   Ejecución: {
     color: "#f59e0b",
     bg: "bg-amber-500/10",
     border: "border-amber-500/30",
     icon: "🔩",
-    desc: "Nicho puente entre técnico e ingeniería",
+    desc: "Vocabulario técnico aislado — el más diferenciado",
   },
 };
 
-// ─── Gráficos con narrativa actualizada ──────────────────────────────────
+// ─── Solo 2 gráficos finales ─────────────────────────────────────────
 const CHARTS = [
   {
-    id: "confusion",
-    src: "/assets/matriz_confusion_LR.png",
-    alt: "Matriz de Confusión — Logistic Regression",
-    title: "Separabilidad vs. Convergencia de Grados",
-    badge: "Regresión Logística · 5-Fold CV",
-    badgeColor: "badge-purple",
-    stat: `${(resultadosData.metricas_supervisadas.accuracy * 100).toFixed(1)}%`,
-    statLabel: "Accuracy",
+    id: "pca-lda",
+    src: "/proyeccion_pca_vs_lda.png",
+    alt: "Proyección 2D PCA vs LDA de Perfiles de Egreso",
+    title: "Proyección 2D de Perfiles de Egreso (PCA vs LDA)",
+    badge: "PCA · No Supervisado | LDA · Supervisado",
+    badgeColor: "badge-cyan",
+    stat: "87.58%",
+    statLabel: "Accuracy SVM 🏆",
     statColor: "#8b5cf6",
     explanation:
-      "El modelo demuestra que los Técnicos poseen una identidad altamente separable. Sin embargo, existe una profunda confusión matemática entre Ingeniería Civil e Informática.",
+      "En el panel izquierdo (PCA, no supervisado), los tres grados se proyectan formando un clúster central de alta densidad entre Civil e Informática, evidenciando una marcada homogeneidad léxica. En el panel derecho (LDA, supervisado), el modelo es guiado para maximizar la separabilidad entre clases: Civil y Informática logran una separación parcial, mientras que Ejecución se posiciona de forma aislada. Este contraste explica por qué el SVM alcanza un 87.58%: la clasificación automática supera la auditoría cualitativa humana.",
     insight: {
-      label: "Hallazgo clave",
-      text: "Civil ↔ Informática son los grados más confundidos por el modelo, confirmando la hipótesis de convergencia semántica.",
+      label: "Interpretación clave",
+      text: "La proyección PCA revela la alta homogeneidad curricular entre Civil e Informática. LDA demuestra que solo un enfoque supervisado puede identificar las fronteras semánticas latentes entre programas.",
       color: "text-violet-400",
       bgColor: "bg-violet-500/10",
       borderColor: "border-violet-500/20",
     },
   },
   {
-    id: "pca-lda",
-    src: "/assets/proyeccion_pca_vs_lda.png",
-    alt: "Proyección PCA vs LDA",
-    title: "Proyección Vectorial 2D del Lenguaje Institucional",
-    badge: "PCA + LDA · Reducción de Dimensionalidad",
-    badgeColor: "badge-cyan",
-    stat: "2D",
-    statLabel: "Espacio proyectado",
-    statColor: "#06b6d4",
-    explanation:
-      "Al forzar al algoritmo a encontrar diferencias (LDA), Informática y Civil colapsan en el mismo espacio vectorial, demostrando visualmente su convergencia estratégica.",
-    insight: {
-      label: "Evidencia visual",
-      text: "Los vectores de Informática y Civil se superponen en el espacio LDA — son matemáticamente indistinguibles.",
-      color: "text-cyan-400",
-      bgColor: "bg-cyan-500/10",
-      borderColor: "border-cyan-500/20",
-    },
-  },
-  {
     id: "similitud",
-    src: "/assets/similitud_centroides.png",
-    alt: "Similitud de Centroides — Cosine Similarity",
-    title: "Matriz de Homogeneidad",
-    badge: "Similitud Coseno · Test de Permutación",
+    src: "/similitud_centroides.png",
+    alt: "Mapa de Calor de Similitud Coseno entre Grados",
+    title: "Análisis de Similitud Semántica (Similitud Coseno)",
+    badge: "Heatmap · Similitud Coseno",
     badgeColor: "badge-emerald",
-    stat: resultadosData.analisis_homogeneidad.similitud_civil_informatica.toFixed(2),
+    stat: "76.8%",
     statLabel: "Civil ↔ Informática",
     statColor: "#10b981",
     explanation:
-      "Validado con un Test de Permutación (p < 0.05), el análisis confirma una similitud del 0.69 entre Civil e Informática, compartiendo un núcleo de competencias casi idéntico.",
+      "Este mapa de calor revela el 76.8% (0.768) de solapamiento semántico (identidad léxica) entre la Ingeniería Civil y la Ingeniería en Informática. Por el contrario, la carrera de \u2018Ejecución\u2019 muestra una similitud inferior al 50% frente a las otras dos, confirmándose como el único grado con vocabulario verdaderamente aislado.",
     insight: {
-      label: "Significancia estadística",
-      text: `p-valor = ${resultadosData.analisis_homogeneidad.test_permutacion_p_valor} — ${resultadosData.analisis_homogeneidad.significancia}`,
+      label: "Hallazgo central",
+      text: "Civil e Informática comparten un 76.8% de su vocabulario de competencias. Solo la Ejecución mantiene un perfil léxico genuinamente diferenciado.",
       color: "text-emerald-400",
       bgColor: "bg-emerald-500/10",
       borderColor: "border-emerald-500/20",
@@ -384,13 +346,14 @@ export default function ResultsSection() {
           </h2>
           <div className="section-divider mt-6" />
           <p className="text-slate-400 max-w-2xl mx-auto text-lg mt-6">
-            Tres métricas independientes convergen en la misma conclusión:
-            la frontera semántica entre Civil e Informática se ha disuelto.
+            El modelo SVM alcanza un 87.58% de Accuracy porque la IA sí detecta
+            las sutiles diferencias que el ojo humano confunde: un 76.8% de solapamiento
+            léxico entre Civil e Informática lo hace evidente.
           </p>
         </div>
 
         {/* ── DISTRIBUTION STATS ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {(Object.entries(distribucion) as [string, number][])
             .filter(([k]) => k !== "Total")
             .map(([grado, n]) => {
@@ -441,12 +404,10 @@ export default function ResultsSection() {
               — Clic en cada imagen para ampliar
             </span>
           </h3>
-          {/* First chart full width */}
-          <ChartCard chart={CHARTS[0]} index={0} onOpenLightbox={openLightbox} />
-          {/* Second and third side by side */}
+          {/* Ambos gráficos lado a lado en desktop, apilados en móvil */}
           <div className="grid md:grid-cols-2 gap-8">
+            <ChartCard chart={CHARTS[0]} index={0} onOpenLightbox={openLightbox} />
             <ChartCard chart={CHARTS[1]} index={1} onOpenLightbox={openLightbox} />
-            <ChartCard chart={CHARTS[2]} index={2} onOpenLightbox={openLightbox} />
           </div>
         </div>
 
@@ -497,9 +458,7 @@ export default function ResultsSection() {
                   <div>
                     <h4 className="font-black text-white text-lg">
                       {g === "Civil"
-                        ? "Ingeniería Civil"
-                        : g === "Técnico"
-                        ? "Técnico en Informática"
+                        ? "Ingeniería Civil Informática"
                         : g === "Ejecución"
                         ? "Ingeniería de Ejecución"
                         : "Ingeniería en Informática"}
@@ -547,43 +506,39 @@ export default function ResultsSection() {
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="badge badge-purple">Conclusión del Estudio</span>
-                <span className="badge badge-cyan">p &lt; 0.05 — Validado estadísticamente</span>
+                <span className="badge badge-cyan">Modelo Híbrido · Validación Estadística</span>
               </div>
               <h2 className="text-2xl md:text-4xl font-black text-white leading-tight">
-                Crisis de Identidad en la{" "}
-                <span className="gradient-text-purple">Ingeniería Chilena</span>
+                Convergencia Semántica{" "}
+                <span className="gradient-text-purple">Cuantificada</span>
               </h2>
             </div>
 
             {/* Cuerpo */}
             <div className="space-y-5 text-slate-300 leading-relaxed max-w-4xl">
               <p className="text-base md:text-lg">
-                Nuestra investigación concluye que el mercado de la educación
-                superior en Chile sufre de una{" "}
+                El modelo híbrido demuestra científicamente una{" "}
                 <span className="text-violet-400 font-semibold">
-                  alta convergencia semántica impulsada por el marketing institucional
+                  alta convergencia semántica en la educación superior TI en Chile
                 </span>
-                . Al limpiar el ruido comercial y analizar puramente las competencias exigidas,
-                la frontera entre la &lsquo;Ingeniería Civil&rsquo; y la &lsquo;Ingeniería en
-                Informática&rsquo; prácticamente{" "}
-                <span className="text-red-400 font-semibold">ha desaparecido en el papel</span>.
+                . Las Ingenierías Civil e Informática comparten un núcleo léxico casi idéntico
+                (76.8%), lo que sugiere que la agregación de terminología de gestión corporativa
+                se utiliza como{" "}
+                <span className="text-cyan-400 font-semibold">
+                  estrategia de posicionamiento institucional
+                </span>
+                , más que como una diferenciación real de especialidades técnicas.
               </p>
               <p className="text-base md:text-lg">
-                Las instituciones están{" "}
-                <span className="text-orange-400 font-semibold">
-                  inflando los perfiles informáticos con el mismo vocabulario gerencial
-                </span>{" "}
-                de la Ingeniería Civil. La diferenciación hoy solo sobrevive en los extremos:
-                el grado{" "}
+                Por su parte, la{" "}
+                <span className="text-amber-400 font-semibold">Ingeniería de Ejecución</span>{" "}
+                se consolida como el único grado con una identidad semántica verdaderamente
+                especializada y pragmática (similitud &lt; 50% respecto a los otros grados).
+                Este ecosistema analítico automatizado{" "}
                 <span className="text-emerald-400 font-semibold">
-                  &lsquo;Técnico&rsquo; (puramente operativo)
-                </span>{" "}
-                y el grado de{" "}
-                <span className="text-amber-400 font-semibold">
-                  &lsquo;Ejecución&rsquo; (nicho puente)
+                  supera las auditorías humanas
                 </span>
-                . Los títulos están diferenciando por duración y costo, pero no por las
-                competencias reales prometidas.
+                , transformando la incertidumbre cualitativa en certeza cuantitativa y reproducible.
               </p>
             </div>
 
@@ -591,25 +546,25 @@ export default function ResultsSection() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
               {[
                 {
-                  icon: "🎯",
-                  label: "Accuracy del modelo",
-                  value: `${(resultadosData.metricas_supervisadas.accuracy * 100).toFixed(1)}%`,
-                  sub: "Limitado por la homogeneidad real de los textos",
+                  icon: "🏆",
+                  label: "Modelo Ganador",
+                  value: "SVM",
+                  sub: "Kernel RBF · 87.58% Accuracy (5-Fold Stratified CV)",
                   color: "#8b5cf6",
                 },
                 {
-                  icon: "📐",
-                  label: "Similitud Civil ↔ Informática",
-                  value: resultadosData.analisis_homogeneidad.similitud_civil_informatica.toFixed(2),
-                  sub: "Cosine similarity sobre centroides TF-IDF",
-                  color: "#06b6d4",
+                  icon: "📀",
+                  label: "Convergencia Léxica Civil ↔ Informática",
+                  value: "76.8%",
+                  sub: "Similitud Coseno sobre centroides TF-IDF (0.768)",
+                  color: "#10b981",
                 },
                 {
-                  icon: "🧪",
-                  label: "Validación estadística",
-                  value: "p = 0.00",
-                  sub: "Test de Permutación — Estadísticamente significativo",
-                  color: "#10b981",
+                  icon: "🔬",
+                  label: "Grado Diferenciado",
+                  value: "Ejecución",
+                  sub: "Similitud < 50% respecto a los otros dos grados",
+                  color: "#f59e0b",
                 },
               ].map((m, i) => (
                 <div
@@ -626,15 +581,17 @@ export default function ResultsSection() {
               ))}
             </div>
 
-            {/* Cita */}
+            {/* Cita oficial */}
             <blockquote className="border-l-4 border-violet-500/50 pl-6">
               <p className="text-slate-400 italic text-sm md:text-base">
-                &ldquo;Un sistema educativo que cobra precios distintos por competencias
-                idénticas no está diferenciando formación — está diferenciando{" "}
-                <span className="text-white not-italic font-semibold">marketing</span>.&rdquo;
+                &ldquo;Este ecosistema analítico automatizado supera las auditorías humanas,
+                pasando de la{" "}
+                <span className="text-white not-italic font-semibold">incertidumbre cualitativa</span>{" "}
+                a la{" "}
+                <span className="text-cyan-400 not-italic font-semibold">certeza cuantitativa</span>.&rdquo;
               </p>
               <footer className="text-xs text-slate-600 mt-2">
-                — Hallazgo central, Tesis UDLA 2026
+                &mdash; Conclusión central, Proyecto de Título UDLA 2026
               </footer>
             </blockquote>
           </div>

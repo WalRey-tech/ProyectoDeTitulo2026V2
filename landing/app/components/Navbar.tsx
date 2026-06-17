@@ -34,7 +34,7 @@ export default function Navbar() {
             ML
           </div>
           <span className="text-sm font-semibold text-slate-300 hidden sm:block">
-            Tesis <span className="text-cyan-400">UDLA 2026</span>
+            Proyecto de Título <span className="text-cyan-400">UDLA 2026</span>
           </span>
         </div>
 

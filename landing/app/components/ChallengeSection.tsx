@@ -2,31 +2,31 @@
 
 import React from "react";
 
-// ─── Problemas reales del proyecto ─────────────────────────────────────────
+// ─── Problemas reales del proyecto ───────────────────────────────────────────
 const PROBLEMS = [
   {
     icon: "🔄",
-    title: "Convergencia de Mallas",
+    title: "Alta Homogeneidad Curricular",
     description:
-      "Las instituciones de educación superior ofrecen múltiples variantes (Técnico, Ejecución, Informática, Civil). Sin embargo, redactan las competencias de estos perfiles copiando atributos gerenciales, creando la ilusión de diferenciación.",
+      "Las tres carreras informáticas analizadas (Ing. Civil, Ing. en Informática e Ing. de Ejecución) presentan una marcada convergencia léxica en sus perfiles de egreso, lo que dificulta una diferenciación objetiva entre sus competencias declaradas.",
     color: "border-red-500/20 bg-red-500/5",
     tag: "Problema",
     tagColor: "text-red-400 bg-red-400/10 border-red-400/20",
   },
   {
     icon: "⚖️",
-    title: "Alta Subjetividad Manual",
+    title: "Sesgo en la Revisión Manual",
     description:
-      "Comparar y clasificar cientos de competencias a mano para descubrir si se copian o no, depende del sesgo del evaluador, careciendo de reproducibilidad científica.",
+      "La comparación cualitativa de perfiles de egreso carece de reproducibilidad científica: distintos evaluadores pueden llegar a conclusiones distintas sobre la similitud o diferencia entre programas académicos.",
     color: "border-orange-500/20 bg-orange-500/5",
     tag: "Problema",
     tagColor: "text-orange-400 bg-orange-400/10 border-orange-400/20",
   },
   {
-    icon: "📢",
-    title: "Falta de Transparencia Léxica",
+    icon: "📊",
+    title: "Ausencia de Métricas Cuantitativas",
     description:
-      "Los títulos informáticos en Chile se están diferenciando comercialmente por costo y duración, pero semánticamente prometen las mismas competencias estratégicas, confundiendo al mercado laboral.",
+      "Hasta ahora no existían métricas estandarizadas que permitieran medir objetivamente el grado de estandarización lingüística entre programas informáticos de distintas instituciones de educación superior en Chile.",
     color: "border-yellow-500/20 bg-yellow-500/5",
     tag: "Problema",
     tagColor: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
@@ -39,7 +39,7 @@ const SOLUTIONS = [
     icon: "🤖",
     title: "Web Scraping Híbrido",
     description:
-      "Motor híbrido (Requests + Selenium) que extrae texto de portales institucionales, recolectando 73 perfiles de egreso validados.",
+      "Motor híbrido (Requests + Selenium) que extrae texto de portales institucionales, recolectando y depurando 63 perfiles de egreso válidos de 47 IES chilenas.",
     color: "border-cyan-500/20 bg-cyan-500/5",
   },
   {
@@ -58,9 +58,9 @@ const SOLUTIONS = [
   },
   {
     icon: "🎯",
-    title: "Machine Learning Supervisado",
+    title: "Benchmark + SVM Ganador",
     description:
-      "Uso de Logistic Regression y Análisis Discriminante Lineal (LDA) para medir matemáticamente la separabilidad y convergencia de las carreras en un plano 2D.",
+      "SMOTE balancea las clases minoritarias. Un benchmark de 11 algoritmos determina al SVM (Kernel RBF) como el modelo ganador con un 87.58% de Accuracy en Validación Cruzada Estratificada.",
     color: "border-emerald-500/20 bg-emerald-500/5",
   },
 ];
@@ -74,14 +74,14 @@ export default function ChallengeSection() {
         <div className="text-center mb-16 space-y-4">
           <span className="badge badge-cyan">El Desafío</span>
           <h2 className="text-3xl md:text-5xl font-black text-white mt-4">
-            La Crisis de Identidad en la{" "}
-            <span className="gradient-text-cyan">Ingeniería Chilena</span>
+            Convergencia Semántica en la{" "}
+            <span className="gradient-text-cyan">Educación Superior TI</span>
           </h2>
           <div className="section-divider mt-6" />
           <p className="text-slate-400 max-w-2xl mx-auto text-lg mt-6">
-            La educación superior en Chile ofrece 4 grados de Informática con nombres
-            distintos. Nuestro análisis estadístico revela que sus competencias son,
-            matemáticamente, casi idénticas.
+            La educación superior en Chile ofrece 3 grados informáticos con denominaciones distintas.
+            Este estudio cuantifica objetivamente el nivel de homogeneidad curricular
+            entre sus perfiles de egreso mediante métodos computacionales reproducibles.
           </p>
         </div>
 
@@ -133,13 +133,13 @@ export default function ChallengeSection() {
         {/* Impact quote */}
         <div className="mt-16 glass-card p-8 border border-cyan-500/20 bg-cyan-500/5 text-center">
           <blockquote className="text-xl md:text-2xl font-semibold text-white italic max-w-3xl mx-auto leading-relaxed">
-            &ldquo;Al eliminar el ruido comercial, descubrimos que Civil e Informática
-            comparten un núcleo de competencias con una similitud coseno de{" "}
-            <span className="text-cyan-400 not-italic font-black">0.69</span>,
-            validado estadísticamente con{" "}
-            <span className="text-violet-400 not-italic font-black">p = 0.00</span>.&rdquo;
+            &ldquo;El modelo híbrido demuestra científicamente que la Ingeniería Civil e Informática
+            comparten un núcleo léxico con una convergencia de{" "}
+            <span className="text-cyan-400 not-italic font-black">76.8% (0.768)</span>,
+            mientras que la Ingeniería de Ejecución consolida una identidad semántica
+            verdaderamente especializada y pragmática.&rdquo;
           </blockquote>
-          <p className="text-slate-500 text-sm mt-4">— Hallazgo central del análisis</p>
+          <p className="text-slate-500 text-sm mt-4">— Hallazgo central del estudio, Proyecto de Título UDLA 2026</p>
         </div>
 
       </div>

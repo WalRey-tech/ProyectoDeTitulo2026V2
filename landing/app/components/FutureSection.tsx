@@ -15,10 +15,10 @@ const PHASES = [
     description:
       "Scraping automatizado utilizando BeautifulSoup y Selenium para recolectar mallas curriculares desde portales universitarios.",
     details: [
-      { label: "Sitios objetivo", value: "32+ portales universitarios chilenos" },
+      { label: "IES objetivo", value: "47 Instituciones de Educación Superior chilenas" },
       { label: "Estrategia", value: "Fallback automático Requests ↔ Selenium" },
       { label: "Parser", value: "BeautifulSoup + selectores CSS personalizados" },
-      { label: "Output", value: "perfiles_egreso_raw.csv · ~73 registros válidos" },
+      { label: "Output", value: "perfiles_egreso_raw.csv · 63 perfiles depurados" },
     ],
     tools: ["BeautifulSoup", "Selenium", "Requests", "Pandas"],
   },
@@ -36,10 +36,10 @@ const PHASES = [
     details: [
       { label: "Motor NLP", value: "spaCy es_core_news_sm — Español" },
       { label: "Técnica", value: "Lematización: 'optimizando' → 'optimizar'" },
-      { label: "Stopwords", value: "47 palabras académicas neutralizadas" },
+      { label: "Stopwords", value: "Términos institucionales neutralizados" },
       { label: "Output", value: "perfiles_egreso_limpio_v1.csv" },
     ],
-    tools: ["spaCy", "es_core_news_sm", "Regex", "NLTK"],
+    tools: ["spaCy", "es_core_news_sm", "Regex"],
   },
   {
     number: "03",
@@ -56,7 +56,7 @@ const PHASES = [
       { label: "Algoritmo", value: "TF-IDF (Term Frequency · Inverse Document Frequency)" },
       { label: "Dimensiones", value: "1500 características por perfil de egreso" },
       { label: "Análisis semántico", value: "Z-Score para identificar términos distintivos" },
-      { label: "Output", value: "Matriz densa 73 × 1500 · top15_palabras_clave.csv" },
+      { label: "Output", value: "Matriz densa 63 × 1500 · top15_palabras_clave.csv" },
     ],
     tools: ["TF-IDF", "scikit-learn", "Z-Score", "NumPy"],
   },
@@ -70,22 +70,22 @@ const PHASES = [
     borderColor: "border-emerald-500/30",
     bgColor: "bg-emerald-500/5",
     description:
-      "Evaluación de clasificadores (Logistic Regression, SVC RBF) con validación cruzada estratificada (K-Fold=5) y reducción de dimensionalidad con LDA.",
+      "SMOTE balancea las clases minoritarias. Un benchmark de 11 clasificadores con Validación Cruzada Estratificada (5-Folds) determina al SVM con Kernel RBF como modelo ganador con 87.58% de Accuracy. PCA y LDA proyectan el espacio vectorial en 2D.",
     details: [
-      { label: "Clasificadores", value: "Logistic Regression · SVC con kernel RBF" },
-      { label: "Validación", value: "Stratified K-Fold Cross-Validation (k=5)" },
-      { label: "Reducción dim.", value: "LDA (Linear Discriminant Analysis) → 2D" },
-      { label: "Validación final", value: "Test de Permutación · p < 0.05 · Similitud Coseno" },
+      { label: "Modelo Ganador", value: "SVM con Kernel RBF 🏆 · Accuracy 87.58%" },
+      { label: "Benchmark", value: "11 clasificadores evaluados con Stratified K-Fold (k=5)" },
+      { label: "Balanceo", value: "SMOTE para clases minoritarias" },
+      { label: "Reducción dim.", value: "PCA (no supervisado) + LDA (supervisado) → 2D" },
     ],
-    tools: ["Logistic Regression", "SVC RBF", "LDA", "K-Fold CV", "scikit-learn"],
+    tools: ["SVM Kernel RBF", "SMOTE", "PCA", "LDA", "K-Fold CV", "scikit-learn"],
   },
 ];
 
 const MODEL_METRICS = [
-  { label: "Modelo Principal", value: "Logistic Regression", sub: "Validación Cruzada 5-Folds", icon: "🎯", color: "#06b6d4" },
-  { label: "Accuracy", value: "57.7%", sub: "F1-Macro: 57.2%", icon: "📊", color: "#8b5cf6" },
-  { label: "Similitud Civil ↔ Info", value: "0.69", sub: "Cosine Similarity — Test Permutación p=0.00", icon: "🔬", color: "#10b981" },
-  { label: "Perfiles analizados", value: "73", sub: "4 grados · 32+ instituciones", icon: "📋", color: "#f59e0b" },
+  { label: "Modelo Ganador", value: "SVM", sub: "Kernel RBF · Benchmark 11 algoritmos", icon: "🏆", color: "#8b5cf6" },
+  { label: "Accuracy Final", value: "87.58%", sub: "Validación Cruzada Estratificada 5-Folds", icon: "📊", color: "#06b6d4" },
+  { label: "Convergencia Civil ↔ Info", value: "76.8%", sub: "Similitud Coseno · 0.768 sobre centroides TF-IDF", icon: "🔬", color: "#10b981" },
+  { label: "Perfiles depurados", value: "63", sub: "3 grados · 47 Instituciones de Educación Superior", icon: "📋", color: "#f59e0b" },
 ];
 
 export default function ArchitectureSection() {
@@ -263,7 +263,7 @@ export default function ArchitectureSection() {
           {[
             {
               label: "Lenguaje",
-              value: "Python 3.11",
+              value: "Python 3.13.5",
               desc: "Pipeline 100% reproducible · scripts modulares",
               icon: "🐍",
               color: "text-cyan-400",
@@ -271,7 +271,7 @@ export default function ArchitectureSection() {
             {
               label: "NLP & ML",
               value: "scikit-learn + spaCy",
-              desc: "TF-IDF · LR · SVC RBF · LDA · K-Fold CV",
+              desc: "TF-IDF · SVM Kernel RBF · SMOTE · PCA · LDA · K-Fold CV",
               icon: "🧠",
               color: "text-purple-400",
             },

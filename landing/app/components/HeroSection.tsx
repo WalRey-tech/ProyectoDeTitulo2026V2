@@ -3,15 +3,15 @@
 import React from "react";
 
 const STATS = [
-  { value: "73", suffix: "", label: "Perfiles Analizados", color: "from-cyan-400 to-blue-500" },
-  { value: "1500", suffix: "D", label: "Dimensiones Vectoriales (TF-IDF)", color: "from-purple-400 to-pink-500" },
-  { value: "58", suffix: "%", label: "Accuracy (Regresión Logística)", color: "from-blue-400 to-cyan-400" },
-  { value: "0.00", suffix: " p-val", label: "Significancia Estadística", color: "from-emerald-400 to-teal-500" },
+  { value: "63", suffix: "", label: "Perfiles Depurados · 47 IES", color: "from-cyan-400 to-blue-500" },
+  { value: "87.58", suffix: "%", label: "Accuracy SVM (Modelo Ganador)", color: "from-violet-400 to-purple-500" },
+  { value: "76.8", suffix: "%", label: "Solapamiento Civil ↔ Informática", color: "from-amber-400 to-orange-500" },
+  { value: "11", suffix: "Alg.", label: "Benchmark de Clasificadores", color: "from-emerald-400 to-teal-500" },
 ];
 
 const TECH_TAGS = [
-  "Python", "spaCy", "TF-IDF", "Logistic Regression", "SVC RBF",
-  "LDA", "BeautifulSoup", "Selenium", "Next.js", "Recharts"
+  "Python", "spaCy", "TF-IDF", "SVM · Kernel RBF", "SMOTE",
+  "PCA", "LDA", "BeautifulSoup", "Selenium", "Next.js"
 ];
 
 export default function HeroSection() {
@@ -37,25 +37,30 @@ export default function HeroSection() {
         <div className="flex justify-center">
           <span className="badge badge-cyan animate-slide-up">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            Tesis de Grado — Universidad de las Américas · 2026
+            Proyecto de Título — Universidad de las Américas · 2026
           </span>
         </div>
 
         {/* Main heading */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight animate-slide-up" style={{ animationDelay: "0.1s" }}>
-          Descubrimiento de{" "}
-          <span className="gradient-text-cyan">Patrones Ocultos</span>
-          <br />
-          en Perfiles de Egreso
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight animate-slide-up" style={{ animationDelay: "0.1s" }}>
+          Descubrimiento de Patrones en Perfiles de{" "}
+          <span className="gradient-text-cyan">Egreso de Informática</span>{" "}
+          mediante Aprendizaje no Supervisado
         </h1>
+
+        {/* Evolution note */}
+        <p className="text-sm text-slate-500 italic animate-slide-up" style={{ animationDelay: "0.15s" }}>
+          Evolucionando hacia un modelo híbrido de validación estadística y clasificación supervisada.
+        </p>
 
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{ animationDelay: "0.2s" }}>
-          Aplicamos <span className="text-cyan-400 font-semibold">Procesamiento de Lenguaje Natural</span> y{" "}
-          <span className="text-purple-400 font-semibold">Aprendizaje Supervisado</span> para medir la
-          separabilidad y convergencia de las competencias del egresado en Chile,
-          transformando miles de palabras en{" "}
-          <span className="text-emerald-400 font-semibold">evidencia estadística</span>.
+          Un pipeline automatizado en Python que aplica{" "}
+          <span className="text-cyan-400 font-semibold">NLP con spaCy</span>,{" "}
+          <span className="text-purple-400 font-semibold">SMOTE y SVM (Kernel RBF)</span>, y reducción de
+          dimensionalidad para cuantificar la{" "}
+          <span className="text-violet-400 font-semibold">convergencia semántica</span>{" "}
+          entre los grados de Informática en la educación superior chilena.
         </p>
 
         {/* Authors */}

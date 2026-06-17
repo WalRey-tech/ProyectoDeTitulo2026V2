@@ -14,15 +14,15 @@ const PHASES = [
     bgColor: "bg-cyan-500/5",
     icon: "🌐",
     description:
-      "Extracción automatizada de 73 perfiles de egreso (Civil, Informática, Ejecución, Técnico) configurada con selectores CSS y fallback automático.",
+      "Extracción automatizada de 63 perfiles de egreso depurados (Civil, Informática, Ejecución) de 47 Instituciones de Educación Superior configurada con selectores CSS y fallback automático.",
     steps: [
-      { label: "config.py", desc: "73 perfiles objetivo configurados con selectores CSS por sitio" },
+      { label: "config.py", desc: "63 perfiles objetivo de 47 IES chilenas configurados con selectores CSS por sitio" },
       { label: "scraper.py", desc: "Fallback automático Requests ↔ Selenium según tipo de sitio" },
       { label: "extractors.py", desc: "Parser BeautifulSoup con limpieza básica de HTML" },
       { label: "main.py", desc: "Orquestador + validación de calidad y guardado en CSV" },
     ],
     output: "perfiles_egreso_raw.csv",
-    outputDesc: "73 perfiles de egreso en texto crudo sin procesar",
+    outputDesc: "63 perfiles de egreso en texto crudo sin procesar (de 47 IES)",
     tools: ["Python", "BeautifulSoup", "Selenium", "Pandas"],
   },
   {
@@ -35,7 +35,7 @@ const PHASES = [
     bgColor: "bg-blue-500/5",
     icon: "🧹",
     description:
-      "Pipeline lingüístico que aplica tokenización, lematización y remoción estricta de Stopwords y términos de marketing académico usando la librería spaCy.",
+      "Pipeline lingüístico que aplica tokenización, lematización y remoción estricta de Stopwords y confusores institucionales (términos ajenos a las competencias técnicas declaradas) usando la librería spaCy.",
     steps: [
       { label: "Tokenización", desc: "Segmentación del texto en unidades léxicas individuales" },
       { label: "Lematización", desc: "spaCy: reducción a raíz canónica — 'optimizando → optimizar'" },
@@ -44,7 +44,7 @@ const PHASES = [
     ],
     output: "perfiles_egreso_limpio_v1.csv",
     outputDesc: "Corpus normalizado listo para vectorización",
-    tools: ["spaCy", "Regex", "NLTK"],
+    tools: ["spaCy", "Regex"],
   },
   {
     number: "03",
@@ -58,35 +58,35 @@ const PHASES = [
     description:
       "Se vectorizó el corpus mediante TF-IDF (1500 features). Además, se aplicó estadística Z-Score sobre frecuencias relativas para extraer el ADN léxico (Top 15 palabras) exclusivo de cada grado.",
     steps: [
-      { label: "TfidfVectorizer", desc: "1500 features · Matriz densa 73 × 1500 dimensiones" },
+      { label: "TfidfVectorizer", desc: "1500 features · Matriz densa 63 × 1500 dimensiones" },
       { label: "CountVectorizer", desc: "Frecuencias absolutas por grado para análisis Z-Score" },
       { label: "Z-Score (Keyness)", desc: "Identifica los términos estadísticamente distintivos por grado" },
       { label: "Top 15 por grado", desc: "ADN léxico exportado → top15_palabras_clave.csv" },
     ],
     output: "top15_palabras_clave.csv",
-    outputDesc: "Términos distintivos por grado + matriz TF-IDF 73×1500",
+    outputDesc: "Términos distintivos por grado + matriz TF-IDF 63×1500",
     tools: ["Scikit-Learn (TfidfVectorizer, CountVectorizer)", "NumPy"],
   },
   {
     number: "04",
     title: "Análisis ML",
-    subtitle: "Aprendizaje Supervisado + Validación",
+    subtitle: "Benchmark · SMOTE · SVM Ganador",
     gradient: "from-purple-500 to-emerald-400",
     glowColor: "rgba(16, 185, 129, 0.3)",
     borderColor: "border-emerald-500/30",
     bgColor: "bg-emerald-500/5",
     icon: "🎯",
     description:
-      "Entrenamiento de clasificadores con Validación Cruzada (5-Folds) alcanzando un Accuracy del 58%. Se calculó la similitud coseno de centroides, confirmando la convergencia (p < 0.05) mediante un Test de Permutación.",
+      "SMOTE balancea las clases minoritarias. Un benchmark de 11 clasificadores (con Validación Cruzada Estratificada de 5-Folds) corona al SVM con Kernel RBF como modelo ganador con 87.58% de Accuracy. PCA y LDA proyectan el espacio vectorial en 2D.",
     steps: [
-      { label: "Logistic Regression", desc: "Clasificador principal · 5-Fold Stratified CV · Accuracy 57.7% · F1-macro 57.2%" },
-      { label: "SVC con kernel RBF", desc: "Clasificador secundario de validación cruzada" },
-      { label: "LDA → 2D", desc: "Reducción de dimensionalidad para visualización de separabilidad" },
-      { label: "Test de Permutación", desc: "Similitud coseno 0.69 entre Civil e Informática · p = 0.00" },
+      { label: "SMOTE", desc: "Balanceo sintético de clases minoritarias para evitar sesgo en el entrenamiento" },
+      { label: "Benchmark 11 Alg.", desc: "Competencia de clasificadores: SVM, KNN, Random Forest, Gradient Boosting y más" },
+      { label: "SVM · Kernel RBF 🏆", desc: "Modelo ganador · 5-Fold Stratified CV · Accuracy 87.58%" },
+      { label: "PCA + LDA → 2D", desc: "Reducción de dimensionalidad: PCA (no supervisado) vs LDA (supervisado) para visualizar separabilidad" },
     ],
     output: "resultados.json · visualizaciones .png",
-    outputDesc: "Métricas, matrices de confusión y proyecciones vectoriales",
-    tools: ["Scikit-Learn (LogisticRegression, LDA, PCA, cosine_similarity)"],
+    outputDesc: "Métricas del benchmark, proyecciones PCA/LDA y mapa de calor de similitud coseno",
+    tools: ["Scikit-Learn (SVM, PCA, LDA, SMOTE, StratifiedKFold)"],
   },
 ];
 
