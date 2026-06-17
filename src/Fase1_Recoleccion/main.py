@@ -4,7 +4,7 @@ import pandas as pd
 from config import SITES
 from scraper import scrapear_sitio
 
-# CONFIGURACIÓN DE RUTA ABSOLUTA
+# CONFIGURACIÓN DE RUTA
 # 1. Obtenemos la ruta exacta de la carpeta donde está este script (Fase1_Recoleccion)
 DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
 

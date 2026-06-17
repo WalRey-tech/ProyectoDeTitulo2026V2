@@ -33,11 +33,11 @@ def calcular_diferencia_intra_inter(sim_matrix, labels):
     return sim_intra - sim_inter
 
 def main():
-    print("🧪 Cargando dataset para el Análisis de Homogeneidad...")
+    print("Cargando dataset para el Análisis de Homogeneidad...")
     try:
         df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
     except FileNotFoundError:
-        print(f"❌ Error: No se encontró {RUTA_ENTRADA}.")
+        print(f"Error: No se encontró {RUTA_ENTRADA}.")
         return
 
     df = df.dropna(subset=['perfil_limpio'])
@@ -47,7 +47,7 @@ def main():
     # =============================================================================
     # 2. VECTORIZACIÓN TF-IDF (Sincronizado con Benchmark de 87%)
     # =============================================================================
-    print("🧮 Vectorizando textos...")
+    print("Vectorizando textos...")
     vectorizer = TfidfVectorizer(max_features=400, ngram_range=(1, 2), max_df=0.85, min_df=2)
     X_tfidf_denso = vectorizer.fit_transform(X).toarray()
 

@@ -6,7 +6,7 @@
         "Total": 63
     },
     "metricas_supervisadas": {
-        "modelo_ganador": "4. SVM (Kernel RBF)",
+        "modelo_ganador": "3. SVM (Kernel RBF)",
         "accuracy": 0.8758,
         "tecnica_balanceo": "SMOTE (Synthetic Minority Over-sampling Technique)",
         "nota": "El modelo LDA se mantiene como base para la proyección espacial 2D."

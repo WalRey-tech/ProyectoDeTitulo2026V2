@@ -14,11 +14,11 @@ RUTA_ENTRADA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "p
 RUTA_SALIDA_CSV = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "top15_palabras_clave.csv"))
 
 def main():
-    print("📝 Cargando dataset para el Análisis de Diferenciación Léxica...")
+    print("Cargando dataset para el Análisis de Diferenciación Léxica...")
     try:
         df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
     except FileNotFoundError:
-        print(f"❌ Error: No se encontró {RUTA_ENTRADA}.")
+        print(f"Error: No se encontró {RUTA_ENTRADA}.")
         return
 
     df = df.dropna(subset=['perfil_limpio'])
@@ -26,7 +26,7 @@ def main():
     # =============================================================================
     # 2. EXTRACCIÓN DE FRECUENCIAS (Sincronizado con el Benchmark de 87%)
     # =============================================================================
-    print("🧮 Contando palabras (Bigramas y Monogramas)...")
+    print("Contando palabras (Bigramas y Monogramas)...")
     # Ajustamos los parámetros EXACTAMENTE como en el modelo ganador de la tesis
     # para que la IA extraiga el "ADN léxico" del mismo vocabulario validado.
     vec = CountVectorizer(max_features=400, ngram_range=(1, 2), max_df=0.85, min_df=2)
@@ -43,7 +43,7 @@ def main():
     # Nota: El Z-Score normaliza automáticamente el desbalance de clases al usar
     # frecuencias relativas, por lo que no es necesario (ni posible) aplicar SMOTE aquí.
     # =============================================================================
-    print("📊 Calculando Keyness mediante Z-Score...")
+    print("Calculando Keyness mediante Z-Score...")
     
     totales_por_grado = frecuencias_por_grado.sum(axis=1)
     freq_relativa = frecuencias_por_grado.div(totales_por_grado, axis=0)
@@ -57,7 +57,7 @@ def main():
     # 4. EXTRACCIÓN Y REPORTE DEL TOP-15
     # =============================================================================
     print("\n" + "="*60)
-    print("🏆 TOP 15 TÉRMINOS DISTINTIVOS POR GRADO (Z-Score)")
+    print("TOP 15 TÉRMINOS DISTINTIVOS POR GRADO (Z-Score)")
     print("="*60)
 
     resultados = []
@@ -65,7 +65,7 @@ def main():
     for grado in z_scores.index:
         top_terms = z_scores.loc[grado].sort_values(ascending=False).head(15)
         
-        print(f"\n📌 {grado.upper()}:")
+        print(f"\n {grado.upper()}:")
         for i, (termino, puntaje_z) in enumerate(top_terms.items(), 1):
             print(f"   {i}. {termino:<25} (Z-Score: {puntaje_z:.2f})")
             resultados.append({
@@ -79,7 +79,7 @@ def main():
     df_resultados.to_csv(RUTA_SALIDA_CSV, index=False, encoding='utf-8-sig')
     
     print("\n" + "="*60)
-    print(f"✅ ¡Extracción exitosa! Datos exportados a: {RUTA_SALIDA_CSV}")
+    print(f"Extracción exitosa. Datos exportados a: {RUTA_SALIDA_CSV}")
 
 if __name__ == "__main__":
     main()

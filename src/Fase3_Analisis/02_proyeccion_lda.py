@@ -46,7 +46,7 @@ def main():
 
     print(" Aplicando LDA (Separabilidad supervisada)...")
     # LDA busca la máxima separación entre clases. 
-    # Soporta máximo (N_clases - 1) dimensiones. Tenemos 4 clases, así que 2D es perfecto.
+    # Soporta máximo (N_clases - 1) dimensiones.
     lda = LinearDiscriminantAnalysis(n_components=2)
     X_lda = lda.fit_transform(X_tfidf_denso, y)
 
@@ -88,8 +88,7 @@ def main():
     plt.tight_layout()
     plt.savefig(RUTA_GRAFICO_SALIDA, dpi=300)
     
-    print(f" ¡Punto 5 completado exitosamente!")
-    print(f" Gráfico guardado en: {RUTA_GRAFICO_SALIDA}")
+    print(f"Gráfico guardado en: {RUTA_GRAFICO_SALIDA}")
 
 if __name__ == "__main__":
     main()

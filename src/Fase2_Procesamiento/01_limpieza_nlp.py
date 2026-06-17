@@ -46,7 +46,7 @@ def limpiar_texto_avanzado(texto):
             continue
             
         token_lower = token.text.lower()
-        # Elimina el ruido institucional (nuestras stopwords personalizadas)
+        # Elimina el ruido institucional
         if token_lower in STOPWORDS_CUSTOM:
             continue
             

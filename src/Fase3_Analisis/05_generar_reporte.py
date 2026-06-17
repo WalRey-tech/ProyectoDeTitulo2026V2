@@ -15,7 +15,7 @@ RUTA_TOP_WORDS = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", 
 RUTA_SALIDA_JSON = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "resultados.json"))
 
 def main():
-    print("📄 Generando reporte final consolidado...")
+    print("Generando reporte final consolidado...")
     
     # -------------------------------------------------------------------------
     # 1. Leer los datos limpios para obtener el conteo real (Dinámico)
@@ -25,7 +25,7 @@ def main():
         conteos = df_limpio['grado'].value_counts().to_dict()
         conteos['Total'] = len(df_limpio)
     except Exception:
-        print("⚠️ Advertencia: No se pudo leer el dataset limpio. Usando valores por defecto.")
+        print("Advertencia: No se pudo leer el dataset limpio. Usando valores por defecto.")
         conteos = {"Civil": 32, "Informática": 25, "Ejecución": 6, "Total": 63}
 
     # -------------------------------------------------------------------------
@@ -37,7 +37,7 @@ def main():
         mejor_modelo = df_bench.iloc[0]['Modelo']
         mejor_acc = float(df_bench.iloc[0]['Accuracy (%)']) / 100.0
     except Exception:
-        print("⚠️ Advertencia: No se pudo leer el Benchmark. Usando SVM por defecto.")
+        print("Advertencia: No se pudo leer el Benchmark. Usando SVM por defecto.")
         mejor_modelo = "SVM (Kernel RBF)"
         mejor_acc = 0.8758
 
@@ -51,7 +51,7 @@ def main():
             palabras = df_top[df_top['Grado'] == grado]['Término distintivo'].tolist()
             terminos_dict[grado] = palabras
     except Exception:
-        print("⚠️ Advertencia: No se encontró el archivo de palabras clave.")
+        print("Advertencia: No se encontró el archivo de palabras clave.")
 
     # -------------------------------------------------------------------------
     # 4. Construir el JSON consolidado
@@ -80,11 +80,9 @@ def main():
         json.dump(reporte, f, indent=4, ensure_ascii=False)
         
     print("\n" + "="*60)
-    print(f"✅ ¡Reporte JSON final actualizado y generado con éxito!")
+    print(f"Reporte JSON final actualizado y generado con éxito")
     print(f"Ruta: {RUTA_SALIDA_JSON}")
     print("="*60)
-    print("💡 El JSON ahora lee tus archivos dinámicamente. Ya no tendrás")
-    print("que cambiar los números a mano si agregas más universidades.")
 
 if __name__ == "__main__":
     main()

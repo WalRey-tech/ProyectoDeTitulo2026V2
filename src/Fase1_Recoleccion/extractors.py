@@ -11,8 +11,8 @@ PALABRAS_CLAVE_PRIORITARIAS = [
     "perfil de egreso",
     "perfil del egresado",
     "perfil profesional",
-    "qué aprenderás",        # Muy común en IPs como INACAP o Duoc
-    "sobre la carrera"       # Común en páginas modernas de CFTs
+    "qué aprenderás",        
+    "sobre la carrera"       
 ]
 
 # Si el scraper no encuentra las prioritarias, intentará raspar estas secciones 
@@ -21,7 +21,7 @@ PALABRAS_CLAVE_SECUNDARIAS = [
     "competencias",
     "el titulado",
     "descripción de la carrera",
-    "campo ocupacional",     # Suele contener mucha info técnica útil
+    "campo ocupacional",     
     "campo laboral",
     "desempeño profesional"
 ]
