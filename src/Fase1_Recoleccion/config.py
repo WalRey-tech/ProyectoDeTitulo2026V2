@@ -431,7 +431,7 @@ SITES = [
     {
         "universidad": "INACAP",
         "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria en Informatica",
+        "carrera": "Ingenieria de ejecución en Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://portal.inacap.cl/carreras/area-informatica-ciberseguridad-y-telecomunicaciones/ingenieria-en-informatica",
         "tipo_extraccion": "selenium",
@@ -554,6 +554,17 @@ SITES = [
         "tipo_extraccion": "css",
         "selector": "" 
     },
+
+     {
+        "universidad": "Universidad de Los Lagos",
+        "tipo_institucion": "Universidad",
+        "carrera": "Ingeniería en Informática para Técnicos de Nivel Superior",
+        "tipo_carrera": "Profesional",
+        "url": "https://admision.ulagos.cl/sin-licenciatura/ingenieria-en-informatica-para-tecnicos-de-nivel-superior/",
+        "tipo_extraccion": "css",
+        "selector": "" 
+    },
+
     {
         "universidad": "Universidad Gabriela Mistral",
         "tipo_institucion": "Universidad",
