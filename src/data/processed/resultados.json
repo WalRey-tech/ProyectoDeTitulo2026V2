@@ -2,17 +2,17 @@
     "n_por_grado": {
         "Civil": 32,
         "Informática": 25,
-        "Ejecución": 6,
-        "Total": 63
+        "Ejecución": 7,
+        "Total": 64
     },
     "metricas_supervisadas": {
-        "modelo_ganador": "3. SVM (Kernel RBF)",
-        "accuracy": 0.8758,
+        "modelo_ganador": "7. Random Forest",
+        "accuracy": 0.9279000000000001,
         "tecnica_balanceo": "SMOTE (Synthetic Minority Over-sampling Technique)",
-        "nota": "El modelo LDA se mantiene como base para la proyección espacial 2D."
+        "nota": "El modelo LDA se mantiene de forma interna exclusivamente para la proyección espacial 2D."
     },
     "analisis_homogeneidad": {
-        "nota": "Revisar heatmap 'similitud_centroides.png' para métrica exacta.",
+        "nota": "Consultar el archivo 'similitud_centroides.png' para la evaluación de distancias inter-centroides.",
         "test_permutacion_p_valor": 0.0,
         "significancia": "Estadísticamente significativo (p < 0.05)"
     },
@@ -20,53 +20,53 @@
         "Civil": [
             "ingeniería civil",
             "civil computación",
+            "fundamento",
             "disciplina",
+            "económico social",
+            "tecnología información",
             "ingeniera",
-            "admisión",
             "identificar",
+            "admisión",
             "comunicar él",
+            "inglés",
             "institucional",
-            "responsable",
-            "problema complejo",
             "civil informático",
-            "ciencia ingeniería",
-            "ético",
-            "comprender",
-            "región"
+            "idioma inglés",
+            "gestión proyecto"
         ],
         "Ejecución": [
-            "área",
-            "persona humano",
+            "gestión",
             "institución",
-            "tic",
-            "demostrar",
-            "matemática",
+            "eficiencia",
+            "analizar",
+            "sistema información",
             "adaptar",
+            "visión cristiano",
+            "tic",
+            "adaptar él",
+            "mundo",
             "cristiano",
             "comunidad",
-            "respeto",
-            "contribuir desarrollo",
-            "adaptar él",
-            "disciplinar",
-            "emergente",
-            "ingeniero ejecución"
+            "ingeniero ejecución",
+            "matemática",
+            "distinguir"
         ],
         "Informática": [
+            "informática chile",
+            "industrial",
+            "formar profesional",
+            "chile",
+            "educación",
             "ciberseguridad",
             "sector productivo",
-            "educación",
-            "cliente",
             "respuesta",
-            "phd",
-            "chile",
+            "empresarial",
             "función",
             "in",
-            "formar profesional",
             "práctica industria",
-            "herramienta",
-            "metodología",
-            "empresarial",
-            "ingeniería informática"
+            "necesidad organización",
+            "phd",
+            "continuo"
         ]
     }
 }

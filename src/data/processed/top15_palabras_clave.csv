@@ -1,46 +1,46 @@
-﻿Grado,Ranking,Término distintivo,Z-Score
+﻿Grado,Ranking,Termino,Z_Score
 Civil,1,ingeniería civil,1.1547
 Civil,2,civil computación,1.1547
-Civil,3,disciplina,1.1547
-Civil,4,ingeniera,1.1513
-Civil,5,admisión,1.1476
-Civil,6,identificar,1.1476
-Civil,7,comunicar él,1.1448
-Civil,8,institucional,1.1448
-Civil,9,responsable,1.1448
-Civil,10,problema complejo,1.1448
-Civil,11,civil informático,1.1448
-Civil,12,ciencia ingeniería,1.1428
-Civil,13,ético,1.1406
-Civil,14,comprender,1.1401
-Civil,15,región,1.1401
-Ejecución,1,área,1.1547
-Ejecución,2,persona humano,1.1547
-Ejecución,3,institución,1.1547
-Ejecución,4,tic,1.1546
-Ejecución,5,demostrar,1.1544
-Ejecución,6,matemática,1.1544
-Ejecución,7,adaptar,1.1544
-Ejecución,8,cristiano,1.1543
-Ejecución,9,comunidad,1.1542
-Ejecución,10,respeto,1.1541
-Ejecución,11,contribuir desarrollo,1.154
-Ejecución,12,adaptar él,1.154
-Ejecución,13,disciplinar,1.154
-Ejecución,14,emergente,1.1539
-Ejecución,15,ingeniero ejecución,1.1539
-Informática,1,ciberseguridad,1.1547
-Informática,2,sector productivo,1.1547
-Informática,3,educación,1.1547
-Informática,4,cliente,1.1547
-Informática,5,respuesta,1.1547
-Informática,6,phd,1.1547
-Informática,7,chile,1.1547
-Informática,8,función,1.1547
-Informática,9,in,1.1547
-Informática,10,formar profesional,1.1547
-Informática,11,práctica industria,1.1547
-Informática,12,herramienta,1.1528
-Informática,13,metodología,1.1514
-Informática,14,empresarial,1.1508
-Informática,15,ingeniería informática,1.1501
+Civil,3,fundamento,1.1547
+Civil,4,disciplina,1.1547
+Civil,5,económico social,1.1547
+Civil,6,tecnología información,1.154
+Civil,7,ingeniera,1.1515
+Civil,8,identificar,1.148
+Civil,9,admisión,1.148
+Civil,10,comunicar él,1.1454
+Civil,11,inglés,1.1454
+Civil,12,institucional,1.1454
+Civil,13,civil informático,1.1454
+Civil,14,idioma inglés,1.141
+Civil,15,gestión proyecto,1.141
+Ejecución,1,gestión,1.1547
+Ejecución,2,institución,1.1547
+Ejecución,3,eficiencia,1.1546
+Ejecución,4,analizar,1.1546
+Ejecución,5,sistema información,1.1546
+Ejecución,6,adaptar,1.1546
+Ejecución,7,visión cristiano,1.1546
+Ejecución,8,tic,1.1546
+Ejecución,9,adaptar él,1.1546
+Ejecución,10,mundo,1.1544
+Ejecución,11,cristiano,1.1542
+Ejecución,12,comunidad,1.154
+Ejecución,13,ingeniero ejecución,1.154
+Ejecución,14,matemática,1.154
+Ejecución,15,distinguir,1.154
+Informática,1,informática chile,1.1547
+Informática,2,industrial,1.1547
+Informática,3,formar profesional,1.1547
+Informática,4,chile,1.1547
+Informática,5,educación,1.1547
+Informática,6,ciberseguridad,1.1547
+Informática,7,sector productivo,1.1547
+Informática,8,respuesta,1.1547
+Informática,9,empresarial,1.1547
+Informática,10,función,1.1547
+Informática,11,in,1.1547
+Informática,12,práctica industria,1.1547
+Informática,13,necesidad organización,1.1547
+Informática,14,phd,1.1547
+Informática,15,continuo,1.1526

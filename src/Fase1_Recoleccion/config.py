@@ -408,7 +408,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.uahurtado.cl/carreras/ingenieria-civil-plan-comun-informatica/",
         "tipo_extraccion": "css",
-        "selector": ""
+        "selector": "#titulados > p:nth-child(2)"
     },
     {
         "universidad": "Universidad de los Andes",
@@ -525,7 +525,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://www.ipchile.cl/carreras/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
-        "selector": "" 
+        "selector": "#accordion-2 > div" 
     },
     {
         "universidad": "Universidad Austral de Chile",
@@ -571,5 +571,14 @@ SITES = [
         "url": "https://advance.ugm.cl/carrera/ingenieria-en-computacion/",
         "tipo_extraccion": "css",
         "selector": "" 
+    },
+    {
+        "universidad": "Universidad de Santiago de Chile",
+        "tipo_institucion": "Universidad",
+        "carrera": "Ingeniería de Ejecución en Computación e Informática",
+        "tipo_carrera": "Profesional",
+        "url": "https://informatica.usach.cl/pregrado/ingenieria-de-ejecucion-en-computacion-e-informatica/",
+        "tipo_extraccion": "css",
+        "selector": "#elementor-tab-content-7061 > div > section > div > div.elementor-column.elementor-col-33.elementor-top-column.elementor-element.elementor-element-38f0115e > div" 
     },
 ]
