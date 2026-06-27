@@ -1,82 +1,101 @@
-# Descubrimiento de patrones en perfiles de Egreso de Informática mediante Machine Learning
+﻿# Descubrimiento de patrones en perfiles de Egreso de Informática mediante Machine Learning
 
-Ecosistema analítico automatizado para la validación estadística y clasificación supervisada de mallas curriculares en la educación superior chilena.
-
-Proyecto de Título · Universidad de las Américas · Facultad de Ingeniería y Negocios · 2026
-
----
-
-## 1. Resumen Ejecutivo
-
-Este proyecto implementa un pipeline de Ciencia de Datos para el análisis semántico de perfiles de egreso de informática en Chile. Mediante técnicas de Procesamiento de Lenguaje Natural (NLP), balanceo sintético de datos (SMOTE) y un benchmark competitivo de 11 algoritmos de Machine Learning, el estudio cuantifica el nivel de homogeneidad y diferenciación curricular entre tres grados académicos.
-
-### Métricas e Indicadores Clave
-* **Muestra final depurada:** 64 perfiles de egreso reales (32 Civil, 25 Informática, 7 Ejecución) de 47 instituciones.
-* **Algoritmo óptimo detectado:** Random Forest.
-* **Rendimiento del modelo:** 92.79% de Accuracy (Validación Cruzada Estratificada de 5 pliegues).
-* **Solapamiento semántico (Civil ↔ Informática):** 76.63% (Similitud Coseno: 0.7663).
-* **Significancia estadística:** p-valor = 0.0000 (Hipótesis nula rechazada mediante Test de Permutación).
+**Proyecto de Título · Universidad de las Américas · Facultad de Ingeniería y Negocios · 2026**  
+**Autores:** Brayan Pineda Poblete · Walter Reyes Silva
 
 ---
 
-## 2. Estructura del Repositorio
+## Resumen Técnico
+
+Pipeline de Ciencia de Datos que extrae, normaliza y clasifica **64 perfiles de egreso** de programas de Informática provenientes de **47 Instituciones de Educación Superior (IES) chilenas**. Mediante NLP (spaCy + TF-IDF) y un benchmark competitivo de Machine Learning, el estudio cuantifica la homogeneidad curricular entre tres grados académicos: Ingeniería Civil Informática, Ingeniería en Informática e Ingeniería de Ejecución.
+
+---
+
+## Modelo
+
+El clasificador ganador es **Random Forest** con un **92.79% de Accuracy** (Validación Cruzada Estratificada, 5-Folds), seleccionado tras un benchmark de **11 algoritmos** optimizados con **SMOTE** para balanceo de clases minoritarias.
+
+---
+
+## Hallazgos Clave
+
+1. **Convergencia léxica del 76.6%** entre Ingeniería Civil e Ingeniería en Informática (Similitud Coseno: 0.7663 sobre centroides TF-IDF).
+2. **Identidad léxica única** en Ingeniería de Ejecución: similitud < 50% respecto a los otros dos grados, con vocabulario técnico operacional genuinamente diferenciado.
+3. **Validación estadística** mediante Test de Permutación: **p-valor = 0.0000** (hipótesis nula rechazada; la convergencia no es producto del azar).
+
+---
+
+## Visualizaciones
+
+### Proyección 2D PCA vs LDA · Separabilidad entre grados
+
+![Proyección PCA vs LDA de perfiles de egreso](src/data/processed/proyeccion_pca_vs_lda.png)
+
+*PCA (no supervisado): muestra el clúster central de alta densidad entre Civil e Informática, evidenciando la convergencia léxica del 76.6%. LDA (supervisado): maximiza la separabilidad entre clases, con Ejecución aislada como el único grado léxicamente diferenciado.*
+
+---
+
+### Similitud Coseno entre Centroides TF-IDF
+
+![Mapa de calor de similitud coseno entre grados](src/data/processed/similitud_centroides.png)
+
+*Heatmap de Similitud Coseno sobre centroides TF-IDF. Civil e Informática comparten el 76.6% de vocabulario de competencias (p = 0.0000). Ejecución mantiene similitudes inferiores al 50% frente a ambos grados.*
+
+---
+
+## Estructura del Repositorio
+
+```
 Proyecto_Titulo_2026/
-│
-├── README.md                        # Descripción del proyecto
-├── requirements.txt                 # Dependencias del entorno Python
-│
-├── src/                             # Pipeline de Ciencia de Datos
-│   ├── Fase1_Recoleccion/           # Web Scraping híbrido (Requests/Selenium)
-│   ├── Fase2_Procesamiento/         # Capa de limpieza lingüística (spaCy)
-│   ├── Fase3_Analisis/              # Algoritmos, validación y reportabilidad
-│   └── data/                        # Almacenamiento local de artefactos y datasets
-│
-└── landing/                         # Plataforma Web Interactiva
-├── app/                         # Componentes de la interfaz de usuario
-└── public/                      # Recursos estáticos y gráficos generados
+├── README.md
+├── requirements.txt
+├── src/
+│   ├── Fase1_Recoleccion/       # Web Scraping híbrido (Requests / Selenium)
+│   ├── Fase2_Procesamiento/     # Limpieza lingüística con spaCy
+│   ├── Fase3_Analisis/          # Benchmark ML, validación estadística, reportes
+│   └── data/
+│       └── processed/           # Artefactos finales: modelo .joblib, imágenes .png, resultados.json
+└── landing/                     # Landing Page interactiva (Next.js)
+```
+
 ---
 
-## 3. Instalación y Ejecución
+## Ejecución
 
-### Configuración del Entorno Virtual
 ```bash
-# Clonar y acceder al directorio
-git clone [https://github.com/](https://github.com/)[usuario]/Proyecto_Titulo_2026.git
-cd Proyecto_Titulo_2026
-
-# Instalar y activar el entorno virtual
+# 1. Entorno virtual
 python -m venv venv
-source venv/bin/activate  # En Windows: .\venv\Scripts\activate
-
-# Instalar dependencias del sistema y el modelo lingüístico
+venv\Scripts\activate          # Windows
 pip install -r requirements.txt
 python -m spacy download es_core_news_sm
-# 1. Extracción y normalización de perfiles
+
+# 2. Pipeline de Ciencia de Datos
 python src/Fase1_Recoleccion/main.py
 python src/Fase2_Procesamiento/01_limpieza_nlp.py
-
-# 2. Análisis de Machine Learning y visualización técnica
 python src/Fase3_Analisis/01_separabilidad_supervisada.py
 python src/Fase3_Analisis/02_proyeccion_lda.py
 python src/Fase3_Analisis/03_homogeneidad_significancia.py
 python src/Fase3_Analisis/04_diferenciacion_lexica.py
 python src/Fase3_Analisis/05_generar_reporte.py
+
+# 3. Landing Page
 cd landing
 npm install
-npm run dev
+npm run dev        # http://localhost:3000
+```
 
-4. Stack Tecnológico
-Core Backend & Machine Learning: Python 3.13.7, scikit-learn, imbalanced-learn, spaCy (es_core_news_sm), Pandas, NumPy, joblib.
+---
 
-Gráficos e Informes: Matplotlib, Seaborn, JSON Serializer.
+## Stack Tecnológico
 
-Frontend & Visualización B2B: Next.js 15, TypeScript 5.x, Tailwind CSS.
+| Capa | Tecnologías |
+|---|---|
+| **Lenguaje** | Python 3.13 |
+| **NLP** | spaCy `es_core_news_sm`, TF-IDF, Z-Score (Keyness) |
+| **Machine Learning** | Scikit-learn · Random Forest · SMOTE · PCA · LDA · StratifiedKFold |
+| **Visualización** | Matplotlib, Seaborn |
+| **Frontend** | Next.js 15, TypeScript, Tailwind CSS |
 
-5. Conclusiones Principales
-Convergencia curricular crítica: El solapamiento del 76.63% entre las Ingenierías Civil e Informática demuestra matemáticamente que comparten un núcleo de competencias casi idéntico en la oferta académica nacional.
+---
 
-Identidad de la Ingeniería de Ejecución: Este grado se consolida de forma aislada en las proyecciones (similitudes inferiores al 54%), manteniendo un vocabulario técnico orientado estrictamente a la eficiencia operacional y sistemas de información.
-
-Validación metodológica: El modelo de producción basado en Random Forest (92.79% de precisión) y el p-valor obtenido demuestran que las auditorías curriculares automatizadas superan la subjetividad de la revisión cualitativa humana.
-
-Universidad de las Américas · Facultad de Ingeniería y Negocios · 2026 Autores: Brayan Pineda Poblete · Walter Ignacio Reyes Silva
+*Universidad de las Américas · 2026*

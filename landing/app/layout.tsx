@@ -9,12 +9,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Descubrimiento de Patrones en Perfiles de Egreso de Informática | Proyecto de Título UDLA 2026",
-    description:
-    "Proyecto de Título en Machine Learning: pipeline NLP + SVM (Kernel RBF) con 87.58% de Accuracy para cuantificar la convergencia semántica entre perfiles de egreso de Informática en Chile. Universidad de las Américas. Autores: Brayan Pineda Poblete y Walter Reyes Silva.",
+  title: "Descubrimiento de Patrones en Perfiles de Egreso de Informática mediante Machine Learning | UDLA 2026",
+  description:
+    "Proyecto de Título en Machine Learning: pipeline NLP + Random Forest (92.79% de Accuracy) con SMOTE para descubrir patrones y cuantificar la convergencia semántica (76.6%) entre perfiles de egreso de Informática en Chile. Universidad de las Américas. Autores: Brayan Pineda Poblete y Walter Reyes Silva.",
   keywords: [
     "machine learning",
-    "SVM",
+    "random forest",
     "NLP",
     "perfiles de egreso",
     "SMOTE",
@@ -24,16 +24,18 @@ export const metadata: Metadata = {
     "proyecto de título",
     "UDLA",
     "convergencia semántica",
+    "similitud coseno",
     "informática",
+    "descubrimiento de patrones",
   ],
   authors: [
     { name: "Brayan Pineda Poblete" },
     { name: "Walter Reyes Silva" },
   ],
   openGraph: {
-    title: "Separabilidad Semántica en Perfiles de Egreso de Informática",
+    title: "Descubrimiento de Patrones en Perfiles de Egreso de Informática mediante Machine Learning",
     description:
-      "Aprendizaje Supervisado y NLP para clasificar y medir convergencia en perfiles de egreso – Universidad de las Américas 2026",
+      "Random Forest (92.79% Accuracy) + NLP para descubrir patrones y medir convergencia semántica (76.6%) en perfiles de egreso – Universidad de las Américas 2026",
     type: "website",
   },
 };

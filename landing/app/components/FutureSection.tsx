@@ -18,7 +18,7 @@ const PHASES = [
       { label: "IES objetivo", value: "47 Instituciones de Educación Superior chilenas" },
       { label: "Estrategia", value: "Fallback automático Requests ↔ Selenium" },
       { label: "Parser", value: "BeautifulSoup + selectores CSS personalizados" },
-      { label: "Output", value: "perfiles_egreso_raw.csv · 63 perfiles depurados" },
+      { label: "Output", value: "perfiles_egreso_raw.csv · 64 perfiles depurados" },
     ],
     tools: ["BeautifulSoup", "Selenium", "Requests", "Pandas"],
   },
@@ -56,7 +56,7 @@ const PHASES = [
       { label: "Algoritmo", value: "TF-IDF (Term Frequency · Inverse Document Frequency)" },
       { label: "Dimensiones", value: "1500 características por perfil de egreso" },
       { label: "Análisis semántico", value: "Z-Score para identificar términos distintivos" },
-      { label: "Output", value: "Matriz densa 63 × 1500 · top15_palabras_clave.csv" },
+      { label: "Output", value: "Matriz densa 64 × 1500 · top15_palabras_clave.csv" },
     ],
     tools: ["TF-IDF", "scikit-learn", "Z-Score", "NumPy"],
   },
@@ -70,22 +70,22 @@ const PHASES = [
     borderColor: "border-emerald-500/30",
     bgColor: "bg-emerald-500/5",
     description:
-      "SMOTE balancea las clases minoritarias. Un benchmark de 11 clasificadores con Validación Cruzada Estratificada (5-Folds) determina al SVM con Kernel RBF como modelo ganador con 87.58% de Accuracy. PCA y LDA proyectan el espacio vectorial en 2D.",
+      "SMOTE balancea las clases minoritarias. Un benchmark competitivo de 11 clasificadores con Validación Cruzada Estratificada (5-Folds) corona al Random Forest como modelo ganador con 92.79% de Accuracy. LDA se utiliza para la proyección espacial 2D; PCA visualiza la distribución no supervisada.",
     details: [
-      { label: "Modelo Ganador", value: "SVM con Kernel RBF 🏆 · Accuracy 87.58%" },
+      { label: "Modelo Ganador", value: "Random Forest 🏆 · Accuracy 92.79%" },
       { label: "Benchmark", value: "11 clasificadores evaluados con Stratified K-Fold (k=5)" },
       { label: "Balanceo", value: "SMOTE para clases minoritarias" },
       { label: "Reducción dim.", value: "PCA (no supervisado) + LDA (supervisado) → 2D" },
     ],
-    tools: ["SVM Kernel RBF", "SMOTE", "PCA", "LDA", "K-Fold CV", "scikit-learn"],
+    tools: ["Random Forest", "SMOTE", "PCA", "LDA", "K-Fold CV", "scikit-learn"],
   },
 ];
 
 const MODEL_METRICS = [
-  { label: "Modelo Ganador", value: "SVM", sub: "Kernel RBF · Benchmark 11 algoritmos", icon: "🏆", color: "#8b5cf6" },
-  { label: "Accuracy Final", value: "87.58%", sub: "Validación Cruzada Estratificada 5-Folds", icon: "📊", color: "#06b6d4" },
-  { label: "Convergencia Civil ↔ Info", value: "76.8%", sub: "Similitud Coseno · 0.768 sobre centroides TF-IDF", icon: "🔬", color: "#10b981" },
-  { label: "Perfiles depurados", value: "63", sub: "3 grados · 47 Instituciones de Educación Superior", icon: "📋", color: "#f59e0b" },
+  { label: "Modelo Ganador", value: "Random Forest", sub: "Benchmark 11 algoritmos · SMOTE", icon: "🏆", color: "#8b5cf6" },
+  { label: "Accuracy Final", value: "92.79%", sub: "Validación Cruzada Estratificada 5-Folds", icon: "📊", color: "#06b6d4" },
+  { label: "Convergencia Civil ↔ Info", value: "76.6%", sub: "Similitud Coseno 0.7663 · p-valor = 0.0000", icon: "🔬", color: "#10b981" },
+  { label: "Perfiles depurados", value: "64", sub: "3 grados · 47 Instituciones de Educación Superior", icon: "📋", color: "#f59e0b" },
 ];
 
 export default function ArchitectureSection() {
@@ -271,7 +271,7 @@ export default function ArchitectureSection() {
             {
               label: "NLP & ML",
               value: "scikit-learn + spaCy",
-              desc: "TF-IDF · SVM Kernel RBF · SMOTE · PCA · LDA · K-Fold CV",
+              desc: "TF-IDF · Random Forest · SMOTE · PCA · LDA · K-Fold CV",
               icon: "🧠",
               color: "text-purple-400",
             },

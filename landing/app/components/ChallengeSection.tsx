@@ -39,7 +39,7 @@ const SOLUTIONS = [
     icon: "🤖",
     title: "Web Scraping Híbrido",
     description:
-      "Motor híbrido (Requests + Selenium) que extrae texto de portales institucionales, recolectando y depurando 63 perfiles de egreso válidos de 47 IES chilenas.",
+      "Motor híbrido (Requests + Selenium) que extrae texto de portales institucionales, recolectando y depurando 64 perfiles de egreso válidos de 47 IES chilenas.",
     color: "border-cyan-500/20 bg-cyan-500/5",
   },
   {
@@ -58,9 +58,9 @@ const SOLUTIONS = [
   },
   {
     icon: "🎯",
-    title: "Benchmark + SVM Ganador",
+    title: "Benchmark + Random Forest Ganador",
     description:
-      "SMOTE balancea las clases minoritarias. Un benchmark de 11 algoritmos determina al SVM (Kernel RBF) como el modelo ganador con un 87.58% de Accuracy en Validación Cruzada Estratificada.",
+      "SMOTE balancea las clases minoritarias. Un benchmark competitivo de 11 algoritmos determina al Random Forest como el modelo ganador con un 92.79% de Accuracy en Validación Cruzada Estratificada.",
     color: "border-emerald-500/20 bg-emerald-500/5",
   },
 ];
@@ -133,11 +133,11 @@ export default function ChallengeSection() {
         {/* Impact quote */}
         <div className="mt-16 glass-card p-8 border border-cyan-500/20 bg-cyan-500/5 text-center">
           <blockquote className="text-xl md:text-2xl font-semibold text-white italic max-w-3xl mx-auto leading-relaxed">
-            &ldquo;El modelo híbrido demuestra científicamente que la Ingeniería Civil e Informática
-            comparten un núcleo léxico con una convergencia de{" "}
-            <span className="text-cyan-400 not-italic font-black">76.8% (0.768)</span>,
-            mientras que la Ingeniería de Ejecución consolida una identidad semántica
-            verdaderamente especializada y pragmática.&rdquo;
+            &ldquo;El pipeline de Machine Learning demuestra científicamente que la Ingeniería Civil e Informática
+            comparten un núcleo léxico con una convergencia estadísticamente significativa de{" "}
+            <span className="text-cyan-400 not-italic font-black">76.6% (0.7663, p = 0.0000)</span>,
+            mientras que la Ingeniería de Ejecución consolida la única identidad semántica
+            verdaderamente diferenciada del ecosistema.&rdquo;
           </blockquote>
           <p className="text-slate-500 text-sm mt-4">— Hallazgo central del estudio, Proyecto de Título UDLA 2026</p>
         </div>
