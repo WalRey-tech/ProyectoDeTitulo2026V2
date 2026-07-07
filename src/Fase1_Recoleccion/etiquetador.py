@@ -30,21 +30,17 @@ def clasificar_grado(nombre_carrera, tipo_institucion=""):
     4. El resto se clasifica como 'Informática'.
     """
     carrera = str(nombre_carrera).lower()
-    institucion = str(tipo_institucion).lower()
 
-    # Regla 1: Institutos Profesionales se agrupan como perfil técnico-operativo / Ejecución
-    if "instituto profesional" in institucion:
-        return "Ejecución"
 
-    # Regla 2: 'Civil' si contiene «civil»
+    # Regla 1: 'Civil' si contiene «civil»
     if "civil" in carrera:
         return "Civil"
 
-    # Regla 3: 'Ejecución' si contiene «ejecu»
+    # Regla 2: 'Ejecución' si contiene «ejecu»
     if "ejecu" in carrera:
         return "Ejecución"
 
-    # Regla 4: 'Informática' en el resto de los casos
+    # Regla 3: 'Informática' en el resto de los casos
     return "Informática"
 
 
@@ -54,7 +50,11 @@ def clasificar_grado(nombre_carrera, tipo_institucion=""):
 def main():
     print("Leyendo el dataset crudo generado por el scraper...")
     try:
-        df = pd.read_csv(RUTA_RAW, encoding="utf-8-sig")
+        df = pd.read_csv(
+    RUTA_RAW,
+    sep=";",
+    encoding="utf-8-sig"
+)
     except FileNotFoundError:
         print(f"Error: No se encontró {RUTA_RAW}. Asegúrate de que main.py terminó.")
         return
@@ -96,7 +96,7 @@ def main():
     os.makedirs(os.path.dirname(RUTA_VERSIONADA), exist_ok=True)
 
     print("Guardando y versionando el dataset...")
-    df.to_csv(RUTA_VERSIONADA, index=False, encoding="utf-8-sig", quoting=csv.QUOTE_ALL)
+    df.to_csv(RUTA_VERSIONADA, index=False, sep=";", encoding="utf-8-sig", quoting=csv.QUOTE_ALL)
 
     print("¡Etiquetado exitoso!")
     print(f"Archivo versionado guardado en: {RUTA_VERSIONADA}")

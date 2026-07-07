@@ -111,7 +111,7 @@ def main():
 
     df_resultados = pd.DataFrame(resultados).sort_values(by="Accuracy (%)", ascending=False)
     os.makedirs(os.path.dirname(RUTA_REPORTE), exist_ok=True)
-    df_resultados.to_csv(RUTA_REPORTE, index=False, encoding='utf-8-sig')
+    df_resultados.to_csv(RUTA_REPORTE,sep=";", index=False, encoding='utf-8-sig')
 
     print("-" * 65)
     mejor = df_resultados.iloc[0]

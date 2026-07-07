@@ -407,8 +407,8 @@ SITES = [
         "carrera": "Ingenieria Civil en Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://admision.uahurtado.cl/carreras/ingenieria-civil-plan-comun-informatica/",
-        "tipo_extraccion": "css",
-        "selector": ""
+        "tipo_extraccion": "selenium",
+        "selector": "#descripcion_carrera"
     },
     {
         "universidad": "Universidad de los Andes",
@@ -431,7 +431,7 @@ SITES = [
     {
         "universidad": "INACAP",
         "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria de ejecución en Informatica",
+        "carrera": "Ingenieria en Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://portal.inacap.cl/carreras/area-informatica-ciberseguridad-y-telecomunicaciones/ingenieria-en-informatica",
         "tipo_extraccion": "selenium",
@@ -500,15 +500,7 @@ SITES = [
         "tipo_extraccion": "css",
         "selector": ""
     },
-    {
-        "universidad": "Universidad del Bio Bio",
-        "tipo_institucion": "Universidad",
-        "carrera": "Ingenieria de Ejecucion en Computacion e Informatica",
-        "tipo_carrera": "Profesional",
-        "url": "https://ubiobio.cl/admision/Todas_las_Carreras/21/Ingenieria_de_Ejecucion_en_Computacion_e_Informatica/#perfilubb",
-        "tipo_extraccion": "selenium",
-        "selector": ""
-    },
+
     {
         "universidad": "Universidad Catolica de la Santisima Concepción",
         "tipo_institucion": "Universidad",
@@ -524,8 +516,8 @@ SITES = [
         "carrera": "Ingenieria en Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://www.ipchile.cl/carreras/ingenieria-en-informatica/",
-        "tipo_extraccion": "css",
-        "selector": "" 
+        "tipo_extraccion": "selenium",
+        "selector": "#accordionInfoCarrera" 
     },
     {
         "universidad": "Universidad Austral de Chile",
@@ -537,9 +529,9 @@ SITES = [
         "selector": "" 
     },
     {
-        "universidad": "Instituto profesional Virgnio Gomez",
+        "universidad": "Instituto profesional Virginio Gomez",
         "tipo_institucion": "Instituto Profesional",
-        "carrera": "Ingenieria Civil en Informatica",
+        "carrera": "Ingenieria en Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://admision.virginiogomez.cl/carreras/ingenieria-en-informatica/",
         "tipo_extraccion": "css",
@@ -561,8 +553,8 @@ SITES = [
         "carrera": "Ingeniería en Informática para Técnicos de Nivel Superior",
         "tipo_carrera": "Profesional",
         "url": "https://admision.ulagos.cl/sin-licenciatura/ingenieria-en-informatica-para-tecnicos-de-nivel-superior/",
-        "tipo_extraccion": "css",
-        "selector": "" 
+        "tipo_extraccion": "selenium",
+        "selector": "h2, p" 
     },
 
     {
@@ -577,10 +569,10 @@ SITES = [
     {
         "universidad": "Universidad San Sebastian",
         "tipo_institucion": "Universidad",
-        "carrera": "Ingenieria en Computacion e Informatica",
+        "carrera": "Ingeniería Civil Informática",
         "tipo_carrera": "Profesional",
-        "url": "https://advance.ugm.cl/carrera/ingenieria-en-computacion/",
-        "tipo_extraccion": "css",
-        "selector": "" 
+        "url": "https://admision.uss.cl/carreras/ingenieria-civil-informatica",
+        "tipo_extraccion": "selenium",
+        "selector": "#carrera-perfil-egreso" 
     },
 ]

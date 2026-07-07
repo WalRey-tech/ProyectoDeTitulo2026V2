@@ -3,6 +3,10 @@ import spacy
 import os
 import csv
 
+try:
+    from ftfy import fix_text
+except ImportError:
+    fix_text = None
 # =============================================================================
 # 1. Configuración de Rutas
 # =============================================================================
@@ -30,6 +34,59 @@ STOPWORDS_CUSTOM = {
     "magíster", "magister", "director", "directora", "licenciado", "licenciatura", 
     "jefatura", "alumno", "estudiante", "egresado", "titulado"
 }
+def corregir_mojibake(texto):
+    """
+    Corrige problemas de codificación típicos como:
+    InformÃ¡tica -> Informática
+    diseÃ±ar -> diseñar
+    tecnolÃ³gicas -> tecnológicas
+    Ãtica -> Ética
+    """
+    if not isinstance(texto, str):
+        return texto
+
+    texto = texto.strip()
+
+    # Opción recomendada: ftfy
+    if fix_text is not None:
+        return fix_text(texto)
+
+    # Respaldo manual si ftfy no está instalado
+    try:
+        if any(marca in texto for marca in ["Ã", "Â", "â"]):
+            return texto.encode("latin1").decode("utf-8")
+    except Exception:
+        pass
+
+    return texto
+
+
+def corregir_columnas_texto(df):
+    """
+    Aplica corrección de encoding a todas las columnas de texto del dataset.
+    """
+    columnas_texto = df.select_dtypes(include=["object"]).columns
+
+    for col in columnas_texto:
+        df[col] = df[col].apply(corregir_mojibake)
+
+    return df
+
+
+def detectar_problemas_encoding(df):
+    """
+    Muestra filas que todavía contienen caracteres sospechosos.
+    """
+    patron = r"Ã|Â|â|�"
+
+    problemas = df[
+        df.apply(
+            lambda fila: fila.astype(str).str.contains(patron, regex=True).any(),
+            axis=1
+        )
+    ]
+
+    return problemas
 
 def limpiar_texto_avanzado(texto):
     if not isinstance(texto, str):
@@ -61,7 +118,7 @@ def limpiar_texto_avanzado(texto):
 def main():
     print(" Leyendo el dataset etiquetado...")
     try:
-        df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
+        df = pd.read_csv(RUTA_ENTRADA,sep=";", encoding='utf-8-sig')
     except Exception as e:
         print(" Archivo no encontrado o corrompido.")
         return
