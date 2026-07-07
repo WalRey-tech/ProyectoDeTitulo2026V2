@@ -3,14 +3,14 @@
 import React from "react";
 
 const STATS = [
-  { value: "63", suffix: "", label: "Perfiles Depurados · 47 IES", color: "from-cyan-400 to-blue-500" },
-  { value: "87.58", suffix: "%", label: "Accuracy SVM (Modelo Ganador)", color: "from-violet-400 to-purple-500" },
-  { value: "76.8", suffix: "%", label: "Solapamiento Civil ↔ Informática", color: "from-amber-400 to-orange-500" },
+  { value: "64", suffix: "", label: "Perfiles Depurados · 47 IES", color: "from-cyan-400 to-blue-500" },
+  { value: "92.79", suffix: "%", label: "Accuracy Random Forest (Modelo Ganador)", color: "from-violet-400 to-purple-500" },
+  { value: "76.6", suffix: "%", label: "Convergencia Léxica Civil ↔ Informática", color: "from-amber-400 to-orange-500" },
   { value: "11", suffix: "Alg.", label: "Benchmark de Clasificadores", color: "from-emerald-400 to-teal-500" },
 ];
 
 const TECH_TAGS = [
-  "Python", "spaCy", "TF-IDF", "SVM · Kernel RBF", "SMOTE",
+  "Python", "spaCy", "TF-IDF", "Random Forest", "SMOTE",
   "PCA", "LDA", "BeautifulSoup", "Selenium", "Next.js"
 ];
 
@@ -45,22 +45,22 @@ export default function HeroSection() {
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight animate-slide-up" style={{ animationDelay: "0.1s" }}>
           Descubrimiento de Patrones en Perfiles de{" "}
           <span className="gradient-text-cyan">Egreso de Informática</span>{" "}
-          mediante Aprendizaje no Supervisado
+          mediante Machine Learning
         </h1>
 
-        {/* Evolution note */}
+        {/* Research scope note */}
         <p className="text-sm text-slate-500 italic animate-slide-up" style={{ animationDelay: "0.15s" }}>
-          Evolucionando hacia un modelo híbrido de validación estadística y clasificación supervisada.
+          Pipeline supervisado con benchmark competitivo de 11 algoritmos · Validación estadística con test de permutación (p = 0.0000).
         </p>
 
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{ animationDelay: "0.2s" }}>
           Un pipeline automatizado en Python que aplica{" "}
           <span className="text-cyan-400 font-semibold">NLP con spaCy</span>,{" "}
-          <span className="text-purple-400 font-semibold">SMOTE y SVM (Kernel RBF)</span>, y reducción de
-          dimensionalidad para cuantificar la{" "}
+          <span className="text-purple-400 font-semibold">SMOTE y Random Forest</span>, y reducción de
+          dimensionalidad para descubrir patrones y cuantificar la{" "}
           <span className="text-violet-400 font-semibold">convergencia semántica</span>{" "}
-          entre los grados de Informática en la educación superior chilena.
+          estadísticamente significativa entre los grados de Informática en Chile.
         </p>
 
         {/* Authors */}

@@ -14,15 +14,15 @@ const PHASES = [
     bgColor: "bg-cyan-500/5",
     icon: "🌐",
     description:
-      "Extracción automatizada de 63 perfiles de egreso depurados (Civil, Informática, Ejecución) de 47 Instituciones de Educación Superior configurada con selectores CSS y fallback automático.",
+      "Extracción automatizada de 64 perfiles de egreso depurados (Civil, Informática, Ejecución) de 47 Instituciones de Educación Superior configurada con selectores CSS y fallback automático.",
     steps: [
-      { label: "config.py", desc: "63 perfiles objetivo de 47 IES chilenas configurados con selectores CSS por sitio" },
+      { label: "config.py", desc: "64 perfiles objetivo de 47 IES chilenas configurados con selectores CSS por sitio" },
       { label: "scraper.py", desc: "Fallback automático Requests ↔ Selenium según tipo de sitio" },
       { label: "extractors.py", desc: "Parser BeautifulSoup con limpieza básica de HTML" },
       { label: "main.py", desc: "Orquestador + validación de calidad y guardado en CSV" },
     ],
     output: "perfiles_egreso_raw.csv",
-    outputDesc: "63 perfiles de egreso en texto crudo sin procesar (de 47 IES)",
+    outputDesc: "64 perfiles de egreso en texto crudo sin procesar (de 47 IES)",
     tools: ["Python", "BeautifulSoup", "Selenium", "Pandas"],
   },
   {
@@ -58,7 +58,7 @@ const PHASES = [
     description:
       "Se vectorizó el corpus mediante TF-IDF (1500 features). Además, se aplicó estadística Z-Score sobre frecuencias relativas para extraer el ADN léxico (Top 15 palabras) exclusivo de cada grado.",
     steps: [
-      { label: "TfidfVectorizer", desc: "1500 features · Matriz densa 63 × 1500 dimensiones" },
+      { label: "TfidfVectorizer", desc: "1500 features · Matriz densa 64 × 1500 dimensiones" },
       { label: "CountVectorizer", desc: "Frecuencias absolutas por grado para análisis Z-Score" },
       { label: "Z-Score (Keyness)", desc: "Identifica los términos estadísticamente distintivos por grado" },
       { label: "Top 15 por grado", desc: "ADN léxico exportado → top15_palabras_clave.csv" },
@@ -70,23 +70,23 @@ const PHASES = [
   {
     number: "04",
     title: "Análisis ML",
-    subtitle: "Benchmark · SMOTE · SVM Ganador",
+    subtitle: "Benchmark · SMOTE · Random Forest Ganador",
     gradient: "from-purple-500 to-emerald-400",
     glowColor: "rgba(16, 185, 129, 0.3)",
     borderColor: "border-emerald-500/30",
     bgColor: "bg-emerald-500/5",
     icon: "🎯",
     description:
-      "SMOTE balancea las clases minoritarias. Un benchmark de 11 clasificadores (con Validación Cruzada Estratificada de 5-Folds) corona al SVM con Kernel RBF como modelo ganador con 87.58% de Accuracy. PCA y LDA proyectan el espacio vectorial en 2D.",
+      "SMOTE balancea las clases minoritarias. Un benchmark competitivo de 11 clasificadores (con Validación Cruzada Estratificada de 5-Folds) corona al Random Forest como modelo ganador con 92.79% de Accuracy. LDA se utiliza exclusivamente para la proyección espacial 2D; PCA permite la visualización no supervisada de la distribución léxica.",
     steps: [
       { label: "SMOTE", desc: "Balanceo sintético de clases minoritarias para evitar sesgo en el entrenamiento" },
-      { label: "Benchmark 11 Alg.", desc: "Competencia de clasificadores: SVM, KNN, Random Forest, Gradient Boosting y más" },
-      { label: "SVM · Kernel RBF 🏆", desc: "Modelo ganador · 5-Fold Stratified CV · Accuracy 87.58%" },
+      { label: "Benchmark 11 Alg.", desc: "Competencia de clasificadores: Random Forest, SVM, KNN, Gradient Boosting, AdaBoost y más" },
+      { label: "Random Forest 🏆", desc: "Modelo ganador · 5-Fold Stratified CV · Accuracy 92.79%" },
       { label: "PCA + LDA → 2D", desc: "Reducción de dimensionalidad: PCA (no supervisado) vs LDA (supervisado) para visualizar separabilidad" },
     ],
     output: "resultados.json · visualizaciones .png",
-    outputDesc: "Métricas del benchmark, proyecciones PCA/LDA y mapa de calor de similitud coseno",
-    tools: ["Scikit-Learn (SVM, PCA, LDA, SMOTE, StratifiedKFold)"],
+    outputDesc: "Métricas del benchmark, proyecciones PCA/LDA, mapa de calor de similitud coseno y modelo_random_forest.joblib",
+    tools: ["Scikit-Learn (RandomForestClassifier, PCA, LDA, SMOTE, StratifiedKFold)"],
   },
 ];
 

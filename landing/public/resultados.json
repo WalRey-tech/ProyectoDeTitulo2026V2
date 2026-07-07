@@ -1,0 +1,57 @@
+﻿{
+  "meta": {
+    "proyecto": "Descubrimiento de patrones en perfiles de Egreso de Informática mediante Machine Learning",
+    "autores": ["Brayan Pineda Poblete", "Walter Reyes Silva"],
+    "institucion": "Universidad de las Américas",
+    "anio": 2026,
+    "version": "1.0.0",
+    "fuente": "src/data/processed/resultados.json"
+  },
+  "n_por_grado": {
+    "Civil": 32,
+    "Informática": 25,
+    "Ejecución": 7,
+    "Total": 64
+  },
+  "metricas_supervisadas": {
+    "modelo_ganador": "Random Forest",
+    "accuracy": 0.9279,
+    "tecnica_balanceo": "SMOTE (Synthetic Minority Over-sampling Technique)",
+    "benchmark_size": 11,
+    "validacion": "5-Fold Stratified Cross-Validation",
+    "nota": "El modelo LDA se mantiene de forma interna exclusivamente para la proyección espacial 2D."
+  },
+  "analisis_homogeneidad": {
+    "similitud_civil_informatica": 0.7663,
+    "solapamiento_pct": 76.6,
+    "test_permutacion_p_valor": 0.0,
+    "significancia": "Estadísticamente significativo (p < 0.05)"
+  },
+  "terminos_distintivos": {
+    "Civil": [
+      "ingeniería civil", "civil computación", "fundamento", "disciplina",
+      "económico social", "tecnología información", "ingeniera",
+      "identificar", "admisión", "comunicar él",
+      "inglés", "institucional", "civil informático",
+      "idioma inglés", "gestión proyecto"
+    ],
+    "Ejecución": [
+      "gestión", "institución", "eficiencia", "analizar",
+      "sistema información", "adaptar", "visión cristiano", "tic",
+      "adaptar él", "mundo",
+      "cristiano", "comunidad", "ingeniero ejecución",
+      "matemática", "distinguir"
+    ],
+    "Informática": [
+      "informática chile", "industrial", "formar profesional", "chile",
+      "educación", "ciberseguridad", "sector productivo", "respuesta",
+      "empresarial", "función",
+      "in", "práctica industria", "necesidad organización",
+      "phd", "continuo"
+    ]
+  },
+  "graficos": {
+    "proyeccion_pca_vs_lda": "/proyeccion_pca_vs_lda.png",
+    "similitud_centroides": "/similitud_centroides.png"
+  }
+}

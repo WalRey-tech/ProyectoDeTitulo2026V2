@@ -1,90 +1,58 @@
-{
+﻿{
+    "meta": {
+        "proyecto": "Descubrimiento de patrones en perfiles de Egreso de Informática mediante Machine Learning",
+        "autores": ["Brayan Pineda Poblete", "Walter Reyes Silva"],
+        "institucion": "Universidad de las Américas",
+        "anio": 2026,
+        "version": "2.0.0",
+        "nota": "Archivo actualizado. Los datos de versiones anteriores (Logistic Regression, SVM) han sido reemplazados por los resultados finales del estudio."
+    },
     "n_por_grado": {
-        "Civil": 29,
-        "Informática": 23,
-        "Técnico": 15,
-        "Ejecución": 6,
-        "Total": 73
+        "Civil": 32,
+        "Informática": 25,
+        "Ejecución": 7,
+        "Total": 64
     },
     "metricas_supervisadas": {
-        "modelo": "Logistic Regression (Validación Cruzada 5-Folds)",
-        "accuracy": 0.5771,
-        "f1_macro": 0.5723,
-        "matriz_confusion": "Ver imagen: matriz_confusion_LR.png"
+        "modelo_ganador": "Random Forest",
+        "accuracy": 0.9279,
+        "tecnica_balanceo": "SMOTE (Synthetic Minority Over-sampling Technique)",
+        "benchmark_size": 11,
+        "validacion": "5-Fold Stratified Cross-Validation",
+        "nota": "El modelo LDA se mantiene internamente exclusivamente para la proyecci\u00f3n espacial 2D."
     },
     "analisis_homogeneidad": {
-        "similitud_civil_informatica": 0.6927,
+        "similitud_civil_informatica": 0.7663,
+        "solapamiento_pct": 76.6,
         "test_permutacion_p_valor": 0.0,
         "significancia": "Estadísticamente significativo (p < 0.05)"
     },
+    "visualizaciones": {
+        "proyeccion_pca_vs_lda": "/assets/proyeccion_pca_vs_lda.png",
+        "similitud_centroides": "/assets/similitud_centroides.png",
+        "nota": "Las visualizaciones anteriores (matriz_confusion_LR.png) han sido eliminadas del pipeline final."
+    },
     "terminos_distintivos": {
         "Civil": [
-            "ingeniería civil",
-            "acorde",
-            "gerencial",
-            "gerencia",
-            "generación conocimiento",
-            "forma colaborativo",
-            "adquirido",
-            "fundamento",
-            "visión integral",
-            "ámbito ciencia",
-            "ámbito disciplina",
-            "formativo desarrollar",
-            "experiencial",
-            "habilidad comunicación",
-            "habilidad identificar"
+            "ingeniería civil", "civil computación", "fundamento", "disciplina",
+            "económico social", "tecnología información", "ingeniera",
+            "identificar", "admisión", "comunicar él",
+            "inglés", "institucional", "civil informático",
+            "idioma inglés", "gestión proyecto"
         ],
         "Ejecución": [
-            "él facilidad",
-            "área matemática",
-            "diseño mantención",
-            "eficiente resolver",
-            "ambiente laboral",
-            "efectivo eficiente",
-            "principio sello",
-            "alto capacidad",
-            "diversidad capaz",
-            "desempeñar institución",
-            "programación recurso",
-            "equipo respetar",
-            "permanente tenacidad",
-            "permitir desenvolver",
-            "informática comprometido"
+            "gestión", "institución", "eficiencia", "analizar",
+            "sistema información", "adaptar", "visión cristiano", "tic",
+            "adaptar él", "mundo",
+            "cristiano", "comunidad", "ingeniero ejecución",
+            "matemática", "distinguir"
         ],
         "Informática": [
-            "doctorado ingeniería",
-            "eficiencia operativo",
-            "género diversidad",
-            "egreso competencias",
-            "entorno digital",
-            "enmarcar",
-            "especialización",
-            "generar valor",
-            "desarrollo implemento",
-            "estándar industria",
-            "tomar consideración",
-            "género",
-            "gestión tecnología",
-            "informático eficiente",
-            "industria organización"
-        ],
-        "Técnico": [
-            "web aplicación",
-            "dato lan",
-            "técnico informática",
-            "existente",
-            "estructura",
-            "desarrollar sistema",
-            "dato seguro",
-            "escritorio",
-            "metodología trabajo",
-            "aplicación escritorio",
-            "sistema web",
-            "metodologíos",
-            "mención ciberseguridad",
-            "vida desarrollo",
-            "operativo servidor"
+            "informática chile", "industrial", "formar profesional", "chile",
+            "educación", "ciberseguridad", "sector productivo", "respuesta",
+            "empresarial", "función",
+            "in", "práctica industria", "necesidad organización",
+            "phd", "continuo"
         ]
     }
 }

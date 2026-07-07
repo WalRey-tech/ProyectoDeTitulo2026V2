@@ -3,42 +3,46 @@
 import React from "react";
 import Image from "next/image";
 
-// ─── Data real de resultados.json (public/assets/resultados.json) ────────
+// ─── Data sincronizada con src/data/processed/resultados.json ────────────
 const resultadosData = {
   n_por_grado: {
     Civil: 32,
     Informática: 25,
-    Ejecución: 6,
-    Total: 63,
+    Ejecución: 7,
+    Total: 64,
   },
   metricas_supervisadas: {
-    modelo: "SVM · Kernel RBF (Validación Cruzada Estratificada 5-Folds)",
-    accuracy: 0.8758,
+    modelo: "Random Forest (Benchmark competitivo · 11 algoritmos · SMOTE · 5-Fold Stratified CV)",
+    accuracy: 0.9279,
     benchmark_size: 11,
   },
   analisis_similitud: {
-    similitud_civil_informatica: 0.768,
-    solapamiento_pct: 76.8,
-    significancia: "Ejecución presenta similitud < 50% con los otros grados",
+    similitud_civil_informatica: 0.7663,
+    solapamiento_pct: 76.6,
+    p_valor: 0.0,
+    significancia: "Estadísticamente significativo (p < 0.05) · Ejecución presenta similitud < 50% con los otros grados",
   },
   terminos_distintivos: {
     Civil: [
-      "ingeniería civil", "civil computación", "disciplina", "ingeniera",
-      "admisión", "identificar", "comunicar él", "institucional",
-      "responsable", "problema complejo", "civil informático",
-      "ciencia ingeniería", "ético", "comprender", "región",
+      "ingeniería civil", "civil computación", "fundamento", "disciplina",
+      "económico social", "tecnología información", "ingeniera",
+      "identificar", "admisión", "comunicar él",
+      "inglés", "institucional", "civil informático",
+      "idioma inglés", "gestión proyecto",
     ],
     Ejecución: [
-      "área", "persona humano", "institución", "tic",
-      "demostrar", "matemática", "adaptar", "cristiano",
-      "comunidad", "respeto", "contribuir desarrollo",
-      "adaptar él", "disciplinar", "emergente", "ingeniero ejecución",
+      "gestión", "institución", "eficiencia", "analizar",
+      "sistema información", "adaptar", "visión cristiano", "tic",
+      "adaptar él", "mundo",
+      "cristiano", "comunidad", "ingeniero ejecución",
+      "matemática", "distinguir",
     ],
     Informática: [
-      "ciberseguridad", "sector productivo", "educación", "cliente",
-      "respuesta", "phd", "chile", "función",
-      "in", "formar profesional", "práctica industria",
-      "herramienta", "metodología", "empresarial", "ingeniería informática",
+      "informática chile", "industrial", "formar profesional", "chile",
+      "educación", "ciberseguridad", "sector productivo", "respuesta",
+      "empresarial", "función",
+      "in", "práctica industria", "necesidad organización",
+      "phd", "continuo",
     ],
   },
 } as const;
@@ -82,14 +86,14 @@ const CHARTS = [
     title: "Proyección 2D de Perfiles de Egreso (PCA vs LDA)",
     badge: "PCA · No Supervisado | LDA · Supervisado",
     badgeColor: "badge-cyan",
-    stat: "87.58%",
-    statLabel: "Accuracy SVM 🏆",
+    stat: "92.79%",
+    statLabel: "Accuracy Random Forest 🏆",
     statColor: "#8b5cf6",
     explanation:
-      "En el panel izquierdo (PCA, no supervisado), los tres grados se proyectan formando un clúster central de alta densidad entre Civil e Informática, evidenciando una marcada homogeneidad léxica. En el panel derecho (LDA, supervisado), el modelo es guiado para maximizar la separabilidad entre clases: Civil y Informática logran una separación parcial, mientras que Ejecución se posiciona de forma aislada. Este contraste explica por qué el SVM alcanza un 87.58%: la clasificación automática supera la auditoría cualitativa humana.",
+      "En el panel izquierdo (PCA, no supervisado), los tres grados se proyectan formando un clúster central de alta densidad entre Civil e Informática, evidenciando una marcada homogeneidad léxica (76.6%). En el panel derecho (LDA, supervisado), el modelo es guiado para maximizar la separabilidad entre clases: Civil e Informática logran una separación parcial, mientras que Ejecución se posiciona de forma aislada. Este contraste explica el rendimiento excepcional del Random Forest (92.79%): la clasificación automática detecta las fronteras semánticas latentes que el análisis cualitativo humano no puede cuantificar.",
     insight: {
       label: "Interpretación clave",
-      text: "La proyección PCA revela la alta homogeneidad curricular entre Civil e Informática. LDA demuestra que solo un enfoque supervisado puede identificar las fronteras semánticas latentes entre programas.",
+      text: "La proyección PCA revela la alta homogeneidad curricular entre Civil e Informática. LDA demuestra que solo un enfoque supervisado —Random Forest, ganador de un benchmark de 11 algoritmos con SMOTE— puede identificar las fronteras semánticas latentes entre programas.",
       color: "text-violet-400",
       bgColor: "bg-violet-500/10",
       borderColor: "border-violet-500/20",
@@ -102,14 +106,14 @@ const CHARTS = [
     title: "Análisis de Similitud Semántica (Similitud Coseno)",
     badge: "Heatmap · Similitud Coseno",
     badgeColor: "badge-emerald",
-    stat: "76.8%",
-    statLabel: "Civil ↔ Informática",
+    stat: "76.6%",
+    statLabel: "Civil ↔ Informática (0.7663)",
     statColor: "#10b981",
     explanation:
-      "Este mapa de calor revela el 76.8% (0.768) de solapamiento semántico (identidad léxica) entre la Ingeniería Civil y la Ingeniería en Informática. Por el contrario, la carrera de \u2018Ejecución\u2019 muestra una similitud inferior al 50% frente a las otras dos, confirmándose como el único grado con vocabulario verdaderamente aislado.",
+      "Este mapa de calor revela el 76.6% (Similitud Coseno: 0.7663) de solapamiento semántico entre la Ingeniería Civil Informática y la Ingeniería en Informática, resultado estadísticamente significativo (p-valor = 0.0000, test de permutación). Por el contrario, la carrera de ‘Ejecución’ muestra una similitud inferior al 50% frente a las otras dos, confirmándose como el único grado con vocabulario verdaderamente aislado y una identidad semántica genuinamente diferenciada.",
     insight: {
-      label: "Hallazgo central",
-      text: "Civil e Informática comparten un 76.8% de su vocabulario de competencias. Solo la Ejecución mantiene un perfil léxico genuinamente diferenciado.",
+      label: "Hallazgo central estadísticamente significativo",
+      text: "Civil e Informática comparten un 76.6% de su vocabulario de competencias (p-valor = 0.0000). Solo la Ejecución mantiene un perfil léxico genuinamente diferenciado.",
       color: "text-emerald-400",
       bgColor: "bg-emerald-500/10",
       borderColor: "border-emerald-500/20",
@@ -346,9 +350,11 @@ export default function ResultsSection() {
           </h2>
           <div className="section-divider mt-6" />
           <p className="text-slate-400 max-w-2xl mx-auto text-lg mt-6">
-            El modelo SVM alcanza un 87.58% de Accuracy porque la IA sí detecta
-            las sutiles diferencias que el ojo humano confunde: un 76.8% de solapamiento
-            léxico entre Civil e Informática lo hace evidente.
+            El modelo Random Forest —ganador de un benchmark competitivo de 11 algoritmos,
+            optimizado con SMOTE— alcanza un <strong className="text-white">92.79% de Accuracy</strong> al
+            detectar las sutiles diferencias semánticas que el análisis cualitativo humano
+            no puede cuantificar: una convergencia léxica del <strong className="text-white">76.6%</strong>{" "}
+            entre Civil e Informática, estadísticamente significativa (p-valor = 0.0000).
           </p>
         </div>
 
@@ -517,26 +523,27 @@ export default function ResultsSection() {
             {/* Cuerpo */}
             <div className="space-y-5 text-slate-300 leading-relaxed max-w-4xl">
               <p className="text-base md:text-lg">
-                El modelo híbrido demuestra científicamente una{" "}
+                El pipeline de Machine Learning demuestra científicamente una{" "}
                 <span className="text-violet-400 font-semibold">
-                  alta convergencia semántica en la educación superior TI en Chile
+                  alta homogeneidad semántica en la educación superior TI en Chile
                 </span>
                 . Las Ingenierías Civil e Informática comparten un núcleo léxico casi idéntico
-                (76.8%), lo que sugiere que la agregación de terminología de gestión corporativa
-                se utiliza como{" "}
+                (76.6%, Similitud Coseno: 0.7663), hallazgo que resulta{" "}
                 <span className="text-cyan-400 font-semibold">
-                  estrategia de posicionamiento institucional
+                  estadísticamente significativo (p-valor = 0.0000)
                 </span>
-                , más que como una diferenciación real de especialidades técnicas.
+                {" "}según el test de permutación aplicado, lo que descarta la posibilidad
+                de que dicha convergencia sea producto del azar.
               </p>
               <p className="text-base md:text-lg">
                 Por su parte, la{" "}
                 <span className="text-amber-400 font-semibold">Ingeniería de Ejecución</span>{" "}
                 se consolida como el único grado con una identidad semántica verdaderamente
-                especializada y pragmática (similitud &lt; 50% respecto a los otros grados).
-                Este ecosistema analítico automatizado{" "}
+                diferenciada (similitud &lt; 50% respecto a los otros grados).
+                El modelo Random Forest, ganador de un benchmark competitivo de 11 algoritmos
+                optimizado con SMOTE,{" "}
                 <span className="text-emerald-400 font-semibold">
-                  supera las auditorías humanas
+                  alcanza un 92.79% de Accuracy
                 </span>
                 , transformando la incertidumbre cualitativa en certeza cuantitativa y reproducible.
               </p>
@@ -548,22 +555,22 @@ export default function ResultsSection() {
                 {
                   icon: "🏆",
                   label: "Modelo Ganador",
-                  value: "SVM",
-                  sub: "Kernel RBF · 87.58% Accuracy (5-Fold Stratified CV)",
+                  value: "Random Forest",
+                  sub: "Benchmark 11 Alg. · SMOTE · 92.79% Accuracy (5-Fold Stratified CV)",
                   color: "#8b5cf6",
                 },
                 {
                   icon: "📀",
                   label: "Convergencia Léxica Civil ↔ Informática",
-                  value: "76.8%",
-                  sub: "Similitud Coseno sobre centroides TF-IDF (0.768)",
+                  value: "76.6%",
+                  sub: "Similitud Coseno 0.7663 · p-valor = 0.0000",
                   color: "#10b981",
                 },
                 {
                   icon: "🔬",
                   label: "Grado Diferenciado",
                   value: "Ejecución",
-                  sub: "Similitud < 50% respecto a los otros dos grados",
+                  sub: "Similitud < 50% · Identidad semántica significativamente diferenciada",
                   color: "#f59e0b",
                 },
               ].map((m, i) => (
