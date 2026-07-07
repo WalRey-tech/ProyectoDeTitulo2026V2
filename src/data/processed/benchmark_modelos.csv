@@ -1,12 +1,11 @@
-﻿Modelo,Accuracy (%),Desviacion (%)
-7. Random Forest,92.79,5.12
-11. XGBoost,88.58,6.04
-5. MLP (Red Neuronal),87.63,8.79
-3. SVM (Kernel RBF),87.58,7.66
-4. Regresion Logistica,87.58,6.9
-6. Multinomial Naive Bayes,85.47,4.91
-2. SVM (Kernel Linear),83.37,8.97
-8. Gradient Boosting,83.37,7.63
-10. Decision Tree,80.21,6.12
-1. LDA,73.95,8.82
-9. K-Nearest Neighbors,59.26,7.43
+﻿Modelo;Accuracy (%);Desviacion (%)
+7. Random Forest;82.37;6.84
+3. SVM (Kernel RBF);82.37;5.98
+5. MLP (Red Neuronal);82.32;4.07
+4. Regresión Logística;82.32;4.07
+8. Gradient Boosting;81.42;9.68
+2. SVM (Kernel Linear);81.32;5.02
+6. Multinomial Naive Bayes;81.32;7.65
+10. Decision Tree;79.26;5.2
+1. LDA (Nuestro Principal);64.63;8.8
+9. K-Nearest Neighbors;63.53;12.02
