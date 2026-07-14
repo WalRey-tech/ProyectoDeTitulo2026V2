@@ -1,46 +1,46 @@
 ﻿Grado,Ranking,Termino,Z_Score
 Civil,1,ingeniería civil,1.1547
 Civil,2,civil computación,1.1547
-Civil,3,fundamento,1.1547
-Civil,4,disciplina,1.1547
-Civil,5,económico social,1.1547
-Civil,6,tecnología información,1.154
-Civil,7,ingeniera,1.1515
-Civil,8,identificar,1.148
-Civil,9,admisión,1.148
-Civil,10,comunicar él,1.1454
-Civil,11,inglés,1.1454
-Civil,12,institucional,1.1454
-Civil,13,civil informático,1.1454
-Civil,14,idioma inglés,1.141
-Civil,15,gestión proyecto,1.141
-Ejecución,1,gestión,1.1547
-Ejecución,2,institución,1.1547
-Ejecución,3,eficiencia,1.1546
-Ejecución,4,analizar,1.1546
-Ejecución,5,sistema información,1.1546
-Ejecución,6,adaptar,1.1546
-Ejecución,7,visión cristiano,1.1546
-Ejecución,8,tic,1.1546
-Ejecución,9,adaptar él,1.1546
-Ejecución,10,mundo,1.1544
-Ejecución,11,cristiano,1.1542
-Ejecución,12,comunidad,1.154
-Ejecución,13,ingeniero ejecución,1.154
-Ejecución,14,matemática,1.154
-Ejecución,15,distinguir,1.154
-Informática,1,informática chile,1.1547
-Informática,2,industrial,1.1547
-Informática,3,formar profesional,1.1547
-Informática,4,chile,1.1547
+Civil,3,disciplina,1.1547
+Civil,4,ético,1.1498
+Civil,5,inglés,1.1495
+Civil,6,comunicar él,1.1451
+Civil,7,ciencia ingeniería,1.1451
+Civil,8,institucional,1.1451
+Civil,9,región,1.1406
+Civil,10,teórico,1.1406
+Civil,11,idioma inglés,1.1406
+Civil,12,comprender,1.1406
+Civil,13,civil informático,1.1406
+Civil,14,ingeniería ingeniería,1.1406
+Civil,15,gestión proyecto,1.1406
+Ejecución,1,analizar,1.1547
+Ejecución,2,adaptar,1.1547
+Ejecución,3,eficiencia,1.1547
+Ejecución,4,persona humano,1.1547
+Ejecución,5,técnico,1.1546
+Ejecución,6,cristiano,1.1545
+Ejecución,7,ámbito,1.1545
+Ejecución,8,identidad,1.1543
+Ejecución,9,participar,1.1542
+Ejecución,10,contribuir desarrollo,1.1542
+Ejecución,11,desenvolver él,1.1541
+Ejecución,12,ingeniero ejecución,1.154
+Ejecución,13,sistema informático,1.1539
+Ejecución,14,promoción,1.1536
+Ejecución,15,institución,1.1536
+Informática,1,in,1.1547
+Informática,2,función,1.1547
+Informática,3,práctica industria,1.1547
+Informática,4,phd,1.1547
 Informática,5,educación,1.1547
-Informática,6,ciberseguridad,1.1547
-Informática,7,sector productivo,1.1547
-Informática,8,respuesta,1.1547
-Informática,9,empresarial,1.1547
-Informática,10,función,1.1547
-Informática,11,in,1.1547
-Informática,12,práctica industria,1.1547
-Informática,13,necesidad organización,1.1547
-Informática,14,phd,1.1547
-Informática,15,continuo,1.1526
+Informática,6,formar profesional,1.1547
+Informática,7,doctor,1.1547
+Informática,8,chile,1.1547
+Informática,9,manager,1.1547
+Informática,10,informática chile,1.1547
+Informática,11,ciberseguridad,1.1547
+Informática,12,empresarial,1.1507
+Informática,13,trabajo,1.1504
+Informática,14,ingeniería informática,1.1504
+Informática,15,industria,1.1495

@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from imblearn.over_sampling import SMOTE
 
 # =============================================================================
 # 1. CONFIGURACIÓN DE RUTAS Y CONSTANTES
@@ -15,17 +14,6 @@ RUTA_ENTRADA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "p
 RUTA_GRAFICO_SALIDA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "similitud_centroides.png"))
 
 def calcular_diferencia_intra_inter(sim_matrix, labels):
-    """
-    Calcula la diferencia matemática entre la similitud intra-grupo (misma categoría)
-    y la similitud inter-grupo (distinta categoría).
-    
-    Args:
-        sim_matrix (np.ndarray): Matriz de similitud coseno de los vectores.
-        labels (np.ndarray o list): Etiquetas correspondientes a cada vector.
-        
-    Returns:
-        float: Diferencia entre el promedio de similitud intra-grupo y el inter-grupo.
-    """
     n = sim_matrix.shape[0]
     indices_superiores = np.triu_indices(n, k=1)
     sim_plana = sim_matrix[indices_superiores]
@@ -40,56 +28,40 @@ def calcular_diferencia_intra_inter(sim_matrix, labels):
     return sim_intra - sim_inter
 
 def main():
-    print("Iniciando Análisis de Homogeneidad Semántica y Significancia Estadística...")
+    print("Iniciando Análisis de Homogeneidad Semántica (Corpus Real)...")
     print("-" * 70)
     
-    # =============================================================================
-    # 2. CARGA Y PREPARACIÓN DE DATOS
-    # =============================================================================
-    print("Cargando dataset estructurado...")
     try:
         df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
     except FileNotFoundError:
-        print(f"Error crítico: No se encontró el archivo de datos en {RUTA_ENTRADA}.")
+        print(f"Error: No se encontró el archivo en {RUTA_ENTRADA}.")
         return
 
-    # Depuración de registros nulos
     df = df.dropna(subset=['perfil_limpio'])
     X = df['perfil_limpio'].values
     y = df['grado'].values
     
     # =============================================================================
-    # 3. VECTORIZACIÓN SEMÁNTICA (TF-IDF)
+    # 2. VECTORIZACIÓN (TF-IDF) SOBRE DATOS REALES
     # =============================================================================
-    # Sincronizado con los parámetros del Benchmark óptimo (92.79%)
     print("Ejecutando vectorización TF-IDF...")
     vectorizer = TfidfVectorizer(max_features=400, ngram_range=(1, 2), max_df=0.85, min_df=2)
     X_tfidf_denso = vectorizer.fit_transform(X).toarray()
-
-    # =============================================================================
-    # 4. BALANCEO SINTÉTICO (SMOTE)
-    # =============================================================================
-    print("Aplicando algoritmo SMOTE para estabilización de métricas estadísticas...")
-    smote = SMOTE(sampling_strategy='auto', k_neighbors=3, random_state=42)
-    X_resampled, y_resampled = smote.fit_resample(X_tfidf_denso, y)
     
-    grados_unicos = sorted(np.unique(y_resampled))
+    grados_unicos = sorted(np.unique(y))
 
     # =============================================================================
-    # 5. CÁLCULO DE CENTROIDES ESPACIALES Y SIMILITUD COSENO
+    # 3. CENTROIDES Y SIMILITUD COSENO (DATOS REALES)
     # =============================================================================
-    print("Calculando vectores promedio (centroides) por grado académico...")
     centroides = []
     for grado in grados_unicos:
-        vectores_grado = X_resampled[y_resampled == grado]
-        centroide_promedio = vectores_grado.mean(axis=0)
-        centroides.append(centroide_promedio)
+        vectores_grado = X_tfidf_denso[y == grado]
+        centroides.append(vectores_grado.mean(axis=0))
     
     similitud_centroides = cosine_similarity(centroides)
 
-    # Reporte de matriz de similitud por consola
     print("\n" + "="*70)
-    print("MATRIZ DE SIMILITUD COSENO ENTRE CENTROIDES (Dataset Balanceado)")
+    print("MATRIZ DE SIMILITUD COSENO ENTRE CENTROIDES (Corpus Real)")
     print("="*70)
     print(f"{'':>15} | " + " | ".join([f"{g:>12}" for g in grados_unicos]))
     print("-" * 70)
@@ -97,62 +69,33 @@ def main():
         fila = [f"{similitud_centroides[i, j]:.4f}" for j in range(len(grados_unicos))]
         print(f"{grado1:>15} | " + " | ".join([f"{val:>12}" for val in fila]))
     
-    # Extracción de métrica crítica para la tesis
     idx_civil = grados_unicos.index('Civil')
     idx_info = grados_unicos.index('Informática')
-    sim_civil_info = similitud_centroides[idx_civil, idx_info]
-    print(f"\n[HALLAZGO ESTRUCTURAL] Similitud entre Civil e Informática: {sim_civil_info:.4f}")
+    print(f"\n[HALLAZGO ESTRUCTURAL] Similitud entre Civil e Informática: {similitud_centroides[idx_civil, idx_info]:.4f}")
 
-    # Generación y exportación de Mapa de Calor (Heatmap)
+    # (Heatmap igual que antes...)
     plt.figure(figsize=(8, 6))
-    sns.heatmap(
-        similitud_centroides, annot=True, fmt='.3f', cmap='YlOrRd', 
-        xticklabels=grados_unicos, yticklabels=grados_unicos, vmin=0, vmax=1
-    )
-    plt.title('Similitud Coseno entre Centroides de Grados', fontweight='bold', fontsize=12)
+    sns.heatmap(similitud_centroides, annot=True, fmt='.3f', cmap='YlOrRd', 
+                xticklabels=grados_unicos, yticklabels=grados_unicos, vmin=0, vmax=1)
+    plt.title('Similitud Coseno (Datos Reales)', fontweight='bold')
     plt.tight_layout()
     plt.savefig(RUTA_GRAFICO_SALIDA, dpi=300)
-    print(f"Mapa de calor exportado exitosamente en: {RUTA_GRAFICO_SALIDA}")
 
     # =============================================================================
-    # 6. VALIDACIÓN ESTADÍSTICA: TEST DE PERMUTACIÓN
+    # 4. TEST DE PERMUTACIÓN (SOBRE DATOS REALES)
     # =============================================================================
-    print("\n" + "="*70)
-    print("EJECUCIÓN DE TEST DE PERMUTACIÓN (Análisis de Significancia)")
-    print("="*70)
-    
-    similitud_total = cosine_similarity(X_resampled)
-    diferencia_observada = calcular_diferencia_intra_inter(similitud_total, y_resampled)
-    print(f"Diferencia observada (Intra - Inter) empírica: {diferencia_observada:.4f}")
+    print("\nEjecutando Test de Permutación sobre datos reales...")
+    similitud_total = cosine_similarity(X_tfidf_denso)
+    diferencia_observada = calcular_diferencia_intra_inter(similitud_total, y)
 
     N_PERMUTACIONES = 1000
     np.random.seed(42) 
-    diferencias_permutadas = np.zeros(N_PERMUTACIONES)
-    
-    print(f"Ejecutando {N_PERMUTACIONES} iteraciones de permutación de etiquetas...")
-    for i in range(N_PERMUTACIONES):
-        y_revuelto = np.random.permutation(y_resampled)
-        diferencias_permutadas[i] = calcular_diferencia_intra_inter(similitud_total, y_revuelto)
+    diferencias_permutadas = np.array([calcular_diferencia_intra_inter(similitud_total, np.random.permutation(y)) 
+                                       for _ in range(N_PERMUTACIONES)])
         
-    casos_extremos = np.sum(diferencias_permutadas >= diferencia_observada)
-    p_valor = casos_extremos / N_PERMUTACIONES
-
-    # Reporte de resultados estadísticos
-    print("\n" + "="*70)
-    print("RESULTADO DE VALIDACIÓN ESTADÍSTICA")
-    print("="*70)
-    print(f"Iteraciones nulas que superaron la métrica observada: {casos_extremos} de {N_PERMUTACIONES}")
+    p_valor = np.sum(diferencias_permutadas >= diferencia_observada) / N_PERMUTACIONES
     print(f"p-valor calculado: {p_valor:.4f}")
-    
-    if p_valor < 0.05:
-        print("\nCONCLUSIÓN: p-valor < 0.05. Se rechaza la Hipótesis Nula (H0).")
-        print("La estructura de separabilidad de los perfiles de egreso analizados")
-        print("es estadísticamente significativa y no responde a una distribución aleatoria.")
-    else:
-        print("\nCONCLUSIÓN: p-valor >= 0.05. No existe evidencia suficiente para rechazar H0.")
-        print("La estructura de distribución léxica actual podría ser producto del azar.")
-        
-    print("="*70 + "\n")
+    print("="*70)
 
 if __name__ == "__main__":
     main()
