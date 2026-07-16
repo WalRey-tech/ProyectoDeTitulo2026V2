@@ -1,0 +1,125 @@
+{
+    "modelo": "Regresión Logística",
+    "metodologia": "Predicciones out-of-fold obtenidas mediante StratifiedKFold de 5 pliegues. TF-IDF y SMOTE se ajustan únicamente sobre el fold de entrenamiento.",
+    "configuracion": {
+        "tfidf": {
+            "max_features": 400,
+            "ngram_range": [
+                1,
+                2
+            ],
+            "max_df": 0.85,
+            "min_df": 2
+        },
+        "smote": {
+            "k_neighbors": 3,
+            "random_state": 42
+        },
+        "regresion_logistica": {
+            "C": 5,
+            "max_iter": 2000,
+            "random_state": 42
+        },
+        "validacion": {
+            "n_splits": 5,
+            "shuffle": true,
+            "random_state": 42
+        }
+    },
+    "clases": [
+        "Civil",
+        "Ejecución",
+        "Informática"
+    ],
+    "total_perfiles": 63,
+    "distribucion_clases": {
+        "Civil": 32,
+        "Informática": 26,
+        "Ejecución": 5
+    },
+    "promedio_metricas_por_fold": {
+        "accuracy": 0.616667,
+        "accuracy_std": 0.121247,
+        "balanced_accuracy": 0.55619,
+        "balanced_accuracy_std": 0.212686,
+        "f1_macro": 0.53718,
+        "f1_macro_std": 0.225605,
+        "precision_macro": 0.543968,
+        "recall_macro": 0.55619
+    },
+    "metricas_globales_oof": {
+        "accuracy": 0.619048,
+        "balanced_accuracy": 0.554808,
+        "f1_macro": 0.602241,
+        "precision_macro": 0.737037,
+        "recall_macro": 0.554808
+    },
+    "matriz_confusion": [
+        [
+            22,
+            0,
+            10
+        ],
+        [
+            3,
+            2,
+            0
+        ],
+        [
+            11,
+            0,
+            15
+        ]
+    ],
+    "matriz_confusion_normalizada": [
+        [
+            0.6875,
+            0.0,
+            0.3125
+        ],
+        [
+            0.6,
+            0.4,
+            0.0
+        ],
+        [
+            0.423077,
+            0.0,
+            0.576923
+        ]
+    ],
+    "reporte_por_clase": {
+        "Civil": {
+            "precision": 0.6111111111111112,
+            "recall": 0.6875,
+            "f1-score": 0.6470588235294118,
+            "support": 32.0
+        },
+        "Ejecución": {
+            "precision": 1.0,
+            "recall": 0.4,
+            "f1-score": 0.5714285714285714,
+            "support": 5.0
+        },
+        "Informática": {
+            "precision": 0.6,
+            "recall": 0.5769230769230769,
+            "f1-score": 0.5882352941176471,
+            "support": 26.0
+        },
+        "accuracy": 0.6190476190476191,
+        "macro avg": {
+            "precision": 0.737037037037037,
+            "recall": 0.5548076923076922,
+            "f1-score": 0.6022408963585435,
+            "support": 63.0
+        },
+        "weighted avg": {
+            "precision": 0.6373897707231041,
+            "recall": 0.6190476190476191,
+            "f1-score": 0.616780045351474,
+            "support": 63.0
+        }
+    },
+    "nota_interpretacion": "Las métricas promedio por fold son comparables con el benchmark. Las métricas globales OOF se calculan acumulando todas las predicciones fuera de muestra y pueden variar ligeramente respecto del promedio de folds."
+}
