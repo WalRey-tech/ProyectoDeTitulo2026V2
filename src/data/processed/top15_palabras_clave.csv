@@ -1,46 +1,46 @@
-﻿Grado,Ranking,Termino,Z_Score
-Civil,1,disciplina,1.1547
-Civil,2,civil informática,1.1547
-Civil,3,económico social,1.1547
-Civil,4,fundamento,1.1547
-Civil,5,ingeniería civil,1.1547
-Civil,6,civil computación,1.1547
-Civil,7,civil,1.1501
-Civil,8,inglés,1.1493
-Civil,9,comunicar él,1.1447
-Civil,10,ciencia ingeniería,1.1447
-Civil,11,ingeniero civil,1.1419
-Civil,12,gestión proyecto,1.14
-Civil,13,institucional,1.14
-Civil,14,comprender,1.14
-Civil,15,teórico,1.14
-Ejecución,1,público,1.1547
-Ejecución,2,ámbito,1.1546
-Ejecución,3,contribuir desarrollo,1.1543
-Ejecución,4,participar,1.1543
-Ejecución,5,eficiencia,1.1542
-Ejecución,6,analizar,1.1542
-Ejecución,7,adaptar,1.1542
-Ejecución,8,desenvolver él,1.1541
-Ejecución,9,técnico,1.1541
-Ejecución,10,ingeniero ejecución,1.154
-Ejecución,11,promoción,1.1537
-Ejecución,12,sistema informático,1.1537
-Ejecución,13,respeto,1.1537
-Ejecución,14,ejecución,1.1535
-Ejecución,15,universitario,1.1535
-Informática,1,in,1.1547
-Informática,2,formar profesional,1.1547
-Informática,3,industrial,1.1547
-Informática,4,función,1.1547
-Informática,5,doctor,1.1547
-Informática,6,sector productivo,1.1547
-Informática,7,phd,1.1547
-Informática,8,práctica industria,1.1547
-Informática,9,educación,1.1547
-Informática,10,cliente,1.1547
-Informática,11,ciberseguridad,1.1547
-Informática,12,necesidad organización,1.1547
-Informática,13,ingeniería informática,1.1514
-Informática,14,empresarial,1.1508
-Informática,15,industria,1.1497
+﻿"Grado";"Ranking";"Termino";"Z_Score";"Frecuencia_Absoluta_Grado";"Frecuencia_Relativa_Grado";"Frecuencia_Total_Corpus";"Documentos_Grado";"Total_Documentos_Grado";"Soporte_Documental_Grado";"Umbral_Documentos"
+"Civil";"1";"disciplina";"1.154701";"7";"0.00301464";"7";"6";"32";"0.1875";"4"
+"Civil";"2";"general";"1.154701";"4";"0.00172265";"4";"4";"32";"0.125";"4"
+"Civil";"3";"económico social";"1.154701";"5";"0.00215332";"5";"4";"32";"0.125";"4"
+"Civil";"4";"ejercer";"1.154701";"5";"0.00215332";"5";"4";"32";"0.125";"4"
+"Civil";"5";"fundamento";"1.154701";"5";"0.00215332";"5";"5";"32";"0.15625";"4"
+"Civil";"6";"líder";"1.154701";"4";"0.00172265";"4";"4";"32";"0.125";"4"
+"Civil";"7";"inglés";"1.149889";"8";"0.00344531";"9";"8";"32";"0.25";"4"
+"Civil";"8";"destacar";"1.145883";"6";"0.00258398";"7";"4";"32";"0.125";"4"
+"Civil";"9";"idioma inglés";"1.141703";"5";"0.00215332";"6";"5";"32";"0.15625";"4"
+"Civil";"10";"gestión proyecto";"1.141703";"5";"0.00215332";"6";"4";"32";"0.125";"4"
+"Civil";"11";"satisfacer";"1.141703";"5";"0.00215332";"6";"4";"32";"0.125";"4"
+"Civil";"12";"comprender";"1.141703";"5";"0.00215332";"6";"5";"32";"0.15625";"4"
+"Civil";"13";"teórico";"1.133698";"4";"0.00172265";"5";"4";"32";"0.125";"4"
+"Civil";"14";"emprender";"1.133698";"4";"0.00172265";"5";"4";"32";"0.125";"4"
+"Civil";"15";"plan";"1.126638";"7";"0.00301464";"9";"5";"32";"0.15625";"4"
+"Ejecución";"1";"público";"1.154287";"3";"0.01234568";"27";"2";"5";"0.4";"2"
+"Ejecución";"2";"recurso";"1.153815";"2";"0.00823045";"14";"2";"5";"0.4";"2"
+"Ejecución";"3";"proceso";"1.153234";"6";"0.02469136";"47";"4";"5";"0.8";"2"
+"Ejecución";"4";"institución";"1.152729";"4";"0.01646091";"10";"2";"5";"0.4";"2"
+"Ejecución";"5";"privado";"1.152189";"3";"0.01234568";"25";"2";"5";"0.4";"2"
+"Ejecución";"6";"información";"1.151825";"6";"0.02469136";"101";"4";"5";"0.8";"2"
+"Ejecución";"7";"lenguaje";"1.151704";"3";"0.01234568";"8";"2";"5";"0.4";"2"
+"Ejecución";"8";"sistema";"1.151583";"5";"0.02057613";"72";"4";"5";"0.8";"2"
+"Ejecución";"9";"efectivo";"1.151317";"3";"0.01234568";"21";"2";"5";"0.4";"2"
+"Ejecución";"10";"comprometido";"1.150068";"3";"0.01234568";"11";"2";"5";"0.4";"2"
+"Ejecución";"11";"capacitado";"1.150068";"3";"0.01234568";"11";"2";"5";"0.4";"2"
+"Ejecución";"12";"mundo";"1.149617";"3";"0.01234568";"18";"2";"5";"0.4";"2"
+"Ejecución";"13";"institución público";"1.149456";"3";"0.01234568";"6";"2";"5";"0.4";"2"
+"Ejecución";"14";"mantención";"1.148982";"3";"0.01234568";"9";"2";"5";"0.4";"2"
+"Ejecución";"15";"lenguaje programación";"1.148641";"3";"0.01234568";"7";"2";"5";"0.4";"2"
+"Informática";"1";"cliente";"1.154701";"5";"0.0017301";"5";"3";"26";"0.115385";"3"
+"Informática";"2";"compromiso ético";"1.154701";"5";"0.0017301";"5";"4";"26";"0.153846";"3"
+"Informática";"3";"respuesta";"1.154701";"5";"0.0017301";"5";"4";"26";"0.153846";"3"
+"Informática";"4";"mercado";"1.154701";"5";"0.0017301";"5";"5";"26";"0.192308";"3"
+"Informática";"5";"práctica industria";"1.154701";"11";"0.00380623";"11";"4";"26";"0.153846";"3"
+"Informática";"6";"integral basado";"1.154701";"4";"0.00138408";"4";"3";"26";"0.115385";"3"
+"Informática";"7";"necesidad organización";"1.154701";"6";"0.00207612";"6";"4";"26";"0.153846";"3"
+"Informática";"8";"industrial";"1.154701";"6";"0.00207612";"6";"4";"26";"0.153846";"3"
+"Informática";"9";"ciberseguridad";"1.154701";"9";"0.00311419";"9";"4";"26";"0.153846";"3"
+"Informática";"10";"empresarial";"1.150347";"13";"0.00449827";"14";"4";"26";"0.153846";"3"
+"Informática";"11";"industria";"1.149073";"23";"0.00795848";"25";"9";"26";"0.346154";"3"
+"Informática";"12";"estándar calidad";"1.148522";"11";"0.00380623";"12";"5";"26";"0.192308";"3"
+"Informática";"13";"calidad seguridad";"1.147148";"10";"0.00346021";"11";"4";"26";"0.153846";"3"
+"Informática";"14";"calidad";"1.145423";"25";"0.00865052";"37";"11";"26";"0.423077";"3"
+"Informática";"15";"productivo";"1.145261";"9";"0.00311419";"10";"5";"26";"0.192308";"3"
