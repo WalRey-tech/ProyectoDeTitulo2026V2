@@ -41,8 +41,13 @@ def main():
     # 2. VECTORIZACIÓN (TF-IDF)
     # =============================================================================
     # Se utiliza unigramas y bigramas para capturar términos compuestos específicos de ingeniería
-    print("Ejecutando vectorización TF-IDF (400 dimensiones)...")
-    vectorizer = TfidfVectorizer(max_features=400, ngram_range=(1, 2))
+    print("Ejecutando vectorización TF-IDF (400 características)...")
+    vectorizer = TfidfVectorizer(
+    max_features=400,
+    ngram_range=(1, 2),
+    max_df=0.85,
+    min_df=2
+    )
     
     # LDA requiere una matriz densa para el cálculo de autovectores y autovalores
     X_tfidf_dense = vectorizer.fit_transform(X_raw).toarray()
@@ -96,7 +101,7 @@ def main():
         hue=y, palette=colores_dict,
         alpha=0.7, edgecolor='k', s=100
     )
-    axes[1].set_title('LDA (Separabilidad Forzada - Supervisado)', fontsize=14)
+    axes[1].set_title("LDA (Proyección Supervisada)", fontsize=14)
     axes[1].set_xlabel('Función Discriminante 1')
     axes[1].set_ylabel('Función Discriminante 2')
 

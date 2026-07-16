@@ -97,74 +97,58 @@ def extraer_con_selenium(site):
 
 def scrapear_sitio(site):
     """
-    El controlador principal. Toma la decisión de qué método usar según el config.py.
-    Tiene un plan de respaldo: si un método falla, intenta con el otro.
+    Intenta extraer el perfil mediante Requests y Selenium.
+    Si el primer método falla por excepción o devuelve texto vacío,
+    continúa automáticamente con el método de respaldo.
     """
     perfil = ""
     metodo_usado = ""
+    errores = []
 
-    try:
-        tipo_extraccion = site.get("tipo_extraccion", "css")
+    tipo_extraccion = site.get("tipo_extraccion", "css")
 
-        # RUTA A: Intenta primero con Selenium
-        if tipo_extraccion == "selenium":
-            perfil = extraer_con_selenium(site)
-            metodo_usado = "selenium"
+    if tipo_extraccion == "selenium":
+        orden_metodos = ["selenium", "requests"]
+    else:
+        orden_metodos = ["requests", "selenium"]
 
-            # Plan de Respaldo: Si Selenium no trajo nada, intenta con Requests
-            if not perfil:
-                print(
-                    f"Selenium no extrajo texto para {site.get('universidad')}. "
-                    f"Probando requests..."
-                )
+    for metodo in orden_metodos:
+        try:
+            print(f"   Intentando extracción mediante {metodo}...")
+
+            if metodo == "requests":
                 perfil = extraer_con_requests(site)
-                metodo_usado = "requests"
-
-        # RUTA B: Intenta primero con Requests (Ruta por defecto)
-        else:
-            perfil = extraer_con_requests(site)
-            metodo_usado = "requests"
-
-            # Plan de Respaldo: Si Requests no trajo nada, intenta con Selenium
-            if not perfil:
-                print(
-                    f"Requests no extrajo texto para {site.get('universidad')}. "
-                    f"Probando Selenium..."
-                )
+            else:
                 perfil = extraer_con_selenium(site)
-                metodo_usado = "selenium"
 
-        # Si agotó ambas opciones y sigue vacío, lanza una alerta visual en la consola
-        if not perfil:
-            print(
-                f"ALERTA: No se extrajo texto. "
-                f"Revisa el selector o la página para {site.get('universidad')}."
-            )
+            metodo_usado = metodo
 
-        # Retorna el diccionario final que se convertirá en una fila del CSV.
-        # CAMBIO CRÍTICO: Se cambió 'perfil' a 'perfil_egreso' para compatibilidad con la Fase 2.
-        return {
-            "universidad": site.get("universidad", ""),
-            "tipo_institucion": site.get("tipo_institucion", ""),
-            "carrera": site.get("carrera", ""),
-            "tipo_carrera": site.get("tipo_carrera", ""),
-            "url": site.get("url", ""),
-            "perfil_egreso": perfil,  
-            "selector": site.get("selector", ""),
-            "metodo_usado": metodo_usado,
-            "error": ""
-        }
+            if perfil and perfil.strip():
+                print(f"   Extracción exitosa mediante {metodo}.")
+                break
 
-    except Exception as error:
-        # Si algo se rompe completamente, guarda el error en el CSV en lugar de botar el programa
-        return {
-            "universidad": site.get("universidad", ""),
-            "tipo_institucion": site.get("tipo_institucion", ""),
-            "carrera": site.get("carrera", ""),
-            "tipo_carrera": site.get("tipo_carrera", ""),
-            "url": site.get("url", ""),
-            "perfil_egreso": "",
-            "selector": site.get("selector", ""),
-            "metodo_usado": metodo_usado,
-            "error": str(error)
-        }
+            errores.append(f"{metodo}: no se encontró texto")
+            print(f"   {metodo} no encontró contenido. Probando respaldo...")
+
+        except Exception as error:
+            errores.append(f"{metodo}: {error}")
+            print(f"   Falló {metodo}: {error}")
+            print("   Probando método de respaldo...")
+
+    if not perfil:
+        print(
+            f"ALERTA: No se extrajo texto para "
+            f"{site.get('universidad')} - {site.get('carrera')}"
+        )
+
+    return {
+        "universidad": site.get("universidad", ""),
+        "tipo_institucion": site.get("tipo_institucion", ""),
+        "carrera": site.get("carrera", ""),
+        "tipo_carrera": site.get("tipo_carrera", ""),
+        "url": site.get("url", ""),
+        "perfil_egreso": perfil,
+        "selector": site.get("selector", ""),
+        "metodo_usado": metodo_usado,
+        "error": "" if perfil else " | ".join(errores)
+    }

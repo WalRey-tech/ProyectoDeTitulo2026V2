@@ -1,26 +1,39 @@
-import pandas as pd
-import numpy as np
 import os
-import warnings
+import csv
 import joblib
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
-# Supresión de advertencias de ejecución para mantener la consola limpia
-warnings.filterwarnings('ignore')
-
+from sklearn.base import BaseEstimator, TransformerMixin, clone
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import (
+    StratifiedKFold,
+    cross_validate,
+    cross_val_predict
+)
+from sklearn.metrics import (
+    classification_report,
+    confusion_matrix,
+    ConfusionMatrixDisplay
+)
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import StratifiedKFold, cross_validate
-from sklearn.preprocessing import LabelEncoder, FunctionTransformer
-from imblearn.over_sampling import SMOTE
+
 from imblearn.pipeline import Pipeline
+from imblearn.over_sampling import SMOTE
 
 # =============================================================================
-# IMPORTACIÓN DE MODELOS CLASIFICADORES
+# MODELOS
 # =============================================================================
+
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.ensemble import (
+    RandomForestClassifier,
+    GradientBoostingClassifier
+)
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import MultinomialNB
@@ -31,140 +44,603 @@ try:
 except ImportError:
     HAS_XGB = False
 
+
 # =============================================================================
-# CONFIGURACIÓN DE RUTAS Y CONSTANTES
+# RUTAS
 # =============================================================================
+
 DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
-RUTA_ENTRADA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "perfiles_egreso_limpio_v1.csv"))
-RUTA_REPORTE = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "benchmark_modelos.csv"))
 
-# Rutas para la exportación de los artefactos del modelo ganador
-RUTA_MODELO_FINAL = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "modelo_random_forest.joblib"))
-RUTA_VECTORIZADOR = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "vectorizador_tfidf.joblib"))
+RUTA_ENTRADA = os.path.normpath(
+    os.path.join(
+        DIRECTORIO_ACTUAL,
+        "..",
+        "data",
+        "processed",
+        "perfiles_egreso_limpio_v1.csv"
+    )
+)
 
-def main():
-    print("Iniciando Fase 3: Benchmark de Modelos y Evaluación de Separabilidad sin Data Leakage")
-    print("-" * 80)
-    
-    # =============================================================================
-    # 1. INGESTA Y PREPARACIÓN DE DATOS
-    # =============================================================================
-    print("Cargando corpus procesado...")
-    try:
-        df = pd.read_csv(RUTA_ENTRADA, encoding='utf-8-sig')
-    except Exception as e:
-        print(f"Error crítico: No se encontró el archivo de entrada. Detalle: {e}")
-        return
+RUTA_BENCHMARK = os.path.normpath(
+    os.path.join(
+        DIRECTORIO_ACTUAL,
+        "..",
+        "data",
+        "processed",
+        "benchmark_modelos_v3.csv"
+    )
+)
 
-    # Limpieza de registros nulos
-    df = df.dropna(subset=['perfil_limpio'])
-    X_text = df['perfil_limpio'].values
-    y_labels = df['grado'].values
+RUTA_METRICAS_CLASE = os.path.normpath(
+    os.path.join(
+        DIRECTORIO_ACTUAL,
+        "..",
+        "data",
+        "processed",
+        "metricas_por_clase_v3.csv"
+    )
+)
 
-    print(f"Total de perfiles académicos validados: {len(X_text)}")
+RUTA_MATRIZ_CSV = os.path.normpath(
+    os.path.join(
+        DIRECTORIO_ACTUAL,
+        "..",
+        "data",
+        "processed",
+        "matriz_confusion_v3.csv"
+    )
+)
 
-    # Codificación de etiquetas categóricas a valores numéricos
-    le = LabelEncoder()
-    y = le.fit_transform(y_labels)
+RUTA_MATRIZ_PNG = os.path.normpath(
+    os.path.join(
+        DIRECTORIO_ACTUAL,
+        "..",
+        "data",
+        "processed",
+        "matriz_confusion_v3.png"
+    )
+)
 
-    # =============================================================================
-    # 2. CONFIGURACIÓN DEL BENCHMARK ALGORÍTMICO
-    # =============================================================================
+RUTA_MODELO = os.path.normpath(
+    os.path.join(
+        DIRECTORIO_ACTUAL,
+        "..",
+        "data",
+        "processed",
+        "modelo_ganador_pipeline_v3.joblib"
+    )
+)
+
+RUTA_LABEL_ENCODER = os.path.normpath(
+    os.path.join(
+        DIRECTORIO_ACTUAL,
+        "..",
+        "data",
+        "processed",
+        "label_encoder_v3.joblib"
+    )
+)
+
+
+# =============================================================================
+# CONFIGURACIÓN
+# =============================================================================
+
+RANDOM_STATE = 42
+N_SPLITS = 5
+
+TFIDF_CONFIG = {
+    "max_features": 400,
+    "ngram_range": (1, 2),
+    "max_df": 0.85,
+    "min_df": 2
+}
+
+
+# =============================================================================
+# TRANSFORMADOR A MATRIZ DENSA
+# =============================================================================
+
+class DenseTransformer(BaseEstimator, TransformerMixin):
+    """
+    Convierte la matriz dispersa de TF-IDF a una matriz densa.
+
+    El corpus es pequeño y se limita a 400 características, por lo que esta
+    conversión permite utilizar modelos que no admiten matrices dispersas,
+    como LDA y Gradient Boosting.
+    """
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        if hasattr(X, "toarray"):
+            return X.toarray()
+
+        return np.asarray(X)
+
+
+# =============================================================================
+# CONSTRUCCIÓN DEL PIPELINE
+# =============================================================================
+
+def construir_pipeline(modelo):
+    """
+    TF-IDF y SMOTE se ajustan dentro de cada fold de entrenamiento.
+
+    El fold de validación no participa en:
+    - la construcción del vocabulario;
+    - el cálculo de los valores IDF;
+    - la generación de muestras sintéticas.
+    """
+
+    return Pipeline(
+        steps=[
+            (
+                "tfidf",
+                TfidfVectorizer(**TFIDF_CONFIG)
+            ),
+            (
+                "to_dense",
+                DenseTransformer()
+            ),
+            (
+                "smote",
+                SMOTE(
+                    sampling_strategy="auto",
+                    k_neighbors=3,
+                    random_state=RANDOM_STATE
+                )
+            ),
+            (
+                "clasificador",
+                modelo
+            )
+        ]
+    )
+
+
+# =============================================================================
+# MODELOS DEL BENCHMARK
+# =============================================================================
+
+def crear_modelos(numero_clases):
     modelos = {
-        "1. LDA": LinearDiscriminantAnalysis(),
-        "2. SVM (Kernel Linear)": SVC(kernel='linear', C=10, random_state=42),
-        "3. SVM (Kernel RBF)": SVC(kernel='rbf', C=5, random_state=42),
-        "4. Regresion Logistica": LogisticRegression(C=5, max_iter=2000, random_state=42),
-        "5. MLP (Red Neuronal)": MLPClassifier(hidden_layer_sizes=(150, 100), max_iter=1500, random_state=42),
-        "6. Multinomial Naive Bayes": MultinomialNB(),
-        "7. Random Forest": RandomForestClassifier(n_estimators=200, random_state=42),
-        "8. Gradient Boosting": GradientBoostingClassifier(n_estimators=150, random_state=42),
-        "9. K-Nearest Neighbors": KNeighborsClassifier(n_neighbors=3),
-        "10. Decision Tree": DecisionTreeClassifier(max_depth=10, random_state=42)
+        "LDA": LinearDiscriminantAnalysis(
+            solver="lsqr",
+            shrinkage="auto"
+        ),
+
+        "SVM Kernel Linear": SVC(
+            kernel="linear",
+            C=10,
+            random_state=RANDOM_STATE
+        ),
+
+        "SVM Kernel RBF": SVC(
+            kernel="rbf",
+            C=5,
+            random_state=RANDOM_STATE
+        ),
+
+        "Regresión Logística": LogisticRegression(
+            C=5,
+            max_iter=2000,
+            random_state=RANDOM_STATE
+        ),
+
+        "MLP Red Neuronal": MLPClassifier(
+            hidden_layer_sizes=(150, 100),
+            max_iter=1500,
+            random_state=RANDOM_STATE
+        ),
+
+        "Multinomial Naive Bayes": MultinomialNB(),
+
+        "Random Forest": RandomForestClassifier(
+            n_estimators=200,
+            random_state=RANDOM_STATE,
+            n_jobs=1
+        ),
+
+        "Gradient Boosting": GradientBoostingClassifier(
+            n_estimators=150,
+            random_state=RANDOM_STATE
+        ),
+
+        "K-Nearest Neighbors": KNeighborsClassifier(
+            n_neighbors=3
+        ),
+
+        "Decision Tree": DecisionTreeClassifier(
+            max_depth=10,
+            random_state=RANDOM_STATE
+        )
     }
 
     if HAS_XGB:
-        modelos["11. XGBoost"] = XGBClassifier(use_label_encoder=False, eval_metric='mlogloss', random_state=42)
+        modelos["XGBoost"] = XGBClassifier(
+            objective="multi:softprob",
+            num_class=numero_clases,
+            eval_metric="mlogloss",
+            n_estimators=150,
+            max_depth=4,
+            learning_rate=0.05,
+            random_state=RANDOM_STATE,
+            n_jobs=1
+        )
 
-    print("\nEjecutando evaluación de métricas de rendimiento (Stratified 5-Fold CV con Pipeline)...")
-    print("-" * 80)
-    print(f"{'Algoritmo':<30} | {'Accuracy Medio':<15} | {'F1-Score Macro'}")
-    print("-" * 80)
+    return modelos
+
+
+# =============================================================================
+# FLUJO PRINCIPAL
+# =============================================================================
+
+def main():
+    print("=" * 76)
+    print("BENCHMARK SUPERVISADO SIN FUGA DE DATOS")
+    print("=" * 76)
+
+    # -------------------------------------------------------------------------
+    # 1. Carga y validación
+    # -------------------------------------------------------------------------
+
+    try:
+        df = pd.read_csv(
+            RUTA_ENTRADA,
+            encoding="utf-8-sig"
+        )
+    except FileNotFoundError:
+        print(f"Error: no existe el archivo:\n{RUTA_ENTRADA}")
+        return
+    except Exception as error:
+        print(f"Error al leer el dataset: {error}")
+        return
+
+    columnas_obligatorias = {
+        "perfil_limpio",
+        "grado"
+    }
+
+    columnas_faltantes = columnas_obligatorias - set(df.columns)
+
+    if columnas_faltantes:
+        print(
+            "Error: faltan columnas obligatorias: "
+            f"{sorted(columnas_faltantes)}"
+        )
+        return
+
+    df = df.dropna(
+        subset=["perfil_limpio", "grado"]
+    ).copy()
+
+    df = df[
+        df["perfil_limpio"].astype(str).str.strip() != ""
+    ].copy()
+
+    X_text = df["perfil_limpio"].astype(str).values
+    y_text = df["grado"].astype(str).values
+
+    print(f"Total de perfiles reales: {len(df)}")
+    print("\nDistribución original:")
+    print(df["grado"].value_counts())
+
+    # -------------------------------------------------------------------------
+    # 2. Codificación de etiquetas
+    # -------------------------------------------------------------------------
+
+    label_encoder = LabelEncoder()
+    y = label_encoder.fit_transform(y_text)
+
+    nombres_clases = label_encoder.classes_
+
+    print("\nClases codificadas:")
+    for indice, clase in enumerate(nombres_clases):
+        print(f"  {indice}: {clase}")
+
+    # -------------------------------------------------------------------------
+    # 3. Validación cruzada
+    # -------------------------------------------------------------------------
+
+    cv = StratifiedKFold(
+        n_splits=N_SPLITS,
+        shuffle=True,
+        random_state=RANDOM_STATE
+    )
+
+    scoring = {
+        "accuracy": "accuracy",
+        "balanced_accuracy": "balanced_accuracy",
+        "f1_macro": "f1_macro",
+        "precision_macro": "precision_macro",
+        "recall_macro": "recall_macro"
+    }
+
+    modelos = crear_modelos(
+        numero_clases=len(nombres_clases)
+    )
 
     resultados = []
-    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-    
-    mejor_score = 0
-    mejor_nombre = ""
-    mejor_pipeline = None
 
-    # Transformador para convertir matrices dispersas (TF-IDF) a densas (Requerido por LDA y SMOTE)
-    to_dense = FunctionTransformer(lambda x: x.toarray(), accept_sparse=True)
+    print("\nEjecutando benchmark...")
+    print("-" * 76)
 
-    # =============================================================================
-    # 3. EVALUACIÓN CON AISLAMIENTO DE DATOS (PIPELINE)
-    # =============================================================================
     for nombre, modelo in modelos.items():
+        print(f"Evaluando: {nombre}")
+
+        pipeline = construir_pipeline(
+            clone(modelo)
+        )
+
         try:
-            # El Pipeline encapsula TF-IDF, conversión y SMOTE para aislar cada fold
-            pipe = Pipeline([
-                ("tfidf", TfidfVectorizer(max_features=400, ngram_range=(1, 2), max_df=0.85, min_df=2)),
-                ("to_dense", to_dense),
-                ("smote", SMOTE(sampling_strategy='auto', k_neighbors=3, random_state=42)),
-                ("clf", modelo)
-            ])
-            
-            # Se evalúa directamente sobre el texto crudo (X_text), NO sobre datos previamente balanceados
-            scores = cross_validate(pipe, X_text, y, cv=cv, scoring=('accuracy', 'f1_macro'))
-            
-            mean_acc = scores['test_accuracy'].mean()
-            std_acc = scores['test_accuracy'].std()
-            f1_mean = scores['test_f1_macro'].mean()
-            
-            resultados.append({
+            scores = cross_validate(
+                pipeline,
+                X_text,
+                y,
+                cv=cv,
+                scoring=scoring,
+                n_jobs=-1,
+                return_train_score=False,
+                error_score="raise"
+            )
+
+            resultado = {
                 "Modelo": nombre,
-                "Accuracy (%)": round(mean_acc * 100, 2),
-                "F1-Macro (%)": round(f1_mean * 100, 2),
-                "Desviacion (%)": round(std_acc * 100, 2)
-            })
-            print(f"{nombre:<30} | {mean_acc*100:>13.2f}% | {f1_mean*100:>13.2f}%")
-            
-            # Selección dinámica del mejor modelo basado en Accuracy
-            if mean_acc > mejor_score:
-                mejor_score = mean_acc
-                mejor_nombre = nombre
-                mejor_pipeline = pipe
 
-        except Exception as e:
-            print(f"Excepción en la evaluación de {nombre}: {str(e)}")
+                "Accuracy (%)":
+                    scores["test_accuracy"].mean() * 100,
 
-    # =============================================================================
-    # 4. EXPORTACIÓN DE RESULTADOS Y PERSISTENCIA DEL MODELO ÓPTIMO
-    # =============================================================================
-    df_resultados = pd.DataFrame(resultados).sort_values(by="Accuracy (%)", ascending=False)
-    os.makedirs(os.path.dirname(RUTA_REPORTE), exist_ok=True)
-    df_resultados.to_csv(RUTA_REPORTE, sep=";", index=False, encoding='utf-8-sig')
+                "Accuracy std (%)":
+                    scores["test_accuracy"].std() * 100,
 
-    print("-" * 80)
-    print("\n[ REPORTE FINAL DE SEPARABILIDAD ]")
-    print(f"Algoritmo superior detectado: {mejor_nombre} ({mejor_score * 100:.2f}%)")
-    print("La interpolación mediante SMOTE se aplicó correctamente sin Data Leakage.")
+                "Balanced Accuracy (%)":
+                    scores["test_balanced_accuracy"].mean() * 100,
 
-    # =============================================================================
-    # 5. ENTRENAMIENTO FINAL Y EXPORTACIÓN
-    # =============================================================================
-    print(f"\nIniciando entrenamiento del modelo en producción ({mejor_nombre})...")
-    
-    # Entrenamos el pipeline ganador con TODO el corpus para producción
-    mejor_pipeline.fit(X_text, y)
-    
-    # Guardamos los artefactos usando las rutas originales configuradas
-    joblib.dump(mejor_pipeline.named_steps['clf'], RUTA_MODELO_FINAL)
-    joblib.dump(mejor_pipeline.named_steps['tfidf'], RUTA_VECTORIZADOR)
-    
-    print(f"Artefactos exportados exitosamente para integración en arquitectura web.")
-    print(f"- Modelo: {RUTA_MODELO_FINAL}")
-    print(f"- Vectorizador: {RUTA_VECTORIZADOR}")
+                "Balanced Accuracy std (%)":
+                    scores["test_balanced_accuracy"].std() * 100,
+
+                "F1 Macro (%)":
+                    scores["test_f1_macro"].mean() * 100,
+
+                "F1 Macro std (%)":
+                    scores["test_f1_macro"].std() * 100,
+
+                "Precision Macro (%)":
+                    scores["test_precision_macro"].mean() * 100,
+
+                "Recall Macro (%)":
+                    scores["test_recall_macro"].mean() * 100
+            }
+
+            resultados.append(resultado)
+
+            print(
+                f"  Accuracy: "
+                f"{resultado['Accuracy (%)']:.2f}%"
+            )
+
+            print(
+                f"  Balanced Accuracy: "
+                f"{resultado['Balanced Accuracy (%)']:.2f}%"
+            )
+
+            print(
+                f"  F1 Macro: "
+                f"{resultado['F1 Macro (%)']:.2f}%"
+            )
+
+        except Exception as error:
+            print(f"  Error durante evaluación: {error}")
+
+        print("-" * 76)
+
+    if not resultados:
+        print("No fue posible evaluar ningún modelo.")
+        return
+
+    # -------------------------------------------------------------------------
+    # 4. Selección del modelo ganador
+    # -------------------------------------------------------------------------
+
+    df_resultados = pd.DataFrame(resultados)
+
+    df_resultados = df_resultados.sort_values(
+        by=[
+            "F1 Macro (%)",
+            "Balanced Accuracy (%)",
+            "Accuracy (%)"
+        ],
+        ascending=False
+    ).reset_index(drop=True)
+
+    columnas_numericas = df_resultados.select_dtypes(
+        include=[np.number]
+    ).columns
+
+    df_resultados[columnas_numericas] = (
+        df_resultados[columnas_numericas].round(2)
+    )
+
+    os.makedirs(
+        os.path.dirname(RUTA_BENCHMARK),
+        exist_ok=True
+    )
+
+    df_resultados.to_csv(
+        RUTA_BENCHMARK,
+        sep=";",
+        index=False,
+        encoding="utf-8-sig",
+        quoting=csv.QUOTE_ALL
+    )
+
+    print("\n" + "=" * 76)
+    print("RANKING FINAL")
+    print("=" * 76)
+
+    print(
+        df_resultados[
+            [
+                "Modelo",
+                "Accuracy (%)",
+                "Balanced Accuracy (%)",
+                "F1 Macro (%)",
+                "F1 Macro std (%)"
+            ]
+        ].to_string(index=False)
+    )
+
+    nombre_ganador = df_resultados.iloc[0]["Modelo"]
+    modelo_ganador = modelos[nombre_ganador]
+
+    print("\nModelo ganador por F1 Macro:")
+    print(f"  {nombre_ganador}")
+
+    # -------------------------------------------------------------------------
+    # 5. Predicciones fuera de muestra
+    # -------------------------------------------------------------------------
+
+    pipeline_ganador = construir_pipeline(
+        clone(modelo_ganador)
+    )
+
+    print("\nGenerando predicciones fuera de muestra...")
+
+    y_pred_oof = cross_val_predict(
+        pipeline_ganador,
+        X_text,
+        y,
+        cv=cv,
+        method="predict",
+        n_jobs=-1
+    )
+
+    # -------------------------------------------------------------------------
+    # 6. Métricas por clase
+    # -------------------------------------------------------------------------
+
+    reporte = classification_report(
+        y,
+        y_pred_oof,
+        target_names=nombres_clases,
+        output_dict=True,
+        zero_division=0
+    )
+
+    df_reporte = pd.DataFrame(
+        reporte
+    ).transpose()
+
+    df_reporte = df_reporte.reset_index().rename(
+        columns={"index": "Clase"}
+    )
+
+    columnas_metricas = [
+        "precision",
+        "recall",
+        "f1-score",
+        "support"
+    ]
+
+    df_reporte[columnas_metricas] = (
+        df_reporte[columnas_metricas].round(4)
+    )
+
+    df_reporte.to_csv(
+        RUTA_METRICAS_CLASE,
+        sep=";",
+        index=False,
+        encoding="utf-8-sig",
+        quoting=csv.QUOTE_ALL
+    )
+
+    print("\nMétricas por clase:")
+    print(df_reporte.to_string(index=False))
+
+    # -------------------------------------------------------------------------
+    # 7. Matriz de confusión
+    # -------------------------------------------------------------------------
+
+    matriz = confusion_matrix(
+        y,
+        y_pred_oof
+    )
+
+    df_matriz = pd.DataFrame(
+        matriz,
+        index=nombres_clases,
+        columns=nombres_clases
+    )
+
+    df_matriz.index.name = "Real"
+    df_matriz.columns.name = "Predicho"
+
+    df_matriz.to_csv(
+        RUTA_MATRIZ_CSV,
+        sep=";",
+        encoding="utf-8-sig",
+        quoting=csv.QUOTE_ALL
+    )
+
+    print("\nMatriz de confusión:")
+    print(df_matriz)
+
+    display = ConfusionMatrixDisplay(
+        confusion_matrix=matriz,
+        display_labels=nombres_clases
+    )
+
+    display.plot(
+        values_format="d"
+    )
+
+    plt.title(
+        f"Matriz de confusión — {nombre_ganador}\n"
+        "Predicciones fuera de muestra"
+    )
+
+    plt.tight_layout()
+    plt.savefig(
+        RUTA_MATRIZ_PNG,
+        dpi=300,
+        bbox_inches="tight"
+    )
+    plt.close()
+
+    # -------------------------------------------------------------------------
+    # 8. Entrenamiento final
+    # -------------------------------------------------------------------------
+
+    print("\nEntrenando pipeline ganador con todo el corpus...")
+
+    pipeline_ganador.fit(
+        X_text,
+        y
+    )
+
+    joblib.dump(
+        pipeline_ganador,
+        RUTA_MODELO
+    )
+
+    joblib.dump(
+        label_encoder,
+        RUTA_LABEL_ENCODER
+    )
+
+    print("\n" + "=" * 76)
+    print("PROCESO COMPLETADO")
+    print("=" * 76)
+
+    print(f"Benchmark:\n  {RUTA_BENCHMARK}")
+    print(f"Métricas por clase:\n  {RUTA_METRICAS_CLASE}")
+    print(f"Matriz CSV:\n  {RUTA_MATRIZ_CSV}")
+    print(f"Matriz PNG:\n  {RUTA_MATRIZ_PNG}")
+    print(f"Pipeline ganador:\n  {RUTA_MODELO}")
+    print(f"Codificador:\n  {RUTA_LABEL_ENCODER}")
+
 
 if __name__ == "__main__":
     main()
