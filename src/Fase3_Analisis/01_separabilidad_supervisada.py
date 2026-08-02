@@ -67,7 +67,7 @@ RUTA_BENCHMARK = os.path.normpath(
         "..",
         "data",
         "processed",
-        "benchmark_modelos_v3.csv"
+        "benchmark_modelos_v1.csv"
     )
 )
 

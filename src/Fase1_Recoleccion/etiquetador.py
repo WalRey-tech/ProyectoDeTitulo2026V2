@@ -22,12 +22,10 @@ def clasificar_grado(nombre_carrera, tipo_institucion=""):
     Clasifica cada registro según el grado académico definido para el análisis.
 
     Reglas metodológicas:
-    1. Si la institución es Instituto Profesional, se clasifica como 'Ejecución',
-       porque se considera un perfil técnico-operativo equivalente para efectos
-       del análisis de separabilidad.
-    2. Si el nombre de la carrera contiene 'civil', se clasifica como 'Civil'.
-    3. Si el nombre de la carrera contiene 'ejecu', se clasifica como 'Ejecución'.
-    4. El resto se clasifica como 'Informática'.
+
+    1. Si el nombre de la carrera contiene 'civil', se clasifica como 'Civil'.
+    2. Si el nombre de la carrera contiene 'ejecu', se clasifica como 'Ejecución'.
+    3. El resto se clasifica como 'Informática'.
     """
     carrera = str(nombre_carrera).lower()
 
