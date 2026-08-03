@@ -1,6 +1,7 @@
-import pandas as pd
-import os
 import csv
+import os
+
+import pandas as pd
 
 # =============================================================================
 # 1. CONFIGURACIÓN DE RUTAS (Arquitectura de Datos)

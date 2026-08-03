@@ -1,5 +1,6 @@
 import re
 
+
 def limpiar_texto(texto: str) -> str:
     """
     Limpia el texto extraído del HTML eliminando espacios redundantes,

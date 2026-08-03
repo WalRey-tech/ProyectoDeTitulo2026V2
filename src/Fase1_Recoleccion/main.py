@@ -36,7 +36,7 @@ def corregir_mojibake(texto):
     try:
         if any(marca in texto for marca in ["Ã", "Â", "â", "�"]):
             return texto.encode("latin1").decode("utf-8")
-    except Exception:
+    except (UnicodeDecodeError, UnicodeEncodeError):
         pass
 
     return texto

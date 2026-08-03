@@ -1,17 +1,17 @@
-import requests
-import time
 import random
+import time
+
+import requests
 import urllib3
 
 # Desactiva las advertencias de seguridad en la consola. 
 # Útil porque muchas páginas de universidades tienen certificados SSL vencidos.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-
 # Importamos la función inteligente que armamos en extractors.py
 from extractors import extraer_por_css
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 # Lista de "disfraces" para que las páginas web crean que somos un usuario real 
 # navegando desde distintos navegadores, y no nos bloqueen por ser un bot.
