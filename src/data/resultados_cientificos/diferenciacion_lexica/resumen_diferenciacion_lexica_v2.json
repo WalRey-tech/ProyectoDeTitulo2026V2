@@ -1,0 +1,459 @@
+{
+    "corpus": {
+        "total": 61,
+        "distribucion": {
+            "Civil": 31,
+            "Informática": 25,
+            "Ejecución": 5
+        }
+    },
+    "metodo": {
+        "unidad_analisis": "presencia del término por documento",
+        "vectorizador": "CountVectorizer(binary=True)",
+        "max_features": 400,
+        "features_generadas": 400,
+        "ngram_range": [
+            1,
+            2
+        ],
+        "min_df": 2,
+        "max_df": 0.9,
+        "min_documentos_clase": 2,
+        "metrica": "log2 razón de prevalencia documental clase vs. resto",
+        "suavizado_alpha": 0.5
+    },
+    "filtrado_interpretativo": {
+        "stopwords_espanol": true,
+        "exclusion_denominacion_grado": true,
+        "exclusion_contexto_institucional": true,
+        "afecta_corpus_original": false,
+        "afecta_gwo": false,
+        "registros_excluidos": 69,
+        "exclusiones_por_motivo": {
+            "denominacion_grado": 59,
+            "contexto_institucional_geografico": 10
+        }
+    },
+    "top_terminos_por_grado": {
+        "Civil": [
+            {
+                "ranking": 1,
+                "termino": "disciplina",
+                "log2_ratio_prevalencia": 3.654636,
+                "documentos_grado": 6,
+                "total_documentos_grado": 31,
+                "documentos_resto": 0,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 2,
+                "termino": "fundamentos",
+                "log2_ratio_prevalencia": 3.654636,
+                "documentos_grado": 6,
+                "total_documentos_grado": 31,
+                "documentos_resto": 0,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 3,
+                "termino": "semestres",
+                "log2_ratio_prevalencia": 3.124121,
+                "documentos_grado": 4,
+                "total_documentos_grado": 31,
+                "documentos_resto": 0,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 4,
+                "termino": "comunicarse",
+                "log2_ratio_prevalencia": 2.069674,
+                "documentos_grado": 6,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 5,
+                "termino": "economico",
+                "log2_ratio_prevalencia": 2.069674,
+                "documentos_grado": 6,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 6,
+                "termino": "estudios",
+                "log2_ratio_prevalencia": 2.069674,
+                "documentos_grado": 6,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 7,
+                "termino": "ingles",
+                "log2_ratio_prevalencia": 2.069674,
+                "documentos_grado": 6,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 8,
+                "termino": "identificar",
+                "log2_ratio_prevalencia": 1.828665,
+                "documentos_grado": 5,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 9,
+                "termino": "idioma ingles",
+                "log2_ratio_prevalencia": 1.828665,
+                "documentos_grado": 5,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 10,
+                "termino": "solida formacion",
+                "log2_ratio_prevalencia": 1.828665,
+                "documentos_grado": 5,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 11,
+                "termino": "basicas",
+                "log2_ratio_prevalencia": 1.790698,
+                "documentos_grado": 12,
+                "total_documentos_grado": 31,
+                "documentos_resto": 3,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 12,
+                "termino": "ciencias basicas",
+                "log2_ratio_prevalencia": 1.790698,
+                "documentos_grado": 12,
+                "total_documentos_grado": 31,
+                "documentos_resto": 3,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 13,
+                "termino": "ciencias",
+                "log2_ratio_prevalencia": 1.680021,
+                "documentos_grado": 21,
+                "total_documentos_grado": 31,
+                "documentos_resto": 6,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 14,
+                "termino": "medio",
+                "log2_ratio_prevalencia": 1.539159,
+                "documentos_grado": 7,
+                "total_documentos_grado": 31,
+                "documentos_resto": 2,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 15,
+                "termino": "colaborativa",
+                "log2_ratio_prevalencia": 1.539159,
+                "documentos_grado": 4,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            }
+        ],
+        "Ejecución": [
+            {
+                "ranking": 1,
+                "termino": "instituciones",
+                "log2_ratio_prevalencia": 3.733354,
+                "documentos_grado": 3,
+                "total_documentos_grado": 5,
+                "documentos_resto": 2,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 2,
+                "termino": "desenvolverse",
+                "log2_ratio_prevalencia": 3.247928,
+                "documentos_grado": 3,
+                "total_documentos_grado": 5,
+                "documentos_resto": 3,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 3,
+                "termino": "respeto",
+                "log2_ratio_prevalencia": 3.247928,
+                "documentos_grado": 3,
+                "total_documentos_grado": 5,
+                "documentos_resto": 3,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 4,
+                "termino": "automatizacion",
+                "log2_ratio_prevalencia": 2.762501,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 3,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 5,
+                "termino": "comprometido",
+                "log2_ratio_prevalencia": 2.762501,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 3,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 6,
+                "termino": "concepcion",
+                "log2_ratio_prevalencia": 2.762501,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 3,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 7,
+                "termino": "cristiana",
+                "log2_ratio_prevalencia": 2.762501,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 3,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 8,
+                "termino": "promocion",
+                "log2_ratio_prevalencia": 2.762501,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 3,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 9,
+                "termino": "bien",
+                "log2_ratio_prevalencia": 2.399931,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 4,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 10,
+                "termino": "bien comun",
+                "log2_ratio_prevalencia": 2.399931,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 4,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 11,
+                "termino": "lenguajes",
+                "log2_ratio_prevalencia": 2.399931,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 4,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 12,
+                "termino": "lenguajes programacion",
+                "log2_ratio_prevalencia": 2.399931,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 4,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 13,
+                "termino": "partir",
+                "log2_ratio_prevalencia": 2.399931,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 4,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 14,
+                "termino": "privadas",
+                "log2_ratio_prevalencia": 2.399931,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 4,
+                "total_documentos_resto": 56
+            },
+            {
+                "ranking": 15,
+                "termino": "publicas",
+                "log2_ratio_prevalencia": 2.399931,
+                "documentos_grado": 2,
+                "total_documentos_grado": 5,
+                "documentos_resto": 4,
+                "total_documentos_resto": 56
+            }
+        ],
+        "Informática": [
+            {
+                "ranking": 1,
+                "termino": "distintas",
+                "log2_ratio_prevalencia": 4.209453,
+                "documentos_grado": 6,
+                "total_documentos_grado": 25,
+                "documentos_resto": 0,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 2,
+                "termino": "laboral",
+                "log2_ratio_prevalencia": 4.209453,
+                "documentos_grado": 6,
+                "total_documentos_grado": 25,
+                "documentos_resto": 0,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 3,
+                "termino": "buenas",
+                "log2_ratio_prevalencia": 3.968445,
+                "documentos_grado": 5,
+                "total_documentos_grado": 25,
+                "documentos_resto": 0,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 4,
+                "termino": "buenas practicas",
+                "log2_ratio_prevalencia": 3.968445,
+                "documentos_grado": 5,
+                "total_documentos_grado": 25,
+                "documentos_resto": 0,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 5,
+                "termino": "componentes",
+                "log2_ratio_prevalencia": 3.968445,
+                "documentos_grado": 5,
+                "total_documentos_grado": 25,
+                "documentos_resto": 0,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 6,
+                "termino": "mercado",
+                "log2_ratio_prevalencia": 3.968445,
+                "documentos_grado": 5,
+                "total_documentos_grado": 25,
+                "documentos_resto": 0,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 7,
+                "termino": "metodologias",
+                "log2_ratio_prevalencia": 2.830942,
+                "documentos_grado": 7,
+                "total_documentos_grado": 25,
+                "documentos_resto": 1,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 8,
+                "termino": "practicas",
+                "log2_ratio_prevalencia": 2.830942,
+                "documentos_grado": 7,
+                "total_documentos_grado": 25,
+                "documentos_resto": 1,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 9,
+                "termino": "podra",
+                "log2_ratio_prevalencia": 2.624491,
+                "documentos_grado": 6,
+                "total_documentos_grado": 25,
+                "documentos_resto": 1,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 10,
+                "termino": "proyectos tecnologicos",
+                "log2_ratio_prevalencia": 2.624491,
+                "documentos_grado": 6,
+                "total_documentos_grado": 25,
+                "documentos_resto": 1,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 11,
+                "termino": "soluciones innovadoras",
+                "log2_ratio_prevalencia": 2.624491,
+                "documentos_grado": 6,
+                "total_documentos_grado": 25,
+                "documentos_resto": 1,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 12,
+                "termino": "contribuyendo",
+                "log2_ratio_prevalencia": 2.383483,
+                "documentos_grado": 5,
+                "total_documentos_grado": 25,
+                "documentos_resto": 1,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 13,
+                "termino": "desarrollar soluciones",
+                "log2_ratio_prevalencia": 2.383483,
+                "documentos_grado": 5,
+                "total_documentos_grado": 25,
+                "documentos_resto": 1,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 14,
+                "termino": "problematicas",
+                "log2_ratio_prevalencia": 2.383483,
+                "documentos_grado": 5,
+                "total_documentos_grado": 25,
+                "documentos_resto": 1,
+                "total_documentos_resto": 36
+            },
+            {
+                "ranking": 15,
+                "termino": "resolucion",
+                "log2_ratio_prevalencia": 2.383483,
+                "documentos_grado": 5,
+                "total_documentos_grado": 25,
+                "documentos_resto": 1,
+                "total_documentos_resto": 36
+            }
+        ]
+    },
+    "interpretacion": {
+        "uso": "Identificar vocabulario relativamente más extendido entre los perfiles de cada grado.",
+        "advertencia": "Un término distintivo describe una diferencia léxica en este corpus y no implica que sea una competencia exclusiva del grado."
+    },
+    "limitaciones": [
+        "La clase Ejecución contiene únicamente cinco perfiles.",
+        "Los términos institucionales y de denominación del grado se excluyen solo del análisis interpretativo.",
+        "Este análisis no modifica ni sustituye el experimento predictivo GWO."
+    ]
+}
