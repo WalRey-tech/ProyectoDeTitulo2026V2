@@ -11,7 +11,7 @@ warnings.filterwarnings('ignore')
 DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
 # Asegúrate de que estas rutas coincidan con la ubicación real de tus archivos
 RUTA_DATOS_LIMPIOS = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "perfiles_egreso_limpio_v1.csv"))
-RUTA_BENCHMARK = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "benchmark_modelos.csv"))
+RUTA_BENCHMARK = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "benchmark_modelos_v3.csv"))
 RUTA_TOP_WORDS = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "top15_palabras_clave.csv"))
 RUTA_SALIDA_JSON = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "processed", "resultados.json"))
 
