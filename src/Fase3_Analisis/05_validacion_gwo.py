@@ -39,9 +39,8 @@ warnings.filterwarnings('ignore')
 # src/Fase3_Analisis/GWO/
 BASE = os.path.dirname(os.path.abspath(__file__))
 
-# Raíz src/
 SRC_ROOT = os.path.abspath(
-    os.path.join(BASE, "..", "..")
+    os.path.join(BASE, "..")
 )
 
 # Corpus V2
