@@ -1,0 +1,107 @@
+{
+    "version_reporte": "2.0",
+    "fecha_generacion_utc": "2026-09-11T21:55:59.142860+00:00",
+    "fuente_oficial_resultados": "src/data/resultados_cientificos/gwo",
+    "corpus": {
+        "total_perfiles": 61,
+        "distribucion": {
+            "Civil": 31,
+            "Informática": 25,
+            "Ejecución": 5
+        },
+        "archivo": "perfiles_egreso_etiquetado_v2.csv"
+    },
+    "metodologia": {
+        "representacion": "TF-IDF word (1,2)-grams",
+        "max_features": 400,
+        "clasificador": "Complement Naive Bayes",
+        "balanceo": "SMOTE",
+        "seleccion_caracteristicas": "Grey Wolf Optimizer (GWO)",
+        "semilla": 42
+    },
+    "seleccion_caracteristicas": {
+        "features_iniciales": 400,
+        "features_seleccionadas": 249,
+        "features_descartadas": 151,
+        "reduccion_porcentual": 37.75,
+        "baseline_f1_macro": 0.6695,
+        "baseline_f1_std": 0.2474,
+        "gwo_f1_macro_exploratorio": 0.8412,
+        "gwo_f1_std": 0.1949,
+        "delta_f1": 0.1717
+    },
+    "validacion_5_fold": {
+        "folds": 5,
+        "f1_macro_media": 0.8412,
+        "f1_macro_std": 0.2179,
+        "f1_macro_ic95": 0.191,
+        "accuracy_media": 0.8667,
+        "f1_civil_media": 0.8807,
+        "f1_ejecucion_media": 0.8,
+        "f1_informatica_media": 0.8429
+    },
+    "validacion_10_fold": {
+        "folds": 10,
+        "f1_macro_media": 0.7316,
+        "f1_macro_std": 0.2134,
+        "f1_macro_ic95": 0.1323,
+        "accuracy_media": 0.7833,
+        "f1_civil_media": 0.806,
+        "f1_ejecucion_media": 0.4,
+        "f1_informatica_media": 0.695
+    },
+    "features_seleccionadas": {
+        "total": 249,
+        "top_30": [
+            "ingeniería",
+            "informática",
+            "soluciones",
+            "tecnologías",
+            "desarrollo",
+            "ingeniero",
+            "civil",
+            "software",
+            "gestión",
+            "capacidad",
+            "ciencias",
+            "conocimientos",
+            "tecnologías información",
+            "formación",
+            "informáticos",
+            "computación",
+            "organizaciones",
+            "equipos",
+            "profesionales",
+            "diseñar",
+            "social",
+            "comunicación",
+            "forma",
+            "capaz",
+            "procesos",
+            "permite",
+            "informática universidad",
+            "además",
+            "calidad",
+            "servicios"
+        ]
+    },
+    "interpretacion": {
+        "resultado_principal": "GWO redujo el espacio de características de 400 a 249 y aumentó el F1-macro exploratorio respecto del baseline.",
+        "sensibilidad_particionado": "La validación de 10 pliegues presentó un F1-macro inferior al observado en 5 pliegues, evidenciando sensibilidad al particionado del corpus."
+    },
+    "limitaciones": [
+        "El corpus contiene solo cinco perfiles de Ingeniería de Ejecución en Informática.",
+        "El resultado de 5 pliegues posterior a GWO es exploratorio, debido a que la selección de características fue realizada antes de esa comparación externa.",
+        "Una estimación estrictamente insesgada de generalización requiere validación cruzada anidada, ejecutando la selección GWO dentro de cada pliegue externo."
+    ],
+    "artefactos": {
+        "gwo_resultados": "gwo/gwo_resultados.csv",
+        "features": "gwo/gwo_features_seleccionadas.csv",
+        "cv5": "gwo/cv5_gwo_resultados.csv",
+        "cv10": "gwo/cv10_gwo_resultados.csv",
+        "grafico_seleccion": "gwo/gwo_seleccion.png",
+        "grafico_mapa_features": "gwo/gwo_mapa_features.png",
+        "grafico_cv": "gwo/cv10_gwo_resultados.png",
+        "grafico_f1_clase": "gwo/cv10_gwo_f1_clase.png"
+    }
+}
