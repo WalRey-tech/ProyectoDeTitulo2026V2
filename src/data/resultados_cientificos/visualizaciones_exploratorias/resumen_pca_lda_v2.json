@@ -1,0 +1,37 @@
+{
+    "corpus": {
+        "total": 61,
+        "distribucion": {
+            "Civil": 31,
+            "Informática": 25,
+            "Ejecución": 5
+        }
+    },
+    "representacion": {
+        "metodo": "TF-IDF",
+        "max_features": 400,
+        "ngram_range": [
+            1,
+            2
+        ],
+        "min_df": 2,
+        "max_df": 0.9,
+        "sublinear_tf": true,
+        "features_generadas": 400
+    },
+    "pca": {
+        "tipo": "no supervisado",
+        "varianza_explicada_componente_1": 0.049457,
+        "varianza_explicada_componente_2": 0.045768,
+        "varianza_explicada_total_2d": 0.095225
+    },
+    "lda": {
+        "tipo": "supervisado",
+        "uso": "Visualización exploratoria de separabilidad entre clases.",
+        "advertencia": "LDA utiliza las etiquetas reales; no debe interpretarse como rendimiento predictivo.",
+        "varianza_discriminante": [
+            0.900605,
+            0.099395
+        ]
+    }
+}
