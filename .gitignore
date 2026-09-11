@@ -7,6 +7,7 @@ Lib/
 Scripts/
 Include/
 pyvenv.cfg
+.venv-gwo/
 
 # =========================
 # Python y Caché
@@ -26,12 +27,19 @@ Thumbs.db
 .idea/
 
 # =========================
-# Datos generados
+# Datos
 # =========================
-# Ignoramos la carpeta data que está dentro de src
+
+# Datos crudos obtenidos mediante scraping:
+# pueden regenerarse y no es necesario versionarlos nuevamente.
 src/data/raw/
-src/data/processed/
-src/data/
+
+# En processed ignoramos nuevos archivos por defecto,
+# excepto el corpus V2 utilizado por la metodología GWO.
+src/data/processed/*
+!src/data/processed/perfiles_egreso_etiquetado_v2.csv
+
+# Los resultados científicos de GWO sí se versionan
 
 # =========================
 # Variables de Entorno y Seguridad
