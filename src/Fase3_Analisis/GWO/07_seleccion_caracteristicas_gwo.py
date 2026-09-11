@@ -76,6 +76,13 @@ OUT_DIR = os.path.join(
 
 os.makedirs(OUT_DIR, exist_ok=True)
 
+# =============================================================================
+# REPRODUCIBILIDAD
+# =============================================================================
+
+SEED = 42
+np.random.seed(SEED)
+
 # ── Carga ──────────────────────────────────────────────────────────────────────
 print("=" * 68)
 print("SELECCION DE FEATURES CON GWO (Grey Wolf Optimizer)")
