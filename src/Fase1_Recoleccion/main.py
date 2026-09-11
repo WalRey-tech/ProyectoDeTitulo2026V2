@@ -1,5 +1,6 @@
-import os
 import csv
+import os
+
 import pandas as pd
 from config import SITES
 from scraper import scrapear_sitio
@@ -14,7 +15,6 @@ except ImportError:
 DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
 
 # 2. Construimos la ruta: Subimos un nivel ("..") hacia 'src', y luego a 'data/raw'
-# NOTA: Asegúrate de que la carpeta data/raw esté lista en tu proyecto
 RUTA_SALIDA = os.path.normpath(os.path.join(DIRECTORIO_ACTUAL, "..", "data", "raw", "perfiles_egreso_raw.csv"))
 
 
@@ -36,7 +36,7 @@ def corregir_mojibake(texto):
     try:
         if any(marca in texto for marca in ["Ã", "Â", "â", "�"]):
             return texto.encode("latin1").decode("utf-8")
-    except Exception:
+    except (UnicodeDecodeError, UnicodeEncodeError):
         pass
 
     return texto

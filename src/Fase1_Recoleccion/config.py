@@ -362,7 +362,7 @@ SITES = [
         "tipo_carrera": "Profesional",
         "url": "https://admision.udp.cl/carrera/ingenieria-en-informatica-y-gestion/",
         "tipo_extraccion": "css",
-        "selector": "-"  # 
+        "selector": "-"  
     },
     {
         "universidad": "Universidad Adolfo Ibanez",
