@@ -31,6 +31,7 @@ SRC_ROOT = os.path.abspath(
     os.path.join(
         DIRECTORIO_ACTUAL,
         "..",
+        "..",
     )
 )
 

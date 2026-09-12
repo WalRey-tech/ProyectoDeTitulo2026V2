@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 # =============================================================================
-# 1. RUTAS
+# 1. RUTAS GENERALES
 # =============================================================================
 
 ROOT = Path(__file__).resolve().parent
@@ -43,7 +43,7 @@ GWO_FEATURES = (
 
 
 # =============================================================================
-# 2. SCRIPTS DE LA FASE 3
+# 2. SCRIPTS OFICIALES DE FASE 3
 # =============================================================================
 
 SCRIPT_01 = (
@@ -73,7 +73,12 @@ SCRIPT_05 = (
 
 SCRIPT_06 = (
     FASE3
-    / "06_generar_reporte.py"
+    / "06_modelo_final_robusto.py"
+)
+
+SCRIPT_07 = (
+    FASE3
+    / "07_generar_reporte.py"
 )
 
 
@@ -106,9 +111,11 @@ def ejecutar(
 
     print()
     print("=" * 78)
+
     print(
-        f"PASO {numero}/6 — {descripcion}"
+        f"PASO {numero}/7 — {descripcion}"
     )
+
     print("=" * 78)
 
     print(
@@ -127,20 +134,21 @@ def ejecutar(
     )
 
     print()
+
     print(
         f"✓ Paso {numero} completado correctamente."
     )
 
 
 # =============================================================================
-# 4. VALIDACIONES INICIALES
+# 4. VALIDACIÓN DE ESTRUCTURA
 # =============================================================================
 
 def verificar_proyecto() -> None:
 
     verificar_archivo(
         DATASET,
-        "el corpus V2",
+        "el corpus científico V2",
     )
 
     scripts = [
@@ -150,6 +158,7 @@ def verificar_proyecto() -> None:
         SCRIPT_04,
         SCRIPT_05,
         SCRIPT_06,
+        SCRIPT_07,
     ]
 
     for script in scripts:
@@ -162,6 +171,14 @@ def verificar_proyecto() -> None:
 
 # =============================================================================
 # 5. MODO COMPLETO
+# =============================================================================
+#
+# Ejecuta nuevamente GWO.
+#
+# Uso:
+#
+# python ejecutar_fase3.py --modo completo
+#
 # =============================================================================
 
 def ejecutar_modo_completo() -> None:
@@ -193,12 +210,18 @@ def ejecutar_modo_completo() -> None:
     ejecutar(
         SCRIPT_05,
         5,
-        "Validación del modelo con características GWO",
+        "Validación de características seleccionadas por GWO",
     )
 
     ejecutar(
         SCRIPT_06,
         6,
+        "Modelo robusto final con control de fuga léxica",
+    )
+
+    ejecutar(
+        SCRIPT_07,
+        7,
         "Generación del reporte científico consolidado",
     )
 
@@ -207,12 +230,17 @@ def ejecutar_modo_completo() -> None:
 # 6. MODO VALIDAR
 # =============================================================================
 #
-# Reutiliza las características GWO ya existentes.
+# No vuelve a ejecutar las 100 épocas de GWO.
+# Reutiliza la selección oficial ya generada.
 #
-# Es útil para:
-# - comprobar rápidamente el proyecto;
-# - realizar demostraciones;
-# - evitar repetir las 100 épocas de GWO.
+# Uso:
+#
+# python ejecutar_fase3.py
+#
+# o:
+#
+# python ejecutar_fase3.py --modo validar
+#
 # =============================================================================
 
 def ejecutar_modo_validar() -> None:
@@ -242,32 +270,40 @@ def ejecutar_modo_validar() -> None:
 
     print()
     print("=" * 78)
+
     print(
-        "PASO 4/6 — Selección GWO"
+        "PASO 4/7 — Selección de características mediante GWO"
     )
+
     print("=" * 78)
 
     print(
-        "Se reutiliza la selección GWO existente:"
+        "Modo validar: se reutiliza la selección GWO existente."
     )
 
     print(
-        GWO_FEATURES
+        f"Archivo: {GWO_FEATURES}"
     )
 
     print(
-        "✓ Paso 4 reutilizado."
+        "✓ Paso 4 reutilizado correctamente."
     )
 
     ejecutar(
         SCRIPT_05,
         5,
-        "Validación del modelo con características GWO",
+        "Validación de características seleccionadas por GWO",
     )
 
     ejecutar(
         SCRIPT_06,
         6,
+        "Modelo robusto final con control de fuga léxica",
+    )
+
+    ejecutar(
+        SCRIPT_07,
+        7,
         "Generación del reporte científico consolidado",
     )
 
@@ -280,7 +316,7 @@ def main() -> int:
 
     parser = argparse.ArgumentParser(
         description=(
-            "Ejecutor secuencial de la Fase 3 "
+            "Ejecutor oficial de la Fase 3 "
             "del Proyecto de Título."
         )
     )
@@ -294,8 +330,8 @@ def main() -> int:
         default="validar",
         help=(
             "'completo' ejecuta nuevamente GWO; "
-            "'validar' reutiliza las características "
-            "GWO existentes. Por defecto: validar."
+            "'validar' reutiliza la selección GWO "
+            "existente. Por defecto: validar."
         ),
     )
 
@@ -305,32 +341,69 @@ def main() -> int:
 
     print()
     print("=" * 78)
+
     print(
         "FASE 3 — ANÁLISIS CIENTÍFICO"
     )
+
     print("=" * 78)
 
     print(
-        f"Proyecto : {ROOT}"
+        f"Proyecto   : {ROOT}"
     )
 
     print(
-        f"Corpus   : {DATASET}"
+        f"Corpus     : {DATASET}"
     )
 
     print(
-        f"Resultados: {RESULTADOS}"
+        f"Resultados : {RESULTADOS}"
     )
 
     print(
-        f"Modo     : {args.modo}"
+        f"Modo       : {args.modo}"
+    )
+
+    print()
+
+    print(
+        "Pipeline oficial:"
+    )
+
+    print(
+        "  01. PCA / LDA"
+    )
+
+    print(
+        "  02. Homogeneidad semántica"
+    )
+
+    print(
+        "  03. Diferenciación léxica"
+    )
+
+    print(
+        "  04. Selección GWO"
+    )
+
+    print(
+        "  05. Validación GWO"
+    )
+
+    print(
+        "  06. Modelo robusto final"
+    )
+
+    print(
+        "  07. Reporte consolidado"
     )
 
     if args.modo == "completo":
 
         print()
         print(
-            "Se ejecutará nuevamente la selección GWO."
+            "Se ejecutará nuevamente "
+            "la optimización GWO."
         )
 
         ejecutar_modo_completo()
@@ -339,19 +412,23 @@ def main() -> int:
 
         print()
         print(
-            "Se reutilizará la selección GWO existente."
+            "Se reutilizará la selección "
+            "GWO existente."
         )
 
         ejecutar_modo_validar()
 
     print()
     print("=" * 78)
+
     print(
         "FASE 3 COMPLETADA CORRECTAMENTE"
     )
+
     print("=" * 78)
 
     print()
+
     print(
         "Resultados disponibles en:"
     )
@@ -362,6 +439,10 @@ def main() -> int:
 
     return 0
 
+
+# =============================================================================
+# 8. CONTROL DE ERRORES
+# =============================================================================
 
 if __name__ == "__main__":
 
@@ -375,14 +456,16 @@ if __name__ == "__main__":
 
         print()
         print("=" * 78)
+
         print(
             "ERROR DURANTE LA EJECUCIÓN DE FASE 3"
         )
+
         print("=" * 78)
 
         print(
-            f"Un script terminó con código "
-            f"{error.returncode}."
+            "Un script terminó con "
+            f"código {error.returncode}."
         )
 
         raise SystemExit(
@@ -393,9 +476,11 @@ if __name__ == "__main__":
 
         print()
         print("=" * 78)
+
         print(
-            "ERROR DE CONFIGURACIÓN"
+            "ERROR DE CONFIGURACIÓN DE FASE 3"
         )
+
         print("=" * 78)
 
         print(
