@@ -1,6 +1,6 @@
 {
     "version": "1.0",
-    "fecha_generacion_utc": "2026-09-12T03:06:54.967571+00:00",
+    "fecha_generacion_utc": "2026-09-12T03:34:28.818140+00:00",
     "estado": "modelo_robusto_congelado",
     "objetivo": "Estimar la capacidad predictiva conservadora de los perfiles de egreso evitando utilizar denominaciones explícitas de los grados como pistas directas de clasificación.",
     "corpus": {

@@ -10,15 +10,26 @@ import pandas as pd
 
 
 # =============================================================================
-# 1. RUTAS
+# 1. RUTAS GENERALES
 # =============================================================================
 
 BASE = Path(__file__).resolve().parent
 SRC_ROOT = BASE.parent
 
-DATA_DIR = SRC_ROOT / "data"
-PROCESSED_DIR = DATA_DIR / "processed"
-RESULTADOS_DIR = DATA_DIR / "resultados_cientificos"
+DATA_DIR = (
+    SRC_ROOT
+    / "data"
+)
+
+PROCESSED_DIR = (
+    DATA_DIR
+    / "processed"
+)
+
+RESULTADOS_DIR = (
+    DATA_DIR
+    / "resultados_cientificos"
+)
 
 CORPUS = (
     PROCESSED_DIR
@@ -31,9 +42,9 @@ SALIDA_FINAL = (
 )
 
 
-# -----------------------------------------------------------------------------
-# Análisis semántico
-# -----------------------------------------------------------------------------
+# =============================================================================
+# 2. ANÁLISIS SEMÁNTICO
+# =============================================================================
 
 PCA_RESUMEN = (
     RESULTADOS_DIR
@@ -54,9 +65,9 @@ LEXICO_RESUMEN = (
 )
 
 
-# -----------------------------------------------------------------------------
-# GWO de referencia / profesor
-# -----------------------------------------------------------------------------
+# =============================================================================
+# 3. GWO — RESULTADOS DE REFERENCIA
+# =============================================================================
 
 GWO_DIR = (
     RESULTADOS_DIR
@@ -84,9 +95,9 @@ GWO_CV10 = (
 )
 
 
-# -----------------------------------------------------------------------------
-# Auditoría metodológica
-# -----------------------------------------------------------------------------
+# =============================================================================
+# 4. AUDITORÍA METODOLÓGICA
+# =============================================================================
 
 AUDITORIA_DIR = (
     RESULTADOS_DIR
@@ -118,9 +129,9 @@ SELECCION_MODELO_RESUMEN = (
 )
 
 
-# -----------------------------------------------------------------------------
-# Modelo robusto final
-# -----------------------------------------------------------------------------
+# =============================================================================
+# 5. MODELO ROBUSTO FINAL
+# =============================================================================
 
 MODELO_FINAL_DIR = (
     RESULTADOS_DIR
@@ -144,7 +155,7 @@ MODELO_FINAL_CLASES = (
 
 
 # =============================================================================
-# 2. UTILIDADES
+# 6. UTILIDADES
 # =============================================================================
 
 def exigir_archivo(
@@ -231,9 +242,14 @@ def redondear(
     decimales: int = 6,
 ):
 
+    if valor is None:
+
+        return None
+
     if pd.isna(
         valor
     ):
+
         return None
 
     return round(
@@ -242,45 +258,83 @@ def redondear(
     )
 
 
+def contar_booleanos_verdaderos(
+    serie: pd.Series,
+) -> int:
+
+    """
+    Permite leer correctamente columnas booleanas
+    tanto si pandas las interpreta como bool como
+    si vienen almacenadas como texto.
+    """
+
+    if pd.api.types.is_bool_dtype(
+        serie
+    ):
+
+        return int(
+            serie.sum()
+        )
+
+    normalizada = (
+        serie
+        .astype(str)
+        .str.strip()
+        .str.lower()
+    )
+
+    return int(
+        normalizada.isin(
+            [
+                "true",
+                "1",
+                "sí",
+                "si",
+                "yes",
+            ]
+        ).sum()
+    )
+
+
 # =============================================================================
-# 3. VALIDACIÓN DE ARCHIVOS ESENCIALES
+# 7. VALIDACIÓN DE ARCHIVOS ESENCIALES
 # =============================================================================
 
 def verificar_archivos_esenciales() -> None:
 
     archivos = {
 
-        "corpus V2":
+        "corpus científico V2":
             CORPUS,
 
         "resumen PCA/LDA":
             PCA_RESUMEN,
 
-        "resumen homogeneidad":
+        "resumen de homogeneidad":
             HOMOGENEIDAD_RESUMEN,
 
-        "resumen diferenciación léxica":
+        "resumen de diferenciación léxica":
             LEXICO_RESUMEN,
 
         "resultados GWO":
             GWO_RESULTADOS,
 
-        "features GWO":
+        "features seleccionadas por GWO":
             GWO_FEATURES,
 
         "validación GWO 5-fold":
             GWO_CV5,
 
-        "validación GWO 10-fold":
+        "diagnóstico GWO 10-fold":
             GWO_CV10,
 
-        "modelo robusto final":
+        "resumen del modelo robusto final":
             MODELO_FINAL_RESUMEN,
 
-        "folds modelo robusto":
+        "métricas por fold del modelo robusto":
             MODELO_FINAL_FOLDS,
 
-        "métricas por clase modelo robusto":
+        "métricas por clase del modelo robusto":
             MODELO_FINAL_CLASES,
     }
 
@@ -295,7 +349,7 @@ def verificar_archivos_esenciales() -> None:
 
 
 # =============================================================================
-# 4. CORPUS
+# 8. CORPUS
 # =============================================================================
 
 def construir_bloque_corpus() -> dict:
@@ -320,8 +374,10 @@ def construir_bloque_corpus() -> dict:
 
         raise ValueError(
             "El corpus V2 no contiene "
-            f"las columnas: {sorted(faltantes)}"
+            f"las columnas requeridas: "
+            f"{sorted(faltantes)}"
         )
+
 
     distribucion = (
         df[
@@ -330,6 +386,7 @@ def construir_bloque_corpus() -> dict:
         .value_counts()
         .to_dict()
     )
+
 
     return {
 
@@ -345,6 +402,7 @@ def construir_bloque_corpus() -> dict:
             ),
 
         "distribucion": {
+
             str(clase):
                 int(cantidad)
 
@@ -356,13 +414,14 @@ def construir_bloque_corpus() -> dict:
             (
                 "Corpus científico congelado "
                 "y versionado utilizado para "
-                "los resultados oficiales."
+                "la obtención de los resultados "
+                "oficiales del estudio."
             ),
     }
 
 
 # =============================================================================
-# 5. ANÁLISIS SEMÁNTICO
+# 9. ANÁLISIS SEMÁNTICO
 # =============================================================================
 
 def construir_bloque_semantico() -> dict:
@@ -387,7 +446,7 @@ def construir_bloque_semantico() -> dict:
 
 
 # =============================================================================
-# 6. GWO EXPLORATORIO
+# 10. GWO EXPLORATORIO Y DIAGNÓSTICO 10-FOLD
 # =============================================================================
 
 def construir_bloque_gwo() -> dict:
@@ -409,6 +468,10 @@ def construir_bloque_gwo() -> dict:
     )
 
 
+    # -------------------------------------------------------------------------
+    # Validación de estructura GWO
+    # -------------------------------------------------------------------------
+
     columnas_gwo = {
         "Modelo",
         "n_features",
@@ -426,25 +489,38 @@ def construir_bloque_gwo() -> dict:
         )
 
 
-    if "F1_macro" not in (
+    columnas_cv_actualizadas = {
+        "F1_macro",
+        "F1_macro_3clases",
+        "contiene_3_clases",
+    }
+
+
+    if not columnas_cv_actualizadas.issubset(
         df_cv5.columns
     ):
 
         raise ValueError(
-            "cv5_gwo_resultados.csv no contiene "
-            "la columna F1_macro."
+            "cv5_gwo_resultados.csv no corresponde "
+            "a la versión metodológica actualizada "
+            "de 05_validacion_gwo.py."
         )
 
 
-    if "F1_macro" not in (
+    if not columnas_cv_actualizadas.issubset(
         df_cv10.columns
     ):
 
         raise ValueError(
-            "cv10_gwo_resultados.csv no contiene "
-            "la columna F1_macro."
+            "cv10_gwo_resultados.csv no corresponde "
+            "a la versión metodológica actualizada "
+            "de 05_validacion_gwo.py."
         )
 
+
+    # -------------------------------------------------------------------------
+    # Identificar baseline y GWO
+    # -------------------------------------------------------------------------
 
     baseline = df_gwo[
         df_gwo[
@@ -475,9 +551,7 @@ def construir_bloque_gwo() -> dict:
     if baseline.empty:
 
         baseline = df_gwo.iloc[
-            [
-                0
-            ]
+            [0]
         ]
 
 
@@ -502,6 +576,10 @@ def construir_bloque_gwo() -> dict:
         ]
     )
 
+
+    # -------------------------------------------------------------------------
+    # Reducción de características
+    # -------------------------------------------------------------------------
 
     total_features = int(
         baseline_row[
@@ -529,6 +607,83 @@ def construir_bloque_gwo() -> dict:
     )
 
 
+    # -------------------------------------------------------------------------
+    # Folds que realmente contienen las tres clases
+    # -------------------------------------------------------------------------
+
+    folds_5_completos = (
+        contar_booleanos_verdaderos(
+            df_cv5[
+                "contiene_3_clases"
+            ]
+        )
+    )
+
+
+    folds_10_completos = (
+        contar_booleanos_verdaderos(
+            df_cv10[
+                "contiene_3_clases"
+            ]
+        )
+    )
+
+
+    folds_10_incompletos = int(
+        len(
+            df_cv10
+        )
+        - folds_10_completos
+    )
+
+
+    # -------------------------------------------------------------------------
+    # Métricas
+    # -------------------------------------------------------------------------
+
+    f1_5 = float(
+        df_cv5[
+            "F1_macro_3clases"
+        ].mean()
+    )
+
+    std_5 = float(
+        df_cv5[
+            "F1_macro_3clases"
+        ].std()
+    )
+
+
+    f1_10_historico = float(
+        df_cv10[
+            "F1_macro"
+        ].mean()
+    )
+
+    std_10_historico = float(
+        df_cv10[
+            "F1_macro"
+        ].std()
+    )
+
+
+    f1_10_3clases = float(
+        df_cv10[
+            "F1_macro_3clases"
+        ].mean()
+    )
+
+    std_10_3clases = float(
+        df_cv10[
+            "F1_macro_3clases"
+        ].std()
+    )
+
+
+    # -------------------------------------------------------------------------
+    # Resultado
+    # -------------------------------------------------------------------------
+
     return {
 
         "estado":
@@ -536,8 +691,9 @@ def construir_bloque_gwo() -> dict:
 
         "metodo":
             (
-                "Grey Wolf Optimizer "
-                "sobre representación TF-IDF."
+                "Grey Wolf Optimizer (GWO) "
+                "aplicado sobre representación "
+                "TF-IDF de hasta 400 características."
             ),
 
         "features_originales":
@@ -552,37 +708,47 @@ def construir_bloque_gwo() -> dict:
                 2,
             ),
 
-        "baseline_exploratorio": {
+        "resultado_archivo_gwo_referencia": {
 
-            "f1_macro":
+            "f1_macro_baseline":
                 redondear(
                     baseline_row[
                         "F1_media"
                     ]
                 ),
 
-            "f1_std":
+            "f1_std_baseline":
                 redondear(
                     baseline_row[
                         "F1_std"
                     ]
                 ),
+
+            "f1_macro_gwo":
+                redondear(
+                    gwo_row[
+                        "F1_media"
+                    ]
+                ),
+
+            "f1_std_gwo":
+                redondear(
+                    gwo_row[
+                        "F1_std"
+                    ]
+                ),
         },
 
-        "gwo_5fold": {
+        "gwo_5fold_exploratorio": {
 
             "f1_macro":
                 redondear(
-                    df_cv5[
-                        "F1_macro"
-                    ].mean()
+                    f1_5
                 ),
 
             "f1_std":
                 redondear(
-                    df_cv5[
-                        "F1_macro"
-                    ].std()
+                    std_5
                 ),
 
             "numero_folds":
@@ -591,22 +757,63 @@ def construir_bloque_gwo() -> dict:
                         df_cv5
                     )
                 ),
-        },
 
-        "gwo_10fold": {
+            "folds_con_3_clases":
+                folds_5_completos,
 
-            "f1_macro":
-                redondear(
-                    df_cv10[
-                        "F1_macro"
-                    ].mean()
+            "folds_sin_alguna_clase":
+                int(
+                    len(
+                        df_cv5
+                    )
+                    - folds_5_completos
                 ),
 
-            "f1_std":
+            "todas_las_clases_en_cada_fold":
+                bool(
+                    folds_5_completos
+                    == len(
+                        df_cv5
+                    )
+                ),
+
+            "interpretacion":
+                (
+                    "Reproduce el resultado "
+                    "exploratorio GWO de referencia. "
+                    "Los cinco folds contienen las "
+                    "tres clases. No obstante, "
+                    "la selección de características "
+                    "GWO y la construcción del "
+                    "vocabulario TF-IDF se realizaron "
+                    "sobre el corpus disponible antes "
+                    "de esta comparación, por lo que "
+                    "el resultado no constituye una "
+                    "estimación final insesgada de "
+                    "generalización."
+                ),
+        },
+
+        "gwo_10fold_diagnostico": {
+
+            "f1_referencia_historico":
                 redondear(
-                    df_cv10[
-                        "F1_macro"
-                    ].std()
+                    f1_10_historico
+                ),
+
+            "f1_referencia_std":
+                redondear(
+                    std_10_historico
+                ),
+
+            "f1_macro_3clases_fijas":
+                redondear(
+                    f1_10_3clases
+                ),
+
+            "f1_macro_3clases_std":
+                redondear(
+                    std_10_3clases
                 ),
 
             "numero_folds":
@@ -615,54 +822,118 @@ def construir_bloque_gwo() -> dict:
                         df_cv10
                     )
                 ),
+
+            "folds_con_3_clases":
+                folds_10_completos,
+
+            "folds_sin_alguna_clase":
+                folds_10_incompletos,
+
+            "valido_como_resultado_final":
+                False,
+
+            "motivo_limitacion":
+                (
+                    "La clase Ejecución contiene "
+                    "solo cinco observaciones. "
+                    "Con StratifiedKFold de diez "
+                    "pliegues no es posible incluir "
+                    "las tres clases en todos los "
+                    "conjuntos de prueba."
+                ),
+
+            "interpretacion_f1_historico":
+                (
+                    "El F1 histórico reproduce el "
+                    "comportamiento del protocolo "
+                    "original, donde el promedio macro "
+                    "de sklearn considera únicamente "
+                    "las clases presentes o predichas "
+                    "en cada fold."
+                ),
+
+            "interpretacion_f1_3clases":
+                (
+                    "El cálculo con tres clases fijas "
+                    "incluye explícitamente Civil, "
+                    "Ejecución e Informática en el "
+                    "promedio de cada fold. Se utiliza "
+                    "como diagnóstico para mostrar la "
+                    "sensibilidad del resultado 10-fold "
+                    "ante la ausencia de Ejecución en "
+                    "cinco de los diez folds."
+                ),
+
+            "uso":
+                (
+                    "Se conserva para reproducibilidad "
+                    "y análisis de sensibilidad. "
+                    "No se emplea como estimación "
+                    "robusta final de generalización."
+                ),
         },
 
-        "advertencia_metodologica":
+        "advertencia_metodologica_general":
             (
-                "La selección GWO se realizó antes "
-                "de la comparación externa sobre el "
-                "corpus disponible. Por esta razón, "
-                "el resultado de 5-fold se interpreta "
-                "como exploratorio y no como una "
-                "estimación definitiva de generalización."
+                "La selección GWO y el espacio TF-IDF "
+                "se construyeron utilizando el corpus "
+                "disponible completo antes de la "
+                "comparación mediante validación "
+                "cruzada. Por esta razón los "
+                "resultados GWO se clasifican como "
+                "exploratorios."
             ),
 
-        "interpretacion":
+        "resultado_robusto_relacionado":
             (
-                "GWO identifica un subconjunto "
-                "altamente discriminativo y reduce "
-                "el espacio de representación, pero "
-                "su rendimiento debe analizarse junto "
-                "con las auditorías de fuga léxica y "
-                "el modelo robusto final."
+                "La estimación conservadora principal "
+                "de generalización se obtiene mediante "
+                "06_modelo_final_robusto.py, donde "
+                "el TF-IDF se ajusta exclusivamente "
+                "sobre entrenamiento y se controlan "
+                "las denominaciones explícitas del "
+                "grado."
             ),
     }
 
 
 # =============================================================================
-# 7. AUDITORÍA METODOLÓGICA
+# 11. AUDITORÍA METODOLÓGICA
 # =============================================================================
 
 def construir_bloque_auditoria() -> dict:
 
-    resumen_fuga = leer_json_opcional(
-        AUDITORIA_RESUMEN
+    resumen_fuga = (
+        leer_json_opcional(
+            AUDITORIA_RESUMEN
+        )
     )
 
-    df_proxies = leer_csv_opcional(
-        AUDITORIA_PROXIES
+
+    df_proxies = (
+        leer_csv_opcional(
+            AUDITORIA_PROXIES
+        )
     )
 
-    validacion_anidada = leer_json_opcional(
-        VALIDACION_ANIDADA_RESUMEN
+
+    validacion_anidada = (
+        leer_json_opcional(
+            VALIDACION_ANIDADA_RESUMEN
+        )
     )
 
-    seleccion_modelo = leer_json_opcional(
-        SELECCION_MODELO_RESUMEN
+
+    seleccion_modelo = (
+        leer_json_opcional(
+            SELECCION_MODELO_RESUMEN
+        )
     )
 
 
     proxies_directos = None
+    porcentaje_proxy = None
+
 
     if df_proxies is not None:
 
@@ -673,19 +944,20 @@ def construir_bloque_auditoria() -> dict:
         )
 
 
-    porcentaje_proxy = None
-
     if (
         proxies_directos
         is not None
         and GWO_FEATURES.exists()
     ):
 
-        total_gwo = len(
-            leer_csv(
-                GWO_FEATURES
+        total_gwo = int(
+            len(
+                leer_csv(
+                    GWO_FEATURES
+                )
             )
         )
+
 
         if total_gwo > 0:
 
@@ -699,7 +971,7 @@ def construir_bloque_auditoria() -> dict:
     return {
 
         "estado":
-            "auditoria_posterior",
+            "auditoria_metodologica_posterior",
 
         "proxies_directos_gwo": {
 
@@ -729,20 +1001,20 @@ def construir_bloque_auditoria() -> dict:
 
         "interpretacion":
             (
-                "Las auditorías se conservaron "
-                "como trazabilidad metodológica. "
-                "Su función es cuantificar cuánto "
-                "del rendimiento aparente puede "
-                "estar asociado a pistas léxicas "
-                "directas y evaluar si las mejoras "
-                "se mantienen bajo protocolos más "
-                "estrictos."
+                "Las auditorías se conservan como "
+                "trazabilidad metodológica del estudio. "
+                "Permiten cuantificar cuánto del "
+                "rendimiento exploratorio puede estar "
+                "asociado a pistas léxicas directas "
+                "del grado y comprobar si las mejoras "
+                "se sostienen bajo protocolos de "
+                "evaluación más estrictos."
             ),
     }
 
 
 # =============================================================================
-# 8. MODELO ROBUSTO FINAL
+# 12. MODELO ROBUSTO FINAL
 # =============================================================================
 
 def construir_bloque_modelo_final() -> dict:
@@ -755,40 +1027,37 @@ def construir_bloque_modelo_final() -> dict:
         MODELO_FINAL_FOLDS
     )
 
-    df_clases = leer_csv(
+    leer_csv(
         MODELO_FINAL_CLASES
     )
 
 
-    if "F1_macro" not in (
+    columnas_requeridas = {
+        "F1_macro",
+        "Accuracy",
+    }
+
+
+    if not columnas_requeridas.issubset(
         df_folds.columns
     ):
 
         raise ValueError(
             "metricas_folds_modelo_final.csv "
-            "no contiene F1_macro."
-        )
-
-
-    if "Accuracy" not in (
-        df_folds.columns
-    ):
-
-        raise ValueError(
-            "metricas_folds_modelo_final.csv "
-            "no contiene Accuracy."
+            "no contiene las columnas requeridas."
         )
 
 
     resultados = resumen.get(
         "resultados_principales",
-        {}
+        {},
     )
 
 
     f1_media = resultados.get(
         "f1_macro_media_folds"
     )
+
 
     if f1_media is None:
 
@@ -803,6 +1072,7 @@ def construir_bloque_modelo_final() -> dict:
         "f1_macro_std_folds"
     )
 
+
     if f1_std is None:
 
         f1_std = float(
@@ -815,6 +1085,7 @@ def construir_bloque_modelo_final() -> dict:
     accuracy_media = resultados.get(
         "accuracy_media_folds"
     )
+
 
     if accuracy_media is None:
 
@@ -834,27 +1105,34 @@ def construir_bloque_modelo_final() -> dict:
             "Complement Naive Bayes",
 
         "representacion":
-            "TF-IDF word 1-2 grams",
+            (
+                "TF-IDF de palabras y bigramas, "
+                "máximo 400 características."
+            ),
 
         "balanceo":
             (
-                "SMOTE únicamente sobre "
-                "el entrenamiento."
+                "SMOTE aplicado exclusivamente "
+                "sobre el conjunto de entrenamiento "
+                "de cada fold."
             ),
 
         "control_fuga":
             (
-                "Enmascaramiento de "
-                "denominaciones explícitas "
-                "del grado antes de vectorizar."
+                "Enmascaramiento de las "
+                "denominaciones explícitas del "
+                "grado antes de la vectorización."
             ),
 
         "validacion":
             (
-                "StratifiedKFold 5-fold "
-                "con TF-IDF ajustado "
-                "exclusivamente en train."
+                "StratifiedKFold de cinco pliegues "
+                "con TF-IDF ajustado exclusivamente "
+                "sobre los documentos de entrenamiento."
             ),
+
+        "metrica_principal":
+            "F1-macro medio entre folds",
 
         "f1_macro_media":
             redondear(
@@ -871,27 +1149,21 @@ def construir_bloque_modelo_final() -> dict:
                 accuracy_media
             ),
 
-        "f1_macro_oof":
+        "f1_macro_oof_secundario":
             resultados.get(
                 "f1_macro_oof"
             ),
 
-        "accuracy_oof":
+        "accuracy_oof_secundaria":
             resultados.get(
                 "accuracy_oof"
             ),
 
-        "metricas_por_clase":
+        "metricas_oof_por_clase":
             resumen.get(
                 "metricas_oof_por_clase",
-                {}
+                {},
             ),
-
-        "resultado_completo":
-            resumen,
-
-        "archivo_metricas_clase":
-            MODELO_FINAL_CLASES.name,
 
         "numero_folds":
             int(
@@ -900,19 +1172,31 @@ def construir_bloque_modelo_final() -> dict:
                 )
             ),
 
+        "resultado_completo":
+            resumen,
+
         "interpretacion":
             (
-                "Este es el resultado conservador "
-                "principal utilizado para estimar "
-                "capacidad de generalización después "
-                "de controlar denominaciones "
-                "explícitas asociadas a la etiqueta."
+                "Este resultado constituye la "
+                "estimación conservadora principal "
+                "de capacidad predictiva del estudio "
+                "después de controlar las "
+                "denominaciones explícitas asociadas "
+                "directamente con la etiqueta."
+            ),
+
+        "limitacion_principal":
+            (
+                "La clase Ejecución contiene "
+                "únicamente cinco perfiles, por lo "
+                "que las métricas presentan una "
+                "sensibilidad elevada al particionado."
             ),
     }
 
 
 # =============================================================================
-# 9. CONCLUSIÓN INTEGRADA
+# 13. CONCLUSIÓN INTEGRADA
 # =============================================================================
 
 def construir_conclusion_integrada(
@@ -926,63 +1210,108 @@ def construir_conclusion_integrada(
         "hallazgo_central":
             (
                 "Los perfiles de egreso presentan "
-                "estructura semántica asociada al tipo "
-                "de grado, pero también un solapamiento "
-                "considerable entre las clases."
+                "estructura semántica asociada al "
+                "tipo de grado, aunque existe un "
+                "solapamiento considerable entre "
+                "las clases analizadas."
             ),
 
         "gwo":
             (
-                "La selección GWO muestra un elevado "
-                "potencial discriminativo y una "
-                "reducción importante del espacio de "
-                "características; su F1-macro de "
-                "5-fold debe interpretarse como "
-                "exploratorio."
+                "La selección mediante GWO redujo "
+                "el espacio de 400 a 249 "
+                "características y reprodujo un "
+                "F1-macro exploratorio de 0.8412 "
+                "en validación de cinco pliegues. "
+                "Este resultado demuestra potencial "
+                "discriminativo, pero no se interpreta "
+                "como estimación final insesgada de "
+                "generalización."
+            ),
+
+        "diagnostico_10fold":
+            (
+                "La comprobación histórica de diez "
+                "pliegues reproduce un F1-macro de "
+                "0.7316. Sin embargo, debido a que "
+                "Ejecución posee únicamente cinco "
+                "observaciones, solo cinco de los "
+                "diez folds contienen las tres clases. "
+                "Al fijar explícitamente las tres "
+                "clases en el cálculo por fold, "
+                "el promedio diagnóstico disminuye "
+                "a 0.6337. Por ello el análisis "
+                "10-fold se conserva únicamente "
+                "como evidencia de sensibilidad."
             ),
 
         "auditoria":
             (
-                "La auditoría posterior detectó "
-                "características directamente asociadas "
-                "a la denominación de los grados, "
-                "confirmando que parte de la capacidad "
-                "predictiva puede proceder de pistas "
-                "léxicas directas."
+                "La auditoría léxica identificó "
+                "características seleccionadas por "
+                "GWO directamente relacionadas con "
+                "la denominación de los grados. "
+                "Esto demuestra que parte de la "
+                "capacidad discriminativa exploratoria "
+                "depende de pistas léxicas directas."
             ),
 
         "resultado_robusto":
             (
-                "Tras controlar las denominaciones "
-                "explícitas y separar correctamente "
-                "entrenamiento y evaluación, la "
-                "capacidad predictiva se mantiene, "
-                "aunque en un nivel moderado."
+                "Al controlar las denominaciones "
+                "explícitas del grado y ajustar la "
+                "representación exclusivamente sobre "
+                "los datos de entrenamiento, el modelo "
+                "Complement Naive Bayes obtuvo un "
+                "F1-macro medio de 0.5742. Este valor "
+                "se adopta como estimación conservadora "
+                "principal de generalización."
             ),
 
         "limitacion_principal":
             (
-                "El corpus contiene únicamente cinco "
-                "perfiles de la clase Ejecución, lo "
-                "que genera alta sensibilidad al "
-                "particionado y limita la precisión "
-                "de las estimaciones."
+                "La principal limitación estadística "
+                "es el reducido número de perfiles "
+                "de Ingeniería de Ejecución, con "
+                "cinco observaciones, lo que genera "
+                "alta variabilidad entre folds."
             ),
 
         "metricas_clave": {
 
             "gwo_5fold_exploratorio":
                 gwo[
-                    "gwo_5fold"
+                    "gwo_5fold_exploratorio"
                 ][
                     "f1_macro"
                 ],
 
-            "gwo_10fold_comprobacion":
+            "gwo_5fold_std":
                 gwo[
-                    "gwo_10fold"
+                    "gwo_5fold_exploratorio"
                 ][
-                    "f1_macro"
+                    "f1_std"
+                ],
+
+            "gwo_10fold_historico":
+                gwo[
+                    "gwo_10fold_diagnostico"
+                ][
+                    "f1_referencia_historico"
+                ],
+
+            "gwo_10fold_3clases_diagnostico":
+                gwo[
+                    "gwo_10fold_diagnostico"
+                ][
+                    "f1_macro_3clases_fijas"
+                ],
+
+            "gwo_10fold_folds_con_3_clases":
+                gwo[
+                    "gwo_10fold_diagnostico"
+                ][
+                    "folds_con_3_clases"
                 ],
 
             "proxies_directos_gwo":
@@ -1001,12 +1330,17 @@ def construir_conclusion_integrada(
                 modelo_final[
                     "f1_macro_std"
                 ],
+
+            "modelo_robusto_accuracy":
+                modelo_final[
+                    "accuracy_media"
+                ],
         },
     }
 
 
 # =============================================================================
-# 10. ARTEFACTOS
+# 14. ARTEFACTOS OFICIALES
 # =============================================================================
 
 def construir_bloque_artefactos() -> dict:
@@ -1040,22 +1374,46 @@ def construir_bloque_artefactos() -> dict:
                 ),
         },
 
-        "gwo": {
+        "gwo_exploratorio": {
 
             "seleccion":
-                "gwo/gwo_seleccion.png",
+                (
+                    "gwo/"
+                    "gwo_seleccion.png"
+                ),
 
             "mapa_features":
-                "gwo/gwo_mapa_features.png",
+                (
+                    "gwo/"
+                    "gwo_mapa_features.png"
+                ),
 
-            "validacion_10fold":
-                "gwo/cv10_gwo_resultados.png",
+            "diagnostico_validacion":
+                (
+                    "gwo/"
+                    "cv10_gwo_resultados.png"
+                ),
 
             "f1_por_clase":
-                "gwo/cv10_gwo_f1_clase.png",
+                (
+                    "gwo/"
+                    "cv10_gwo_f1_clase.png"
+                ),
+
+            "resultados_5fold":
+                (
+                    "gwo/"
+                    "cv5_gwo_resultados.csv"
+                ),
+
+            "resultados_10fold":
+                (
+                    "gwo/"
+                    "cv10_gwo_resultados.csv"
+                ),
         },
 
-        "auditoria": {
+        "auditoria_metodologica": {
 
             "comparacion_fuga_lexica":
                 (
@@ -1067,6 +1425,12 @@ def construir_bloque_artefactos() -> dict:
                 (
                     "validacion_robusta/"
                     "comparacion_validacion_robusta.png"
+                ),
+
+            "seleccion_modelo_robusta":
+                (
+                    "seleccion_modelo_robusta/"
+                    "comparacion_modelos_robustos.png"
                 ),
         },
 
@@ -1083,12 +1447,30 @@ def construir_bloque_artefactos() -> dict:
                     "modelo_final_robusto/"
                     "matriz_confusion_modelo_final.png"
                 ),
+
+            "metricas_folds":
+                (
+                    "modelo_final_robusto/"
+                    "metricas_folds_modelo_final.csv"
+                ),
+
+            "metricas_por_clase":
+                (
+                    "modelo_final_robusto/"
+                    "metricas_por_clase_modelo_final.csv"
+                ),
+
+            "predicciones_oof":
+                (
+                    "modelo_final_robusto/"
+                    "predicciones_oof_modelo_final.csv"
+                ),
         },
     }
 
 
 # =============================================================================
-# 11. FLUJO PRINCIPAL
+# 15. FLUJO PRINCIPAL
 # =============================================================================
 
 def main() -> int:
@@ -1109,21 +1491,30 @@ def main() -> int:
     verificar_archivos_esenciales()
 
 
-    corpus = construir_bloque_corpus()
+    corpus = (
+        construir_bloque_corpus()
+    )
+
 
     analisis_semantico = (
         construir_bloque_semantico()
     )
 
-    gwo = construir_bloque_gwo()
+
+    gwo = (
+        construir_bloque_gwo()
+    )
+
 
     auditoria = (
         construir_bloque_auditoria()
     )
 
+
     modelo_final = (
         construir_bloque_modelo_final()
     )
+
 
     conclusion = (
         construir_conclusion_integrada(
@@ -1139,7 +1530,7 @@ def main() -> int:
         "metadata": {
 
             "version":
-                "4.0",
+                "5.0",
 
             "fecha_generacion_utc":
                 datetime.now(
@@ -1177,34 +1568,56 @@ def main() -> int:
         "advertencias_metodologicas": [
 
             (
-                "El F1-macro GWO de 5-fold "
-                "es un resultado exploratorio y "
-                "no debe describirse como una "
-                "estimación definitiva de "
-                "generalización."
+                "El F1-macro GWO 5-fold de 0.8412 "
+                "es reproducible dentro del protocolo "
+                "de referencia, pero se considera "
+                "exploratorio porque la selección "
+                "GWO y la construcción del espacio "
+                "TF-IDF preceden a la validación."
             ),
 
             (
-                "La auditoría detectó proxies "
-                "léxicos asociados directamente "
-                "a la denominación del grado."
+                "El diagnóstico GWO de 10-fold se "
+                "conserva para reproducibilidad. "
+                "Debido a que Ejecución contiene "
+                "solo cinco perfiles, cinco de los "
+                "diez folds no contienen las tres "
+                "clases."
+            ),
+
+            (
+                "El valor histórico 10-fold de "
+                "0.7316 y el cálculo diagnóstico "
+                "con tres clases fijas de 0.6337 "
+                "no se utilizan como estimación "
+                "final robusta de generalización."
+            ),
+
+            (
+                "La auditoría metodológica detectó "
+                "proxies léxicos asociados "
+                "directamente a la denominación "
+                "de los grados."
             ),
 
             (
                 "El resultado robusto final debe "
-                "reportarse separadamente del "
-                "resultado exploratorio GWO."
+                "reportarse de manera separada de "
+                "los resultados exploratorios GWO."
             ),
 
             (
-                "La clase Ejecución contiene "
-                "solamente cinco observaciones."
+                "La métrica F1-macro no debe "
+                "denominarse 'precisión'."
             ),
 
             (
-                "No debe utilizarse el término "
-                "'precisión' como sinónimo de "
-                "F1-macro."
+                "No se reportan intervalos normales "
+                "de confianza calculados directamente "
+                "sobre los folds como evidencia "
+                "principal, debido al número reducido "
+                "de particiones y a la naturaleza "
+                "acotada de la métrica."
             ),
         ],
 
@@ -1232,11 +1645,17 @@ def main() -> int:
         )
 
 
+    # =========================================================================
+    # SALIDA DE CONSOLA
+    # =========================================================================
+
     print()
+
     print(
         f"Corpus: "
         f"{corpus['total_perfiles']} perfiles"
     )
+
 
     print(
         "Distribución: "
@@ -1251,9 +1670,11 @@ def main() -> int:
 
 
     print()
+
     print(
         "GWO exploratorio:"
     )
+
 
     print(
         f"  Features: "
@@ -1262,41 +1683,97 @@ def main() -> int:
         f"{gwo['features_seleccionadas']}"
     )
 
+
     print(
         f"  Reducción: "
         f"{gwo['reduccion_porcentual']:.2f}%"
     )
 
-    print(
-        f"  F1-macro 5-fold : "
-        f"{gwo['gwo_5fold']['f1_macro']:.4f}"
-    )
 
     print(
-        f"  F1-macro 10-fold: "
-        f"{gwo['gwo_10fold']['f1_macro']:.4f}"
+        f"  F1 5-fold exploratorio      : "
+        f"{gwo['gwo_5fold_exploratorio']['f1_macro']:.4f}"
+    )
+
+
+    print(
+        f"  Std 5-fold                  : "
+        f"{gwo['gwo_5fold_exploratorio']['f1_std']:.4f}"
+    )
+
+
+    print(
+        f"  Folds 5-fold con 3 clases   : "
+        f"{gwo['gwo_5fold_exploratorio']['folds_con_3_clases']}"
+        f"/"
+        f"{gwo['gwo_5fold_exploratorio']['numero_folds']}"
     )
 
 
     print()
+
+    print(
+        "Diagnóstico GWO 10-fold:"
+    )
+
+
+    print(
+        f"  F1 histórico                : "
+        f"{gwo['gwo_10fold_diagnostico']['f1_referencia_historico']:.4f}"
+    )
+
+
+    print(
+        f"  F1 con 3 clases fijas       : "
+        f"{gwo['gwo_10fold_diagnostico']['f1_macro_3clases_fijas']:.4f}"
+    )
+
+
+    print(
+        f"  Folds con las 3 clases      : "
+        f"{gwo['gwo_10fold_diagnostico']['folds_con_3_clases']}"
+        f"/"
+        f"{gwo['gwo_10fold_diagnostico']['numero_folds']}"
+    )
+
+
+    print(
+        f"  Folds sin alguna clase      : "
+        f"{gwo['gwo_10fold_diagnostico']['folds_sin_alguna_clase']}"
+        f"/"
+        f"{gwo['gwo_10fold_diagnostico']['numero_folds']}"
+    )
+
+
+    print()
+
     print(
         "Auditoría metodológica:"
     )
 
-    proxies = auditoria[
-        "proxies_directos_gwo"
-    ][
-        "cantidad"
-    ]
 
-    porcentaje = auditoria[
-        "proxies_directos_gwo"
-    ][
-        "porcentaje"
-    ]
+    proxies = (
+        auditoria[
+            "proxies_directos_gwo"
+        ][
+            "cantidad"
+        ]
+    )
 
 
-    if proxies is not None:
+    porcentaje = (
+        auditoria[
+            "proxies_directos_gwo"
+        ][
+            "porcentaje"
+        ]
+    )
+
+
+    if (
+        proxies is not None
+        and porcentaje is not None
+    ):
 
         print(
             f"  Proxies directos GWO: "
@@ -1313,24 +1790,29 @@ def main() -> int:
 
 
     print()
+
     print(
         "Resultado robusto final:"
     )
+
 
     print(
         f"  Modelo        : "
         f"{modelo_final['modelo']}"
     )
 
+
     print(
         f"  F1-macro medio: "
         f"{modelo_final['f1_macro_media']:.4f}"
     )
 
+
     print(
         f"  F1 std        : "
         f"{modelo_final['f1_macro_std']:.4f}"
     )
+
 
     print(
         f"  Accuracy media: "
@@ -1339,6 +1821,31 @@ def main() -> int:
 
 
     print()
+
+    print(
+        "Interpretación oficial:"
+    )
+
+
+    print(
+        "  0.8412 -> resultado GWO exploratorio reproducido."
+    )
+
+    print(
+        "  0.7316 -> diagnóstico histórico 10-fold reproducido."
+    )
+
+    print(
+        "  0.6337 -> sensibilidad 10-fold con tres clases fijas."
+    )
+
+    print(
+        "  0.5742 -> estimación robusta principal de generalización."
+    )
+
+
+    print()
+
     print(
         "Reporte generado:"
     )
@@ -1349,6 +1856,7 @@ def main() -> int:
 
 
     print()
+
     print(
         "=" * 76
     )

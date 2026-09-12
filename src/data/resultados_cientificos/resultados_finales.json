@@ -1,7 +1,7 @@
 {
     "metadata": {
-        "version": "4.0",
-        "fecha_generacion_utc": "2026-09-12T03:06:55.700678+00:00",
+        "version": "5.0",
+        "fecha_generacion_utc": "2026-09-12T03:34:29.489197+00:00",
         "estado": "resultados_cientificos_consolidados",
         "proyecto": "Análisis de perfiles de egreso de carreras de informática en Chile"
     },
@@ -14,7 +14,7 @@
             "Informática": 25,
             "Ejecución": 5
         },
-        "uso": "Corpus científico congelado y versionado utilizado para los resultados oficiales."
+        "uso": "Corpus científico congelado y versionado utilizado para la obtención de los resultados oficiales del estudio."
     },
     "analisis_semantico": {
         "pca_lda": {
@@ -582,29 +582,44 @@
     },
     "gwo_exploratorio": {
         "estado": "exploratorio",
-        "metodo": "Grey Wolf Optimizer sobre representación TF-IDF.",
+        "metodo": "Grey Wolf Optimizer (GWO) aplicado sobre representación TF-IDF de hasta 400 características.",
         "features_originales": 400,
         "features_seleccionadas": 249,
         "reduccion_porcentual": 37.75,
-        "baseline_exploratorio": {
-            "f1_macro": 0.669518,
-            "f1_std": 0.247384
+        "resultado_archivo_gwo_referencia": {
+            "f1_macro_baseline": 0.669518,
+            "f1_std_baseline": 0.247384,
+            "f1_macro_gwo": 0.841216,
+            "f1_std_gwo": 0.194908
         },
-        "gwo_5fold": {
+        "gwo_5fold_exploratorio": {
             "f1_macro": 0.841216,
             "f1_std": 0.217914,
-            "numero_folds": 5
+            "numero_folds": 5,
+            "folds_con_3_clases": 5,
+            "folds_sin_alguna_clase": 0,
+            "todas_las_clases_en_cada_fold": true,
+            "interpretacion": "Reproduce el resultado exploratorio GWO de referencia. Los cinco folds contienen las tres clases. No obstante, la selección de características GWO y la construcción del vocabulario TF-IDF se realizaron sobre el corpus disponible antes de esta comparación, por lo que el resultado no constituye una estimación final insesgada de generalización."
         },
-        "gwo_10fold": {
-            "f1_macro": 0.731627,
-            "f1_std": 0.213449,
-            "numero_folds": 10
+        "gwo_10fold_diagnostico": {
+            "f1_referencia_historico": 0.731627,
+            "f1_referencia_std": 0.213449,
+            "f1_macro_3clases_fijas": 0.633651,
+            "f1_macro_3clases_std": 0.226728,
+            "numero_folds": 10,
+            "folds_con_3_clases": 5,
+            "folds_sin_alguna_clase": 5,
+            "valido_como_resultado_final": false,
+            "motivo_limitacion": "La clase Ejecución contiene solo cinco observaciones. Con StratifiedKFold de diez pliegues no es posible incluir las tres clases en todos los conjuntos de prueba.",
+            "interpretacion_f1_historico": "El F1 histórico reproduce el comportamiento del protocolo original, donde el promedio macro de sklearn considera únicamente las clases presentes o predichas en cada fold.",
+            "interpretacion_f1_3clases": "El cálculo con tres clases fijas incluye explícitamente Civil, Ejecución e Informática en el promedio de cada fold. Se utiliza como diagnóstico para mostrar la sensibilidad del resultado 10-fold ante la ausencia de Ejecución en cinco de los diez folds.",
+            "uso": "Se conserva para reproducibilidad y análisis de sensibilidad. No se emplea como estimación robusta final de generalización."
         },
-        "advertencia_metodologica": "La selección GWO se realizó antes de la comparación externa sobre el corpus disponible. Por esta razón, el resultado de 5-fold se interpreta como exploratorio y no como una estimación definitiva de generalización.",
-        "interpretacion": "GWO identifica un subconjunto altamente discriminativo y reduce el espacio de representación, pero su rendimiento debe analizarse junto con las auditorías de fuga léxica y el modelo robusto final."
+        "advertencia_metodologica_general": "La selección GWO y el espacio TF-IDF se construyeron utilizando el corpus disponible completo antes de la comparación mediante validación cruzada. Por esta razón los resultados GWO se clasifican como exploratorios.",
+        "resultado_robusto_relacionado": "La estimación conservadora principal de generalización se obtiene mediante 06_modelo_final_robusto.py, donde el TF-IDF se ajusta exclusivamente sobre entrenamiento y se controlan las denominaciones explícitas del grado."
     },
     "auditoria_metodologica": {
-        "estado": "auditoria_posterior",
+        "estado": "auditoria_metodologica_posterior",
         "proxies_directos_gwo": {
             "cantidad": 16,
             "porcentaje": 6.43
@@ -790,21 +805,22 @@
                 "advertencia": "El corpus es reducido y la clase Ejecución contiene únicamente cinco observaciones, por lo que se espera variabilidad entre folds."
             }
         },
-        "interpretacion": "Las auditorías se conservaron como trazabilidad metodológica. Su función es cuantificar cuánto del rendimiento aparente puede estar asociado a pistas léxicas directas y evaluar si las mejoras se mantienen bajo protocolos más estrictos."
+        "interpretacion": "Las auditorías se conservan como trazabilidad metodológica del estudio. Permiten cuantificar cuánto del rendimiento exploratorio puede estar asociado a pistas léxicas directas del grado y comprobar si las mejoras se sostienen bajo protocolos de evaluación más estrictos."
     },
     "resultado_robusto_final": {
         "estado": "resultado_robusto_principal",
         "modelo": "Complement Naive Bayes",
-        "representacion": "TF-IDF word 1-2 grams",
-        "balanceo": "SMOTE únicamente sobre el entrenamiento.",
-        "control_fuga": "Enmascaramiento de denominaciones explícitas del grado antes de vectorizar.",
-        "validacion": "StratifiedKFold 5-fold con TF-IDF ajustado exclusivamente en train.",
+        "representacion": "TF-IDF de palabras y bigramas, máximo 400 características.",
+        "balanceo": "SMOTE aplicado exclusivamente sobre el conjunto de entrenamiento de cada fold.",
+        "control_fuga": "Enmascaramiento de las denominaciones explícitas del grado antes de la vectorización.",
+        "validacion": "StratifiedKFold de cinco pliegues con TF-IDF ajustado exclusivamente sobre los documentos de entrenamiento.",
+        "metrica_principal": "F1-macro medio entre folds",
         "f1_macro_media": 0.574224,
         "f1_macro_std": 0.201917,
         "accuracy_media": 0.655128,
-        "f1_macro_oof": 0.604042,
-        "accuracy_oof": 0.655738,
-        "metricas_por_clase": {
+        "f1_macro_oof_secundario": 0.604042,
+        "accuracy_oof_secundaria": 0.655738,
+        "metricas_oof_por_clase": {
             "Civil": {
                 "precision": 0.6875,
                 "recall": 0.709677,
@@ -824,9 +840,10 @@
                 "support": 25
             }
         },
+        "numero_folds": 5,
         "resultado_completo": {
             "version": "1.0",
-            "fecha_generacion_utc": "2026-09-12T03:06:54.967571+00:00",
+            "fecha_generacion_utc": "2026-09-12T03:34:28.818140+00:00",
             "estado": "modelo_robusto_congelado",
             "objetivo": "Estimar la capacidad predictiva conservadora de los perfiles de egreso evitando utilizar denominaciones explícitas de los grados como pistas directas de clasificación.",
             "corpus": {
@@ -912,30 +929,36 @@
                 "grafico_matriz": "matriz_confusion_modelo_final.png"
             }
         },
-        "archivo_metricas_clase": "metricas_por_clase_modelo_final.csv",
-        "numero_folds": 5,
-        "interpretacion": "Este es el resultado conservador principal utilizado para estimar capacidad de generalización después de controlar denominaciones explícitas asociadas a la etiqueta."
+        "interpretacion": "Este resultado constituye la estimación conservadora principal de capacidad predictiva del estudio después de controlar las denominaciones explícitas asociadas directamente con la etiqueta.",
+        "limitacion_principal": "La clase Ejecución contiene únicamente cinco perfiles, por lo que las métricas presentan una sensibilidad elevada al particionado."
     },
     "conclusion_integrada": {
-        "hallazgo_central": "Los perfiles de egreso presentan estructura semántica asociada al tipo de grado, pero también un solapamiento considerable entre las clases.",
-        "gwo": "La selección GWO muestra un elevado potencial discriminativo y una reducción importante del espacio de características; su F1-macro de 5-fold debe interpretarse como exploratorio.",
-        "auditoria": "La auditoría posterior detectó características directamente asociadas a la denominación de los grados, confirmando que parte de la capacidad predictiva puede proceder de pistas léxicas directas.",
-        "resultado_robusto": "Tras controlar las denominaciones explícitas y separar correctamente entrenamiento y evaluación, la capacidad predictiva se mantiene, aunque en un nivel moderado.",
-        "limitacion_principal": "El corpus contiene únicamente cinco perfiles de la clase Ejecución, lo que genera alta sensibilidad al particionado y limita la precisión de las estimaciones.",
+        "hallazgo_central": "Los perfiles de egreso presentan estructura semántica asociada al tipo de grado, aunque existe un solapamiento considerable entre las clases analizadas.",
+        "gwo": "La selección mediante GWO redujo el espacio de 400 a 249 características y reprodujo un F1-macro exploratorio de 0.8412 en validación de cinco pliegues. Este resultado demuestra potencial discriminativo, pero no se interpreta como estimación final insesgada de generalización.",
+        "diagnostico_10fold": "La comprobación histórica de diez pliegues reproduce un F1-macro de 0.7316. Sin embargo, debido a que Ejecución posee únicamente cinco observaciones, solo cinco de los diez folds contienen las tres clases. Al fijar explícitamente las tres clases en el cálculo por fold, el promedio diagnóstico disminuye a 0.6337. Por ello el análisis 10-fold se conserva únicamente como evidencia de sensibilidad.",
+        "auditoria": "La auditoría léxica identificó características seleccionadas por GWO directamente relacionadas con la denominación de los grados. Esto demuestra que parte de la capacidad discriminativa exploratoria depende de pistas léxicas directas.",
+        "resultado_robusto": "Al controlar las denominaciones explícitas del grado y ajustar la representación exclusivamente sobre los datos de entrenamiento, el modelo Complement Naive Bayes obtuvo un F1-macro medio de 0.5742. Este valor se adopta como estimación conservadora principal de generalización.",
+        "limitacion_principal": "La principal limitación estadística es el reducido número de perfiles de Ingeniería de Ejecución, con cinco observaciones, lo que genera alta variabilidad entre folds.",
         "metricas_clave": {
             "gwo_5fold_exploratorio": 0.841216,
-            "gwo_10fold_comprobacion": 0.731627,
+            "gwo_5fold_std": 0.217914,
+            "gwo_10fold_historico": 0.731627,
+            "gwo_10fold_3clases_diagnostico": 0.633651,
+            "gwo_10fold_folds_con_3_clases": 5,
             "proxies_directos_gwo": 16,
             "modelo_robusto_f1_macro": 0.574224,
-            "modelo_robusto_f1_std": 0.201917
+            "modelo_robusto_f1_std": 0.201917,
+            "modelo_robusto_accuracy": 0.655128
         }
     },
     "advertencias_metodologicas": [
-        "El F1-macro GWO de 5-fold es un resultado exploratorio y no debe describirse como una estimación definitiva de generalización.",
-        "La auditoría detectó proxies léxicos asociados directamente a la denominación del grado.",
-        "El resultado robusto final debe reportarse separadamente del resultado exploratorio GWO.",
-        "La clase Ejecución contiene solamente cinco observaciones.",
-        "No debe utilizarse el término 'precisión' como sinónimo de F1-macro."
+        "El F1-macro GWO 5-fold de 0.8412 es reproducible dentro del protocolo de referencia, pero se considera exploratorio porque la selección GWO y la construcción del espacio TF-IDF preceden a la validación.",
+        "El diagnóstico GWO de 10-fold se conserva para reproducibilidad. Debido a que Ejecución contiene solo cinco perfiles, cinco de los diez folds no contienen las tres clases.",
+        "El valor histórico 10-fold de 0.7316 y el cálculo diagnóstico con tres clases fijas de 0.6337 no se utilizan como estimación final robusta de generalización.",
+        "La auditoría metodológica detectó proxies léxicos asociados directamente a la denominación de los grados.",
+        "El resultado robusto final debe reportarse de manera separada de los resultados exploratorios GWO.",
+        "La métrica F1-macro no debe denominarse 'precisión'.",
+        "No se reportan intervalos normales de confianza calculados directamente sobre los folds como evidencia principal, debido al número reducido de particiones y a la naturaleza acotada de la métrica."
     ],
     "artefactos_oficiales": {
         "analisis_semantico": {
@@ -944,19 +967,25 @@
             "test_permutacion": "homogeneidad_semantica/test_permutacion_homogeneidad_v2.png",
             "diferenciacion_lexica": "diferenciacion_lexica/terminos_distintivos_v2.png"
         },
-        "gwo": {
+        "gwo_exploratorio": {
             "seleccion": "gwo/gwo_seleccion.png",
             "mapa_features": "gwo/gwo_mapa_features.png",
-            "validacion_10fold": "gwo/cv10_gwo_resultados.png",
-            "f1_por_clase": "gwo/cv10_gwo_f1_clase.png"
+            "diagnostico_validacion": "gwo/cv10_gwo_resultados.png",
+            "f1_por_clase": "gwo/cv10_gwo_f1_clase.png",
+            "resultados_5fold": "gwo/cv5_gwo_resultados.csv",
+            "resultados_10fold": "gwo/cv10_gwo_resultados.csv"
         },
-        "auditoria": {
+        "auditoria_metodologica": {
             "comparacion_fuga_lexica": "auditoria_fuga_lexica/comparacion_f1_fuga_lexica.png",
-            "validacion_gwo_anidada": "validacion_robusta/comparacion_validacion_robusta.png"
+            "validacion_gwo_anidada": "validacion_robusta/comparacion_validacion_robusta.png",
+            "seleccion_modelo_robusta": "seleccion_modelo_robusta/comparacion_modelos_robustos.png"
         },
         "modelo_final_robusto": {
             "f1_por_fold": "modelo_final_robusto/f1_por_fold_modelo_final.png",
-            "matriz_confusion": "modelo_final_robusto/matriz_confusion_modelo_final.png"
+            "matriz_confusion": "modelo_final_robusto/matriz_confusion_modelo_final.png",
+            "metricas_folds": "modelo_final_robusto/metricas_folds_modelo_final.csv",
+            "metricas_por_clase": "modelo_final_robusto/metricas_por_clase_modelo_final.csv",
+            "predicciones_oof": "modelo_final_robusto/predicciones_oof_modelo_final.csv"
         }
     }
 }
