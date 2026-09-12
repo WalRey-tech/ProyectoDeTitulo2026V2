@@ -1,0 +1,45 @@
+{
+    "corpus": {
+        "total": 61,
+        "distribucion": {
+            "Civil": 31,
+            "Informática": 25,
+            "Ejecución": 5
+        }
+    },
+    "features_gwo": {
+        "features_gwo_total": 249,
+        "features_proxy_directo": 16,
+        "porcentaje_proxy": 6.43,
+        "features_proxy": [
+            "informática",
+            "civil",
+            "informáticos",
+            "informática universidad",
+            "ingeniero civil",
+            "civil informática",
+            "computación informática",
+            "ingeniería civil",
+            "civil computación",
+            "informático",
+            "ingeniero informática",
+            "civil informático",
+            "ejecución",
+            "ingeniero ejecución",
+            "ingeniera civil",
+            "ejecución informática"
+        ]
+    },
+    "evaluacion_controlada": {
+        "metodologia": "TF-IDF ajustado exclusivamente en cada fold de entrenamiento + SMOTE(k=2) + ComplementNB.",
+        "folds": 5,
+        "original_f1_macro": 0.7316,
+        "enmascarado_f1_macro": 0.497112,
+        "delta_enmascarado_menos_original": -0.234488,
+        "caida_absoluta": 0.234488
+    },
+    "interpretacion": {
+        "nota": "Esta comparación no sustituye la evaluación GWO de referencia. Su objetivo es estimar cuánto cambia el rendimiento al retirar pistas léxicas directas del grado.",
+        "criterio": "Una caída importante del F1 tras el enmascaramiento sugiere que los términos directos del grado estaban aportando señal predictiva."
+    }
+}

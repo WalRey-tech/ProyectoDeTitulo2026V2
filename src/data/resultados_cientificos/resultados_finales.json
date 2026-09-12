@@ -1,0 +1,991 @@
+{
+    "metadata": {
+        "version": "5.0",
+        "fecha_generacion_utc": "2026-09-12T06:11:37.061855+00:00",
+        "estado": "resultados_cientificos_consolidados",
+        "proyecto": "Análisis de perfiles de egreso de carreras de informática en Chile"
+    },
+    "corpus": {
+        "version": "V2",
+        "archivo": "perfiles_egreso_etiquetado_v2.csv",
+        "total_perfiles": 61,
+        "distribucion": {
+            "Civil": 31,
+            "Informática": 25,
+            "Ejecución": 5
+        },
+        "uso": "Corpus científico congelado y versionado utilizado para la obtención de los resultados oficiales del estudio."
+    },
+    "analisis_semantico": {
+        "pca_lda": {
+            "corpus": {
+                "total": 61,
+                "distribucion": {
+                    "Civil": 31,
+                    "Informática": 25,
+                    "Ejecución": 5
+                }
+            },
+            "representacion": {
+                "metodo": "TF-IDF",
+                "max_features": 400,
+                "ngram_range": [
+                    1,
+                    2
+                ],
+                "min_df": 2,
+                "max_df": 0.9,
+                "sublinear_tf": true,
+                "features_generadas": 400
+            },
+            "pca": {
+                "tipo": "no supervisado",
+                "varianza_explicada_componente_1": 0.050308,
+                "varianza_explicada_componente_2": 0.045575,
+                "varianza_explicada_total_2d": 0.095882
+            },
+            "lda": {
+                "tipo": "supervisado",
+                "uso": "Visualización exploratoria de separabilidad entre clases.",
+                "advertencia": "LDA utiliza las etiquetas reales; no debe interpretarse como rendimiento predictivo.",
+                "varianza_discriminante": [
+                    0.907142,
+                    0.092858
+                ]
+            }
+        },
+        "homogeneidad_semantica": {
+            "corpus": {
+                "total": 61,
+                "distribucion": {
+                    "Civil": 31,
+                    "Informática": 25,
+                    "Ejecución": 5
+                }
+            },
+            "representacion": {
+                "metodo": "TF-IDF",
+                "max_features": 400,
+                "features_generadas": 400,
+                "ngram_range": [
+                    1,
+                    2
+                ],
+                "min_df": 2,
+                "max_df": 0.9,
+                "sublinear_tf": true
+            },
+            "similitud_global": {
+                "intra_clase_media": 0.236999,
+                "inter_clase_media": 0.216484,
+                "diferencia_intra_inter": 0.020516,
+                "homogeneidad_intra_macro": 0.257994
+            },
+            "test_permutacion": {
+                "hipotesis_nula": "La asociación entre perfiles y grados no produce una diferencia intra/inter mayor a la esperada por azar.",
+                "hipotesis_alternativa": "La similitud intra-grado es mayor que la similitud inter-grado.",
+                "tipo": "unilateral",
+                "n_permutaciones": 5000,
+                "semilla": 42,
+                "permutaciones_extremas": 23,
+                "p_valor": 0.00479904,
+                "alpha": 0.05,
+                "significativo": true
+            },
+            "similitud_centroides": {
+                "Civil": {
+                    "Civil": 1.0,
+                    "Ejecución": 0.628249,
+                    "Informática": 0.831562
+                },
+                "Ejecución": {
+                    "Civil": 0.628249,
+                    "Ejecución": 1.0,
+                    "Informática": 0.605238
+                },
+                "Informática": {
+                    "Civil": 0.831562,
+                    "Ejecución": 0.605238,
+                    "Informática": 1.0
+                }
+            },
+            "interpretacion": {
+                "resultado": "Los perfiles del mismo grado presentan una similitud promedio mayor que los perfiles de grados diferentes.",
+                "significancia": "La diferencia observada es estadísticamente significativa bajo el test de permutación.",
+                "advertencia": "Este es un análisis descriptivo y de asociación del corpus. No constituye una estimación de rendimiento predictivo."
+            },
+            "limitaciones": [
+                "La clase Ejecución contiene solo cinco perfiles, por lo que sus estimaciones presentan mayor incertidumbre.",
+                "El corpus utiliza el texto original de los perfiles de egreso. Algunos documentos pueden contener términos directamente asociados al nombre del programa o grado.",
+                "La similitud global intra-clase está influida por el número de pares de cada clase; por ello también se reporta homogeneidad por clase."
+            ]
+        },
+        "diferenciacion_lexica": {
+            "corpus": {
+                "total": 61,
+                "distribucion": {
+                    "Civil": 31,
+                    "Informática": 25,
+                    "Ejecución": 5
+                }
+            },
+            "metodo": {
+                "unidad_analisis": "presencia del término por documento",
+                "vectorizador": "CountVectorizer(binary=True)",
+                "max_features": 400,
+                "features_generadas": 400,
+                "ngram_range": [
+                    1,
+                    2
+                ],
+                "min_df": 2,
+                "max_df": 0.9,
+                "min_documentos_clase": 2,
+                "metrica": "log2 razón de prevalencia documental clase vs. resto",
+                "suavizado_alpha": 0.5
+            },
+            "filtrado_interpretativo": {
+                "stopwords_espanol": true,
+                "exclusion_denominacion_grado": true,
+                "exclusion_contexto_institucional": true,
+                "afecta_corpus_original": false,
+                "afecta_gwo": false,
+                "registros_excluidos": 69,
+                "exclusiones_por_motivo": {
+                    "denominacion_grado": 59,
+                    "contexto_institucional_geografico": 10
+                }
+            },
+            "top_terminos_por_grado": {
+                "Civil": [
+                    {
+                        "ranking": 1,
+                        "termino": "disciplina",
+                        "log2_ratio_prevalencia": 3.654636,
+                        "documentos_grado": 6,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 0,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 2,
+                        "termino": "fundamentos",
+                        "log2_ratio_prevalencia": 3.654636,
+                        "documentos_grado": 6,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 0,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 3,
+                        "termino": "comunicarse",
+                        "log2_ratio_prevalencia": 2.069674,
+                        "documentos_grado": 6,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 4,
+                        "termino": "economico",
+                        "log2_ratio_prevalencia": 2.069674,
+                        "documentos_grado": 6,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 5,
+                        "termino": "estudios",
+                        "log2_ratio_prevalencia": 2.069674,
+                        "documentos_grado": 6,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 6,
+                        "termino": "identificar",
+                        "log2_ratio_prevalencia": 1.828665,
+                        "documentos_grado": 5,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 7,
+                        "termino": "solida formacion",
+                        "log2_ratio_prevalencia": 1.828665,
+                        "documentos_grado": 5,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 8,
+                        "termino": "basicas",
+                        "log2_ratio_prevalencia": 1.790698,
+                        "documentos_grado": 12,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 3,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 9,
+                        "termino": "ciencias basicas",
+                        "log2_ratio_prevalencia": 1.790698,
+                        "documentos_grado": 12,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 3,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 10,
+                        "termino": "ciencias",
+                        "log2_ratio_prevalencia": 1.680021,
+                        "documentos_grado": 21,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 6,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 11,
+                        "termino": "medio",
+                        "log2_ratio_prevalencia": 1.539159,
+                        "documentos_grado": 7,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 2,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 12,
+                        "termino": "colaborativa",
+                        "log2_ratio_prevalencia": 1.539159,
+                        "documentos_grado": 4,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 13,
+                        "termino": "demuestra",
+                        "log2_ratio_prevalencia": 1.539159,
+                        "documentos_grado": 4,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 14,
+                        "termino": "emprender",
+                        "log2_ratio_prevalencia": 1.539159,
+                        "documentos_grado": 4,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 15,
+                        "termino": "junto",
+                        "log2_ratio_prevalencia": 1.539159,
+                        "documentos_grado": 4,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    }
+                ],
+                "Ejecución": [
+                    {
+                        "ranking": 1,
+                        "termino": "instituciones",
+                        "log2_ratio_prevalencia": 3.733354,
+                        "documentos_grado": 3,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 2,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 2,
+                        "termino": "desenvolverse",
+                        "log2_ratio_prevalencia": 3.247928,
+                        "documentos_grado": 3,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 3,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 3,
+                        "termino": "respeto",
+                        "log2_ratio_prevalencia": 3.247928,
+                        "documentos_grado": 3,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 3,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 4,
+                        "termino": "automatizacion",
+                        "log2_ratio_prevalencia": 2.762501,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 3,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 5,
+                        "termino": "comprometido",
+                        "log2_ratio_prevalencia": 2.762501,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 3,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 6,
+                        "termino": "concepcion",
+                        "log2_ratio_prevalencia": 2.762501,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 3,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 7,
+                        "termino": "cristiana",
+                        "log2_ratio_prevalencia": 2.762501,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 3,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 8,
+                        "termino": "promocion",
+                        "log2_ratio_prevalencia": 2.762501,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 3,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 9,
+                        "termino": "bien",
+                        "log2_ratio_prevalencia": 2.399931,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 4,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 10,
+                        "termino": "bien comun",
+                        "log2_ratio_prevalencia": 2.399931,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 4,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 11,
+                        "termino": "lenguajes",
+                        "log2_ratio_prevalencia": 2.399931,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 4,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 12,
+                        "termino": "lenguajes programacion",
+                        "log2_ratio_prevalencia": 2.399931,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 4,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 13,
+                        "termino": "partir",
+                        "log2_ratio_prevalencia": 2.399931,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 4,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 14,
+                        "termino": "privadas",
+                        "log2_ratio_prevalencia": 2.399931,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 4,
+                        "total_documentos_resto": 56
+                    },
+                    {
+                        "ranking": 15,
+                        "termino": "publicas",
+                        "log2_ratio_prevalencia": 2.399931,
+                        "documentos_grado": 2,
+                        "total_documentos_grado": 5,
+                        "documentos_resto": 4,
+                        "total_documentos_resto": 56
+                    }
+                ],
+                "Informática": [
+                    {
+                        "ranking": 1,
+                        "termino": "distintas",
+                        "log2_ratio_prevalencia": 4.209453,
+                        "documentos_grado": 6,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 0,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 2,
+                        "termino": "laboral",
+                        "log2_ratio_prevalencia": 4.209453,
+                        "documentos_grado": 6,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 0,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 3,
+                        "termino": "buenas",
+                        "log2_ratio_prevalencia": 3.968445,
+                        "documentos_grado": 5,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 0,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 4,
+                        "termino": "buenas practicas",
+                        "log2_ratio_prevalencia": 3.968445,
+                        "documentos_grado": 5,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 0,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 5,
+                        "termino": "componentes",
+                        "log2_ratio_prevalencia": 3.968445,
+                        "documentos_grado": 5,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 0,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 6,
+                        "termino": "mercado",
+                        "log2_ratio_prevalencia": 3.968445,
+                        "documentos_grado": 5,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 0,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 7,
+                        "termino": "metodologias",
+                        "log2_ratio_prevalencia": 3.011514,
+                        "documentos_grado": 8,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 8,
+                        "termino": "practicas",
+                        "log2_ratio_prevalencia": 2.830942,
+                        "documentos_grado": 7,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 9,
+                        "termino": "podra",
+                        "log2_ratio_prevalencia": 2.624491,
+                        "documentos_grado": 6,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 10,
+                        "termino": "proyectos tecnologicos",
+                        "log2_ratio_prevalencia": 2.624491,
+                        "documentos_grado": 6,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 11,
+                        "termino": "soluciones innovadoras",
+                        "log2_ratio_prevalencia": 2.624491,
+                        "documentos_grado": 6,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 12,
+                        "termino": "contribuyendo",
+                        "log2_ratio_prevalencia": 2.383483,
+                        "documentos_grado": 5,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 13,
+                        "termino": "desarrollar soluciones",
+                        "log2_ratio_prevalencia": 2.383483,
+                        "documentos_grado": 5,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 14,
+                        "termino": "problematicas",
+                        "log2_ratio_prevalencia": 2.383483,
+                        "documentos_grado": 5,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 36
+                    },
+                    {
+                        "ranking": 15,
+                        "termino": "resolucion",
+                        "log2_ratio_prevalencia": 2.383483,
+                        "documentos_grado": 5,
+                        "total_documentos_grado": 25,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 36
+                    }
+                ]
+            },
+            "interpretacion": {
+                "uso": "Identificar vocabulario relativamente más extendido entre los perfiles de cada grado.",
+                "advertencia": "Un término distintivo describe una diferencia léxica en este corpus y no implica que sea una competencia exclusiva del grado."
+            },
+            "limitaciones": [
+                "La clase Ejecución contiene únicamente cinco perfiles.",
+                "Los términos institucionales y de denominación del grado se excluyen solo del análisis interpretativo.",
+                "Este análisis no modifica ni sustituye el experimento predictivo GWO."
+            ]
+        }
+    },
+    "gwo_exploratorio": {
+        "estado": "exploratorio",
+        "metodo": "Grey Wolf Optimizer (GWO) aplicado sobre representación TF-IDF de hasta 400 características.",
+        "features_originales": 400,
+        "features_seleccionadas": 249,
+        "reduccion_porcentual": 37.75,
+        "resultado_archivo_gwo_referencia": {
+            "f1_macro_baseline": 0.669518,
+            "f1_std_baseline": 0.276583,
+            "f1_macro_gwo": 0.841216,
+            "f1_std_gwo": 0.217914
+        },
+        "gwo_5fold_exploratorio": {
+            "f1_macro": 0.841216,
+            "f1_std": 0.217914,
+            "numero_folds": 5,
+            "folds_con_3_clases": 5,
+            "folds_sin_alguna_clase": 0,
+            "todas_las_clases_en_cada_fold": true,
+            "interpretacion": "Reproduce el resultado exploratorio GWO de referencia. Los cinco folds contienen las tres clases. No obstante, la selección de características GWO y la construcción del vocabulario TF-IDF se realizaron sobre el corpus disponible antes de esta comparación, por lo que el resultado no constituye una estimación final insesgada de generalización."
+        },
+        "gwo_10fold_diagnostico": {
+            "f1_referencia_historico": 0.731627,
+            "f1_referencia_std": 0.213449,
+            "f1_macro_3clases_fijas": 0.633651,
+            "f1_macro_3clases_std": 0.226728,
+            "numero_folds": 10,
+            "folds_con_3_clases": 5,
+            "folds_sin_alguna_clase": 5,
+            "valido_como_resultado_final": false,
+            "motivo_limitacion": "La clase Ejecución contiene solo cinco observaciones. Con StratifiedKFold de diez pliegues no es posible incluir las tres clases en todos los conjuntos de prueba.",
+            "interpretacion_f1_historico": "El F1 histórico reproduce el comportamiento del protocolo original, donde el promedio macro de sklearn considera únicamente las clases presentes o predichas en cada fold.",
+            "interpretacion_f1_3clases": "El cálculo con tres clases fijas incluye explícitamente Civil, Ejecución e Informática en el promedio de cada fold. Se utiliza como diagnóstico para mostrar la sensibilidad del resultado 10-fold ante la ausencia de Ejecución en cinco de los diez folds.",
+            "uso": "Se conserva para reproducibilidad y análisis de sensibilidad. No se emplea como estimación robusta final de generalización."
+        },
+        "advertencia_metodologica_general": "La selección GWO y el espacio TF-IDF se construyeron utilizando el corpus disponible completo antes de la comparación mediante validación cruzada. Por esta razón los resultados GWO se clasifican como exploratorios.",
+        "resultado_robusto_relacionado": "La estimación conservadora principal de generalización se obtiene mediante 06_modelo_final_robusto.py, donde el TF-IDF se ajusta exclusivamente sobre entrenamiento y se controlan las denominaciones explícitas del grado."
+    },
+    "auditoria_metodologica": {
+        "estado": "auditoria_metodologica_posterior",
+        "proxies_directos_gwo": {
+            "cantidad": 16,
+            "porcentaje": 6.43
+        },
+        "auditoria_fuga_lexica": {
+            "corpus": {
+                "total": 61,
+                "distribucion": {
+                    "Civil": 31,
+                    "Informática": 25,
+                    "Ejecución": 5
+                }
+            },
+            "features_gwo": {
+                "features_gwo_total": 249,
+                "features_proxy_directo": 16,
+                "porcentaje_proxy": 6.43,
+                "features_proxy": [
+                    "informática",
+                    "civil",
+                    "informáticos",
+                    "informática universidad",
+                    "ingeniero civil",
+                    "civil informática",
+                    "computación informática",
+                    "ingeniería civil",
+                    "civil computación",
+                    "informático",
+                    "ingeniero informática",
+                    "civil informático",
+                    "ejecución",
+                    "ingeniero ejecución",
+                    "ingeniera civil",
+                    "ejecución informática"
+                ]
+            },
+            "evaluacion_controlada": {
+                "metodologia": "TF-IDF ajustado exclusivamente en cada fold de entrenamiento + SMOTE(k=2) + ComplementNB.",
+                "folds": 5,
+                "original_f1_macro": 0.7316,
+                "enmascarado_f1_macro": 0.497112,
+                "delta_enmascarado_menos_original": -0.234488,
+                "caida_absoluta": 0.234488
+            },
+            "interpretacion": {
+                "nota": "Esta comparación no sustituye la evaluación GWO de referencia. Su objetivo es estimar cuánto cambia el rendimiento al retirar pistas léxicas directas del grado.",
+                "criterio": "Una caída importante del F1 tras el enmascaramiento sugiere que los términos directos del grado estaban aportando señal predictiva."
+            }
+        },
+        "validacion_gwo_anidada": {
+            "version": "1.0",
+            "objetivo": "Estimar generalización con proxies directos del grado enmascarados y selección GWO realizada únicamente dentro del entrenamiento externo.",
+            "corpus": {
+                "total": 61,
+                "distribucion": {
+                    "Civil": 31,
+                    "Informática": 25,
+                    "Ejecución": 5
+                }
+            },
+            "configuracion": {
+                "outer_folds": 5,
+                "inner_folds_gwo": 3,
+                "gwo_epochs": 100,
+                "gwo_population": 30,
+                "seed": 42,
+                "clasificador": "Complement Naive Bayes",
+                "balanceo": "SMOTE dentro del entrenamiento",
+                "control_fuga": "Enmascaramiento de denominaciones directas del grado antes de TF-IDF."
+            },
+            "resultados": {
+                "Original_sin_GWO": {
+                    "f1_macro_media": 0.653333,
+                    "f1_macro_std": 0.260063,
+                    "accuracy_media": 0.735897,
+                    "f1_civil_media": 0.816667,
+                    "f1_ejecucion_media": 0.5,
+                    "f1_informatica_media": 0.643333
+                },
+                "Enmascarado_sin_GWO": {
+                    "f1_macro_media": 0.482719,
+                    "f1_macro_std": 0.183982,
+                    "accuracy_media": 0.588462,
+                    "f1_civil_media": 0.612601,
+                    "f1_ejecucion_media": 0.2,
+                    "f1_informatica_media": 0.635556
+                },
+                "Enmascarado_GWO_anidado": {
+                    "f1_macro_media": 0.432461,
+                    "f1_macro_std": 0.181359,
+                    "accuracy_media": 0.541026,
+                    "f1_civil_media": 0.544172,
+                    "f1_ejecucion_media": 0.213333,
+                    "f1_informatica_media": 0.539878
+                }
+            },
+            "impacto_enmascaramiento": {
+                "delta_f1": -0.170614
+            },
+            "efecto_gwo_robusto": {
+                "delta_vs_enmascarado_sin_gwo": -0.050258,
+                "features_seleccionadas_media": 298.8,
+                "features_seleccionadas_min": 274,
+                "features_seleccionadas_max": 317
+            },
+            "modelo_robusto_oof": {
+                "accuracy": 0.540984,
+                "f1_macro": 0.481929
+            },
+            "interpretacion": {
+                "nota": "El resultado Enmascarado_GWO_anidado es el candidato principal para una estimación más conservadora de generalización.",
+                "advertencia": "El tamaño reducido del corpus, especialmente la clase Ejecución con cinco observaciones, implica alta incertidumbre y sensibilidad a las particiones."
+            }
+        },
+        "seleccion_modelos_robusta": {
+            "version": "1.0",
+            "objetivo": "Evaluar la sensibilidad a distintos niveles de enmascaramiento y seleccionar el clasificador mediante validación anidada sin utilizar el conjunto externo de prueba para elegir el modelo.",
+            "corpus": {
+                "total": 61,
+                "distribucion": {
+                    "Civil": 31,
+                    "Informática": 25,
+                    "Ejecución": 5
+                }
+            },
+            "sensibilidad_enmascaramiento": {
+                "original_cnb_f1_macro": 0.653333,
+                "solo_titulos_cnb_f1_macro": 0.574224,
+                "agresivo_cnb_f1_macro": 0.465258,
+                "delta_solo_titulos_vs_original": -0.079109,
+                "delta_agresivo_vs_original": -0.188075
+            },
+            "seleccion_anidada": {
+                "outer_folds": 5,
+                "inner_folds": 3,
+                "f1_macro_media_outer": 0.556585,
+                "f1_macro_std_outer": 0.285004,
+                "f1_macro_oof": 0.594104,
+                "accuracy_oof": 0.639344,
+                "modelos_seleccionados": {
+                    "LinearSVC_balanced_C=0.5": 1,
+                    "ComplementNB_sinSMOTE_alpha=0.1": 1,
+                    "ComplementNB_sinSMOTE_alpha=0.5": 1,
+                    "Ridge_balanced_alpha=0.5": 1,
+                    "ComplementNB_SMOTE_alpha=0.5": 1
+                }
+            },
+            "reporte_oof": {
+                "Civil": {
+                    "precision": 0.6388888888888888,
+                    "recall": 0.7419354838709677,
+                    "f1-score": 0.6865671641791045,
+                    "support": 31.0
+                },
+                "Ejecución": {
+                    "precision": 0.6666666666666666,
+                    "recall": 0.4,
+                    "f1-score": 0.5,
+                    "support": 5.0
+                },
+                "Informática": {
+                    "precision": 0.6363636363636364,
+                    "recall": 0.56,
+                    "f1-score": 0.5957446808510638,
+                    "support": 25.0
+                },
+                "accuracy": 0.639344262295082,
+                "macro avg": {
+                    "precision": 0.6473063973063972,
+                    "recall": 0.5673118279569893,
+                    "f1-score": 0.5941039483433894,
+                    "support": 61.0
+                },
+                "weighted avg": {
+                    "precision": 0.6401308163603244,
+                    "recall": 0.639344262295082,
+                    "f1-score": 0.6340524444398169,
+                    "support": 61.0
+                }
+            },
+            "interpretacion": {
+                "nota": "La métrica principal para comparación es el F1-macro medio de los folds externos.",
+                "advertencia": "El corpus es reducido y la clase Ejecución contiene únicamente cinco observaciones, por lo que se espera variabilidad entre folds."
+            }
+        },
+        "interpretacion": "Las auditorías se conservan como trazabilidad metodológica del estudio. Permiten cuantificar cuánto del rendimiento exploratorio puede estar asociado a pistas léxicas directas del grado y comprobar si las mejoras se sostienen bajo protocolos de evaluación más estrictos."
+    },
+    "resultado_robusto_final": {
+        "estado": "resultado_robusto_principal",
+        "modelo": "Complement Naive Bayes",
+        "representacion": "TF-IDF de palabras y bigramas, máximo 400 características.",
+        "balanceo": "SMOTE aplicado exclusivamente sobre el conjunto de entrenamiento de cada fold.",
+        "control_fuga": "Enmascaramiento de las denominaciones explícitas del grado antes de la vectorización.",
+        "validacion": "StratifiedKFold de cinco pliegues con TF-IDF ajustado exclusivamente sobre los documentos de entrenamiento.",
+        "metrica_principal": "F1-macro medio entre folds",
+        "f1_macro_media": 0.574224,
+        "f1_macro_std": 0.201917,
+        "accuracy_media": 0.655128,
+        "f1_macro_oof_secundario": 0.604042,
+        "accuracy_oof_secundaria": 0.655738,
+        "metricas_oof_por_clase": {
+            "Civil": {
+                "precision": 0.6875,
+                "recall": 0.709677,
+                "f1_score": 0.698413,
+                "support": 31
+            },
+            "Ejecución": {
+                "precision": 0.375,
+                "recall": 0.6,
+                "f1_score": 0.461538,
+                "support": 5
+            },
+            "Informática": {
+                "precision": 0.714286,
+                "recall": 0.6,
+                "f1_score": 0.652174,
+                "support": 25
+            }
+        },
+        "numero_folds": 5,
+        "resultado_completo": {
+            "version": "1.0",
+            "fecha_generacion_utc": "2026-09-12T06:02:10.136041+00:00",
+            "estado": "modelo_robusto_congelado",
+            "objetivo": "Estimar la capacidad predictiva conservadora de los perfiles de egreso evitando utilizar denominaciones explícitas de los grados como pistas directas de clasificación.",
+            "corpus": {
+                "total_perfiles": 61,
+                "distribucion": {
+                    "Civil": 31,
+                    "Informática": 25,
+                    "Ejecución": 5
+                },
+                "archivo": "perfiles_egreso_etiquetado_v2.csv"
+            },
+            "control_fuga_lexica": {
+                "metodo": "Enmascaramiento de denominaciones explícitas del grado.",
+                "documentos_modificados": 35,
+                "denominaciones_enmascaradas": 78,
+                "nota": "No se eliminan de forma general términos aislados como civil, ejecución o informática."
+            },
+            "representacion": {
+                "metodo": "TF-IDF",
+                "max_features": 400,
+                "ngram_range": [
+                    1,
+                    2
+                ],
+                "min_df": 2,
+                "max_df": 0.9,
+                "sublinear_tf": true,
+                "ajuste": "El vectorizador se ajusta exclusivamente con el fold de entrenamiento."
+            },
+            "modelo": {
+                "clasificador": "Complement Naive Bayes",
+                "alpha": 1.0,
+                "balanceo": "SMOTE",
+                "smote_k_maximo": 2,
+                "semilla": 42
+            },
+            "validacion": {
+                "metodo": "StratifiedKFold 5-fold",
+                "n_splits": 5,
+                "shuffle": true,
+                "random_state": 42,
+                "metrica_principal": "Promedio de F1-macro de los cinco folds."
+            },
+            "resultados_principales": {
+                "f1_macro_media_folds": 0.574224,
+                "f1_macro_std_folds": 0.201917,
+                "accuracy_media_folds": 0.655128,
+                "f1_macro_oof": 0.604042,
+                "accuracy_oof": 0.655738
+            },
+            "metricas_oof_por_clase": {
+                "Civil": {
+                    "precision": 0.6875,
+                    "recall": 0.709677,
+                    "f1_score": 0.698413,
+                    "support": 31
+                },
+                "Ejecución": {
+                    "precision": 0.375,
+                    "recall": 0.6,
+                    "f1_score": 0.461538,
+                    "support": 5
+                },
+                "Informática": {
+                    "precision": 0.714286,
+                    "recall": 0.6,
+                    "f1_score": 0.652174,
+                    "support": 25
+                }
+            },
+            "interpretacion": {
+                "resultado_principal": "Este resultado constituye la estimación conservadora principal del rendimiento predictivo.",
+                "relacion_con_gwo": "No reemplaza los resultados exploratorios GWO. Los resultados GWO se mantienen como evidencia del potencial discriminativo y de reducción de características, pero se reportan separadamente.",
+                "limitacion": "La clase Ejecución contiene únicamente cinco perfiles, por lo que las métricas presentan alta sensibilidad al particionado."
+            },
+            "artefactos": {
+                "folds": "metricas_folds_modelo_final.csv",
+                "predicciones_oof": "predicciones_oof_modelo_final.csv",
+                "metricas_por_clase": "metricas_por_clase_modelo_final.csv",
+                "matriz_confusion_csv": "matriz_confusion_modelo_final.csv",
+                "auditoria_enmascaramiento": "auditoria_enmascaramiento_modelo_final.csv",
+                "grafico_folds": "f1_por_fold_modelo_final.png",
+                "grafico_matriz": "matriz_confusion_modelo_final.png"
+            }
+        },
+        "interpretacion": "Este resultado constituye la estimación conservadora principal de capacidad predictiva del estudio después de controlar las denominaciones explícitas asociadas directamente con la etiqueta.",
+        "limitacion_principal": "La clase Ejecución contiene únicamente cinco perfiles, por lo que las métricas presentan una sensibilidad elevada al particionado."
+    },
+    "conclusion_integrada": {
+        "hallazgo_central": "Los perfiles de egreso presentan estructura semántica asociada al tipo de grado, aunque existe un solapamiento considerable entre las clases analizadas.",
+        "gwo": "La selección mediante GWO redujo el espacio de 400 a 249 características y reprodujo un F1-macro exploratorio de 0.8412 en validación de cinco pliegues. Este resultado demuestra potencial discriminativo, pero no se interpreta como estimación final insesgada de generalización.",
+        "diagnostico_10fold": "La comprobación histórica de diez pliegues reproduce un F1-macro de 0.7316. Sin embargo, debido a que Ejecución posee únicamente cinco observaciones, solo cinco de los diez folds contienen las tres clases. Al fijar explícitamente las tres clases en el cálculo por fold, el promedio diagnóstico disminuye a 0.6337. Por ello el análisis 10-fold se conserva únicamente como evidencia de sensibilidad.",
+        "auditoria": "La auditoría léxica identificó características seleccionadas por GWO directamente relacionadas con la denominación de los grados. Esto demuestra que parte de la capacidad discriminativa exploratoria depende de pistas léxicas directas.",
+        "resultado_robusto": "Al controlar las denominaciones explícitas del grado y ajustar la representación exclusivamente sobre los datos de entrenamiento, el modelo Complement Naive Bayes obtuvo un F1-macro medio de 0.5742. Este valor se adopta como estimación conservadora principal de generalización.",
+        "limitacion_principal": "La principal limitación estadística es el reducido número de perfiles de Ingeniería de Ejecución, con cinco observaciones, lo que genera alta variabilidad entre folds.",
+        "metricas_clave": {
+            "gwo_5fold_exploratorio": 0.841216,
+            "gwo_5fold_std": 0.217914,
+            "gwo_10fold_historico": 0.731627,
+            "gwo_10fold_3clases_diagnostico": 0.633651,
+            "gwo_10fold_folds_con_3_clases": 5,
+            "proxies_directos_gwo": 16,
+            "modelo_robusto_f1_macro": 0.574224,
+            "modelo_robusto_f1_std": 0.201917,
+            "modelo_robusto_accuracy": 0.655128
+        }
+    },
+    "advertencias_metodologicas": [
+        "El F1-macro GWO 5-fold de 0.8412 es reproducible dentro del protocolo de referencia, pero se considera exploratorio porque la selección GWO y la construcción del espacio TF-IDF preceden a la validación.",
+        "El diagnóstico GWO de 10-fold se conserva para reproducibilidad. Debido a que Ejecución contiene solo cinco perfiles, cinco de los diez folds no contienen las tres clases.",
+        "El valor histórico 10-fold de 0.7316 y el cálculo diagnóstico con tres clases fijas de 0.6337 no se utilizan como estimación final robusta de generalización.",
+        "La auditoría metodológica detectó proxies léxicos asociados directamente a la denominación de los grados.",
+        "El resultado robusto final debe reportarse de manera separada de los resultados exploratorios GWO.",
+        "La métrica F1-macro no debe denominarse 'precisión'.",
+        "No se reportan intervalos normales de confianza calculados directamente sobre los folds como evidencia principal, debido al número reducido de particiones y a la naturaleza acotada de la métrica."
+    ],
+    "artefactos_oficiales": {
+        "analisis_semantico": {
+            "pca_lda": "visualizaciones_exploratorias/proyeccion_pca_vs_lda_v2.png",
+            "similitud_centroides": "homogeneidad_semantica/similitud_centroides_v2.png",
+            "test_permutacion": "homogeneidad_semantica/test_permutacion_homogeneidad_v2.png",
+            "diferenciacion_lexica": "diferenciacion_lexica/terminos_distintivos_v2.png"
+        },
+        "gwo_exploratorio": {
+            "seleccion": "gwo/gwo_seleccion.png",
+            "mapa_features": "gwo/gwo_mapa_features.png",
+            "diagnostico_validacion": "gwo/cv10_gwo_resultados.png",
+            "f1_por_clase": "gwo/cv10_gwo_f1_clase.png",
+            "resultados_5fold": "gwo/cv5_gwo_resultados.csv",
+            "resultados_10fold": "gwo/cv10_gwo_resultados.csv"
+        },
+        "auditoria_metodologica": {
+            "comparacion_fuga_lexica": "auditoria_fuga_lexica/comparacion_f1_fuga_lexica.png",
+            "validacion_gwo_anidada": "validacion_robusta/comparacion_validacion_robusta.png",
+            "seleccion_modelo_robusta": "seleccion_modelo_robusta/comparacion_modelos_robustos.png"
+        },
+        "modelo_final_robusto": {
+            "f1_por_fold": "modelo_final_robusto/f1_por_fold_modelo_final.png",
+            "matriz_confusion": "modelo_final_robusto/matriz_confusion_modelo_final.png",
+            "metricas_folds": "modelo_final_robusto/metricas_folds_modelo_final.csv",
+            "metricas_por_clase": "modelo_final_robusto/metricas_por_clase_modelo_final.csv",
+            "predicciones_oof": "modelo_final_robusto/predicciones_oof_modelo_final.csv"
+        }
+    }
+}

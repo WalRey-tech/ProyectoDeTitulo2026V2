@@ -1,0 +1,91 @@
+﻿grado,termino,log_ratio,frecuencia_grado,frecuencia_resto,es_proxy_grado
+Civil,civil,1.943777964249793,42,14,True
+Civil,civil en,1.9196150261045324,24,8,True
+Civil,computación informática,1.2591014923761992,15,8,True
+Civil,de ejecución,-3.999949399539097,0,10,True
+Civil,de ingeniería,0.45510377858762596,23,22,True
+Civil,ejecución,-4.131193932817349,0,11,True
+Civil,ejecución en,-3.999949399539097,0,10,True
+Civil,el ingeniero,1.8329406146256448,9,3,True
+Civil,en informática,-1.7489878260058784,8,37,True
+Civil,en ingeniería,-1.9295600716476993,2,12,True
+Civil,informática,-0.3042398333104021,43,70,True
+Civil,informática de,0.5916768314630699,15,13,True
+Civil,informáticas,0.3923680232396633,7,7,True
+Civil,informático,1.1293336174058695,7,4,True
+Civil,informáticos,0.4725383719236467,18,17,True
+Civil,ingeniera,1.1293336174058695,7,4,True
+Civil,ingeniero,-0.46865556361152605,24,44,True
+Civil,ingeniero civil,0.9579651990938883,18,12,True
+Civil,ingeniero de,-2.5462314320961936,1,11,True
+Civil,ingeniero en,-4.7369149937053034,0,17,True
+Civil,ingeniería,0.41491059189075186,64,63,True
+Civil,ingeniería civil,5.677770242101912,19,0,True
+Civil,ingeniería de,0.5916768314630699,15,13,True
+Civil,ingeniería en,-2.643255886491058,2,20,True
+Civil,ingeniería informática,-2.040591384036443,2,13,True
+Civil,la ingeniero,-0.0732955491091484,10,14,True
+Civil,la ingeniería,0.5729402688814843,25,22,True
+Civil,proyectos informáticos,-0.13814669345911673,4,6,True
+Civil,sistemas informáticos,-0.4307542146762576,6,11,True
+Civil,soluciones informáticas,-0.5007167728438248,3,6,True
+Ejecución,civil,-3.382829418292086,0,56,True
+Ejecución,civil en,-2.585018268905353,0,32,True
+Ejecución,computación informática,0.8871524615626225,3,20,True
+Ejecución,de ejecución,3.967864260821882,6,4,True
+Ejecución,de ingeniería,-0.6836658568382641,2,43,True
+Ejecución,ejecución,4.174315138289308,7,4,True
+Ejecución,ejecución en,3.967864260821882,6,4,True
+Ejecución,el ingeniero,-1.2065066456516227,0,12,True
+Ejecución,en informática,-0.16468646995699582,3,42,True
+Ejecución,en ingeniería,0.2674245426807897,1,13,True
+Ejecución,informática,-0.19628680333374401,8,105,True
+Ejecución,informática de,-0.7590476686804016,1,27,True
+Ejecución,informáticas,0.2674245426807897,1,13,True
+Ejecución,informático,-1.086212411933911,0,11,True
+Ejecución,informáticos,0.2223366531522516,3,32,True
+Ejecución,ingeniera,-1.086212411933911,0,11,True
+Ejecución,ingeniero,0.4017256343923804,7,61,True
+Ejecución,ingeniero civil,-2.4933877934397843,0,30,True
+Ejecución,ingeniero de,3.437349544123102,6,6,True
+Ejecución,ingeniero en,-1.6919334728218647,0,17,True
+Ejecución,ingeniería,-1.0398567762421713,5,122,True
+Ejecución,ingeniería civil,-1.8480526747391466,0,19,True
+Ejecución,ingeniería de,0.0313571844472651,2,26,True
+Ejecución,ingeniería en,-0.4039527098578398,1,21,True
+Ejecución,ingeniería informática,0.164331049716686,1,14,True
+Ejecución,la ingeniero,1.611378943898151,5,19,True
+Ejecución,la ingeniería,-1.5168467662637732,1,46,True
+Ejecución,proyectos informáticos,-0.9549678786556584,0,10,True
+Ejecución,sistemas informáticos,1.386723471053134,3,14,True
+Ejecución,soluciones informáticas,0.9348492035939187,1,8,True
+Informática,civil,-1.5762238658736132,14,42,True
+Informática,civil en,-1.5520609277283521,8,24,True
+Informática,computación informática,-1.7748356718551357,5,18,True
+Informática,de ejecución,-0.5553286415622635,4,6,True
+Informática,de ingeniería,-0.3396872622168954,20,25,True
+Informática,ejecución,-0.7617795190296898,4,7,True
+Informática,ejecución en,-0.5553286415622635,4,6,True
+Informática,el ingeniero,-1.4653865162494648,3,9,True
+Informática,en informática,1.5601485758576727,34,11,True
+Informática,en ingeniería,1.6913931091359256,11,3,True
+Informática,informática,0.254469832615385,62,51,True
+Informática,informática de,-0.4253518544472124,12,16,True
+Informática,informáticas,-0.4118370479727308,6,8,True
+Informática,informático,-0.7617795190296898,4,7,True
+Informática,informáticos,-0.5930976844380093,14,21,True
+Informática,ingeniera,-0.7617795190296898,4,7,True
+Informática,ingeniero,0.22672484213248106,37,31,True
+Informática,ingeniero civil,-0.5904111007177085,12,18,True
+Informática,ingeniero de,-0.4722729018347047,5,7,True
+Informática,ingeniero en,5.104469092081483,17,0,True
+Informática,ingeniería,-0.2733902780035863,58,69,True
+Informática,ingeniería civil,-5.310216143725732,0,19,True
+Informática,ingeniería de,-0.6305349857514371,11,17,True
+Informática,ingeniería en,2.453233371941161,19,3,True
+Informática,ingeniería informática,1.811687342853637,12,3,True
+Informática,la ingeniero,-0.7310827218067731,9,15,True
+Informática,la ingeniería,-0.3264696247245848,21,26,True
+Informática,proyectos informáticos,0.5057007918352964,6,4,True
+Informática,sistemas informáticos,-0.1852785970567295,8,9,True
+Informática,soluciones informáticas,0.2646926923315017,5,4,True

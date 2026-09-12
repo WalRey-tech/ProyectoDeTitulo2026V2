@@ -1,0 +1,65 @@
+{
+    "version": "1.0",
+    "objetivo": "Estimar generalización con proxies directos del grado enmascarados y selección GWO realizada únicamente dentro del entrenamiento externo.",
+    "corpus": {
+        "total": 61,
+        "distribucion": {
+            "Civil": 31,
+            "Informática": 25,
+            "Ejecución": 5
+        }
+    },
+    "configuracion": {
+        "outer_folds": 5,
+        "inner_folds_gwo": 3,
+        "gwo_epochs": 100,
+        "gwo_population": 30,
+        "seed": 42,
+        "clasificador": "Complement Naive Bayes",
+        "balanceo": "SMOTE dentro del entrenamiento",
+        "control_fuga": "Enmascaramiento de denominaciones directas del grado antes de TF-IDF."
+    },
+    "resultados": {
+        "Original_sin_GWO": {
+            "f1_macro_media": 0.653333,
+            "f1_macro_std": 0.260063,
+            "accuracy_media": 0.735897,
+            "f1_civil_media": 0.816667,
+            "f1_ejecucion_media": 0.5,
+            "f1_informatica_media": 0.643333
+        },
+        "Enmascarado_sin_GWO": {
+            "f1_macro_media": 0.482719,
+            "f1_macro_std": 0.183982,
+            "accuracy_media": 0.588462,
+            "f1_civil_media": 0.612601,
+            "f1_ejecucion_media": 0.2,
+            "f1_informatica_media": 0.635556
+        },
+        "Enmascarado_GWO_anidado": {
+            "f1_macro_media": 0.432461,
+            "f1_macro_std": 0.181359,
+            "accuracy_media": 0.541026,
+            "f1_civil_media": 0.544172,
+            "f1_ejecucion_media": 0.213333,
+            "f1_informatica_media": 0.539878
+        }
+    },
+    "impacto_enmascaramiento": {
+        "delta_f1": -0.170614
+    },
+    "efecto_gwo_robusto": {
+        "delta_vs_enmascarado_sin_gwo": -0.050258,
+        "features_seleccionadas_media": 298.8,
+        "features_seleccionadas_min": 274,
+        "features_seleccionadas_max": 317
+    },
+    "modelo_robusto_oof": {
+        "accuracy": 0.540984,
+        "f1_macro": 0.481929
+    },
+    "interpretacion": {
+        "nota": "El resultado Enmascarado_GWO_anidado es el candidato principal para una estimación más conservadora de generalización.",
+        "advertencia": "El tamaño reducido del corpus, especialmente la clase Ejecución con cinco observaciones, implica alta incertidumbre y sensibilidad a las particiones."
+    }
+}

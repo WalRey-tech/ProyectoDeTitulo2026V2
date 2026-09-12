@@ -1,0 +1,88 @@
+{
+    "version": "1.0",
+    "fecha_generacion_utc": "2026-09-12T06:02:10.136041+00:00",
+    "estado": "modelo_robusto_congelado",
+    "objetivo": "Estimar la capacidad predictiva conservadora de los perfiles de egreso evitando utilizar denominaciones explícitas de los grados como pistas directas de clasificación.",
+    "corpus": {
+        "total_perfiles": 61,
+        "distribucion": {
+            "Civil": 31,
+            "Informática": 25,
+            "Ejecución": 5
+        },
+        "archivo": "perfiles_egreso_etiquetado_v2.csv"
+    },
+    "control_fuga_lexica": {
+        "metodo": "Enmascaramiento de denominaciones explícitas del grado.",
+        "documentos_modificados": 35,
+        "denominaciones_enmascaradas": 78,
+        "nota": "No se eliminan de forma general términos aislados como civil, ejecución o informática."
+    },
+    "representacion": {
+        "metodo": "TF-IDF",
+        "max_features": 400,
+        "ngram_range": [
+            1,
+            2
+        ],
+        "min_df": 2,
+        "max_df": 0.9,
+        "sublinear_tf": true,
+        "ajuste": "El vectorizador se ajusta exclusivamente con el fold de entrenamiento."
+    },
+    "modelo": {
+        "clasificador": "Complement Naive Bayes",
+        "alpha": 1.0,
+        "balanceo": "SMOTE",
+        "smote_k_maximo": 2,
+        "semilla": 42
+    },
+    "validacion": {
+        "metodo": "StratifiedKFold 5-fold",
+        "n_splits": 5,
+        "shuffle": true,
+        "random_state": 42,
+        "metrica_principal": "Promedio de F1-macro de los cinco folds."
+    },
+    "resultados_principales": {
+        "f1_macro_media_folds": 0.574224,
+        "f1_macro_std_folds": 0.201917,
+        "accuracy_media_folds": 0.655128,
+        "f1_macro_oof": 0.604042,
+        "accuracy_oof": 0.655738
+    },
+    "metricas_oof_por_clase": {
+        "Civil": {
+            "precision": 0.6875,
+            "recall": 0.709677,
+            "f1_score": 0.698413,
+            "support": 31
+        },
+        "Ejecución": {
+            "precision": 0.375,
+            "recall": 0.6,
+            "f1_score": 0.461538,
+            "support": 5
+        },
+        "Informática": {
+            "precision": 0.714286,
+            "recall": 0.6,
+            "f1_score": 0.652174,
+            "support": 25
+        }
+    },
+    "interpretacion": {
+        "resultado_principal": "Este resultado constituye la estimación conservadora principal del rendimiento predictivo.",
+        "relacion_con_gwo": "No reemplaza los resultados exploratorios GWO. Los resultados GWO se mantienen como evidencia del potencial discriminativo y de reducción de características, pero se reportan separadamente.",
+        "limitacion": "La clase Ejecución contiene únicamente cinco perfiles, por lo que las métricas presentan alta sensibilidad al particionado."
+    },
+    "artefactos": {
+        "folds": "metricas_folds_modelo_final.csv",
+        "predicciones_oof": "predicciones_oof_modelo_final.csv",
+        "metricas_por_clase": "metricas_por_clase_modelo_final.csv",
+        "matriz_confusion_csv": "matriz_confusion_modelo_final.csv",
+        "auditoria_enmascaramiento": "auditoria_enmascaramiento_modelo_final.csv",
+        "grafico_folds": "f1_por_fold_modelo_final.png",
+        "grafico_matriz": "matriz_confusion_modelo_final.png"
+    }
+}

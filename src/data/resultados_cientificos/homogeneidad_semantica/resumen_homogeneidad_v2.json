@@ -1,0 +1,66 @@
+{
+    "corpus": {
+        "total": 61,
+        "distribucion": {
+            "Civil": 31,
+            "Informática": 25,
+            "Ejecución": 5
+        }
+    },
+    "representacion": {
+        "metodo": "TF-IDF",
+        "max_features": 400,
+        "features_generadas": 400,
+        "ngram_range": [
+            1,
+            2
+        ],
+        "min_df": 2,
+        "max_df": 0.9,
+        "sublinear_tf": true
+    },
+    "similitud_global": {
+        "intra_clase_media": 0.236999,
+        "inter_clase_media": 0.216484,
+        "diferencia_intra_inter": 0.020516,
+        "homogeneidad_intra_macro": 0.257994
+    },
+    "test_permutacion": {
+        "hipotesis_nula": "La asociación entre perfiles y grados no produce una diferencia intra/inter mayor a la esperada por azar.",
+        "hipotesis_alternativa": "La similitud intra-grado es mayor que la similitud inter-grado.",
+        "tipo": "unilateral",
+        "n_permutaciones": 5000,
+        "semilla": 42,
+        "permutaciones_extremas": 23,
+        "p_valor": 0.00479904,
+        "alpha": 0.05,
+        "significativo": true
+    },
+    "similitud_centroides": {
+        "Civil": {
+            "Civil": 1.0,
+            "Ejecución": 0.628249,
+            "Informática": 0.831562
+        },
+        "Ejecución": {
+            "Civil": 0.628249,
+            "Ejecución": 1.0,
+            "Informática": 0.605238
+        },
+        "Informática": {
+            "Civil": 0.831562,
+            "Ejecución": 0.605238,
+            "Informática": 1.0
+        }
+    },
+    "interpretacion": {
+        "resultado": "Los perfiles del mismo grado presentan una similitud promedio mayor que los perfiles de grados diferentes.",
+        "significancia": "La diferencia observada es estadísticamente significativa bajo el test de permutación.",
+        "advertencia": "Este es un análisis descriptivo y de asociación del corpus. No constituye una estimación de rendimiento predictivo."
+    },
+    "limitaciones": [
+        "La clase Ejecución contiene solo cinco perfiles, por lo que sus estimaciones presentan mayor incertidumbre.",
+        "El corpus utiliza el texto original de los perfiles de egreso. Algunos documentos pueden contener términos directamente asociados al nombre del programa o grado.",
+        "La similitud global intra-clase está influida por el número de pares de cada clase; por ello también se reporta homogeneidad por clase."
+    ]
+}

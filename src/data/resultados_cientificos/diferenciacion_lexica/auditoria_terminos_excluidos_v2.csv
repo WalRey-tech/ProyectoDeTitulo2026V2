@@ -1,0 +1,70 @@
+﻿grado,termino,log2_ratio_prevalencia,documentos_grado,total_documentos_grado,documentos_resto,total_documentos_resto,prevalencia_grado,prevalencia_resto,motivo_exclusion
+Civil,basicas ingenieria,1.5391588111080314,4,31,1,30,0.12903225806451613,0.03333333333333333,denominacion_grado
+Civil,carrera ingenieria,0.16064718785430146,7,31,6,30,0.22580645161290322,0.2,denominacion_grado
+Civil,chile,-1.4243153128668546,2,31,6,30,0.06451612903225806,0.2,contexto_institucional_geografico
+Civil,ciencias ingenieria,1.670403344386284,11,31,3,30,0.3548387096774194,0.1,denominacion_grado
+Civil,civil,3.3046935574710083,25,31,2,30,0.8064516129032258,0.06666666666666667,denominacion_grado
+Civil,civil computacion,4.202123823830461,9,31,0,30,0.2903225806451613,0.0,denominacion_grado
+Civil,civil informatica,3.1241213118291875,13,31,1,30,0.41935483870967744,0.03333333333333333,denominacion_grado
+Civil,civil informatico,2.2761244052742375,7,31,1,30,0.22580645161290322,0.03333333333333333,denominacion_grado
+Civil,computacion informatica,0.19520440989066998,6,31,5,30,0.1935483870967742,0.16666666666666666,denominacion_grado
+Civil,informatica,-0.2818710478466493,22,31,26,30,0.7096774193548387,0.8666666666666667,denominacion_grado
+Civil,informatica universidad,0.3902954251935488,11,31,8,30,0.3548387096774194,0.26666666666666666,denominacion_grado
+Civil,informaticas,-0.25225456708055116,6,31,7,30,0.1935483870967742,0.23333333333333334,denominacion_grado
+Civil,informatico,0.6911619045530814,7,31,4,30,0.22580645161290322,0.13333333333333333,denominacion_grado
+Civil,informatico universidad,0.6062730069665684,5,31,3,30,0.16129032258064516,0.1,denominacion_grado
+Civil,informaticos,0.05728980335097884,14,31,13,30,0.45161290322580644,0.43333333333333335,denominacion_grado
+Civil,ingeniera,1.0916998341368103,5,31,2,30,0.16129032258064516,0.06666666666666667,denominacion_grado
+Civil,ingeniera civil,1.5391588111080314,4,31,1,30,0.12903225806451613,0.03333333333333333,denominacion_grado
+Civil,ingenieria,0.2003568976562727,25,31,21,30,0.8064516129032258,0.7,denominacion_grado
+Civil,ingenieria civil,4.5980525001616,12,31,0,30,0.3870967741935484,0.0,denominacion_grado
+Civil,ingenieria computacion,0.4396231375571169,3,31,2,30,0.0967741935483871,0.06666666666666667,denominacion_grado
+Civil,ingenieria informatica,-2.096429762683093,3,31,14,30,0.0967741935483871,0.4666666666666667,denominacion_grado
+Civil,ingenieria software,0.5822275329999173,8,31,5,30,0.25806451612903225,0.16666666666666666,denominacion_grado
+Civil,ingeniero,0.10229494937600896,20,31,18,30,0.6451612903225806,0.6,denominacion_grado
+Civil,ingeniero civil,2.676662334857966,16,31,2,30,0.5161290322580645,0.06666666666666667,denominacion_grado
+Civil,ingenieros,3.4136279290241727,5,31,0,30,0.16129032258064516,0.0,denominacion_grado
+Civil,proyectos informaticos,-0.5763184063119047,4,31,6,30,0.12903225806451613,0.2,denominacion_grado
+Civil,proyectos ingenieria,-0.5312305167833666,2,31,3,30,0.06451612903225806,0.1,denominacion_grado
+Civil,sistemas informaticos,-0.25225456708055116,6,31,7,30,0.1935483870967742,0.23333333333333334,denominacion_grado
+Civil,soluciones informaticas,-0.9388884856966128,3,31,6,30,0.0967741935483871,0.2,denominacion_grado
+Civil,universidad,0.026346096142710624,20,31,19,30,0.6451612903225806,0.6333333333333333,contexto_institucional_geografico
+Civil,universidad catolica,-0.697880386192818,3,31,5,30,0.0967741935483871,0.16666666666666666,contexto_institucional_geografico
+Ejecución,computacion informatica,1.3219280948873626,2,5,9,56,0.4,0.16071428571428573,denominacion_grado
+Ejecución,ejecucion,4.095924419998536,4,5,2,56,0.8,0.03571428571428571,denominacion_grado
+Ejecución,informatica,-0.057880916080499875,4,5,44,56,0.8,0.7857142857142857,denominacion_grado
+Ejecución,informaticos,-0.10256973364054771,2,5,25,56,0.4,0.44642857142857145,denominacion_grado
+Ejecución,ingenieria,-0.9058778226354497,2,5,44,56,0.4,0.7857142857142857,denominacion_grado
+Ejecución,ingeniero,0.30932805810772873,4,5,34,56,0.8,0.6071428571428571,denominacion_grado
+Ejecución,ingeniero ejecucion,4.832890014164741,4,5,1,56,0.8,0.017857142857142856,denominacion_grado
+Ejecución,instituto,2.1104239896936505,2,5,5,56,0.4,0.08928571428571429,contexto_institucional_geografico
+Ejecución,sistemas informaticos,1.0462936522739352,2,5,11,56,0.4,0.19642857142857142,denominacion_grado
+Ejecución,universidad,0.5988346753027137,5,5,34,56,1.0,0.6071428571428571,contexto_institucional_geografico
+Ejecución,universidad catolica,1.8694158901898559,2,5,6,56,0.4,0.10714285714285714,contexto_institucional_geografico
+Informática,carrera ingenieria,0.3025627700204311,6,25,7,36,0.24,0.19444444444444445,denominacion_grado
+Informática,chile,1.1610903440675509,5,25,3,36,0.2,0.08333333333333333,contexto_institucional_geografico
+Informática,ciencias ingenieria,-1.8129144473995045,2,25,12,36,0.08,0.3333333333333333,denominacion_grado
+Informática,civil,-2.8414835995962755,2,25,25,36,0.08,0.6944444444444444,denominacion_grado
+Informática,computacion informatica,-0.7710942717048779,3,25,8,36,0.12,0.2222222222222222,denominacion_grado
+Informática,ejecucion,-0.3389832590670925,2,25,4,36,0.08,0.1111111111111111,denominacion_grado
+Informática,informatica,0.27294628925433323,22,25,26,36,0.88,0.7222222222222222,denominacion_grado
+Informática,informatica universidad,-0.22795194667834862,7,25,12,36,0.28,0.3333333333333333,denominacion_grado
+Informática,informaticas,0.3025627700204311,6,25,7,36,0.24,0.19444444444444445,denominacion_grado
+Informática,informatico,-0.22795194667834862,4,25,7,36,0.16,0.19444444444444445,denominacion_grado
+Informática,informatico universidad,-0.14306304909183565,3,25,5,36,0.12,0.1388888888888889,denominacion_grado
+Informática,informaticos,-0.011818515813582946,11,25,16,36,0.44,0.4444444444444444,denominacion_grado
+Informática,ingeniera,-0.6284898762620772,2,25,5,36,0.08,0.1388888888888889,denominacion_grado
+Informática,ingenieria,0.013056152825446284,19,25,27,36,0.76,0.75,denominacion_grado
+Informática,ingenieria computacion,0.02358682031761578,2,25,3,36,0.08,0.08333333333333333,denominacion_grado
+Informática,ingenieria informatica,2.0939761482090136,13,25,4,36,0.52,0.1111111111111111,denominacion_grado
+Informática,ingenieria software,-0.5689888645134156,4,25,9,36,0.16,0.25,denominacion_grado
+Informática,ingeniero,-0.24771520149977844,14,25,24,36,0.56,0.6666666666666666,denominacion_grado
+Informática,ingeniero civil,-2.2134523769832333,2,25,16,36,0.08,0.4444444444444444,denominacion_grado
+Informática,ingeniero informatica,4.901331070266618,10,25,0,36,0.4,0.0,denominacion_grado
+Informática,instituto,1.6465171712377926,5,25,2,36,0.2,0.05555555555555555,contexto_institucional_geografico
+Informática,proyectos informaticos,1.0395283641866373,6,25,4,36,0.24,0.1111111111111111,denominacion_grado
+Informática,proyectos ingenieria,0.9944404746580993,3,25,2,36,0.12,0.05555555555555555,denominacion_grado
+Informática,sistemas informaticos,-0.11901757512518461,5,25,8,36,0.2,0.2222222222222222,denominacion_grado
+Informática,soluciones informaticas,0.7985202646828423,5,25,4,36,0.2,0.1111111111111111,denominacion_grado
+Informática,universidad,-0.30543069935606565,14,25,25,36,0.56,0.6944444444444444,contexto_institucional_geografico
+Informática,universidad catolica,-0.14306304909183565,3,25,5,36,0.12,0.1388888888888889,contexto_institucional_geografico
