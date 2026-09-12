@@ -1,7 +1,7 @@
 {
     "metadata": {
         "version": "5.0",
-        "fecha_generacion_utc": "2026-09-12T03:34:29.489197+00:00",
+        "fecha_generacion_utc": "2026-09-12T06:11:37.061855+00:00",
         "estado": "resultados_cientificos_consolidados",
         "proyecto": "Análisis de perfiles de egreso de carreras de informática en Chile"
     },
@@ -40,17 +40,17 @@
             },
             "pca": {
                 "tipo": "no supervisado",
-                "varianza_explicada_componente_1": 0.049457,
-                "varianza_explicada_componente_2": 0.045768,
-                "varianza_explicada_total_2d": 0.095225
+                "varianza_explicada_componente_1": 0.050308,
+                "varianza_explicada_componente_2": 0.045575,
+                "varianza_explicada_total_2d": 0.095882
             },
             "lda": {
                 "tipo": "supervisado",
                 "uso": "Visualización exploratoria de separabilidad entre clases.",
                 "advertencia": "LDA utiliza las etiquetas reales; no debe interpretarse como rendimiento predictivo.",
                 "varianza_discriminante": [
-                    0.900605,
-                    0.099395
+                    0.907142,
+                    0.092858
                 ]
             }
         },
@@ -76,10 +76,10 @@
                 "sublinear_tf": true
             },
             "similitud_global": {
-                "intra_clase_media": 0.234907,
-                "inter_clase_media": 0.214728,
-                "diferencia_intra_inter": 0.020179,
-                "homogeneidad_intra_macro": 0.253178
+                "intra_clase_media": 0.236999,
+                "inter_clase_media": 0.216484,
+                "diferencia_intra_inter": 0.020516,
+                "homogeneidad_intra_macro": 0.257994
             },
             "test_permutacion": {
                 "hipotesis_nula": "La asociación entre perfiles y grados no produce una diferencia intra/inter mayor a la esperada por azar.",
@@ -87,25 +87,25 @@
                 "tipo": "unilateral",
                 "n_permutaciones": 5000,
                 "semilla": 42,
-                "permutaciones_extremas": 26,
-                "p_valor": 0.00539892,
+                "permutaciones_extremas": 23,
+                "p_valor": 0.00479904,
                 "alpha": 0.05,
                 "significativo": true
             },
             "similitud_centroides": {
                 "Civil": {
                     "Civil": 1.0,
-                    "Ejecución": 0.626953,
-                    "Informática": 0.833266
+                    "Ejecución": 0.628249,
+                    "Informática": 0.831562
                 },
                 "Ejecución": {
-                    "Civil": 0.626953,
+                    "Civil": 0.628249,
                     "Ejecución": 1.0,
-                    "Informática": 0.604467
+                    "Informática": 0.605238
                 },
                 "Informática": {
-                    "Civil": 0.833266,
-                    "Ejecución": 0.604467,
+                    "Civil": 0.831562,
+                    "Ejecución": 0.605238,
                     "Informática": 1.0
                 }
             },
@@ -178,15 +178,6 @@
                     },
                     {
                         "ranking": 3,
-                        "termino": "semestres",
-                        "log2_ratio_prevalencia": 3.124121,
-                        "documentos_grado": 4,
-                        "total_documentos_grado": 31,
-                        "documentos_resto": 0,
-                        "total_documentos_resto": 30
-                    },
-                    {
-                        "ranking": 4,
                         "termino": "comunicarse",
                         "log2_ratio_prevalencia": 2.069674,
                         "documentos_grado": 6,
@@ -195,7 +186,7 @@
                         "total_documentos_resto": 30
                     },
                     {
-                        "ranking": 5,
+                        "ranking": 4,
                         "termino": "economico",
                         "log2_ratio_prevalencia": 2.069674,
                         "documentos_grado": 6,
@@ -204,7 +195,7 @@
                         "total_documentos_resto": 30
                     },
                     {
-                        "ranking": 6,
+                        "ranking": 5,
                         "termino": "estudios",
                         "log2_ratio_prevalencia": 2.069674,
                         "documentos_grado": 6,
@@ -213,16 +204,7 @@
                         "total_documentos_resto": 30
                     },
                     {
-                        "ranking": 7,
-                        "termino": "ingles",
-                        "log2_ratio_prevalencia": 2.069674,
-                        "documentos_grado": 6,
-                        "total_documentos_grado": 31,
-                        "documentos_resto": 1,
-                        "total_documentos_resto": 30
-                    },
-                    {
-                        "ranking": 8,
+                        "ranking": 6,
                         "termino": "identificar",
                         "log2_ratio_prevalencia": 1.828665,
                         "documentos_grado": 5,
@@ -231,16 +213,7 @@
                         "total_documentos_resto": 30
                     },
                     {
-                        "ranking": 9,
-                        "termino": "idioma ingles",
-                        "log2_ratio_prevalencia": 1.828665,
-                        "documentos_grado": 5,
-                        "total_documentos_grado": 31,
-                        "documentos_resto": 1,
-                        "total_documentos_resto": 30
-                    },
-                    {
-                        "ranking": 10,
+                        "ranking": 7,
                         "termino": "solida formacion",
                         "log2_ratio_prevalencia": 1.828665,
                         "documentos_grado": 5,
@@ -249,7 +222,7 @@
                         "total_documentos_resto": 30
                     },
                     {
-                        "ranking": 11,
+                        "ranking": 8,
                         "termino": "basicas",
                         "log2_ratio_prevalencia": 1.790698,
                         "documentos_grado": 12,
@@ -258,7 +231,7 @@
                         "total_documentos_resto": 30
                     },
                     {
-                        "ranking": 12,
+                        "ranking": 9,
                         "termino": "ciencias basicas",
                         "log2_ratio_prevalencia": 1.790698,
                         "documentos_grado": 12,
@@ -267,7 +240,7 @@
                         "total_documentos_resto": 30
                     },
                     {
-                        "ranking": 13,
+                        "ranking": 10,
                         "termino": "ciencias",
                         "log2_ratio_prevalencia": 1.680021,
                         "documentos_grado": 21,
@@ -276,7 +249,7 @@
                         "total_documentos_resto": 30
                     },
                     {
-                        "ranking": 14,
+                        "ranking": 11,
                         "termino": "medio",
                         "log2_ratio_prevalencia": 1.539159,
                         "documentos_grado": 7,
@@ -285,8 +258,35 @@
                         "total_documentos_resto": 30
                     },
                     {
-                        "ranking": 15,
+                        "ranking": 12,
                         "termino": "colaborativa",
+                        "log2_ratio_prevalencia": 1.539159,
+                        "documentos_grado": 4,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 13,
+                        "termino": "demuestra",
+                        "log2_ratio_prevalencia": 1.539159,
+                        "documentos_grado": 4,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 14,
+                        "termino": "emprender",
+                        "log2_ratio_prevalencia": 1.539159,
+                        "documentos_grado": 4,
+                        "total_documentos_grado": 31,
+                        "documentos_resto": 1,
+                        "total_documentos_resto": 30
+                    },
+                    {
+                        "ranking": 15,
+                        "termino": "junto",
                         "log2_ratio_prevalencia": 1.539159,
                         "documentos_grado": 4,
                         "total_documentos_grado": 31,
@@ -489,8 +489,8 @@
                     {
                         "ranking": 7,
                         "termino": "metodologias",
-                        "log2_ratio_prevalencia": 2.830942,
-                        "documentos_grado": 7,
+                        "log2_ratio_prevalencia": 3.011514,
+                        "documentos_grado": 8,
                         "total_documentos_grado": 25,
                         "documentos_resto": 1,
                         "total_documentos_resto": 36
@@ -588,9 +588,9 @@
         "reduccion_porcentual": 37.75,
         "resultado_archivo_gwo_referencia": {
             "f1_macro_baseline": 0.669518,
-            "f1_std_baseline": 0.247384,
+            "f1_std_baseline": 0.276583,
             "f1_macro_gwo": 0.841216,
-            "f1_std_gwo": 0.194908
+            "f1_std_gwo": 0.217914
         },
         "gwo_5fold_exploratorio": {
             "f1_macro": 0.841216,
@@ -843,7 +843,7 @@
         "numero_folds": 5,
         "resultado_completo": {
             "version": "1.0",
-            "fecha_generacion_utc": "2026-09-12T03:34:28.818140+00:00",
+            "fecha_generacion_utc": "2026-09-12T06:02:10.136041+00:00",
             "estado": "modelo_robusto_congelado",
             "objetivo": "Estimar la capacidad predictiva conservadora de los perfiles de egreso evitando utilizar denominaciones explícitas de los grados como pistas directas de clasificación.",
             "corpus": {

@@ -21,17 +21,17 @@
     },
     "pca": {
         "tipo": "no supervisado",
-        "varianza_explicada_componente_1": 0.049457,
-        "varianza_explicada_componente_2": 0.045768,
-        "varianza_explicada_total_2d": 0.095225
+        "varianza_explicada_componente_1": 0.050308,
+        "varianza_explicada_componente_2": 0.045575,
+        "varianza_explicada_total_2d": 0.095882
     },
     "lda": {
         "tipo": "supervisado",
         "uso": "Visualización exploratoria de separabilidad entre clases.",
         "advertencia": "LDA utiliza las etiquetas reales; no debe interpretarse como rendimiento predictivo.",
         "varianza_discriminante": [
-            0.900605,
-            0.099395
+            0.907142,
+            0.092858
         ]
     }
 }

@@ -20,10 +20,10 @@
         "sublinear_tf": true
     },
     "similitud_global": {
-        "intra_clase_media": 0.234907,
-        "inter_clase_media": 0.214728,
-        "diferencia_intra_inter": 0.020179,
-        "homogeneidad_intra_macro": 0.253178
+        "intra_clase_media": 0.236999,
+        "inter_clase_media": 0.216484,
+        "diferencia_intra_inter": 0.020516,
+        "homogeneidad_intra_macro": 0.257994
     },
     "test_permutacion": {
         "hipotesis_nula": "La asociación entre perfiles y grados no produce una diferencia intra/inter mayor a la esperada por azar.",
@@ -31,25 +31,25 @@
         "tipo": "unilateral",
         "n_permutaciones": 5000,
         "semilla": 42,
-        "permutaciones_extremas": 26,
-        "p_valor": 0.00539892,
+        "permutaciones_extremas": 23,
+        "p_valor": 0.00479904,
         "alpha": 0.05,
         "significativo": true
     },
     "similitud_centroides": {
         "Civil": {
             "Civil": 1.0,
-            "Ejecución": 0.626953,
-            "Informática": 0.833266
+            "Ejecución": 0.628249,
+            "Informática": 0.831562
         },
         "Ejecución": {
-            "Civil": 0.626953,
+            "Civil": 0.628249,
             "Ejecución": 1.0,
-            "Informática": 0.604467
+            "Informática": 0.605238
         },
         "Informática": {
-            "Civil": 0.833266,
-            "Ejecución": 0.604467,
+            "Civil": 0.831562,
+            "Ejecución": 0.605238,
             "Informática": 1.0
         }
     },

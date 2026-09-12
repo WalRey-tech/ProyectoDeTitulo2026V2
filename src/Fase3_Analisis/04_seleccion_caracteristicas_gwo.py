@@ -9,7 +9,7 @@ Codificación : binaria — cada lobo = vector {0,1}^400
                1 = feature incluida, 0 = excluida
 
 Fitness      : F1-macro (StratifiedKFold-3, SMOTE k=2 dentro del fold)
-               Penalización si selecciona 0 features o >95% del espacio
+               Fitness 0 si selecciona 0 features o el espacio completo
 
 Optimizador  : GWO.OriginalGWO (mealpy) — Mirjalili et al. (2014)
 
@@ -96,10 +96,11 @@ le     = LabelEncoder()
 y      = le.fit_transform(df['grado'].tolist())
 print(f"Dataset: {len(df)} docs — {dict(df['grado'].value_counts())}")
 
-# ── Vectorización TF-IDF (config idéntica al mejor modelo) ────────────────────
-# Nota: TF-IDF se ajusta sobre todo el corpus (preprocesamiento).
-# La selección con GWO y evaluación son independientes del ajuste del vectorizador.
-# Stopwords en español — lista estándar NLTK + términos de dominio genérico
+# Nota metodológica:
+# TF-IDF se ajusta sobre el corpus completo antes de la selección GWO.
+# Por ello, la evaluación posterior sobre las features seleccionadas
+# se interpreta como exploratoria y no como una estimación no sesgada
+# de generalización.
 STOPWORDS_ES = [
     'a','al','algo','algunas','algunos','ante','antes','como','con','contra',
     'cual','cuando','de','del','desde','donde','durante','e','el','ella',
@@ -234,7 +235,7 @@ except ImportError as e:
     sys.exit(1)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# EVALUACIÓN FINAL CON OUTER CV (5-fold) — estimación de generalización
+# EVALUACIÓN EXPLORATORIA CON CV 5-FOLD SOBRE FEATURES YA SELECCIONADAS
 # ══════════════════════════════════════════════════════════════════════════════
 print("\n" + "─" * 68)
 print("EVALUACION EXPLORATORIA — StratifiedKFold(5) sobre features GWO")
@@ -266,8 +267,11 @@ for tr, te in OUTER_CV.split(X_gwo, y):
     clf = ComplementNB(); clf.fit(X_r, y_r)
     f1s_gwo_outer.append(f1_score(y_te, clf.predict(X_te), average='macro', zero_division=0))
 
-f1_base_out = np.mean(f1s_base_outer); std_base_out = np.std(f1s_base_outer)
-f1_gwo_out  = np.mean(f1s_gwo_outer);  std_gwo_out  = np.std(f1s_gwo_outer)
+f1_base_out = np.mean(f1s_base_outer)
+std_base_out = np.std(f1s_base_outer, ddof=1)
+
+f1_gwo_out = np.mean(f1s_gwo_outer)
+std_gwo_out = np.std(f1s_gwo_outer, ddof=1)
 
 print(f"  Baseline (400 feat)  : F1={f1_base_out:.4f} ± {std_base_out:.4f}  "
       f"folds={[round(x,3) for x in f1s_base_outer]}")

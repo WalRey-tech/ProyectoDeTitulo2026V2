@@ -56,15 +56,6 @@
             },
             {
                 "ranking": 3,
-                "termino": "semestres",
-                "log2_ratio_prevalencia": 3.124121,
-                "documentos_grado": 4,
-                "total_documentos_grado": 31,
-                "documentos_resto": 0,
-                "total_documentos_resto": 30
-            },
-            {
-                "ranking": 4,
                 "termino": "comunicarse",
                 "log2_ratio_prevalencia": 2.069674,
                 "documentos_grado": 6,
@@ -73,7 +64,7 @@
                 "total_documentos_resto": 30
             },
             {
-                "ranking": 5,
+                "ranking": 4,
                 "termino": "economico",
                 "log2_ratio_prevalencia": 2.069674,
                 "documentos_grado": 6,
@@ -82,7 +73,7 @@
                 "total_documentos_resto": 30
             },
             {
-                "ranking": 6,
+                "ranking": 5,
                 "termino": "estudios",
                 "log2_ratio_prevalencia": 2.069674,
                 "documentos_grado": 6,
@@ -91,16 +82,7 @@
                 "total_documentos_resto": 30
             },
             {
-                "ranking": 7,
-                "termino": "ingles",
-                "log2_ratio_prevalencia": 2.069674,
-                "documentos_grado": 6,
-                "total_documentos_grado": 31,
-                "documentos_resto": 1,
-                "total_documentos_resto": 30
-            },
-            {
-                "ranking": 8,
+                "ranking": 6,
                 "termino": "identificar",
                 "log2_ratio_prevalencia": 1.828665,
                 "documentos_grado": 5,
@@ -109,16 +91,7 @@
                 "total_documentos_resto": 30
             },
             {
-                "ranking": 9,
-                "termino": "idioma ingles",
-                "log2_ratio_prevalencia": 1.828665,
-                "documentos_grado": 5,
-                "total_documentos_grado": 31,
-                "documentos_resto": 1,
-                "total_documentos_resto": 30
-            },
-            {
-                "ranking": 10,
+                "ranking": 7,
                 "termino": "solida formacion",
                 "log2_ratio_prevalencia": 1.828665,
                 "documentos_grado": 5,
@@ -127,7 +100,7 @@
                 "total_documentos_resto": 30
             },
             {
-                "ranking": 11,
+                "ranking": 8,
                 "termino": "basicas",
                 "log2_ratio_prevalencia": 1.790698,
                 "documentos_grado": 12,
@@ -136,7 +109,7 @@
                 "total_documentos_resto": 30
             },
             {
-                "ranking": 12,
+                "ranking": 9,
                 "termino": "ciencias basicas",
                 "log2_ratio_prevalencia": 1.790698,
                 "documentos_grado": 12,
@@ -145,7 +118,7 @@
                 "total_documentos_resto": 30
             },
             {
-                "ranking": 13,
+                "ranking": 10,
                 "termino": "ciencias",
                 "log2_ratio_prevalencia": 1.680021,
                 "documentos_grado": 21,
@@ -154,7 +127,7 @@
                 "total_documentos_resto": 30
             },
             {
-                "ranking": 14,
+                "ranking": 11,
                 "termino": "medio",
                 "log2_ratio_prevalencia": 1.539159,
                 "documentos_grado": 7,
@@ -163,8 +136,35 @@
                 "total_documentos_resto": 30
             },
             {
-                "ranking": 15,
+                "ranking": 12,
                 "termino": "colaborativa",
+                "log2_ratio_prevalencia": 1.539159,
+                "documentos_grado": 4,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 13,
+                "termino": "demuestra",
+                "log2_ratio_prevalencia": 1.539159,
+                "documentos_grado": 4,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 14,
+                "termino": "emprender",
+                "log2_ratio_prevalencia": 1.539159,
+                "documentos_grado": 4,
+                "total_documentos_grado": 31,
+                "documentos_resto": 1,
+                "total_documentos_resto": 30
+            },
+            {
+                "ranking": 15,
+                "termino": "junto",
                 "log2_ratio_prevalencia": 1.539159,
                 "documentos_grado": 4,
                 "total_documentos_grado": 31,
@@ -367,8 +367,8 @@
             {
                 "ranking": 7,
                 "termino": "metodologias",
-                "log2_ratio_prevalencia": 2.830942,
-                "documentos_grado": 7,
+                "log2_ratio_prevalencia": 3.011514,
+                "documentos_grado": 8,
                 "total_documentos_grado": 25,
                 "documentos_resto": 1,
                 "total_documentos_resto": 36
