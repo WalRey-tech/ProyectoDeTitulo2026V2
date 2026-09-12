@@ -1,0 +1,71 @@
+{
+    "version": "1.0",
+    "objetivo": "Evaluar la sensibilidad a distintos niveles de enmascaramiento y seleccionar el clasificador mediante validación anidada sin utilizar el conjunto externo de prueba para elegir el modelo.",
+    "corpus": {
+        "total": 61,
+        "distribucion": {
+            "Civil": 31,
+            "Informática": 25,
+            "Ejecución": 5
+        }
+    },
+    "sensibilidad_enmascaramiento": {
+        "original_cnb_f1_macro": 0.653333,
+        "solo_titulos_cnb_f1_macro": 0.574224,
+        "agresivo_cnb_f1_macro": 0.465258,
+        "delta_solo_titulos_vs_original": -0.079109,
+        "delta_agresivo_vs_original": -0.188075
+    },
+    "seleccion_anidada": {
+        "outer_folds": 5,
+        "inner_folds": 3,
+        "f1_macro_media_outer": 0.556585,
+        "f1_macro_std_outer": 0.285004,
+        "f1_macro_oof": 0.594104,
+        "accuracy_oof": 0.639344,
+        "modelos_seleccionados": {
+            "LinearSVC_balanced_C=0.5": 1,
+            "ComplementNB_sinSMOTE_alpha=0.1": 1,
+            "ComplementNB_sinSMOTE_alpha=0.5": 1,
+            "Ridge_balanced_alpha=0.5": 1,
+            "ComplementNB_SMOTE_alpha=0.5": 1
+        }
+    },
+    "reporte_oof": {
+        "Civil": {
+            "precision": 0.6388888888888888,
+            "recall": 0.7419354838709677,
+            "f1-score": 0.6865671641791045,
+            "support": 31.0
+        },
+        "Ejecución": {
+            "precision": 0.6666666666666666,
+            "recall": 0.4,
+            "f1-score": 0.5,
+            "support": 5.0
+        },
+        "Informática": {
+            "precision": 0.6363636363636364,
+            "recall": 0.56,
+            "f1-score": 0.5957446808510638,
+            "support": 25.0
+        },
+        "accuracy": 0.639344262295082,
+        "macro avg": {
+            "precision": 0.6473063973063972,
+            "recall": 0.5673118279569893,
+            "f1-score": 0.5941039483433894,
+            "support": 61.0
+        },
+        "weighted avg": {
+            "precision": 0.6401308163603244,
+            "recall": 0.639344262295082,
+            "f1-score": 0.6340524444398169,
+            "support": 61.0
+        }
+    },
+    "interpretacion": {
+        "nota": "La métrica principal para comparación es el F1-macro medio de los folds externos.",
+        "advertencia": "El corpus es reducido y la clase Ejecución contiene únicamente cinco observaciones, por lo que se espera variabilidad entre folds."
+    }
+}
