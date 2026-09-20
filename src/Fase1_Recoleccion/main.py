@@ -127,9 +127,10 @@ CORPUS_CIENTIFICO_V2 = (
 # =============================================================================
 # 3. PARÁMETROS
 # =============================================================================
-
+# Longitud mínima de referencia del perfil, en caracteres, después de la limpieza.
 LONGITUD_MINIMA_REFERENCIA = 150
-
+# Cantidad máxima de fuentes que procesa el modo demo por defecto.
+# Selecciona las primeras 5 entradas de SITES; puede cambiarse con --limite.
 LIMITE_DEMO_POR_DEFECTO = 5
 
 
@@ -1501,9 +1502,39 @@ def seleccionar_fuentes(
 
     return fuentes
 
+# =============================================================================
+# 15. SELECCIÓN INTERACTIVA DEL MODO
+# =============================================================================
+
+def seleccionar_modo_interactivo():
+    """
+    Solicita al usuario elegir entre modo demo
+    y modo completo cuando no se indica --modo.
+    """
+
+    print("\nSeleccione el modo de ejecución:")
+    print("1. Demo     - procesa 5 fuentes")
+    print("2. Completo - procesa todas las fuentes")
+
+    while True:
+
+        opcion = input(
+            "\nIngrese una opción [1/2]: "
+        ).strip()
+
+        if opcion == "1":
+            return "demo"
+
+        if opcion == "2":
+            return "completo"
+
+        print(
+            "Opción inválida. Ingrese 1 o 2."
+        )
+
 
 # =============================================================================
-# 15. ARGUMENTOS
+# 16. ARGUMENTOS
 # =============================================================================
 
 def construir_parser():
@@ -1530,7 +1561,7 @@ def construir_parser():
             "completo",
         ],
 
-        default="demo",
+        default=None,
 
         help=(
             "demo procesa pocas fuentes; "
@@ -1560,7 +1591,7 @@ def construir_parser():
 
 
 # =============================================================================
-# 16. FLUJO PRINCIPAL
+# 17. FLUJO PRINCIPAL
 # =============================================================================
 
 def main():
@@ -1571,6 +1602,11 @@ def main():
     parser = construir_parser()
 
     args = parser.parse_args()
+
+    #Si no se especifica el modo, se solicita al usuario.
+    #Preguntar al usuario si desea ejecutar en modo demo o completo.
+    if args.modo is None:
+        args.modo = seleccionar_modo_interactivo()
 
 
     try:
@@ -1957,7 +1993,7 @@ def main():
 
 
 # =============================================================================
-# 17. ENTRY POINT
+# 18. ENTRY POINT
 # =============================================================================
 
 if __name__ == "__main__":
