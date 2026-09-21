@@ -1,4 +1,5 @@
 import random
+from io import BytesIO
 import time
 
 import requests
@@ -12,6 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
 from extractors import extraer_por_css
+from utils import limpiar_texto
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
@@ -29,6 +31,34 @@ USER_AGENTS = [
 def obtener_headers():
     """Elige un User-Agent al azar para cada petición."""
     return {"User-Agent": random.choice(USER_AGENTS)}
+
+
+def extraer_html_estricto(html, site):
+    """Selecciona solo el bloque declarado y detecta cambios de estructura."""
+    from bs4 import BeautifulSoup
+    selector = site.get("selector", "").strip()
+    if not selector:
+        raise ValueError("La extracción estricta necesita un selector CSS.")
+    nodos = BeautifulSoup(html, "lxml").select(selector)
+    textos = [limpiar_texto(n.get_text(" ", strip=True)) for n in nodos]
+    filtro = limpiar_texto(site.get("selector_texto_contiene", "")).casefold()
+    if filtro:
+        textos = [t for t in textos if filtro in t.casefold()]
+    esperadas = site.get("selector_coincidencias")
+    if esperadas is not None and len(textos) != esperadas:
+        raise ValueError(f"El selector devolvió {len(textos)} bloques; se esperaban {esperadas}.")
+    return limpiar_texto(" ".join(textos))
+
+
+def validar_contenido(perfil, site):
+    """Rechaza contenido ajeno aunque supere la longitud mínima."""
+    normalizado = limpiar_texto(perfil).casefold()
+    for marcador in site.get("marcadores_requeridos", []):
+        if limpiar_texto(marcador).casefold() not in normalizado:
+            raise ValueError(f"No se encontró el contenido esperado: {marcador}.")
+    for marcador in site.get("marcadores_prohibidos", []):
+        if limpiar_texto(marcador).casefold() in normalizado:
+            raise ValueError(f"Se encontró contenido ajeno al perfil: {marcador}.")
 
 
 def extraer_con_requests(site):
@@ -58,7 +88,47 @@ def extraer_con_requests(site):
     response.raise_for_status()
 
     html = response.text
+    if site.get("selector_estricto", False):
+        return extraer_html_estricto(html, site)
     return extraer_por_css(html, site.get("selector", ""))
+
+
+def extraer_con_pdf(site):
+    """Lee las páginas configuradas de un PDF, numeradas desde 1."""
+    try:
+        import pdfplumber
+    except ImportError:
+        raise RuntimeError(
+            "Falta pdfplumber. Instala con: python -m pip install pdfplumber"
+        ) from None
+
+    paginas = site.get("pdf_paginas", [])
+    if not paginas or any(type(p) is not int or p < 1 for p in paginas):
+        raise ValueError("Define pdf_paginas como una lista de páginas desde 1.")
+
+    response = requests.get(
+        site["url"], headers=obtener_headers(), timeout=30,
+        verify=site.get("verificar_ssl", True),
+    )
+    response.raise_for_status()
+    if not response.content.lstrip().startswith(b"%PDF-"):
+        raise ValueError("La respuesta no contiene un PDF válido.")
+
+    textos = []
+    with pdfplumber.open(BytesIO(response.content)) as documento:
+        for numero in paginas:
+            if numero > len(documento.pages):
+                raise ValueError(f"El PDF no contiene la página {numero}.")
+            texto = limpiar_texto(documento.pages[numero - 1].extract_text() or "")
+            if not texto:
+                raise ValueError(f"La página {numero} no tiene texto extraíble.")
+            textos.append(texto)
+
+    perfil = limpiar_texto(" ".join(textos))
+    for marcador in site.get("pdf_marcadores", []):
+        if limpiar_texto(marcador).casefold() not in perfil.casefold():
+            raise ValueError(f"El PDF cambió: no se encontró '{marcador}'.")
+    return perfil
 
 
 def extraer_con_selenium(site):
@@ -122,6 +192,8 @@ def extraer_con_selenium(site):
                 elemento = WebDriverWait(driver, 15).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, selector))
                 )
+                if site.get("selector_estricto", False):
+                    return extraer_html_estricto(driver.page_source, site)
                 return elemento.text.strip()
 
             raise ValueError(
@@ -147,6 +219,7 @@ def scrapear_sitio(site):
     Reglas:
     - XPath y XPath múltiple se procesan únicamente con Selenium.
     - CSS puede usar Requests y Selenium como respaldo.
+    - PDF procesa solo las páginas configuradas, sin respaldo HTML.
     """
     perfil = ""
     metodo_usado = ""
@@ -155,7 +228,9 @@ def scrapear_sitio(site):
     tipo_extraccion = site.get("tipo_extraccion", "requests").lower().strip()
     tipo_selector = site.get("tipo_selector", "css").lower().strip()
 
-    if tipo_selector in {"xpath", "xpath_multiple"}:
+    if tipo_extraccion == "pdf":
+        orden_metodos = ["pdf"]
+    elif tipo_selector in {"xpath", "xpath_multiple"}:
         orden_metodos = ["selenium"]
     elif tipo_extraccion == "selenium":
         orden_metodos = ["selenium", "requests"]
@@ -167,13 +242,20 @@ def scrapear_sitio(site):
             print(f"   Intentando extracción mediante {metodo}...")
 
             if metodo == "requests":
-                perfil = extraer_con_requests(site)
+                candidato = extraer_con_requests(site)
+            elif metodo == "pdf":
+                candidato = extraer_con_pdf(site)
             else:
-                perfil = extraer_con_selenium(site)
+                candidato = extraer_con_selenium(site)
 
-            metodo_usado = metodo
+            minimo = int(site.get("longitud_minima", 1))
+            if candidato and len(candidato.strip()) < minimo:
+                raise ValueError(f"Contenido insuficiente: menos de {minimo} caracteres.")
 
-            if perfil and perfil.strip():
+            if candidato and candidato.strip():
+                validar_contenido(candidato, site)
+                perfil = candidato.strip()
+                metodo_usado = metodo
                 print(f"   Extracción exitosa mediante {metodo}.")
                 break
 
@@ -204,4 +286,12 @@ def scrapear_sitio(site):
         "tipo_selector": tipo_selector,
         "metodo_usado": metodo_usado,
         "error": "" if perfil else " | ".join(errores),
+        **{k: site[k] for k in (
+            "modalidad", "grupo_perfil", "id_programa", "requiere_revision",
+            "motivo_revision",
+        ) if k in site},
+        **({
+            "url_pagina_origen": site.get("url_pagina_origen", ""),
+            "pdf_paginas": ",".join(map(str, site.get("pdf_paginas", []))),
+        } if tipo_extraccion == "pdf" else {}),
     }

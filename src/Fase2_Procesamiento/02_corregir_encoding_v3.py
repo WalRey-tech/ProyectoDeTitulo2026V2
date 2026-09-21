@@ -2,33 +2,22 @@
 
 """
 FASE 2 — CORRECCIÓN CONTROLADA DE ENCODING
-==========================================
 
-Genera un corpus candidato V3 a partir del corpus científico V2.
+Sin argumentos muestra un menú; también admite --corpus actual o --corpus v2.
+Actual lee perfiles_egreso_etiquetado_actual.csv (referencia: 63, 32/26/5)
+y genera perfiles_egreso_etiquetado_actual_corregido.csv.
+V2 lee perfiles_egreso_etiquetado_v2.csv (referencia: 61, 31/25/5)
+y conserva la salida histórica perfiles_egreso_etiquetado_v3.csv.
+Corrige únicamente mojibake conocido en perfil_egreso y registra los cambios.
+Mantiene las filas, las clases y el archivo de entrada; verifica su SHA-256.
+Ambos modos leen el etiquetado original: la copia preparada es solo auditoría.
+La salida es un candidato y no cambia las rutas de Fase 3 automáticamente.
 
-OBJETIVOS
----------
-
-- Detectar y corregir mojibake conocido en perfil_egreso.
-- NO modificar el corpus V2.
-- Mantener exactamente los mismos 61 registros.
-- Mantener exactamente la misma distribución de clases.
-- Registrar cuáles filas fueron modificadas.
-- Verificar que no queden marcas conocidas de mojibake.
-
-IMPORTANTE
-----------
-
-El V3 generado es inicialmente un CANDIDATO.
-
-No reemplaza automáticamente al corpus científico V2.
-
-Antes de adoptar V3 como corpus oficial se debe volver a ejecutar
-Fase 3 y comparar los resultados.
 """
 
 from __future__ import annotations
 
+import argparse
 import csv
 import hashlib
 import json
@@ -61,13 +50,13 @@ PROCESSED_DIR = (
 )
 
 
-RUTA_V2 = (
+RUTA_ENTRADA = (
     PROCESSED_DIR
     / "perfiles_egreso_etiquetado_v2.csv"
 )
 
 
-RUTA_V3 = (
+RUTA_SALIDA = (
     PROCESSED_DIR
     / "perfiles_egreso_etiquetado_v3.csv"
 )
@@ -102,6 +91,63 @@ DISTRIBUCION_ESPERADA = {
 # =============================================================================
 # 3. UTILIDADES
 # =============================================================================
+
+CORPUS_SELECCIONADO = "v2"
+
+
+def configurar_corpus(corpus: str):
+    """Selecciona rutas y expectativas; nunca escribe sobre la entrada."""
+    global CORPUS_SELECCIONADO, RUTA_ENTRADA, RUTA_SALIDA, RUTA_AUDITORIA
+    global RUTA_RESUMEN, TOTAL_ESPERADO, DISTRIBUCION_ESPERADA
+    if corpus not in {"actual", "v2"}:
+        raise ValueError("Corpus no válido.")
+    CORPUS_SELECCIONADO = corpus
+    sufijo_salida = "actual_corregido" if corpus == "actual" else "v3"
+    RUTA_ENTRADA = PROCESSED_DIR / f"perfiles_egreso_etiquetado_{corpus}.csv"
+    RUTA_SALIDA = PROCESSED_DIR / f"perfiles_egreso_etiquetado_{sufijo_salida}.csv"
+    RUTA_AUDITORIA = PROCESSED_DIR / f"auditoria_correccion_encoding_{sufijo_salida}.csv"
+    RUTA_RESUMEN = PROCESSED_DIR / f"resumen_correccion_encoding_{sufijo_salida}.json"
+    TOTAL_ESPERADO = 61
+    DISTRIBUCION_ESPERADA = {"Civil": 31, "Informática": 25, "Ejecución": 5}
+    if corpus == "actual":
+        # El corpus vivo depende de los aceptados, no del número de fuentes.
+        ruta_resumen = PROCESSED_DIR / "resumen_etiquetado_actual.json"
+        if not ruta_resumen.exists():
+            raise FileNotFoundError(
+                "Falta resumen_etiquetado_actual.json. Ejecuta primero "
+                "etiquetador.py --modo completo con el raw actualizado."
+            )
+        resumen = json.loads(ruta_resumen.read_text(encoding="utf-8-sig"))
+        if resumen.get("modo") != "completo":
+            raise ValueError("El resumen debe corresponder al etiquetado completo.")
+        TOTAL_ESPERADO = resumen["registros_aceptados"]
+        DISTRIBUCION_ESPERADA = resumen["distribucion_grado"]
+        if (type(TOTAL_ESPERADO) is not int or TOTAL_ESPERADO <= 0
+                or not isinstance(DISTRIBUCION_ESPERADA, dict)
+                or not set(DISTRIBUCION_ESPERADA).issubset({"Civil", "Informática", "Ejecución"})
+                or any(type(v) is not int or v < 0 for v in DISTRIBUCION_ESPERADA.values())
+                or sum(DISTRIBUCION_ESPERADA.values()) != TOTAL_ESPERADO):
+            raise ValueError("El resumen de etiquetado contiene recuentos inválidos.")
+
+
+def solicitar_corpus() -> str:
+    """Elige explícitamente la entrada de esta ejecución."""
+    print("\nCORPUS PARA FASE 2")
+    print("1. Actual — recuentos del resumen de etiquetado completo")
+    print("2. V2 — corpus anterior (61 esperados)")
+    while True:
+        try:
+            opcion = input("Selecciona 1 o 2: ").strip().lower()
+        except EOFError:
+            raise SystemExit("Indica --corpus actual o --corpus v2.") from None
+        except KeyboardInterrupt:
+            raise SystemExit("\nOperación cancelada.") from None
+        if opcion in {"1", "actual"}:
+            return "actual"
+        if opcion in {"2", "v2"}:
+            return "v2"
+        print("Opción inválida. Ingresa 1 o 2.")
+
 
 def texto_seguro(
     valor,
@@ -307,21 +353,21 @@ def corregir_mojibake(
 # 6. CARGA DEL CORPUS
 # =============================================================================
 
-def cargar_v2() -> pd.DataFrame:
+def cargar_corpus() -> pd.DataFrame:
     """
-    Carga el corpus V2.
+    Carga el corpus de entrada.
     """
 
-    if not RUTA_V2.exists():
+    if not RUTA_ENTRADA.exists():
 
         raise FileNotFoundError(
-            "No existe el corpus científico V2:\n"
-            f"{RUTA_V2}"
+            "No existe el corpus de entrada:\n"
+            f"{RUTA_ENTRADA}"
         )
 
 
     df = pd.read_csv(
-        RUTA_V2,
+        RUTA_ENTRADA,
         sep=None,
         engine="python",
         encoding="utf-8-sig",
@@ -394,11 +440,11 @@ def obtener_distribucion(
     }
 
 
-def validar_estructura_v2(
+def validar_estructura(
     df: pd.DataFrame,
 ):
     """
-    Comprueba que el V2 sea el corpus esperado.
+    Comprueba que la entrada corresponda al corpus elegido.
     """
 
     if len(
@@ -406,7 +452,7 @@ def validar_estructura_v2(
     ) != TOTAL_ESPERADO:
 
         raise ValueError(
-            "El corpus V2 no contiene los "
+            "El corpus de entrada no contiene los "
             f"{TOTAL_ESPERADO} registros esperados. "
             f"Encontrados: {len(df)}"
         )
@@ -420,7 +466,7 @@ def validar_estructura_v2(
     if distribucion != DISTRIBUCION_ESPERADA:
 
         raise ValueError(
-            "La distribución de clases del V2 no coincide "
+            "La distribución de clases del corpus de entrada no coincide "
             "con la distribución científica esperada.\n"
             f"Observada: {distribucion}\n"
             f"Esperada : {DISTRIBUCION_ESPERADA}"
@@ -428,23 +474,23 @@ def validar_estructura_v2(
 
 
 # =============================================================================
-# 8. GENERACIÓN DE V3
+# 8. GENERACIÓN DE candidato corregido
 # =============================================================================
 
-def generar_v3(
-    df_v2: pd.DataFrame,
+def generar_candidato(
+    df_entrada: pd.DataFrame,
 ):
     """
-    Genera V3 corrigiendo únicamente perfiles con mojibake detectable.
+    Genera candidato corregido corrigiendo únicamente perfiles con mojibake detectable.
     """
 
-    df_v3 = df_v2.copy()
+    df_salida = df_entrada.copy()
 
 
     auditoria = []
 
 
-    for indice, fila in df_v2.iterrows():
+    for indice, fila in df_entrada.iterrows():
 
         original = texto_seguro(
             fila[
@@ -478,7 +524,7 @@ def generar_v3(
             continue
 
 
-        df_v3.at[
+        df_salida.at[
             indice,
             "perfil_egreso",
         ] = corregido
@@ -544,7 +590,7 @@ def generar_v3(
 
 
     return (
-        df_v3,
+        df_salida,
         pd.DataFrame(
             auditoria
         ),
@@ -556,8 +602,8 @@ def generar_v3(
 # =============================================================================
 
 def verificar_columnas_no_modificadas(
-    df_v2: pd.DataFrame,
-    df_v3: pd.DataFrame,
+    df_entrada: pd.DataFrame,
+    df_salida: pd.DataFrame,
 ):
     """
     Verifica que ninguna columna distinta de perfil_egreso haya cambiado.
@@ -567,7 +613,7 @@ def verificar_columnas_no_modificadas(
 
         columna
         for columna
-        in df_v2.columns
+        in df_entrada.columns
 
         if columna != "perfil_egreso"
 
@@ -578,7 +624,7 @@ def verificar_columnas_no_modificadas(
 
         serie_v2 = (
 
-            df_v2[
+            df_entrada[
                 columna
             ]
             .fillna(
@@ -593,7 +639,7 @@ def verificar_columnas_no_modificadas(
 
         serie_v3 = (
 
-            df_v3[
+            df_salida[
                 columna
             ]
             .fillna(
@@ -620,16 +666,16 @@ def verificar_columnas_no_modificadas(
 # 10. GUARDADO
 # =============================================================================
 
-def guardar_v3(
-    df_v3: pd.DataFrame,
+def guardar_candidato(
+    df_salida: pd.DataFrame,
 ):
     """
-    Guarda el corpus candidato V3.
+    Guarda el corpus candidato corregido.
     """
 
-    df_v3.to_csv(
+    df_salida.to_csv(
 
-        RUTA_V3,
+        RUTA_SALIDA,
 
         index=False,
 
@@ -694,10 +740,10 @@ def guardar_auditoria(
 
 def guardar_resumen(
     *,
-    hash_v2: str,
-    hash_v2_despues: str,
-    hash_v3: str,
-    df_v3: pd.DataFrame,
+    hash_entrada: str,
+    hash_entrada_despues: str,
+    hash_salida: str,
+    df_salida: pd.DataFrame,
     registros_corregidos: int,
     mojibake_restante: int,
 ):
@@ -715,14 +761,15 @@ def guardar_resumen(
                 timezone.utc
             ).isoformat(),
 
-        "entrada_v2":
+        "corpus_seleccionado": CORPUS_SELECCIONADO,
+        "entrada":
             str(
-                RUTA_V2
+                RUTA_ENTRADA
             ),
 
-        "salida_v3":
+        "salida":
             str(
-                RUTA_V3
+                RUTA_SALIDA
             ),
 
         "auditoria":
@@ -733,7 +780,7 @@ def guardar_resumen(
         "registros_total":
             int(
                 len(
-                    df_v3
+                    df_salida
                 )
             ),
 
@@ -749,33 +796,33 @@ def guardar_resumen(
 
         "distribucion_grado":
             obtener_distribucion(
-                df_v3
+                df_salida
             ),
 
-        "sha256_v2_antes":
-            hash_v2,
+        "sha256_entrada_antes":
+            hash_entrada,
 
-        "sha256_v2_despues":
-            hash_v2_despues,
+        "sha256_entrada_despues":
+            hash_entrada_despues,
 
-        "sha256_v3":
-            hash_v3,
+        "sha256_salida":
+            hash_salida,
 
-        "v2_intacto":
+        "entrada_intacta":
             (
-                hash_v2
-                == hash_v2_despues
+                hash_entrada
+                == hash_entrada_despues
             ),
 
-        "v3_es_candidato":
+        "salida_es_candidato":
             True,
 
-        "v3_reemplaza_v2_automaticamente":
+        "reemplaza_entrada_automaticamente":
             False,
 
         "nota":
             (
-                "V3 corrige únicamente problemas conocidos de encoding. "
+                "candidato corregido corrige únicamente problemas conocidos de encoding. "
                 "Debe validarse nuevamente con Fase 3 antes de ser adoptado "
                 "como corpus científico oficial."
             ),
@@ -802,8 +849,13 @@ def guardar_resumen(
 
 def main():
     """
-    Ejecuta la generación controlada del candidato V3.
+    Ejecuta la generación controlada del candidato corregido.
     """
+    parser = argparse.ArgumentParser(description="Corrección controlada de encoding.")
+    parser.add_argument("--corpus", choices=["actual", "v2"], default=None,
+                        help="Dataset a corregir; si se omite, muestra un menú.")
+    args = parser.parse_args()
+    configurar_corpus(args.corpus or solicitar_corpus())
 
     print(
         "=" * 78
@@ -819,26 +871,26 @@ def main():
 
 
     print(
-        f"Entrada V2 : {RUTA_V2}"
+        f"Entrada elegida : {RUTA_ENTRADA}"
     )
 
     print(
-        f"Salida V3  : {RUTA_V3}"
+        f"Salida corregida: {RUTA_SALIDA}"
     )
 
 
     # =========================================================================
-    # HASH V2 ANTES
+    # HASH corpus de entrada ANTES
     # =========================================================================
 
-    if not RUTA_V2.exists():
+    if not RUTA_ENTRADA.exists():
 
         print(
             "\nERROR:"
         )
 
         print(
-            "No existe el corpus V2."
+            "No existe el corpus de entrada."
         )
 
         raise SystemExit(
@@ -846,13 +898,13 @@ def main():
         )
 
 
-    hash_v2_antes = sha256_archivo(
-        RUTA_V2
+    hash_entrada_antes = sha256_archivo(
+        RUTA_ENTRADA
     )
 
 
     print(
-        f"\nSHA V2     : {hash_v2_antes}"
+        f"\nSHA corpus de entrada     : {hash_entrada_antes}"
     )
 
 
@@ -862,25 +914,25 @@ def main():
 
     try:
 
-        df_v2 = cargar_v2()
+        df_entrada = cargar_corpus()
 
 
-        validar_estructura_v2(
-            df_v2
+        validar_estructura(
+            df_entrada
         )
 
 
         (
-            df_v3,
+            df_salida,
             df_auditoria,
-        ) = generar_v3(
-            df_v2
+        ) = generar_candidato(
+            df_entrada
         )
 
 
         verificar_columnas_no_modificadas(
-            df_v2,
-            df_v3,
+            df_entrada,
+            df_salida,
         )
 
 
@@ -906,9 +958,9 @@ def main():
     # =========================================================================
 
     if len(
-        df_v3
+        df_salida
     ) != len(
-        df_v2
+        df_entrada
     ):
 
         raise RuntimeError(
@@ -916,28 +968,28 @@ def main():
         )
 
 
-    distribucion_v2 = obtener_distribucion(
-        df_v2
+    distribucion_entrada = obtener_distribucion(
+        df_entrada
     )
 
 
-    distribucion_v3 = obtener_distribucion(
-        df_v3
+    distribucion_salida = obtener_distribucion(
+        df_salida
     )
 
 
-    if distribucion_v2 != distribucion_v3:
+    if distribucion_entrada != distribucion_salida:
 
         raise RuntimeError(
             "ERROR: cambió la distribución de clases."
         )
 
 
-    if distribucion_v3 != DISTRIBUCION_ESPERADA:
+    if distribucion_salida != DISTRIBUCION_ESPERADA:
 
         raise RuntimeError(
-            "ERROR: la distribución de V3 no coincide "
-            "con 31/25/5."
+            "ERROR: la distribución de candidato corregido no coincide "
+            f"con la esperada: {DISTRIBUCION_ESPERADA}."
         )
 
 
@@ -947,7 +999,7 @@ def main():
 
     mojibake_restante = int(
 
-        df_v3[
+        df_salida[
             "perfil_egreso"
         ]
         .apply(
@@ -968,8 +1020,8 @@ def main():
     )
 
 
-    guardar_v3(
-        df_v3
+    guardar_candidato(
+        df_salida
     )
 
 
@@ -982,24 +1034,24 @@ def main():
     # HASHES FINALES
     # =========================================================================
 
-    hash_v2_despues = sha256_archivo(
-        RUTA_V2
+    hash_entrada_despues = sha256_archivo(
+        RUTA_ENTRADA
     )
 
 
-    hash_v3 = sha256_archivo(
-        RUTA_V3
+    hash_salida = sha256_archivo(
+        RUTA_SALIDA
     )
 
 
     # =========================================================================
-    # VERIFICACIÓN V2
+    # VERIFICACIÓN corpus de entrada
     # =========================================================================
 
-    if hash_v2_antes != hash_v2_despues:
+    if hash_entrada_antes != hash_entrada_despues:
 
         raise RuntimeError(
-            "ERROR: el corpus V2 fue modificado."
+            "ERROR: el corpus de entrada fue modificado."
         )
 
 
@@ -1009,13 +1061,13 @@ def main():
 
     guardar_resumen(
 
-        hash_v2=hash_v2_antes,
+        hash_entrada=hash_entrada_antes,
 
-        hash_v2_despues=hash_v2_despues,
+        hash_entrada_despues=hash_entrada_despues,
 
-        hash_v3=hash_v3,
+        hash_salida=hash_salida,
 
-        df_v3=df_v3,
+        df_salida=df_salida,
 
         registros_corregidos=len(
             df_auditoria
@@ -1045,7 +1097,7 @@ def main():
 
 
     print(
-        f"Registros totales     : {len(df_v3)}"
+        f"Registros totales     : {len(df_salida)}"
     )
 
     print(
@@ -1070,21 +1122,21 @@ def main():
 
         print(
             f"  {grado:<12}: "
-            f"{distribucion_v3.get(grado, 0)}"
+            f"{distribucion_salida.get(grado, 0)}"
         )
 
 
     print(
-        f"\nSHA V2 después : {hash_v2_despues}"
+        f"\nSHA corpus de entrada después : {hash_entrada_despues}"
     )
 
     print(
-        f"SHA V3         : {hash_v3}"
+        f"SHA candidato corregido         : {hash_salida}"
     )
 
 
     print(
-        "\nEstado V2      : ✓ INTACTO"
+        "\nEstado corpus de entrada      : ✓ INTACTO"
     )
 
 
@@ -1112,7 +1164,7 @@ def main():
         )
 
         print(
-            "V3 NO debe considerarse corregido todavía."
+            "candidato corregido NO debe considerarse corregido todavía."
         )
 
         raise SystemExit(
@@ -1125,7 +1177,7 @@ def main():
     )
 
     print(
-        f"  V3 candidato : {RUTA_V3}"
+        f"  candidato corregido candidato : {RUTA_SALIDA}"
     )
 
     print(
@@ -1142,15 +1194,15 @@ def main():
     )
 
     print(
-        "  V3 es todavía un corpus candidato."
+        "  candidato corregido es todavía un corpus candidato."
     )
 
     print(
-        "  V2 permanece intacto."
+        "  corpus de entrada permanece intacto."
     )
 
     print(
-        "  Antes de adoptar V3 debemos volver a ejecutar Fase 3 "
+        "  Antes de adoptar candidato corregido debemos volver a ejecutar Fase 3 "
         "y comparar los resultados."
     )
 
@@ -1161,7 +1213,7 @@ def main():
     )
 
     print(
-        "CORRECCIÓN V3 GENERADA CORRECTAMENTE"
+        "CORRECCIÓN GENERADA CORRECTAMENTE"
     )
 
     print(

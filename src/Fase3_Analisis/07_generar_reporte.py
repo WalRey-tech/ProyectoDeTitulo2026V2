@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -1018,325 +1019,101 @@ def construir_bloque_auditoria() -> dict:
 # =============================================================================
 
 def construir_bloque_modelo_final() -> dict:
-
-    resumen = leer_json(
-        MODELO_FINAL_RESUMEN
-    )
-
-    df_folds = leer_csv(
-        MODELO_FINAL_FOLDS
-    )
-
-    leer_csv(
-        MODELO_FINAL_CLASES
-    )
-
-
-    columnas_requeridas = {
-        "F1_macro",
-        "Accuracy",
-    }
-
-
-    if not columnas_requeridas.issubset(
-        df_folds.columns
-    ):
-
-        raise ValueError(
-            "metricas_folds_modelo_final.csv "
-            "no contiene las columnas requeridas."
-        )
-
-
-    resultados = resumen.get(
-        "resultados_principales",
-        {},
-    )
-
-
-    f1_media = resultados.get(
-        "f1_macro_media_folds"
-    )
-
-
-    if f1_media is None:
-
-        f1_media = float(
-            df_folds[
-                "F1_macro"
-            ].mean()
-        )
-
-
-    f1_std = resultados.get(
-        "f1_macro_std_folds"
-    )
-
-
-    if f1_std is None:
-
-        f1_std = float(
-            df_folds[
-                "F1_macro"
-            ].std()
-        )
-
-
-    accuracy_media = resultados.get(
-        "accuracy_media_folds"
-    )
-
-
-    if accuracy_media is None:
-
-        accuracy_media = float(
-            df_folds[
-                "Accuracy"
-            ].mean()
-        )
-
-
+    resumen = leer_json(MODELO_FINAL_RESUMEN)
+    if resumen.get('validacion', {}).get('protocolo_id') != 'gwo_nested_v2':
+        raise ValueError('El resultado pertenece al modelo anterior. Ejecuta primero el nuevo 06_modelo_final_robusto.py.')
+    df_folds = leer_csv(MODELO_FINAL_FOLDS)
+    baseline = leer_csv(MODELO_FINAL_DIR / 'metricas_folds_baseline.csv')
+    requeridas = {'Fold', 'F1_macro', 'Accuracy', 'run_id'}
+    for tabla in [df_folds, baseline]:
+        if not requeridas.issubset(tabla.columns):
+            raise ValueError('Las métricas no contienen todas las columnas del protocolo nuevo.')
+        if len(tabla) != 5 or sorted(tabla['Fold'].tolist()) != [1, 2, 3, 4, 5]:
+            raise ValueError('Se requieren exactamente cinco folds externos completos.')
+        if set(tabla['run_id'].astype(str)) != {resumen.get('run_id')}:
+            raise ValueError('CSV y JSON pertenecen a ejecuciones diferentes. Vuelve a ejecutar 06.')
+        if tabla[['F1_macro', 'Accuracy']].isna().any().any():
+            raise ValueError('Hay métricas incompletas.')
+    hash_actual = hashlib.sha256(CORPUS.read_bytes()).hexdigest()
+    if resumen.get('corpus', {}).get('sha256') != hash_actual:
+        raise ValueError('El corpus cambió después de la evaluación. Vuelve a ejecutar 06.')
+    resultados = resumen['resultados_principales']
+    f1_media = float(df_folds['F1_macro'].mean())
+    f1_std = float(df_folds['F1_macro'].std(ddof=1))
+    accuracy_media = float(df_folds['Accuracy'].mean())
+    valores = {'f1_macro_media_folds': f1_media, 'f1_macro_std_folds': f1_std,
+               'accuracy_media_folds': accuracy_media}
+    for clave, observado in valores.items():
+        if abs(float(resultados[clave]) - observado) > 1e-9:
+            raise ValueError(f'CSV y JSON discrepan en {clave}. Vuelve a ejecutar 06.')
+    f1_base = float(baseline['F1_macro'].mean())
+    if abs(f1_base - float(resumen['baseline_sin_gwo']['f1_macro_media_folds'])) > 1e-9:
+        raise ValueError('CSV y JSON discrepan en el baseline.')
     return {
-
-        "estado":
-            "resultado_robusto_principal",
-
-        "modelo":
-            "Complement Naive Bayes",
-
-        "representacion":
-            (
-                "TF-IDF de palabras y bigramas, "
-                "máximo 400 características."
-            ),
-
-        "balanceo":
-            (
-                "SMOTE aplicado exclusivamente "
-                "sobre el conjunto de entrenamiento "
-                "de cada fold."
-            ),
-
-        "control_fuga":
-            (
-                "Enmascaramiento de las "
-                "denominaciones explícitas del "
-                "grado antes de la vectorización."
-            ),
-
-        "validacion":
-            (
-                "StratifiedKFold de cinco pliegues "
-                "con TF-IDF ajustado exclusivamente "
-                "sobre los documentos de entrenamiento."
-            ),
-
-        "metrica_principal":
-            "F1-macro medio entre folds",
-
-        "f1_macro_media":
-            redondear(
-                f1_media
-            ),
-
-        "f1_macro_std":
-            redondear(
-                f1_std
-            ),
-
-        "accuracy_media":
-            redondear(
-                accuracy_media
-            ),
-
-        "f1_macro_oof_secundario":
-            resultados.get(
-                "f1_macro_oof"
-            ),
-
-        "accuracy_oof_secundaria":
-            resultados.get(
-                "accuracy_oof"
-            ),
-
-        "metricas_oof_por_clase":
-            resumen.get(
-                "metricas_oof_por_clase",
-                {},
-            ),
-
-        "numero_folds":
-            int(
-                len(
-                    df_folds
-                )
-            ),
-
-        "resultado_completo":
-            resumen,
-
-        "interpretacion":
-            (
-                "Este resultado constituye la "
-                "estimación conservadora principal "
-                "de capacidad predictiva del estudio "
-                "después de controlar las "
-                "denominaciones explícitas asociadas "
-                "directamente con la etiqueta."
-            ),
-
-        "limitacion_principal":
-            (
-                "La clase Ejecución contiene "
-                "únicamente cinco perfiles, por lo "
-                "que las métricas presentan una "
-                "sensibilidad elevada al particionado."
-            ),
+        'estado': resumen['estado'], 'modelo': 'TF-IDF + GWO + SMOTE + Complement Naive Bayes',
+        'representacion': 'TF-IDF de palabras y bigramas; selección GWO en cada entrenamiento externo.',
+        'balanceo': 'SMOTE exclusivamente en entrenamiento interno o externo, nunca en prueba.',
+        'control_fuga': 'Enmascaramiento de denominaciones y aislamiento de la prueba externa.',
+        'validacion': resumen['validacion']['metodo'],
+        'metrica_principal': 'F1-macro medio en los cinco tests externos',
+        'f1_macro_media': f1_media, 'f1_macro_std': f1_std, 'accuracy_media': accuracy_media,
+        'f1_macro_oof_secundario': resultados['f1_macro_oof'],
+        'accuracy_oof_secundaria': resultados['accuracy_oof'],
+        'metricas_oof_por_clase': resumen['metricas_oof_por_clase'],
+        'numero_folds': len(df_folds), 'presupuesto_referencia': resumen['presupuesto_referencia'],
+        'baseline_sin_gwo': resumen['baseline_sin_gwo'],
+        'seleccion_gwo': resumen['seleccion_gwo'], 'resultado_completo': resumen,
+        'interpretacion': 'Estimación externa del procedimiento con selección GWO interna. La comparación con baseline es descriptiva y no garantiza una mejora.',
+        'limitacion_principal': resumen['interpretacion']['limitacion'],
     }
+
 
 
 # =============================================================================
 # 13. CONCLUSIÓN INTEGRADA
 # =============================================================================
 
-def construir_conclusion_integrada(
-    gwo: dict,
-    modelo_final: dict,
-    auditoria: dict,
-) -> dict:
-
+def construir_conclusion_integrada(gwo: dict, modelo_final: dict, auditoria: dict) -> dict:
+    cv5 = gwo['gwo_5fold_exploratorio']
+    cv10 = gwo['gwo_10fold_diagnostico']
+    base = modelo_final['baseline_sin_gwo']
+    seleccion = modelo_final['seleccion_gwo']
+    cantidad_proxies = auditoria['proxies_directos_gwo']['cantidad']
     return {
-
-        "hallazgo_central":
-            (
-                "Los perfiles de egreso presentan "
-                "estructura semántica asociada al "
-                "tipo de grado, aunque existe un "
-                "solapamiento considerable entre "
-                "las clases analizadas."
-            ),
-
-        "gwo":
-            (
-                "La selección mediante GWO redujo "
-                "el espacio de 400 a 249 "
-                "características y reprodujo un "
-                "F1-macro exploratorio de 0.8412 "
-                "en validación de cinco pliegues. "
-                "Este resultado demuestra potencial "
-                "discriminativo, pero no se interpreta "
-                "como estimación final insesgada de "
-                "generalización."
-            ),
-
-        "diagnostico_10fold":
-            (
-                "La comprobación histórica de diez "
-                "pliegues reproduce un F1-macro de "
-                "0.7316. Sin embargo, debido a que "
-                "Ejecución posee únicamente cinco "
-                "observaciones, solo cinco de los "
-                "diez folds contienen las tres clases. "
-                "Al fijar explícitamente las tres "
-                "clases en el cálculo por fold, "
-                "el promedio diagnóstico disminuye "
-                "a 0.6337. Por ello el análisis "
-                "10-fold se conserva únicamente "
-                "como evidencia de sensibilidad."
-            ),
-
-        "auditoria":
-            (
-                "La auditoría léxica identificó "
-                "características seleccionadas por "
-                "GWO directamente relacionadas con "
-                "la denominación de los grados. "
-                "Esto demuestra que parte de la "
-                "capacidad discriminativa exploratoria "
-                "depende de pistas léxicas directas."
-            ),
-
-        "resultado_robusto":
-            (
-                "Al controlar las denominaciones "
-                "explícitas del grado y ajustar la "
-                "representación exclusivamente sobre "
-                "los datos de entrenamiento, el modelo "
-                "Complement Naive Bayes obtuvo un "
-                "F1-macro medio de 0.5742. Este valor "
-                "se adopta como estimación conservadora "
-                "principal de generalización."
-            ),
-
-        "limitacion_principal":
-            (
-                "La principal limitación estadística "
-                "es el reducido número de perfiles "
-                "de Ingeniería de Ejecución, con "
-                "cinco observaciones, lo que genera "
-                "alta variabilidad entre folds."
-            ),
-
-        "metricas_clave": {
-
-            "gwo_5fold_exploratorio":
-                gwo[
-                    "gwo_5fold_exploratorio"
-                ][
-                    "f1_macro"
-                ],
-
-            "gwo_5fold_std":
-                gwo[
-                    "gwo_5fold_exploratorio"
-                ][
-                    "f1_std"
-                ],
-
-            "gwo_10fold_historico":
-                gwo[
-                    "gwo_10fold_diagnostico"
-                ][
-                    "f1_referencia_historico"
-                ],
-
-            "gwo_10fold_3clases_diagnostico":
-                gwo[
-                    "gwo_10fold_diagnostico"
-                ][
-                    "f1_macro_3clases_fijas"
-                ],
-
-            "gwo_10fold_folds_con_3_clases":
-                gwo[
-                    "gwo_10fold_diagnostico"
-                ][
-                    "folds_con_3_clases"
-                ],
-
-            "proxies_directos_gwo":
-                auditoria[
-                    "proxies_directos_gwo"
-                ][
-                    "cantidad"
-                ],
-
-            "modelo_robusto_f1_macro":
-                modelo_final[
-                    "f1_macro_media"
-                ],
-
-            "modelo_robusto_f1_std":
-                modelo_final[
-                    "f1_macro_std"
-                ],
-
-            "modelo_robusto_accuracy":
-                modelo_final[
-                    "accuracy_media"
-                ],
+        'hallazgo_central': 'La similitud y la diferenciación deben interpretarse junto con los resultados semánticos del reporte; la clasificación evalúa separabilidad textual, no calidad educativa.',
+        'gwo': (f"La ejecución exploratoria registrada seleccionó {gwo['features_seleccionadas']} "
+                f"de {gwo['features_originales']} características y obtuvo "
+                f"F1-macro={cv5['f1_macro']:.4f}. La selección previa a los folds impide tratarlo como evaluación externa independiente."),
+        'diagnostico_10fold': (
+            f"F1 de referencia={cv10['f1_referencia_historico']:.4f}; "
+            f"con tres clases fijas={cv10['f1_macro_3clases_fijas']:.4f}. "
+            f"{cv10['folds_con_3_clases']}/{cv10['numero_folds']} folds contienen todas las clases. Uso diagnóstico."),
+        'auditoria': ('No se adjuntó una auditoría de proxies; no se presume su resultado.'
+                      if cantidad_proxies is None else
+                      f'La auditoría disponible registra {cantidad_proxies} características proxy.'),
+        'resultado_robusto': (
+            f"GWO dentro del entrenamiento externo obtuvo F1-macro medio={modelo_final['f1_macro_media']:.4f} "
+            f"(desviación={modelo_final['f1_macro_std']:.4f}). "
+            f"Subconjuntos por fold: {seleccion['features_por_fold']}."),
+        'comparacion_baseline': (
+            f"Sin GWO, en las mismas particiones, F1-macro={base['f1_macro_media_folds']:.4f}. "
+            f"Diferencia GWO menos baseline={base['delta_f1_gwo_menos_baseline']:+.4f}. "
+            'Esta diferencia descriptiva no demuestra significancia estadística ni justifica elegir y reevaluar un ganador con los mismos tests.'),
+        'limitacion_principal': modelo_final['limitacion_principal'],
+        'metricas_clave': {
+            'gwo_5fold_exploratorio': cv5['f1_macro'], 'gwo_5fold_std': cv5['f1_std'],
+            'gwo_10fold_historico': cv10['f1_referencia_historico'],
+            'gwo_10fold_3clases_diagnostico': cv10['f1_macro_3clases_fijas'],
+            'gwo_10fold_folds_con_3_clases': cv10['folds_con_3_clases'],
+            'proxies_directos_gwo': cantidad_proxies,
+            'modelo_robusto_f1_macro': modelo_final['f1_macro_media'],
+            'modelo_robusto_f1_std': modelo_final['f1_macro_std'],
+            'modelo_robusto_accuracy': modelo_final['accuracy_media'],
+            'baseline_f1_macro': base['f1_macro_media_folds'],
+            'delta_gwo_baseline': base['delta_f1_gwo_menos_baseline'],
         },
     }
+
 
 
 # =============================================================================
@@ -1474,403 +1251,56 @@ def construir_bloque_artefactos() -> dict:
 # =============================================================================
 
 def main() -> int:
-
-    print(
-        "=" * 76
-    )
-
-    print(
-        "GENERACIÓN DEL REPORTE CIENTÍFICO FINAL"
-    )
-
-    print(
-        "=" * 76
-    )
-
-
+    print('GENERACIÓN DEL REPORTE: GWO EXPLORATORIO Y GWO CON VALIDACIÓN EXTERNA')
     verificar_archivos_esenciales()
-
-
-    corpus = (
-        construir_bloque_corpus()
-    )
-
-
-    analisis_semantico = (
-        construir_bloque_semantico()
-    )
-
-
-    gwo = (
-        construir_bloque_gwo()
-    )
-
-
-    auditoria = (
-        construir_bloque_auditoria()
-    )
-
-
-    modelo_final = (
-        construir_bloque_modelo_final()
-    )
-
-
-    conclusion = (
-        construir_conclusion_integrada(
-            gwo,
-            modelo_final,
-            auditoria,
-        )
-    )
-
-
+    corpus = construir_bloque_corpus()
+    analisis_semantico = construir_bloque_semantico()
+    gwo = construir_bloque_gwo()
+    auditoria = construir_bloque_auditoria()
+    modelo_final = construir_bloque_modelo_final()
+    conclusion = construir_conclusion_integrada(gwo, modelo_final, auditoria)
+    artefactos = construir_bloque_artefactos()
+    artefactos['modelo_final_robusto'].update({
+        'baseline': 'modelo_final_robusto/metricas_folds_baseline.csv',
+        'comparacion': 'modelo_final_robusto/comparacion_gwo_baseline.csv',
+        'features_por_fold': 'modelo_final_robusto/features_gwo_por_fold.csv',
+        'auditoria_cv': 'modelo_final_robusto/auditoria_cv_gwo.json',
+    })
     reporte = {
-
-        "metadata": {
-
-            "version":
-                "5.0",
-
-            "fecha_generacion_utc":
-                datetime.now(
-                    timezone.utc
-                ).isoformat(),
-
-            "estado":
-                "resultados_cientificos_consolidados",
-
-            "proyecto":
-                (
-                    "Análisis de perfiles de egreso "
-                    "de carreras de informática en Chile"
-                ),
-        },
-
-        "corpus":
-            corpus,
-
-        "analisis_semantico":
-            analisis_semantico,
-
-        "gwo_exploratorio":
-            gwo,
-
-        "auditoria_metodologica":
-            auditoria,
-
-        "resultado_robusto_final":
-            modelo_final,
-
-        "conclusion_integrada":
-            conclusion,
-
-        "advertencias_metodologicas": [
-
-            (
-                "El F1-macro GWO 5-fold de 0.8412 "
-                "es reproducible dentro del protocolo "
-                "de referencia, pero se considera "
-                "exploratorio porque la selección "
-                "GWO y la construcción del espacio "
-                "TF-IDF preceden a la validación."
-            ),
-
-            (
-                "El diagnóstico GWO de 10-fold se "
-                "conserva para reproducibilidad. "
-                "Debido a que Ejecución contiene "
-                "solo cinco perfiles, cinco de los "
-                "diez folds no contienen las tres "
-                "clases."
-            ),
-
-            (
-                "El valor histórico 10-fold de "
-                "0.7316 y el cálculo diagnóstico "
-                "con tres clases fijas de 0.6337 "
-                "no se utilizan como estimación "
-                "final robusta de generalización."
-            ),
-
-            (
-                "La auditoría metodológica detectó "
-                "proxies léxicos asociados "
-                "directamente a la denominación "
-                "de los grados."
-            ),
-
-            (
-                "El resultado robusto final debe "
-                "reportarse de manera separada de "
-                "los resultados exploratorios GWO."
-            ),
-
-            (
-                "La métrica F1-macro no debe "
-                "denominarse 'precisión'."
-            ),
-
-            (
-                "No se reportan intervalos normales "
-                "de confianza calculados directamente "
-                "sobre los folds como evidencia "
-                "principal, debido al número reducido "
-                "de particiones y a la naturaleza "
-                "acotada de la métrica."
-            ),
+        'metadata': {'version': '6.0',
+            'fecha_generacion_utc': datetime.now(timezone.utc).isoformat(),
+            'estado': 'resultados_consolidados_gwo_anidado',
+            'proyecto': 'Análisis de perfiles de egreso de carreras de informática en Chile',
+            'run_id_modelo_final': modelo_final['resultado_completo']['run_id'],
+            'presupuesto_referencia': modelo_final['presupuesto_referencia']},
+        'corpus': corpus, 'analisis_semantico': analisis_semantico,
+        'gwo_exploratorio': gwo, 'auditoria_metodologica': auditoria,
+        'resultado_robusto_final': modelo_final, 'conclusion_integrada': conclusion,
+        'advertencias_metodologicas': [
+            'Los pasos 04/05 siguen siendo exploratorios. El paso 06 realiza una selección nueva en cada entrenamiento externo.',
+            'Los resultados se leen de archivos; no se reutiliza un F1 histórico como resultado de esta ejecución.',
+            'Los subconjuntos GWO pueden cambiar entre folds y no tienen que contener 249 términos.',
+            'El F1 interno es un criterio de búsqueda; el rendimiento se estima en los tests externos.',
+            'PCA y LDA se mantienen como visualizaciones independientes.',
+            'F1-macro no equivale a precisión ni al porcentaje de aciertos.',
+            'La media de F1 por fold puede diferir del F1 de las predicciones OOF reunidas.',
+            'La comparación con baseline es descriptiva: no garantiza mejora ni significancia.',
+            'Los resúmenes semánticos y exploratorios previos carecen de hash obligatorio; verifica que correspondan al mismo V2 antes de consolidarlos.',
+            'No se ajusta ni serializa aquí un modelo de despliegue entrenado sobre todo el corpus.',
         ],
-
-        "artefactos_oficiales":
-            construir_bloque_artefactos(),
+        'artefactos_oficiales': artefactos,
     }
-
-
-    RESULTADOS_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-
-    with SALIDA_FINAL.open(
-        "w",
-        encoding="utf-8",
-    ) as archivo:
-
-        json.dump(
-            reporte,
-            archivo,
-            indent=4,
-            ensure_ascii=False,
-        )
-
-
-    # =========================================================================
-    # SALIDA DE CONSOLA
-    # =========================================================================
-
-    print()
-
-    print(
-        f"Corpus: "
-        f"{corpus['total_perfiles']} perfiles"
-    )
-
-
-    print(
-        "Distribución: "
-        + ", ".join(
-            f"{clase}={cantidad}"
-            for clase, cantidad
-            in corpus[
-                "distribucion"
-            ].items()
-        )
-    )
-
-
-    print()
-
-    print(
-        "GWO exploratorio:"
-    )
-
-
-    print(
-        f"  Features: "
-        f"{gwo['features_originales']} "
-        f"-> "
-        f"{gwo['features_seleccionadas']}"
-    )
-
-
-    print(
-        f"  Reducción: "
-        f"{gwo['reduccion_porcentual']:.2f}%"
-    )
-
-
-    print(
-        f"  F1 5-fold exploratorio      : "
-        f"{gwo['gwo_5fold_exploratorio']['f1_macro']:.4f}"
-    )
-
-
-    print(
-        f"  Std 5-fold                  : "
-        f"{gwo['gwo_5fold_exploratorio']['f1_std']:.4f}"
-    )
-
-
-    print(
-        f"  Folds 5-fold con 3 clases   : "
-        f"{gwo['gwo_5fold_exploratorio']['folds_con_3_clases']}"
-        f"/"
-        f"{gwo['gwo_5fold_exploratorio']['numero_folds']}"
-    )
-
-
-    print()
-
-    print(
-        "Diagnóstico GWO 10-fold:"
-    )
-
-
-    print(
-        f"  F1 histórico                : "
-        f"{gwo['gwo_10fold_diagnostico']['f1_referencia_historico']:.4f}"
-    )
-
-
-    print(
-        f"  F1 con 3 clases fijas       : "
-        f"{gwo['gwo_10fold_diagnostico']['f1_macro_3clases_fijas']:.4f}"
-    )
-
-
-    print(
-        f"  Folds con las 3 clases      : "
-        f"{gwo['gwo_10fold_diagnostico']['folds_con_3_clases']}"
-        f"/"
-        f"{gwo['gwo_10fold_diagnostico']['numero_folds']}"
-    )
-
-
-    print(
-        f"  Folds sin alguna clase      : "
-        f"{gwo['gwo_10fold_diagnostico']['folds_sin_alguna_clase']}"
-        f"/"
-        f"{gwo['gwo_10fold_diagnostico']['numero_folds']}"
-    )
-
-
-    print()
-
-    print(
-        "Auditoría metodológica:"
-    )
-
-
-    proxies = (
-        auditoria[
-            "proxies_directos_gwo"
-        ][
-            "cantidad"
-        ]
-    )
-
-
-    porcentaje = (
-        auditoria[
-            "proxies_directos_gwo"
-        ][
-            "porcentaje"
-        ]
-    )
-
-
-    if (
-        proxies is not None
-        and porcentaje is not None
-    ):
-
-        print(
-            f"  Proxies directos GWO: "
-            f"{proxies} "
-            f"({porcentaje:.2f}%)"
-        )
-
-    else:
-
-        print(
-            "  Auditoría de proxies: "
-            "no disponible."
-        )
-
-
-    print()
-
-    print(
-        "Resultado robusto final:"
-    )
-
-
-    print(
-        f"  Modelo        : "
-        f"{modelo_final['modelo']}"
-    )
-
-
-    print(
-        f"  F1-macro medio: "
-        f"{modelo_final['f1_macro_media']:.4f}"
-    )
-
-
-    print(
-        f"  F1 std        : "
-        f"{modelo_final['f1_macro_std']:.4f}"
-    )
-
-
-    print(
-        f"  Accuracy media: "
-        f"{modelo_final['accuracy_media']:.4f}"
-    )
-
-
-    print()
-
-    print(
-        "Interpretación oficial:"
-    )
-
-
-    print(
-        "  0.8412 -> resultado GWO exploratorio reproducido."
-    )
-
-    print(
-        "  0.7316 -> diagnóstico histórico 10-fold reproducido."
-    )
-
-    print(
-        "  0.6337 -> sensibilidad 10-fold con tres clases fijas."
-    )
-
-    print(
-        "  0.5742 -> estimación robusta principal de generalización."
-    )
-
-
-    print()
-
-    print(
-        "Reporte generado:"
-    )
-
-    print(
-        SALIDA_FINAL
-    )
-
-
-    print()
-
-    print(
-        "=" * 76
-    )
-
-    print(
-        "REPORTE CONSOLIDADO GENERADO CORRECTAMENTE"
-    )
-
-    print(
-        "=" * 76
-    )
-
-
+    if not modelo_final['presupuesto_referencia']:
+        reporte['advertencias_metodologicas'].append(
+            'El presupuesto GWO es distinto de 100 iteraciones y 30 lobos; identifícalo al comparar resultados.')
+    RESULTADOS_DIR.mkdir(parents=True, exist_ok=True)
+    with SALIDA_FINAL.open('w', encoding='utf-8') as f:
+        json.dump(reporte, f, ensure_ascii=False, indent=4)
+    print(conclusion['resultado_robusto'])
+    print(conclusion['comparacion_baseline'])
+    print(f'Reporte generado: {SALIDA_FINAL}')
     return 0
+
 
 
 if __name__ == "__main__":

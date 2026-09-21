@@ -45,9 +45,21 @@ SITES = [
         "carrera": "Ingeniería Civil en Computación",
         "tipo_carrera": "Profesional",
         "url": "https://admisionuchile.cl/career/ingenieria-civil-en-computacion/",
-        "tipo_extraccion": "css",
+        "tipo_extraccion": "requests",
         "tipo_selector": "css",
-        "selector": "-"
+        "selector": ".elementor-element-329fe8e2",
+        "selector_estricto": True,
+        "selector_coincidencias": 1,
+        "longitud_minima": 150,
+        "marcadores_requeridos": [
+            "conciben, diseñan",
+            "Software",
+            "arquitectura de hardware"
+        ],
+        "marcadores_prohibidos": [
+            "Arancel",
+            "Matrícula"
+        ]
     },
     {
         "universidad": "Universidad de Atacama",
@@ -75,9 +87,12 @@ SITES = [
         "carrera": "Ingeniería Civil en Computación",
         "tipo_carrera": "Profesional",
         "url": "https://admision.utalca.cl/carreras/ingenieria-civil-en-computacion/",
-        "tipo_extraccion": "selenium",
-        "tipo_selector": "xpath_multiple",
-        "selector": "//*[contains(normalize-space(.), 'Perfil de egreso')]/following::p[position() <= 3]"
+        # Bloque del perfil completo, verificado en la página de admisión.
+        "tipo_extraccion": "requests",
+        "tipo_selector": "css",
+        "selector": ".elementor-element-9289d86",
+        "selector_estricto": True,
+        "longitud_minima": 150
     },
     {
         "universidad": "Universidad de Talca",
@@ -85,9 +100,21 @@ SITES = [
         "carrera": "Ingeniería en Informática Empresarial",
         "tipo_carrera": "Profesional",
         "url": "https://admision.utalca.cl/carreras/ingenieria-en-informatica-empresarial/",
-        "tipo_extraccion": "css",
+        "tipo_extraccion": "requests",
         "tipo_selector": "css",
-        "selector": ".elementor-widget-container p" 
+        "selector": ".elementor-element-9289d86",
+        "selector_estricto": True,
+        "selector_coincidencias": 1,
+        "longitud_minima": 150,
+        "marcadores_requeridos": [
+            "Informática Empresarial",
+            "gestión empresarial",
+            "toma de decisiones"
+        ],
+        "marcadores_prohibidos": [
+            "Arancel",
+            "Matrícula"
+        ]
     },
     {
         "universidad": "Universidad del Biobío",
@@ -274,7 +301,7 @@ SITES = [
         "selector": ""
     },
     {
-        "universidad": "Universidad de la Santisima Concepcion",
+        "universidad": "Universidad Católica de la Santísima Concepción",
         "tipo_institucion": "Universidad",
         "carrera": "Ingenieria Civil Informatica",
         "tipo_carrera": "Profesional",
@@ -284,14 +311,30 @@ SITES = [
         "selector": ""
     },
     {
-        "universidad": "Universidad de la Santisima Concepcion",
+        "universidad": "Universidad Católica de la Santísima Concepción",
         "tipo_institucion": "Universidad",
         "carrera": "Ingenieria de Ejecucion en Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://it.ucsc.cl/carreras/ingenieria-de-ejecucion-en-informatica/",
-        "tipo_extraccion": "css",
+        "tipo_extraccion": "requests",
         "tipo_selector": "css",
-        "selector": ""
+        "selector": ".graduate-profile > p",
+        "selector_texto_contiene": "El/la Ingeniero/a de Ejecución en Informática egresado/a",
+        "selector_estricto": True,
+        "selector_coincidencias": 1,
+        "longitud_minima": 150,
+        "marcadores_requeridos": [
+            "desarrollo de software",
+            "bases de datos"
+        ],
+        "marcadores_prohibidos": [
+            "Técnico(a) Universitario(a)",
+            "El/la Técnico(a)",
+            "Perfil de ingreso"
+        ],
+        "modalidad": "Presencial; diurna; 8 semestres",
+        "grupo_perfil": "ucsc_ejecucion_informatica",
+        "id_programa": "ucsc_ejecucion_presencial"
     },
     {
         "universidad": "Universidad Catolica de Temuco",
@@ -311,7 +354,13 @@ SITES = [
         "url": "https://ingenieria.udla.cl/carreras/ingenieria-en-informatica/",
         "tipo_extraccion": "selenium",
         "tipo_selector": "css",
-        "selector": "#perfil-egreso"
+        "selector": "#perfil-egreso",
+        "requiere_revision": True,
+        "motivo_revision": "El HTML mezcla denominaciones y contenido de periodismo; el PDF oficial enlazado devuelve 404. Pendiente obtener documento vigente.",
+        "marcadores_prohibidos": [
+            "periodísticos"
+        ],
+        "longitud_minima": 150
     },
     {
         "universidad": "Universidad Andres Bello",
@@ -550,21 +599,43 @@ SITES = [
         "tipo_institucion": "Universidad",
         "carrera": "Ingenieria Ejecucion en Computacion e Informatica",
         "tipo_carrera": "Profesional",
-        "url": "https://www.ucm.cl/prenovato/ingenieria-ejecucion-en-computacion-e-informatica/",
-        "tipo_extraccion": "css",
-        "tipo_selector": "css",
-        "selector": ""
+        # PDF oficial enlazado como "Perfil de Egreso" en la página de admisión.
+        "url": "https://files.griddo.ucm.cl/ingenieria-de-ejecucion-en-computacion-e-informatica.pdf",
+        "url_pagina_origen": "https://www.ucm.cl/prenovato/ingenieria-ejecucion-en-computacion-e-informatica/",
+        "tipo_extraccion": "pdf",
+        "tipo_selector": "pdf",
+        "selector": "",
+        # Página 1: perfil. Página 2: competencias. Página 3: malla (excluida).
+        "pdf_paginas": [1, 2],
+        "pdf_marcadores": ["Perfil de egreso", "Competencias Profesionales", "Competencias Genéricas"],
+        "longitud_minima": 150
     },
 
     {
-        "universidad": "Universidad Catolica de la Santisima Concepción",
+        "universidad": "Universidad Católica de la Santísima Concepción",
         "tipo_institucion": "Universidad",
         "carrera": "Ingenieria de Ejecucion en Informatica",
         "tipo_carrera": "Profesional",
         "url": "https://advance.ucsc.cl/carreras/ingenieria-de-ejecucion-en-informatica/",
-        "tipo_extraccion": "css",
+        "tipo_extraccion": "requests",
         "tipo_selector": "css",
-        "selector": ""
+        "selector": ".graduate-profile > p",
+        "selector_texto_contiene": "El/la Ingeniero/a de Ejecución en Informática egresado/a",
+        "selector_estricto": True,
+        "selector_coincidencias": 1,
+        "longitud_minima": 150,
+        "marcadores_requeridos": [
+            "desarrollo de software",
+            "bases de datos"
+        ],
+        "marcadores_prohibidos": [
+            "Técnico(a) Universitario(a)",
+            "El/la Técnico(a)",
+            "Perfil de ingreso"
+        ],
+        "modalidad": "Online; continuidad de estudios; 8 trimestres",
+        "grupo_perfil": "ucsc_ejecucion_informatica",
+        "id_programa": "ucsc_ejecucion_online"
     },
     {
         "universidad": "IP Chile",

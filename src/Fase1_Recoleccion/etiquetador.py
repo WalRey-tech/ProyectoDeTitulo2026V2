@@ -38,6 +38,9 @@ Esto mantiene la definición de clases utilizada en el corpus científico.
 MODOS
 -----
 
+Sin --modo se muestra un menú para elegir demo o completo.
+También se puede indicar --modo demo o --modo completo directamente.
+
 DEMO:
 
     entrada:
@@ -836,6 +839,30 @@ def guardar_resumen(
 # 11. ARGUMENTOS
 # =============================================================================
 
+def solicitar_modo() -> str:
+    """Pregunta qué dataset etiquetar cuando no se indica --modo."""
+    print("\nMODO DE ETIQUETADO")
+    print("1. Demo — perfiles_egreso_raw_demo.csv")
+    print("2. Completo — perfiles_egreso_raw_actual.csv")
+
+    while True:
+        try:
+            opcion = input("Selecciona una opción (1 o 2): ").strip().lower()
+        except EOFError:
+            raise SystemExit(
+                "No se pudo leer una opción. Ejecuta con --modo demo "
+                "o --modo completo."
+            ) from None
+        except KeyboardInterrupt:
+            raise SystemExit("\nEtiquetado cancelado.") from None
+
+        if opcion in {"1", "demo"}:
+            return "demo"
+        if opcion in {"2", "completo"}:
+            return "completo"
+        print("Opción inválida. Ingresa 1 para demo o 2 para completo.")
+
+
 def construir_parser():
     """
     Construye la interfaz de línea de comandos.
@@ -860,11 +887,11 @@ def construir_parser():
             "completo",
         ],
 
-        default="demo",
+        default=None,
 
         help=(
             "demo usa raw_demo; "
-            "completo usa raw_actual."
+            "completo usa raw_actual. Si se omite, se muestra un menú."
         ),
 
     )
@@ -885,6 +912,10 @@ def main():
     parser = construir_parser()
 
     args = parser.parse_args()
+
+    # Los argumentos explícitos permiten ejecutar sin interacción.
+    if args.modo is None:
+        args.modo = solicitar_modo()
 
 
     (

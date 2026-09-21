@@ -1,48 +1,17 @@
 # -*- coding: utf-8 -*-
 
 """
-FASE 2 — PREPARACIÓN Y AUDITORÍA DEL CORPUS CIENTÍFICO V2
-==========================================================
+FASE 2 — PREPARACIÓN Y AUDITORÍA DEL CORPUS SELECCIONADO
 
-OBJETIVO
---------
+Sin argumentos muestra un menú; también admite --corpus actual o --corpus v2.
+Actual lee perfiles_egreso_etiquetado_actual.csv (referencia: 63, 32/26/5).
+V2 lee perfiles_egreso_etiquetado_v2.csv (referencia: 61, 31/25/5).
+Los recuentos son expectativas de validación: no se agregan ni eliminan filas.
+Genera una copia de auditoría y un resumen propios del corpus seleccionado.
+Conserva el archivo de entrada y comprueba su SHA-256 antes y después.
+La normalización se guarda en una columna auxiliar, sin reemplazar el perfil.
+Fase 3 conserva sus propias rutas; este script no cambia sus entradas.
 
-Esta etapa verifica la integridad estructural y textual del corpus
-científico congelado:
-
-    src/data/processed/perfiles_egreso_etiquetado_v2.csv
-
-La Fase 2:
-
-    - verifica cantidad de registros;
-    - verifica distribución por grado;
-    - detecta perfiles vacíos;
-    - detecta posibles problemas de codificación;
-    - detecta duplicados;
-    - genera una copia normalizada para auditoría;
-    - calcula SHA-256 antes y después;
-    - NO modifica el corpus V2.
-
-IMPORTANTE
-----------
-
-La copia generada por esta fase NO reemplaza la entrada de Fase 3.
-
-La Fase 3 oficial continúa utilizando directamente:
-
-    perfiles_egreso_etiquetado_v2.csv
-
-Esta etapa tampoco ejecuta:
-
-    - TF-IDF;
-    - SMOTE;
-    - clasificación;
-    - GWO;
-    - PCA/LDA;
-    - homogeneidad;
-    - test de permutación.
-
-Esas responsabilidades pertenecen a Fase 3.
 """
 
 from __future__ import annotations
@@ -88,7 +57,7 @@ PROCESSED_DIR = (
 )
 
 
-RUTA_CORPUS_V2 = (
+RUTA_CORPUS = (
     PROCESSED_DIR
     / "perfiles_egreso_etiquetado_v2.csv"
 )
@@ -134,6 +103,61 @@ CLASES_VALIDAS = set(
 # =============================================================================
 # 3. UTILIDADES
 # =============================================================================
+
+CORPUS_SELECCIONADO = "v2"
+
+
+def configurar_corpus(corpus: str):
+    """Selecciona rutas y expectativas sin modificar ningún dataset."""
+    global CORPUS_SELECCIONADO, RUTA_CORPUS, RUTA_COPIA_AUDITORIA
+    global RUTA_RESUMEN, TOTAL_ESPERADO, DISTRIBUCION_ESPERADA
+    if corpus not in {"actual", "v2"}:
+        raise ValueError("Corpus no válido.")
+    CORPUS_SELECCIONADO = corpus
+    RUTA_CORPUS = PROCESSED_DIR / f"perfiles_egreso_etiquetado_{corpus}.csv"
+    RUTA_COPIA_AUDITORIA = PROCESSED_DIR / f"perfiles_egreso_preparado_{corpus}_auditoria.csv"
+    RUTA_RESUMEN = PROCESSED_DIR / f"resumen_preparacion_corpus_{corpus}.json"
+    TOTAL_ESPERADO = 61
+    DISTRIBUCION_ESPERADA = {"Civil": 31, "Informática": 25, "Ejecución": 5}
+    if corpus == "actual":
+        # El corpus vivo depende de los aceptados, no del número de fuentes.
+        ruta_resumen = PROCESSED_DIR / "resumen_etiquetado_actual.json"
+        if not ruta_resumen.exists():
+            raise FileNotFoundError(
+                "Falta resumen_etiquetado_actual.json. Ejecuta primero "
+                "etiquetador.py --modo completo con el raw actualizado."
+            )
+        resumen = json.loads(ruta_resumen.read_text(encoding="utf-8-sig"))
+        if resumen.get("modo") != "completo":
+            raise ValueError("El resumen debe corresponder al etiquetado completo.")
+        TOTAL_ESPERADO = resumen["registros_aceptados"]
+        DISTRIBUCION_ESPERADA = resumen["distribucion_grado"]
+        if (type(TOTAL_ESPERADO) is not int or TOTAL_ESPERADO <= 0
+                or not isinstance(DISTRIBUCION_ESPERADA, dict)
+                or not set(DISTRIBUCION_ESPERADA).issubset({"Civil", "Informática", "Ejecución"})
+                or any(type(v) is not int or v < 0 for v in DISTRIBUCION_ESPERADA.values())
+                or sum(DISTRIBUCION_ESPERADA.values()) != TOTAL_ESPERADO):
+            raise ValueError("El resumen de etiquetado contiene recuentos inválidos.")
+
+
+def solicitar_corpus() -> str:
+    """Elige explícitamente la entrada de esta ejecución."""
+    print("\nCORPUS PARA FASE 2")
+    print("1. Actual — recuentos del resumen de etiquetado completo")
+    print("2. V2 — corpus anterior (61 esperados)")
+    while True:
+        try:
+            opcion = input("Selecciona 1 o 2: ").strip().lower()
+        except EOFError:
+            raise SystemExit("Indica --corpus actual o --corpus v2.") from None
+        except KeyboardInterrupt:
+            raise SystemExit("\nOperación cancelada.") from None
+        if opcion in {"1", "actual"}:
+            return "actual"
+        if opcion in {"2", "v2"}:
+            return "v2"
+        print("Opción inválida. Ingresa 1 o 2.")
+
 
 def texto_seguro(
     valor,
@@ -232,7 +256,7 @@ def normalizar_perfil(
         - elimina stopwords;
         - lematiza;
         - elimina palabras;
-        - cambia el corpus V2.
+        - cambia el corpus seleccionado.
     """
 
     texto = texto_seguro(
@@ -361,22 +385,22 @@ def tiene_posible_mojibake(
 
 def cargar_corpus() -> pd.DataFrame:
     """
-    Carga el corpus científico V2.
+    Carga el corpus seleccionado.
 
     Se utiliza autodetección de separador para conservar compatibilidad
     con versiones CSV separadas por coma o punto y coma.
     """
 
-    if not RUTA_CORPUS_V2.exists():
+    if not RUTA_CORPUS.exists():
 
         raise FileNotFoundError(
-            "No se encontró el corpus científico V2:\n"
-            f"{RUTA_CORPUS_V2}"
+            "No se encontró el corpus seleccionado:\n"
+            f"{RUTA_CORPUS}"
         )
 
 
     df = pd.read_csv(
-        RUTA_CORPUS_V2,
+        RUTA_CORPUS,
         sep=None,
         engine="python",
         encoding="utf-8-sig",
@@ -394,7 +418,7 @@ def cargar_corpus() -> pd.DataFrame:
     if faltantes:
 
         raise ValueError(
-            "El corpus V2 no contiene las columnas obligatorias: "
+            "El corpus seleccionado no contiene las columnas obligatorias: "
             + ", ".join(
                 sorted(
                     faltantes
@@ -693,6 +717,13 @@ def auditar_corpus(
         )
 
 
+        # En el corpus vivo una modalidad documentada distingue programas.
+        # grupo_perfil se conserva por separado para la futura validación agrupada.
+        columnas_identidad = ["_universidad", "_carrera"]
+        if CORPUS_SELECCIONADO == "actual" and "modalidad" in salida.columns:
+            claves["_modalidad"] = salida["modalidad"].apply(normalizar_clave)
+            columnas_identidad.append("_modalidad")
+
         claves_validas = (
 
             clave_universidad.ne(
@@ -715,10 +746,7 @@ def auditar_corpus(
                 claves_validas
             ]
             .duplicated(
-                subset=[
-                    "_universidad",
-                    "_carrera",
-                ],
+                subset=columnas_identidad,
                 keep=False,
             )
             .values
@@ -1120,7 +1148,7 @@ def guardar_csv_auditoria(
     """
     Guarda una copia derivada.
 
-    Nunca escribe sobre el corpus V2 original.
+    Nunca escribe sobre el corpus seleccionado original.
     """
 
     PROCESSED_DIR.mkdir(
@@ -1165,9 +1193,10 @@ def guardar_resumen(
                 timezone.utc
             ).isoformat(),
 
-        "corpus_cientifico":
+        "corpus_seleccionado": CORPUS_SELECCIONADO,
+        "entrada":
             str(
-                RUTA_CORPUS_V2
+                RUTA_CORPUS
             ),
 
         "salida_auditoria":
@@ -1175,13 +1204,13 @@ def guardar_resumen(
                 RUTA_COPIA_AUDITORIA
             ),
 
-        "sha256_v2_antes":
+        "sha256_entrada_antes":
             sha_antes,
 
-        "sha256_v2_despues":
+        "sha256_entrada_despues":
             sha_despues,
 
-        "v2_intacto":
+        "entrada_intacta":
             (
                 sha_antes is not None
                 and sha_antes == sha_despues
@@ -1193,10 +1222,10 @@ def guardar_resumen(
         "rol_fase2":
             (
                 "Preparación y auditoría no destructiva "
-                "del corpus científico V2."
+                "del corpus seleccionado."
             ),
 
-        "entrada_oficial_fase3":
+        "entrada_fase3_sin_modificar":
             "perfiles_egreso_etiquetado_v2.csv",
 
         "salida_fase2_usada_como_entrada_fase3":
@@ -1378,13 +1407,13 @@ def imprimir_resumen(
     ]:
 
         print(
-            "  ✓ CORPUS V2 COHERENTE CON LA ESTRUCTURA OFICIAL"
+            "  ✓ RECUENTO, DISTRIBUCIÓN Y AUSENCIA DE VACÍOS SEGÚN LO ESPERADO"
         )
 
     else:
 
         print(
-            "  ✗ EL CORPUS V2 NO COINCIDE CON LA ESTRUCTURA ESPERADA"
+            "  ✗ EL CORPUS SELECCIONADO NO COINCIDE CON LA ESTRUCTURA ESPERADA"
         )
 
 
@@ -1401,7 +1430,7 @@ def construir_parser():
 
         description=(
             "Fase 2 - Preparación y auditoría "
-            "no destructiva del corpus V2."
+            "no destructiva del corpus seleccionado."
         )
 
     )
@@ -1415,13 +1444,15 @@ def construir_parser():
 
         help=(
             "No termina con error si el corpus no contiene "
-            "exactamente 61 registros con distribución 31/25/5. "
+            "el recuento y distribución esperados para el corpus elegido. "
             "Útil solamente para auditorías exploratorias."
         ),
 
     )
 
 
+    parser.add_argument("--corpus", choices=["actual", "v2"], default=None,
+                        help="Dataset a auditar; si se omite, muestra un menú.")
     return parser
 
 
@@ -1437,6 +1468,7 @@ def main():
     parser = construir_parser()
 
     args = parser.parse_args()
+    configurar_corpus(args.corpus or solicitar_corpus())
 
 
     print(
@@ -1444,7 +1476,7 @@ def main():
     )
 
     print(
-        "FASE 2 — PREPARACIÓN Y AUDITORÍA DEL CORPUS V2"
+        "FASE 2 — PREPARACIÓN Y AUDITORÍA DEL CORPUS SELECCIONADO"
     )
 
     print(
@@ -1453,7 +1485,7 @@ def main():
 
 
     print(
-        f"Entrada oficial : {RUTA_CORPUS_V2}"
+        f"Entrada elegida : {RUTA_CORPUS}"
     )
 
     print(
@@ -1478,7 +1510,7 @@ def main():
     )
 
     print(
-        "  - El corpus V2 original no se modifica."
+        "  - El corpus de entrada no se modifica."
     )
 
     print(
@@ -1486,7 +1518,7 @@ def main():
     )
 
     print(
-        "  - Fase 3 continúa utilizando directamente el V2 original."
+        "  - Fase 3 conserva sus propias rutas de entrada."
     )
 
 
@@ -1495,7 +1527,7 @@ def main():
     # =========================================================================
 
     sha_antes = calcular_sha256_archivo(
-        RUTA_CORPUS_V2
+        RUTA_CORPUS
     )
 
 
@@ -1506,7 +1538,7 @@ def main():
         )
 
         print(
-            "No se encontró el corpus V2."
+            "No se encontró el corpus seleccionado."
         )
 
         raise SystemExit(
@@ -1515,7 +1547,7 @@ def main():
 
 
     print(
-        f"\nSHA-256 V2 antes : {sha_antes}"
+        f"\nSHA-256 entrada antes : {sha_antes}"
     )
 
 
@@ -1567,7 +1599,7 @@ def main():
     # =========================================================================
 
     sha_despues = calcular_sha256_archivo(
-        RUTA_CORPUS_V2
+        RUTA_CORPUS
     )
 
 
@@ -1597,7 +1629,7 @@ def main():
     )
 
     print(
-        "VERIFICACIÓN DE INTEGRIDAD DEL V2"
+        "VERIFICACIÓN DE INTEGRIDAD DE LA ENTRADA"
     )
 
     print(
@@ -1620,13 +1652,13 @@ def main():
     ):
 
         print(
-            "Estado           : ✓ V2 INTACTO"
+            "Estado           : ✓ CORPUS DE ENTRADA INTACTO"
         )
 
     else:
 
         print(
-            "Estado           : ✗ EL CORPUS V2 CAMBIÓ"
+            "Estado           : ✗ EL CORPUS SELECCIONADO CAMBIÓ"
         )
 
         raise SystemExit(
@@ -1689,12 +1721,11 @@ def main():
     )
 
     print(
-        "  NO reemplaza al corpus científico V2."
+        "  NO reemplaza al corpus seleccionado."
     )
 
     print(
-        "  Fase 3 continúa leyendo directamente "
-        "perfiles_egreso_etiquetado_v2.csv."
+        "  Esta auditoría no cambia las rutas de entrada de Fase 3."
     )
 
 
