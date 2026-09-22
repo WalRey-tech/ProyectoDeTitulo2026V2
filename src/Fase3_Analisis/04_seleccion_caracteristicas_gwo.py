@@ -1,106 +1,86 @@
 # -*- coding: utf-8 -*-
+"""GWO exploratorio: selección TF-IDF con SMOTE y ComplementNB.
+
+Instalación: python -m pip install mealpy imbalanced-learn scikit-learn pandas matplotlib
+Entorno probado: Python 3.12, numpy 1.26.0, scikit-learn 1.7.2,
+imbalanced-learn 0.14.0, mealpy 3.0.3. El resumen registra las versiones usadas.
+Ejecutar desde src/Fase3_Analisis:
+    python 04_seleccion_caracteristicas_gwo.py --corpus actual
+Prueba rápida del funcionamiento (no resultados finales): --epochs 3 --poblacion 6
+
+TF-IDF se ajusta a todo el corpus para mantener un vocabulario común de selección.
+Los F1 del optimizador y de la comparación posterior son EXPLORATORIOS:
+la selección ya utilizó las etiquetas y el vocabulario contiene información global.
+Este script no hace validación anidada ni produce una estimación independiente.
+
+GWO continuo (mealpy.OriginalGWO) + transformación V y umbral determinista 0.5.
+No se implementa una transición binaria probabilística ni inversión de bits.
+Las particiones estratifican GRUPOS homogéneos en grado y luego expanden a filas.
+SMOTE se aplica únicamente al entrenamiento; k=min(2, mínimo por clase - 1).
+Los términos de grado/institución se conservan, como en el método de entrada.
 """
-Selección de Características con Metaheurística — GWO (Grey Wolf Optimizer)
-============================================================================
-Problema : seleccionar el subconjunto óptimo de features TF-IDF (400 dims)
-           que maximice F1-macro en clasificación de perfiles de egreso.
+from __future__ import annotations
 
-Codificación : binaria — cada lobo = vector {0,1}^400
-               1 = feature incluida, 0 = excluida
+import argparse
+import hashlib
+import json
+import os
+import sys
+import time
+from datetime import datetime, timezone
+from importlib.metadata import version
+from pathlib import Path
+from urllib.parse import urlparse
 
-Fitness      : F1-macro (StratifiedKFold-3, SMOTE k=2 dentro del fold)
-               Fitness 0 si selecciona 0 features o el espacio completo
-
-Optimizador  : GWO.OriginalGWO (mealpy) — Mirjalili et al. (2014)
-
-Referencias
------------
-  Mirjalili et al. (2014) — Grey Wolf Optimizer. Advances in Engineering Software.
-  Emary et al. (2016)     — Binary grey wolf optimization approaches for feature
-                             selection. Neurocomputing.
-  Mafarja & Mirjalili (2017) — Hybrid Whale Optimization Algorithm with simulated
-                             annealing for feature selection. Neurocomputing.
-  Nguyen et al. (2020)    — mealpy: A Framework of Metaheuristic Algorithms in Python.
-"""
-
-import os, sys, io, warnings, time
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
-
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import ftfy
-
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import f1_score
 from sklearn.naive_bayes import ComplementNB
-from imblearn.pipeline import Pipeline as ImbPipeline
-from imblearn.over_sampling import SMOTE
 
-warnings.filterwarnings('ignore')
-
-# =============================================================================
-# RUTAS DEL PROYECTO
-# =============================================================================
-
-# Carpeta donde se encuentra este script:
-# src/Fase3_Analisis/GWO/
-BASE = os.path.dirname(os.path.abspath(__file__))
-
-SRC_ROOT = os.path.abspath(
-    os.path.join(BASE, "..")
-)
-
-# Dataset V2 utilizado por la metodología GWO
-CSV_V2 = os.path.join(
-    SRC_ROOT,
-    "data",
-    "processed",
-    "perfiles_egreso_etiquetado_v2.csv"
-)
-
-# Resultados generados por NUESTRA ejecución integrada
-OUT_DIR = os.path.join(
-    SRC_ROOT,
-    "data",
-    "resultados_cientificos",
-    "gwo"
-)
-
-os.makedirs(OUT_DIR, exist_ok=True)
-
-# =============================================================================
-# REPRODUCIBILIDAD
-# =============================================================================
-
+SRC_ROOT = str(Path(__file__).resolve().parent.parent)
 SEED = 42
-np.random.seed(SEED)
+CLASES = ["Civil", "Ejecución", "Informática"]
+TFIDF_CONFIG = dict(max_features=400, ngram_range=(1, 2), min_df=2,
+                    max_df=0.9, sublinear_tf=True)
+CORPUS_SELECCIONADO = "actual"
 
-# ── Carga ──────────────────────────────────────────────────────────────────────
-print("=" * 68)
-print("SELECCION DE FEATURES CON GWO (Grey Wolf Optimizer)")
-print("Mirjalili et al. (2014) + Binary encoding (Emary et al., 2016)")
-print("=" * 68)
 
-df = pd.read_csv(CSV_V2, encoding='utf-8-sig')
-df['perfil_egreso'] = df['perfil_egreso'].apply(lambda x: ftfy.fix_text(str(x)))
-df['grado']         = df['grado'].apply(lambda x: ftfy.fix_text(str(x)))
+def configurar_corpus(corpus: str) -> None:
+    global CORPUS_SELECCIONADO, RUTA_ENTRADA, OUT_DIR
+    if corpus not in {"actual", "v2"}:
+        raise ValueError("Corpus no válido: usa actual o v2.")
+    CORPUS_SELECCIONADO = corpus
+    archivo = ("perfiles_egreso_etiquetado_actual_corregido.csv"
+               if corpus == "actual" else "perfiles_egreso_etiquetado_v2.csv")
+    RUTA_ENTRADA = os.path.join(SRC_ROOT, "data", "processed", archivo)
+    OUT_DIR = Path(SRC_ROOT) / "data" / "resultados_cientificos" / "gwo" / corpus
 
-textos = df['perfil_egreso'].tolist()
-le     = LabelEncoder()
-y      = le.fit_transform(df['grado'].tolist())
-print(f"Dataset: {len(df)} docs — {dict(df['grado'].value_counts())}")
 
-# Nota metodológica:
-# TF-IDF se ajusta sobre el corpus completo antes de la selección GWO.
-# Por ello, la evaluación posterior sobre las features seleccionadas
-# se interpreta como exploratoria y no como una estimación no sesgada
-# de generalización.
+def solicitar_corpus() -> str:
+    print("\nSelecciona el corpus:")
+    print("1. Actual — salida corregida del encoding")
+    print("2. V2 — corpus histórico")
+    opciones = {"1": "actual", "actual": "actual", "2": "v2", "v2": "v2"}
+    while True:
+        try:
+            respuesta = input("Opción [1/2]: ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            raise SystemExit("Selección cancelada. Usa --corpus actual o --corpus v2.") from None
+        if respuesta in opciones:
+            return opciones[respuesta]
+        print("Opción no válida. Escribe 1 o 2.")
+
+
+def sha256_archivo(ruta: str) -> str:
+    with open(ruta, "rb") as archivo:
+        return hashlib.sha256(archivo.read()).hexdigest()
+
+
 STOPWORDS_ES = [
     'a','al','algo','algunas','algunos','ante','antes','como','con','contra',
     'cual','cuando','de','del','desde','donde','durante','e','el','ella',
@@ -120,275 +100,314 @@ STOPWORDS_ES = [
     'últimas','último','últimos',
 ]
 
-VEC = TfidfVectorizer(max_features=400, ngram_range=(1, 2),
-                      min_df=2, max_df=0.9, sublinear_tf=True,
-                      stop_words=STOPWORDS_ES)
-X_full = VEC.fit_transform(textos).toarray()   # (61, 400)
-feature_names = np.array(VEC.get_feature_names_out())
-N_FEATURES = X_full.shape[1]
-print(f"Espacio de features: {N_FEATURES} dimensiones (TF-IDF word 1-2 grams)")
 
-# ── CV interno para la función fitness ────────────────────────────────────────
-# 3-fold (en vez de 5) para reducir tiempo por evaluación
-INNER_CV = StratifiedKFold(n_splits=3, shuffle=True, random_state=SEED)
-
-def fitness_fn_array(solution_bin):
-    """
-    Evalúa un subconjunto de features dado el vector binario.
-    Retorna F1-macro (valor a MAXIMIZAR).
-    """
-    mask = solution_bin.astype(bool)
-    n_sel = mask.sum()
-    if n_sel == 0:
-        return 0.0                # penalización: sin features
-    if n_sel == N_FEATURES:
-        return 0.0                # penalización: selecciona todo (sin reducción)
-
-    X_sel = X_full[:, mask]
-    f1s = []
-    for tr, te in INNER_CV.split(X_sel, y):
-        X_tr, X_te = X_sel[tr], X_sel[te]
-        y_tr, y_te = y[tr], y[te]
-        try:
-            smote = SMOTE(k_neighbors=2, random_state=SEED)
-            X_r, y_r = smote.fit_resample(X_tr, y_tr)
-            clf = ComplementNB()
-            clf.fit(X_r, y_r)
-            f1s.append(f1_score(y_te, clf.predict(X_te),
-                                average='macro', zero_division=0))
-        except Exception:
-            f1s.append(0.0)
-    return float(np.mean(f1s))
-
-# ══════════════════════════════════════════════════════════════════════════════
-# BASELINE (sin selección) — evaluado con mismo CV interno
-# ══════════════════════════════════════════════════════════════════════════════
-def evaluar_baseline_inner():
-    """Evalúa las 400 variables sin activar la penalización de la función GWO."""
-    f1s = []
-    for tr, te in INNER_CV.split(X_full, y):
-        X_tr, X_te = X_full[tr], X_full[te]
-        y_tr, y_te = y[tr], y[te]
-        smote = SMOTE(k_neighbors=2, random_state=SEED)
-        X_r, y_r = smote.fit_resample(X_tr, y_tr)
-        clf = ComplementNB()
-        clf.fit(X_r, y_r)
-        f1s.append(
-            f1_score(y_te, clf.predict(X_te), average='macro', zero_division=0)
+def cargar_corpus() -> pd.DataFrame:
+    if not os.path.isfile(RUTA_ENTRADA):
+        raise FileNotFoundError(
+            f"No se encontró el corpus seleccionado ({CORPUS_SELECCIONADO}):\n"
+            f"{RUTA_ENTRADA}\n"
+            "Para actual, ejecuta primero el encoding con --corpus actual."
         )
-    return float(np.mean(f1s))
+    huella = sha256_archivo(RUTA_ENTRADA)
+    # Admite los CSV históricos con comas y los actuales con punto y coma.
+    df = pd.read_csv(RUTA_ENTRADA, sep=None, engine="python",
+                     encoding="utf-8-sig", keep_default_na=False)
+    if sha256_archivo(RUTA_ENTRADA) != huella:
+        raise ValueError("El CSV cambió durante la lectura. Repite la ejecución.")
+    faltantes = {"perfil_egreso", "grado"} - set(df.columns)
+    if faltantes:
+        raise ValueError(f"Faltan columnas requeridas: {sorted(faltantes)}")
+    if df.empty:
+        raise ValueError("El corpus está vacío.")
+    for columna in ["perfil_egreso", "grado"]:
+        vacias = df[columna].astype(str).str.strip().eq("")
+        if vacias.any():
+            raise ValueError(
+                f"Hay {int(vacias.sum())} filas sin {columna}; "
+                "corrige el corpus en fase 2. No se eliminaron filas."
+            )
+    desconocidas = set(df["grado"]) - set(CLASES)
+    if desconocidas:
+        raise ValueError(f"Grados fuera del catálogo: {sorted(desconocidas)}")
+    for columna in ["estado_registro", "estado_etiquetado"]:
+        if columna in df:
+            pendientes = df[columna].astype(str).str.strip().str.upper().isin(["REVISAR", "ERROR"])
+            if pendientes.any():
+                raise ValueError(f"El CSV contiene filas REVISAR/ERROR en {columna}.")
+    conteos = df["grado"].value_counts()
+    if len(conteos) != 3 or conteos.min() < 2:
+        raise ValueError("GWO requiere las tres clases, con al menos dos perfiles cada una.")
+    df.attrs["sha256_entrada"] = huella
+    return df
 
 
-f1_base = evaluar_baseline_inner()
-print(f"\nBaseline (400 features, 3-fold inner CV): F1={f1_base:.4f}")
 
-# ══════════════════════════════════════════════════════════════════════════════
-# GWO — Grey Wolf Optimizer (versión binaria con función de transferencia V-shape)
-# Emary et al. (2016): posiciones continuas → binarias vía T(x) = |2/π·arctan(π/2·x)|
-# ══════════════════════════════════════════════════════════════════════════════
-print("\n" + "─" * 68)
-print("GWO — Grey Wolf Optimizer (Mirjalili et al., 2014)")
-print(f"Parametros: epoch=100, pop_size=30, n_vars={N_FEATURES}")
-print("Transfer fn: V-shape T(x)=|2/pi·arctan(pi/2·x)|  (Emary et al., 2016)")
-print("─" * 68)
 
-try:
+def construir_grupos(df: pd.DataFrame):
+    """Une grupos declarados, el par UCSC conocido y duplicados textuales.
+
+    No usa similitud ajustada a etiquetas ni resultados del optimizador.
+    Conserva cada perfil; solo impide separar sus grupos entre train y test.
+    """
+    n = len(df)
+    padres = list(range(n))
+    def raiz(i):
+        while padres[i] != i:
+            padres[i] = padres[padres[i]]
+            i = padres[i]
+        return i
+    def unir(i, j):
+        padres[raiz(j)] = raiz(i)
+    vistos_grupos, vistos_textos = {}, {}
+    criterios = [[] for _ in range(n)]
+    for i, (_, fila) in enumerate(df.iterrows()):
+        grupo = str(fila.get("grupo_perfil", "")).strip()
+        claves = [grupo] if grupo else []
+        url = urlparse(str(fila.get("url", "")))
+        if (url.hostname in {"it.ucsc.cl", "advance.ucsc.cl"}
+                and url.path.rstrip("/") == "/carreras/ingenieria-de-ejecucion-en-informatica"):
+            claves.append("ucsc_ejecucion_informatica")
+        for clave in claves:
+            if clave in vistos_grupos:
+                unir(vistos_grupos[clave], i)
+            else:
+                vistos_grupos[clave] = i
+            criterios[i].append("grupo:" + clave)
+        texto = " ".join(str(fila["perfil_egreso"]).casefold().split())
+        if texto in vistos_textos:
+            unir(vistos_textos[texto], i)
+            criterios[i].append("duplicado textual normalizado")
+        else:
+            vistos_textos[texto] = i
+    nombres = {}
+    grupos = np.asarray([nombres.setdefault(raiz(i), f"grupo_{len(nombres)+1:03d}")
+                         for i in range(n)])
+    auditoria = pd.DataFrame({"fila_datos": np.arange(1, n+1), "grupo_cv": grupos,
+                             "grado": df.grado.to_numpy(),
+                             "criterio": ["; ".join(c) or "perfil individual" for c in criterios]})
+    for columna in ["indice_fuente", "universidad", "carrera", "url", "modalidad", "grupo_perfil"]:
+        if columna in df:
+            auditoria[columna] = df[columna].to_numpy()
+    if auditoria.groupby("grupo_cv")["grado"].nunique().gt(1).any():
+        raise ValueError("Un grupo reúne perfiles con distintos grados. Revisa su etiquetado.")
+    return grupos, auditoria
+
+
+def crear_particiones(y: np.ndarray, grupos: np.ndarray, solicitadas: int, semilla=SEED):
+    """Estratifica IDs únicos por grado y expande a documentos sin separarlos."""
+    tabla = pd.DataFrame({"grupo": grupos, "grado": y})
+    if tabla.groupby("grupo").grado.nunique().gt(1).any():
+        raise ValueError("Cada grupo debe tener un único grado.")
+    tabla = tabla.drop_duplicates("grupo").reset_index(drop=True)
+    cantidades = tabla.grado.value_counts()
+    if set(cantidades.index) != set(CLASES):
+        raise ValueError("Falta alguna clase en las unidades de validación.")
+    n_splits = min(solicitadas, int(cantidades.min()))
+    if n_splits < 2:
+        raise ValueError("No hay grupos suficientes para validación estratificada.")
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=semilla)
+    particiones, detalles = [], []
+    for fold, (trg, teg) in enumerate(cv.split(tabla.grupo, tabla.grado), 1):
+        tr = np.flatnonzero(np.isin(grupos, tabla.grupo.iloc[trg]))
+        te = np.flatnonzero(np.isin(grupos, tabla.grupo.iloc[teg]))
+        if set(grupos[tr]) & set(grupos[te]):
+            raise ValueError("Hay grupos compartidos entre entrenamiento y prueba.")
+        if set(y[tr]) != set(CLASES) or set(y[te]) != set(CLASES):
+            raise ValueError("Una partición no contiene todas las clases.")
+        conteos = pd.Series(y[tr]).value_counts()
+        k = min(2, int(conteos.min())-1)
+        if k < 1:
+            raise ValueError("Un entrenamiento tiene menos de dos perfiles por clase; SMOTE no es viable.")
+        particiones.append((tr, te))
+        detalles.append({"fold": fold, "n_train": len(tr), "n_test": len(te),
+                         "grados_train": {str(a):int(b) for a,b in conteos.items()},
+                         "grados_test": {str(a):int(b) for a,b in pd.Series(y[te]).value_counts().items()},
+                         "grupos_train": sorted(set(grupos[tr])), "grupos_test": sorted(set(grupos[te])),
+                         "smote_k": k})
+    return particiones, detalles
+
+
+def evaluar_mascara(X, y, mascara, particiones):
+    from imblearn.over_sampling import SMOTE
+    mascara = np.asarray(mascara, dtype=bool)
+    if mascara.shape != (X.shape[1],) or not mascara.any():
+        raise ValueError("La máscara debe seleccionar al menos una característica válida.")
+    X_sel = X[:, mascara]
+    puntuaciones = []
+    for tr, te in particiones:
+        minimo = int(pd.Series(y[tr]).value_counts().min())
+        if minimo < 2:
+            raise ValueError("SMOTE necesita al menos dos ejemplos de cada clase en train.")
+        smote = SMOTE(k_neighbors=min(2, minimo-1), random_state=SEED)
+        X_r, y_r = smote.fit_resample(X_sel[tr], y[tr])
+        clasificador = ComplementNB()
+        clasificador.fit(X_r, y_r)
+        puntuaciones.append(f1_score(y[te], clasificador.predict(X_sel[te]),
+                                     labels=CLASES, average="macro", zero_division=0))
+    return np.asarray(puntuaciones)
+
+
+def binarizar(posicion):
+    """Umbral V determinista compartido entre fitness y solución guardada."""
+    return np.abs((2 / np.pi) * np.arctan((np.pi / 2) * np.asarray(posicion))) > 0.5
+
+
+def optimizar(X, y, particiones, epochs, poblacion):
     from mealpy import GWO, FloatVar, Problem
-
-    # ── Definición del problema ────────────────────────────────────────────────
-    class GWOFeatureSelection(Problem):
-        def __init__(self, bounds, minmax, **kwargs):
-            super().__init__(bounds, minmax, **kwargs)
-
+    n_features = X.shape[1]
+    cache = {}
+    class SeleccionGWO(Problem):
         def obj_func(self, solution):
-            # solution: vector continuo [-6, 6]^N
-            # Transfer function V-shape → binario
-            binary = (np.abs((2 / np.pi) * np.arctan((np.pi / 2) * solution)) > 0.5).astype(float)
-            return fitness_fn_array(binary)
+            mascara = binarizar(solution)
+            n = int(mascara.sum())
+            if n == 0 or n == n_features:
+                return 0.0
+            clave = mascara.tobytes()
+            if clave not in cache:
+                cache[clave] = float(evaluar_mascara(X, y, mascara, particiones).mean())
+            return cache[clave]
+    problema = SeleccionGWO(bounds=FloatVar(lb=(-6.,)*n_features, ub=(6.,)*n_features,
+                                          name="features"), minmax="max", log_to=None)
+    optimizador = GWO.OriginalGWO(epoch=epochs, pop_size=poblacion)
+    inicio = time.perf_counter()
+    optimizador.solve(problema, seed=SEED)
+    mascara = binarizar(optimizador.g_best.solution)
+    if not 0 < mascara.sum() < n_features:
+        raise ValueError("GWO no encontró una selección reducida válida. Revisa datos o aumenta epochs/población.")
+    fitness = float(optimizador.g_best.target.fitness)
+    historial = np.asarray(optimizador.history.list_global_best_fit, dtype=float)
+    if not np.isfinite(fitness) or not np.isfinite(historial).all():
+        raise ValueError("El optimizador devolvió resultados no finitos.")
+    return mascara, fitness, historial, time.perf_counter()-inicio, len(cache)
 
-    bounds = FloatVar(lb=(-6,) * N_FEATURES, ub=(6,) * N_FEATURES, name="features")
-    problem = GWOFeatureSelection(bounds=bounds, minmax="max", log_to=None, seed=SEED)
 
-    EPOCH    = 100
-    POP_SIZE = 30
+def graficar(historial, baseline_inner, resultados, features, mascara):
+    fig, axes = plt.subplots(1, 3, figsize=(17, 6))
+    axes[0].plot(np.arange(1, len(historial)+1), historial)
+    axes[0].axhline(baseline_inner, linestyle="--", color="gray", label="Baseline búsqueda")
+    axes[0].set(xlabel="Iteración", ylabel="F1-macro de búsqueda", title="Convergencia GWO (exploratoria)")
+    axes[0].legend()
+    valores = resultados.F1_media.to_numpy()
+    axes[1].bar([0,1], valores, color=["gray", "#1F497D"])
+    axes[1].errorbar([0,1], valores, yerr=resultados.F1_std.to_numpy(), fmt="none", capsize=5, color="black")
+    axes[1].set_xticks([0,1], resultados.Modelo)
+    axes[1].set(ylabel="F1-macro", title="Comparación exploratoria\nMedia ± desviación entre folds", ylim=(0,1.15))
+    top = features.head(20).iloc[::-1]
+    axes[2].barh(top.feature, top.tfidf_mean, color="#1E6823")
+    axes[2].tick_params(axis="y", labelsize=8)
+    axes[2].set(xlabel="TF-IDF medio", title="Características seleccionadas (top 20)")
+    fig.suptitle(f"GWO — {CORPUS_SELECCIONADO.upper()} — Selección previa; no validación anidada", fontweight="bold")
+    fig.tight_layout(rect=[0,0,1,.95])
+    fig.savefig(OUT_DIR / "gwo_seleccion.png", dpi=160, bbox_inches="tight")
+    plt.close(fig)
+    fig, ax = plt.subplots(figsize=(14,3))
+    ax.imshow(mascara.reshape(1,-1), cmap="Blues", vmin=0, vmax=1, aspect="auto", interpolation="nearest")
+    ax.set(xlabel=f"Índice de característica (0–{len(mascara)-1})", yticks=[],
+           title=f"{CORPUS_SELECCIONADO.upper()}: {int(mascara.sum())} de {len(mascara)} características seleccionadas")
+    fig.tight_layout()
+    fig.savefig(OUT_DIR / "gwo_mapa_features.png", dpi=160, bbox_inches="tight")
+    plt.close(fig)
 
-    t0 = time.time()
-    optimizer = GWO.OriginalGWO(epoch=EPOCH, pop_size=POP_SIZE)
-    optimizer.solve(problem, seed=SEED)
-    t_gwo = time.time() - t0
 
-    best_sol_cont = optimizer.g_best.solution
-    best_binary   = (np.abs((2 / np.pi) * np.arctan((np.pi / 2) * best_sol_cont)) > 0.5).astype(float)
-    n_sel         = int(best_binary.sum())
-    f1_gwo        = optimizer.g_best.target.fitness
+def main() -> int:
+    parser = argparse.ArgumentParser(description="GWO exploratorio con particiones por grupos.")
+    parser.add_argument("--corpus", choices=["actual", "v2"], help="Si se omite, muestra el menú.")
+    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--poblacion", type=int, default=30)
+    args = parser.parse_args()
+    if not 1 <= args.epochs <= 100000 or not 5 <= args.poblacion <= 10000:
+        parser.error("epochs debe estar entre 1 y 100000; población entre 5 y 10000.")
+    # Error de dependencias antes de iniciar una búsqueda costosa.
+    from imblearn.over_sampling import SMOTE
+    from mealpy import GWO
+    configurar_corpus(args.corpus or solicitar_corpus())
+    print(f"GWO EXPLORATORIO — {CORPUS_SELECCIONADO.upper()}", flush=True)
+    print(f"Entrada: {RUTA_ENTRADA}", flush=True)
+    df = cargar_corpus()
+    print(f"SHA-256: {df.attrs['sha256_entrada']}")
+    print(f"Corpus: {len(df)} perfiles; {df.grado.value_counts().to_dict()}")
+    y = df.grado.to_numpy()
+    grupos, auditoria = construir_grupos(df)
+    inner, detalle_inner = crear_particiones(y, grupos, 3)
+    comparacion, detalle_comparacion = crear_particiones(y, grupos, 5)
+    print(f"Grupos: {len(set(grupos))}; folds búsqueda: {len(inner)}; comparación: {len(comparacion)}")
+    print("TF-IDF global y selección previa: los F1 son exploratorios, no rendimiento independiente.", flush=True)
+    vectorizador = TfidfVectorizer(**TFIDF_CONFIG, stop_words=STOPWORDS_ES)
+    X = vectorizador.fit_transform(df.perfil_egreso).toarray()
+    nombres = vectorizador.get_feature_names_out()
+    if X.shape[1] < 2 or not np.isfinite(X).all() or np.any(np.linalg.norm(X, axis=1)==0):
+        raise ValueError("La matriz TF-IDF necesita al menos dos características y perfiles con términos.")
+    todas = np.ones(X.shape[1], dtype=bool)
+    baseline_inner = evaluar_mascara(X, y, todas, inner)
+    print(f"Baseline ({X.shape[1]} características), F1 búsqueda={baseline_inner.mean():.4f}")
+    print(f"Iniciando GWO: {args.epochs} iteraciones, {args.poblacion} lobos...", flush=True)
+    mascara, fitness, historial, segundos, evaluaciones = optimizar(X, y, inner, args.epochs, args.poblacion)
+    base_cmp = evaluar_mascara(X, y, todas, comparacion)
+    gwo_cmp = evaluar_mascara(X, y, mascara, comparacion)
+    n_sel = int(mascara.sum())
+    resultados = pd.DataFrame({"Modelo":[f"Baseline ({X.shape[1]} feat)", f"GWO ({n_sel} feat)"],
+                               "n_features":[X.shape[1],n_sel], "F1_media":[base_cmp.mean(),gwo_cmp.mean()],
+                               "F1_std":[base_cmp.std(ddof=1),gwo_cmp.std(ddof=1)],
+                               "n_folds":[len(comparacion)]*2, "alcance":["exploratorio"]*2})
+    features = pd.DataFrame({"feature":nombres[mascara], "tfidf_mean":X[:,mascara].mean(axis=0),
+                             "tfidf_std":X[:,mascara].std(axis=0)}).sort_values("tfidf_mean",ascending=False)
+    resumen = {
+        "version_analisis":"gwo_exploratorio_grupos_v1", "fecha_utc":datetime.now(timezone.utc).isoformat(),
+        "corpus":{"seleccion":CORPUS_SELECCIONADO, "archivo":RUTA_ENTRADA, "sha256":df.attrs["sha256_entrada"],
+                  "total":len(df), "distribucion":{str(k):int(v) for k,v in df.grado.value_counts().items()},
+                  "grupos":len(set(grupos)), "filas_descartadas":0},
+        "tfidf":{**TFIDF_CONFIG, "stop_words":STOPWORDS_ES, "ajuste":"corpus completo"},
+        "optimizador":{"algoritmo":"mealpy.GWO.OriginalGWO", "semilla":SEED, "epochs":args.epochs,
+                       "poblacion":args.poblacion, "transformacion":"abs(2/pi*arctan(pi/2*x)) > 0.5; determinista",
+                       "penalizacion":"fitness 0 para máscara vacía o completa", "segundos":segundos,
+                       "mascaras_validas_evaluadas":evaluaciones},
+        "seleccion":{"features_entrada":X.shape[1], "features_seleccionadas":n_sel,
+                     "reduccion_porcentaje":100*(1-n_sel/X.shape[1]), "fitness_busqueda":fitness,
+                     "baseline_busqueda":float(baseline_inner.mean())},
+        "cv":{"metodo":"StratifiedKFold sobre grupos homogéneos, expandido a documentos",
+              "busqueda":detalle_inner, "comparacion_exploratoria":detalle_comparacion,
+              "f1_baseline_comparacion":base_cmp.tolist(), "f1_gwo_comparacion":gwo_cmp.tolist(),
+              "smote":"Solo train; k=min(2, mínimo de perfiles por clase en train - 1)",
+              "barras_error":"desviación estándar entre folds; no intervalo de confianza"},
+        "versiones":{p:version(p) for p in ["numpy","pandas","scikit-learn","imbalanced-learn","mealpy"]},
+        "limitaciones":[
+            "El vocabulario y los IDF usan el corpus completo: hay información global en las particiones.",
+            "GWO selecciona antes de la comparación: esos folds no son una evaluación externa independiente.",
+            "Agrupar UCSC y duplicados conocidos evita separarlos; no elimina otras dependencias institucionales.",
+            "Las métricas ponderan perfiles individuales; los grupos no se promedian ni eliminan.",
+            "Se conservan términos que nombran el grado o la institución, potencialmente informativos de la etiqueta.",
+            "Para estimar generalización se requiere validación anidada con TF-IDF y GWO ajustados solo al entrenamiento."]}
+    if sha256_archivo(RUTA_ENTRADA) != df.attrs["sha256_entrada"]:
+        raise ValueError("El corpus cambió durante la búsqueda. No se guardaron resultados.")
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    resultados.to_csv(OUT_DIR/"gwo_resultados.csv", index=False, encoding="utf-8-sig")
+    features.to_csv(OUT_DIR/"gwo_features_seleccionadas.csv", index=False, encoding="utf-8-sig")
+    pd.DataFrame({"indice":np.arange(len(nombres)), "feature":nombres, "seleccionada":mascara.astype(int)}).to_csv(
+        OUT_DIR/"gwo_mascara_vocabulario.csv", index=False, encoding="utf-8-sig")
+    pd.DataFrame({"epoch":np.arange(1,len(historial)+1),"fitness":historial}).to_csv(
+        OUT_DIR/"gwo_convergencia.csv", index=False, encoding="utf-8-sig")
+    # Una fila por perfil: el fold indica en qué prueba aparece en cada esquema.
+    for columna, splits in [("fold_busqueda",inner),("fold_comparacion",comparacion)]:
+        asignacion=np.zeros(len(df),dtype=int)
+        for fold, (_,te) in enumerate(splits,1): asignacion[te]=fold
+        auditoria[columna]=asignacion
+    auditoria.to_csv(OUT_DIR/"gwo_auditoria_particiones.csv", index=False, sep=";", encoding="utf-8-sig")
+    pd.DataFrame({"fold":np.arange(1,len(comparacion)+1), "f1_baseline":base_cmp, "f1_gwo":gwo_cmp}).to_csv(
+        OUT_DIR/"gwo_comparacion_folds.csv",index=False,encoding="utf-8-sig")
+    (OUT_DIR/"resumen_gwo.json").write_text(json.dumps(resumen,ensure_ascii=False,indent=2),encoding="utf-8")
+    graficar(historial,float(baseline_inner.mean()),resultados,features,mascara)
+    print(f"GWO finalizado en {segundos:.1f}s: {n_sel}/{X.shape[1]} características")
+    print(resultados.to_string(index=False))
+    print(f"Resultados: {OUT_DIR}")
+    print("Siguiente: adaptar 05_validacion_gwo.py; su versión anterior no consume esta carpeta por corpus.")
+    return 0
 
-    print(f"\nGWO completado en {t_gwo:.1f}s")
-    print(f"Features seleccionadas: {n_sel} / {N_FEATURES}  ({100*n_sel/N_FEATURES:.1f}%)")
-    print(f"F1-macro (inner CV 3-fold): {f1_gwo:.4f}")
-    print(f"Delta vs baseline: {'+' if f1_gwo >= f1_base else ''}{f1_gwo - f1_base:.4f}")
 
-    # Historial de convergencia
-    history_best = optimizer.history.list_global_best_fit
-
-except ImportError as e:
-    print(f"Error importando mealpy: {e}")
-    sys.exit(1)
-
-# ══════════════════════════════════════════════════════════════════════════════
-# EVALUACIÓN EXPLORATORIA CON CV 5-FOLD SOBRE FEATURES YA SELECCIONADAS
-# ══════════════════════════════════════════════════════════════════════════════
-print("\n" + "─" * 68)
-print("EVALUACION EXPLORATORIA — StratifiedKFold(5) sobre features GWO")
-print("─" * 68)
-print("Nota: la selección GWO se hizo antes de esta comparación externa.")
-print("Por ello, este valor no sustituye una validación anidada completa.")
-
-OUTER_CV = StratifiedKFold(n_splits=5, shuffle=True, random_state=SEED)
-mask_gwo = best_binary.astype(bool)
-
-# Baseline: todas las features, outer CV
-f1s_base_outer = []
-for tr, te in OUTER_CV.split(X_full, y):
-    X_tr, X_te = X_full[tr], X_full[te]
-    y_tr, y_te = y[tr], y[te]
-    smote = SMOTE(k_neighbors=2, random_state=SEED)
-    X_r, y_r = smote.fit_resample(X_tr, y_tr)
-    clf = ComplementNB(); clf.fit(X_r, y_r)
-    f1s_base_outer.append(f1_score(y_te, clf.predict(X_te), average='macro', zero_division=0))
-
-# GWO: features seleccionadas, outer CV
-X_gwo = X_full[:, mask_gwo]
-f1s_gwo_outer = []
-for tr, te in OUTER_CV.split(X_gwo, y):
-    X_tr, X_te = X_gwo[tr], X_gwo[te]
-    y_tr, y_te = y[tr], y[te]
-    smote = SMOTE(k_neighbors=2, random_state=SEED)
-    X_r, y_r = smote.fit_resample(X_tr, y_tr)
-    clf = ComplementNB(); clf.fit(X_r, y_r)
-    f1s_gwo_outer.append(f1_score(y_te, clf.predict(X_te), average='macro', zero_division=0))
-
-f1_base_out = np.mean(f1s_base_outer)
-std_base_out = np.std(f1s_base_outer, ddof=1)
-
-f1_gwo_out = np.mean(f1s_gwo_outer)
-std_gwo_out = np.std(f1s_gwo_outer, ddof=1)
-
-print(f"  Baseline (400 feat)  : F1={f1_base_out:.4f} ± {std_base_out:.4f}  "
-      f"folds={[round(x,3) for x in f1s_base_outer]}")
-print(f"  GWO ({n_sel:>3} feat)    : F1={f1_gwo_out:.4f} ± {std_gwo_out:.4f}  "
-      f"folds={[round(x,3) for x in f1s_gwo_outer]}")
-print(f"  Delta F1             : {'+' if f1_gwo_out >= f1_base_out else ''}{f1_gwo_out - f1_base_out:.4f}")
-print(f"  Reduccion de espacio : {100*(1 - n_sel/N_FEATURES):.1f}%  ({N_FEATURES} → {n_sel} features)")
-
-# ── Top 30 features seleccionadas ────────────────────────────────────────────
-selected_names = feature_names[mask_gwo]
-# Puntaje TF-IDF medio para ordenar
-tfidf_mean = X_full[:, mask_gwo].mean(axis=0)
-top_idx    = np.argsort(tfidf_mean)[::-1][:30]
-print(f"\n  Top 30 features seleccionadas (por TF-IDF medio):")
-for i, idx in enumerate(top_idx):
-    print(f"    {i+1:>2}. '{selected_names[idx]}'  (tfidf_mean={tfidf_mean[idx]:.4f})")
-
-# ══════════════════════════════════════════════════════════════════════════════
-# GUARDADO DE RESULTADOS
-# ══════════════════════════════════════════════════════════════════════════════
-df_results = pd.DataFrame({
-    'Modelo':   ['Baseline (400 feat)', f'GWO ({n_sel} feat)'],
-    'n_features': [N_FEATURES, n_sel],
-    'F1_media': [f1_base_out, f1_gwo_out],
-    'F1_std':   [std_base_out, std_gwo_out],
-    'IC95':     [1.96*std_base_out/np.sqrt(5), 1.96*std_gwo_out/np.sqrt(5)],
-})
-df_results.to_csv(os.path.join(OUT_DIR, 'gwo_resultados.csv'), index=False, encoding='utf-8-sig')
-
-df_features = pd.DataFrame({
-    'feature': selected_names,
-    'tfidf_mean': X_full[:, mask_gwo].mean(axis=0),
-    'tfidf_std':  X_full[:, mask_gwo].std(axis=0),
-})
-df_features = df_features.sort_values('tfidf_mean', ascending=False)
-df_features.to_csv(os.path.join(OUT_DIR, 'gwo_features_seleccionadas.csv'),
-                   index=False, encoding='utf-8-sig')
-print(f"\nCSVs guardados: gwo_resultados.csv, gwo_features_seleccionadas.csv")
-
-# ══════════════════════════════════════════════════════════════════════════════
-# VISUALIZACIONES
-# ══════════════════════════════════════════════════════════════════════════════
-fig, axes = plt.subplots(1, 3, figsize=(16, 5))
-
-# ── 1. Curva de convergencia ──────────────────────────────────────────────────
-ax = axes[0]
-ax.plot(range(1, len(history_best) + 1), history_best,
-        color='#1F497D', linewidth=2)
-ax.axhline(f1_base, color='#888888', linestyle='--', linewidth=1.5,
-           label=f'Baseline {f1_base:.3f}')
-ax.set_xlabel('Epoch'); ax.set_ylabel('F1-macro (fitness)')
-ax.set_title('GWO — Curva de convergencia\n(fitness del alfa por epoch)', fontsize=10)
-ax.legend(fontsize=9); ax.grid(alpha=0.3)
-
-# ── 2. Comparación barras (outer CV) ─────────────────────────────────────────
-ax = axes[1]
-labels = [f'Baseline\n(400 feat)', f'GWO\n({n_sel} feat)']
-vals   = [f1_base_out, f1_gwo_out]
-errs   = [1.96*std_base_out/np.sqrt(5), 1.96*std_gwo_out/np.sqrt(5)]
-colors = ['#888888', '#1F497D']
-bars   = ax.bar([0, 1], vals, color=colors, alpha=0.85, edgecolor='white', linewidth=0.8)
-ax.errorbar([0, 1], vals, yerr=errs, fmt='none', color='#222222', capsize=7, linewidth=2)
-for bar, val in zip(bars, vals):
-    ax.text(bar.get_x() + bar.get_width()/2, val + 0.015, f'{val:.3f}',
-            ha='center', va='bottom', fontsize=12, fontweight='bold')
-ax.set_xticks([0, 1]); ax.set_xticklabels(labels, fontsize=10)
-ax.set_ylabel('F1-macro (5-fold outer CV)'); ax.set_ylim(0, 1.05)
-ax.set_title('F1-macro con IC 95%\n(Outer CV 5-fold)', fontsize=10)
-ax.grid(axis='y', alpha=0.3)
-
-# ── 3. Top 20 features seleccionadas ─────────────────────────────────────────
-ax = axes[2]
-top20 = df_features.head(20)
-y_pos = np.arange(len(top20))
-ax.barh(y_pos, top20['tfidf_mean'], color='#1E6823', alpha=0.8, edgecolor='white')
-ax.set_yticks(y_pos)
-ax.set_yticklabels(top20['feature'], fontsize=8)
-ax.invert_yaxis()
-ax.set_xlabel('TF-IDF medio en corpus')
-ax.set_title(f'Top 20 features seleccionadas por GWO\n(de {n_sel} totales seleccionadas)', fontsize=10)
-ax.grid(axis='x', alpha=0.3)
-
-plt.tight_layout()
-plt.savefig(os.path.join(OUT_DIR, 'gwo_seleccion.png'), dpi=150)
-plt.close()
-print("Grafica guardada: gwo_seleccion.png")
-
-# ── Mapa de features seleccionadas vs no seleccionadas ───────────────────────
-fig, ax = plt.subplots(figsize=(14, 3))
-colors_map = ['#D5E8F0' if b else '#F8F8F8' for b in best_binary]
-for i, (c, b) in enumerate(zip(colors_map, best_binary)):
-    ax.bar(i, 1, width=1, color='#1F497D' if b else '#EEEEEE',
-           edgecolor='none', linewidth=0)
-ax.set_xlim(0, N_FEATURES); ax.set_ylim(0, 1)
-ax.set_xlabel('Indice de feature (0–399)')
-ax.set_title(f'Mapa binario de seleccion GWO: {n_sel} features seleccionadas (azul) '
-             f'/ {N_FEATURES - n_sel} descartadas (gris)', fontsize=10)
-ax.set_yticks([])
-from matplotlib.patches import Patch
-ax.legend(handles=[Patch(color='#1F497D', label='Seleccionada'),
-                   Patch(color='#EEEEEE', label='Descartada')],
-          loc='upper right', fontsize=9)
-plt.tight_layout()
-plt.savefig(os.path.join(OUT_DIR, 'gwo_mapa_features.png'), dpi=150)
-plt.close()
-print("Grafica guardada: gwo_mapa_features.png")
-
-# ── Tabla final ───────────────────────────────────────────────────────────────
-print("\n" + "=" * 68)
-print("RESUMEN FINAL")
-print("=" * 68)
-print(f"  {'Metodo':<30} {'Features':>8}  {'F1-macro':>8}  {'±IC95%':>8}")
-print(f"  {'-'*56}")
-print(f"  {'Baseline (sin seleccion)':<30} {N_FEATURES:>8}  {f1_base_out:>8.4f}  {1.96*std_base_out/np.sqrt(5):>8.4f}")
-print(f"  {'GWO (Mirjalili et al., 2014)':<30} {n_sel:>8}  {f1_gwo_out:>8.4f}  {1.96*std_gwo_out/np.sqrt(5):>8.4f}")
-print(f"\n  Reduccion espacio de features: {N_FEATURES} → {n_sel} ({100*(1-n_sel/N_FEATURES):.1f}% menos)")
-print(f"  Delta F1: {'+' if f1_gwo_out >= f1_base_out else ''}{f1_gwo_out - f1_base_out:.4f}")
-print("\n" + "=" * 68)
-print("FIN — gwo_feature_selection.py")
-print("=" * 68)
+configurar_corpus("actual")
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except ImportError as error:
+        raise SystemExit(f"Dependencia ausente o incompatible: {error}. Revisa las versiones del entorno. Instalación de paquetes: python -m pip install mealpy imbalanced-learn scikit-learn pandas matplotlib") from None
+    except (FileNotFoundError, ValueError) as error:
+        raise SystemExit(f"ERROR: {error}") from None

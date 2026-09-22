@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
 import os
+from datetime import datetime, timezone
+from urllib.parse import urlparse
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -28,44 +32,52 @@ SRC_ROOT = os.path.abspath(
     )
 )
 
-RUTA_ENTRADA = os.path.join(
-    SRC_ROOT,
-    "data",
-    "processed",
-    "perfiles_egreso_etiquetado_v2.csv",
-)
+CORPUS_SELECCIONADO = "actual"
 
-RESULTADOS_DIR = os.path.join(
-    SRC_ROOT,
-    "data",
-    "resultados_cientificos",
-    "homogeneidad_semantica",
-)
 
-RUTA_MATRIZ_CENTROIDES = os.path.join(
-    RESULTADOS_DIR,
-    "similitud_centroides_v2.csv",
-)
+def configurar_corpus(corpus: str) -> None:
+    global CORPUS_SELECCIONADO, RUTA_ENTRADA, RESULTADOS_DIR
+    global RUTA_MATRIZ_CENTROIDES, RUTA_HOMOGENEIDAD_CLASE, RUTA_RESUMEN
+    global RUTA_GRAFICO_CENTROIDES, RUTA_GRAFICO_PERMUTACION, RUTA_GRUPOS, RUTA_PERMUTACIONES
+    if corpus not in {"actual", "v2"}:
+        raise ValueError("Corpus no válido: usa actual o v2.")
+    CORPUS_SELECCIONADO = corpus
+    nombre = ("perfiles_egreso_etiquetado_actual_corregido.csv"
+              if corpus == "actual" else "perfiles_egreso_etiquetado_v2.csv")
+    RUTA_ENTRADA = os.path.join(SRC_ROOT, "data", "processed", nombre)
+    RESULTADOS_DIR = os.path.join(SRC_ROOT, "data", "resultados_cientificos", "homogeneidad_semantica")
+    def ruta(nombre, extension):
+        return os.path.join(RESULTADOS_DIR, f"{nombre}_{corpus}.{extension}")
+    RUTA_MATRIZ_CENTROIDES = ruta("similitud_centroides", "csv")
+    RUTA_HOMOGENEIDAD_CLASE = ruta("homogeneidad_por_clase", "csv")
+    RUTA_RESUMEN = ruta("resumen_homogeneidad", "json")
+    RUTA_GRAFICO_CENTROIDES = ruta("similitud_centroides", "png")
+    RUTA_GRAFICO_PERMUTACION = ruta("test_permutacion_homogeneidad", "png")
+    RUTA_GRUPOS = ruta("unidades_test_homogeneidad", "csv")
+    RUTA_PERMUTACIONES = ruta("distribucion_nula_homogeneidad", "csv")
 
-RUTA_HOMOGENEIDAD_CLASE = os.path.join(
-    RESULTADOS_DIR,
-    "homogeneidad_por_clase_v2.csv",
-)
 
-RUTA_RESUMEN = os.path.join(
-    RESULTADOS_DIR,
-    "resumen_homogeneidad_v2.json",
-)
+def solicitar_corpus() -> str:
+    print("\nSelecciona el corpus:")
+    print("1. Actual — salida corregida del encoding")
+    print("2. V2 — corpus histórico")
+    opciones = {"1": "actual", "actual": "actual", "2": "v2", "v2": "v2"}
+    while True:
+        try:
+            respuesta = input("Opción [1/2]: ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            raise SystemExit("Selección cancelada. Usa --corpus actual o --corpus v2.") from None
+        if respuesta in opciones:
+            return opciones[respuesta]
+        print("Opción no válida. Escribe 1 o 2.")
 
-RUTA_GRAFICO_CENTROIDES = os.path.join(
-    RESULTADOS_DIR,
-    "similitud_centroides_v2.png",
-)
 
-RUTA_GRAFICO_PERMUTACION = os.path.join(
-    RESULTADOS_DIR,
-    "test_permutacion_homogeneidad_v2.png",
-)
+def sha256_archivo(ruta: str) -> str:
+    with open(ruta, "rb") as archivo:
+        return hashlib.sha256(archivo.read()).hexdigest()
+
+
+configurar_corpus("actual")
 
 
 # =============================================================================
@@ -90,48 +102,42 @@ TFIDF_CONFIG = {
 # =============================================================================
 
 def cargar_corpus() -> pd.DataFrame:
-
-    if not os.path.exists(RUTA_ENTRADA):
+    if not os.path.isfile(RUTA_ENTRADA):
         raise FileNotFoundError(
-            "No se encontró el corpus V2:\n"
-            f"{RUTA_ENTRADA}"
+            f"No se encontró el corpus seleccionado ({CORPUS_SELECCIONADO}):\n"
+            f"{RUTA_ENTRADA}\n"
+            "Para actual, ejecuta primero el encoding con --corpus actual."
         )
-
-    df = pd.read_csv(
-        RUTA_ENTRADA,
-        encoding="utf-8-sig",
-    )
-
-    columnas_requeridas = {
-        "perfil_egreso",
-        "grado",
-    }
-
-    faltantes = (
-        columnas_requeridas
-        - set(df.columns)
-    )
-
+    huella = sha256_archivo(RUTA_ENTRADA)
+    # Admite los CSV históricos con comas y los actuales con punto y coma.
+    df = pd.read_csv(RUTA_ENTRADA, sep=None, engine="python",
+                     encoding="utf-8-sig", keep_default_na=False)
+    if sha256_archivo(RUTA_ENTRADA) != huella:
+        raise ValueError("El CSV cambió durante la lectura. Repite la ejecución.")
+    faltantes = {"perfil_egreso", "grado"} - set(df.columns)
     if faltantes:
-        raise ValueError(
-            "El corpus V2 no contiene las columnas "
-            f"requeridas: {sorted(faltantes)}"
-        )
-
-    df = df.dropna(
-        subset=[
-            "perfil_egreso",
-            "grado",
-        ]
-    ).copy()
-
-    df = df[
-        df["perfil_egreso"]
-        .astype(str)
-        .str.strip()
-        .ne("")
-    ].copy()
-
+        raise ValueError(f"Faltan columnas requeridas: {sorted(faltantes)}")
+    if df.empty:
+        raise ValueError("El corpus está vacío.")
+    for columna in ["perfil_egreso", "grado"]:
+        vacias = df[columna].astype(str).str.strip().eq("")
+        if vacias.any():
+            raise ValueError(
+                f"Hay {int(vacias.sum())} filas sin {columna}; "
+                "corrige el corpus en fase 2. No se eliminaron filas."
+            )
+    desconocidas = set(df["grado"]) - {"Civil", "Informática", "Ejecución"}
+    if desconocidas:
+        raise ValueError(f"Grados fuera del catálogo: {sorted(desconocidas)}")
+    for columna in ["estado_registro", "estado_etiquetado"]:
+        if columna in df:
+            pendientes = df[columna].astype(str).str.strip().str.upper().isin(["REVISAR", "ERROR"])
+            if pendientes.any():
+                raise ValueError(f"El CSV contiene filas REVISAR/ERROR en {columna}.")
+    conteos = df["grado"].value_counts()
+    if len(conteos) != 3 or conteos.min() < 2:
+        raise ValueError("El análisis requiere las tres clases, con al menos dos perfiles cada una.")
+    df.attrs["sha256_entrada"] = huella
     return df
 
 
@@ -151,10 +157,9 @@ def vectorizar(
         textos.astype(str)
     )
 
-    return (
-        vectorizador,
-        X.toarray(),
-    )
+    if np.any(np.asarray(X.getnnz(axis=1)) == 0):
+        raise ValueError("TF-IDF dejó perfiles sin términos; revisa el corpus o su configuración.")
+    return vectorizador, X.toarray()
 
 
 # =============================================================================
@@ -190,10 +195,9 @@ def obtener_similitudes_intra_inter(
         ~mismas_clases
     ]
 
-    return (
-        intra,
-        inter,
-    )
+    if not len(intra) or not len(inter):
+        raise ValueError("No hay suficientes pares intra/inter para calcular el estadístico.")
+    return intra, inter
 
 
 def calcular_estadistico(
@@ -336,6 +340,81 @@ def calcular_centroides(
     )
 
 
+def preparar_unidades_test(df: pd.DataFrame, X: np.ndarray):
+    """Actual: un vector promedio por grupo; V2: esquema histórico por perfil.
+
+    La agrupación se define sin usar el resultado del test. Solo se comprueba
+    que cada grupo tenga una etiqueta coherente. TF-IDF se ajusta al corpus
+    completo (descriptivo), después se promedian los vectores de cada grupo.
+    La permutación asume intercambiabilidad entre las unidades resultantes;
+    agrupar dependencias conocidas no demuestra independencia entre todas ellas.
+    """
+    n = len(df)
+    padres = list(range(n))
+    def raiz(i):
+        while padres[i] != i:
+            padres[i] = padres[padres[i]]
+            i = padres[i]
+        return i
+    def unir(i, j):
+        padres[raiz(j)] = raiz(i)
+    motivos = [[] for _ in range(n)]
+    if CORPUS_SELECCIONADO == "actual":
+        vistos_grupo, vistos_texto = {}, {}
+        for i, (_, fila) in enumerate(df.iterrows()):
+            grupo = str(fila.get("grupo_perfil", "")).strip()
+            url = urlparse(str(fila.get("url", "")))
+            # Recupera el vínculo conocido si el CSV no trae grupo_perfil.
+            ucsc = (url.hostname in {"it.ucsc.cl", "advance.ucsc.cl"}
+                    and url.path.rstrip("/") == "/carreras/ingenieria-de-ejecucion-en-informatica")
+            claves = ([grupo] if grupo else [])
+            if ucsc:
+                claves.append("ucsc_ejecucion_informatica")
+                motivos[i].append("modalidades UCSC documentadas")
+            for clave in claves:
+                if clave in vistos_grupo:
+                    unir(vistos_grupo[clave], i)
+                else:
+                    vistos_grupo[clave] = i
+                motivos[i].append("grupo:" + clave)
+            texto = " ".join(str(fila["perfil_egreso"]).casefold().split())
+            if texto in vistos_texto:
+                unir(vistos_texto[texto], i)
+                motivos[i].append("texto duplicado normalizado")
+            else:
+                vistos_texto[texto] = i
+    miembros = {}
+    for i in range(n):
+        miembros.setdefault(raiz(i), []).append(i)
+    vectores, etiquetas, filas = [], [], []
+    for numero, indices in enumerate(miembros.values(), 1):
+        clases = df.iloc[indices]["grado"].unique()
+        if len(clases) != 1:
+            raise ValueError(f"El grupo con filas {[i+1 for i in indices]} mezcla grados; revisa las etiquetas.")
+        vectores.append(X[indices].mean(axis=0))
+        etiquetas.append(clases[0])
+        for i in indices:
+            fila = df.iloc[i]
+            filas.append({"unidad_test": f"unidad_{numero:03d}", "fila_datos": i+1,
+                          "n_perfiles_unidad": len(indices), "grado": clases[0],
+                          "universidad": fila.get("universidad", ""),
+                          "carrera": fila.get("carrera", ""), "url": fila.get("url", ""),
+                          "grupo_perfil_original": fila.get("grupo_perfil", ""),
+                          "criterio_agrupacion": "; ".join(motivos[i]) or "perfil individual"})
+    y = np.asarray(etiquetas)
+    conteos = pd.Series(y).value_counts()
+    if len(conteos) != 3 or conteos.min() < 2:
+        raise ValueError("El test requiere al menos dos unidades por grado después de agrupar.")
+    auditoria = pd.DataFrame(filas).sort_values("fila_datos")
+    meta = {"unidad": "grupo de perfiles" if CORPUS_SELECCIONADO == "actual" else "perfil (histórico)",
+            "n_unidades": len(y), "distribucion_unidades": {str(k): int(v) for k,v in conteos.items()},
+            "grupos_con_varios_perfiles": sum(len(v)>1 for v in miembros.values()),
+            "vector_por_unidad": "media de los vectores TF-IDF de sus perfiles",
+            "tfidf_ajustado_sobre": "todos los perfiles de entrada, sin etiquetas",
+            "supuesto": "Intercambiabilidad de etiquetas entre unidades bajo H0; no garantiza independencia institucional."}
+    return np.asarray(vectores), y, auditoria, meta
+
+
 # =============================================================================
 # 8. TEST DE PERMUTACIÓN
 # =============================================================================
@@ -345,6 +424,8 @@ def ejecutar_test_permutacion(
     etiquetas: np.ndarray,
 ):
 
+    if N_PERMUTACIONES < 1:
+        raise ValueError("El número de permutaciones debe ser positivo.")
     rng = np.random.default_rng(
         RANDOM_STATE
     )
@@ -382,7 +463,7 @@ def ejecutar_test_permutacion(
     extremos = int(
         np.sum(
             permutados
-            >= observado
+            >= observado - 100 * np.finfo(float).eps * abs(observado)
         )
     )
 
@@ -461,7 +542,7 @@ def generar_grafico_centroides(
     ax.set_title(
         (
             "Similitud coseno entre centroides\n"
-            "Perfiles de egreso — Corpus V2"
+            f"Perfiles de egreso — Corpus {CORPUS_SELECCIONADO.upper()}"
         ),
         fontweight="bold",
     )
@@ -522,7 +603,7 @@ def generar_grafico_permutacion(
     ax.set_title(
         (
             "Test de permutación — "
-            "Homogeneidad semántica"
+            f"Homogeneidad ({CORPUS_SELECCIONADO.upper()}; unidades del test)"
         ),
         fontweight="bold",
     )
@@ -581,6 +662,8 @@ def guardar_resumen(
     extremos: int,
     p_valor: float,
     homogeneidad_clase: pd.DataFrame,
+    observado_test: float,
+    metadatos_test: dict,
 ) -> dict:
 
     distribucion = (
@@ -629,7 +712,12 @@ def guardar_resumen(
 
     resumen = {
 
+        "fecha_ejecucion_utc": datetime.now(timezone.utc).isoformat(),
         "corpus": {
+            "seleccion": CORPUS_SELECCIONADO,
+            "archivo_entrada": RUTA_ENTRADA,
+            "sha256": df.attrs["sha256_entrada"],
+            "filas_descartadas": 0,
             "total": int(
                 len(df)
             ),
@@ -707,10 +795,18 @@ def guardar_resumen(
         },
 
         "test_permutacion": {
+            "agrupacion": metadatos_test,
+            "estadistico_observado_unidades": float(observado_test),
+            "estadistico": "media de similitudes intra menos media inter entre unidades",
+            "recuentos_preservados": "número de unidades por grado",
+            "correccion_p_valor": "(extremas + 1) / (permutaciones + 1)",
+            "referencia_calculo_p": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.permutation_test.html",
+            "archivo_asignacion_unidades": RUTA_GRUPOS,
+            "archivo_distribucion_nula": RUTA_PERMUTACIONES,
 
             "hipotesis_nula":
                 (
-                    "La asociación entre perfiles y "
+                    "La asociación entre unidades del test y "
                     "grados no produce una diferencia "
                     "intra/inter mayor a la esperada "
                     "por azar."
@@ -718,7 +814,7 @@ def guardar_resumen(
 
             "hipotesis_alternativa":
                 (
-                    "La similitud intra-grado es mayor "
+                    "Entre unidades del test, la similitud intra-grado es mayor "
                     "que la similitud inter-grado."
                 ),
 
@@ -767,12 +863,12 @@ def guardar_resumen(
 
             "significancia":
                 (
-                    "La diferencia observada es "
+                    "La diferencia entre unidades del test es "
                     "estadísticamente significativa "
                     "bajo el test de permutación."
                     if significativo
                     else
-                    "La diferencia observada no "
+                    "La diferencia entre unidades del test no "
                     "alcanza significancia estadística "
                     "bajo el test de permutación."
                 ),
@@ -789,8 +885,8 @@ def guardar_resumen(
         "limitaciones": [
 
             (
-                "La clase Ejecución contiene solo "
-                "cinco perfiles, por lo que sus "
+                f"La clase Ejecución contiene {distribucion.get('Ejecución', 0)} perfiles "
+                f"y {metadatos_test['distribucion_unidades'].get('Ejecución', 0)} unidades del test; sus "
                 "estimaciones presentan mayor "
                 "incertidumbre."
             ),
@@ -812,6 +908,14 @@ def guardar_resumen(
         ],
     }
 
+    resumen["limitaciones"].extend([
+        "Las medias descriptivas usan todos los perfiles; el p-valor corresponde al estadístico entre unidades agrupadas.",
+        "Los pares de similitudes comparten perfiles: no son observaciones independientes. Se permutan etiquetas de unidades, no pares.",
+        "Solo se agrupan vínculos declarados, modalidades UCSC conocidas y duplicados textuales normalizados. Pueden existir otras dependencias.",
+        "TF-IDF mide coincidencia léxica ponderada, no equivalencia semántica completa.",
+    ])
+    if sha256_archivo(RUTA_ENTRADA) != df.attrs["sha256_entrada"]:
+        raise ValueError("El archivo de entrada cambió durante el análisis; repite la ejecución.")
     with open(
         RUTA_RESUMEN,
         "w",
@@ -833,13 +937,22 @@ def guardar_resumen(
 # =============================================================================
 
 def main() -> int:
+    global N_PERMUTACIONES
+    parser = argparse.ArgumentParser(description="Homogeneidad del corpus y permutación por unidades.")
+    parser.add_argument("--corpus", choices=["actual", "v2"], help="Si se omite, muestra un menú.")
+    parser.add_argument("--permutaciones", type=int, default=5000)
+    args = parser.parse_args()
+    if args.permutaciones < 1:
+        parser.error("--permutaciones debe ser positivo")
+    N_PERMUTACIONES = args.permutaciones
+    configurar_corpus(args.corpus or solicitar_corpus())
 
     print(
         "=" * 72
     )
 
     print(
-        "HOMOGENEIDAD Y SIGNIFICANCIA SEMÁNTICA — CORPUS V2"
+        f"HOMOGENEIDAD Y SIGNIFICANCIA — {CORPUS_SELECCIONADO.upper()}"
     )
 
     print(
@@ -851,7 +964,9 @@ def main() -> int:
         exist_ok=True,
     )
 
+    print(f"Entrada seleccionada: {RUTA_ENTRADA}")
     df = cargar_corpus()
+    print(f"SHA-256: {df.attrs['sha256_entrada']}")
 
     etiquetas = (
         df["grado"]
@@ -880,6 +995,12 @@ def main() -> int:
         f"\nTF-IDF generado: "
         f"{X.shape[1]} características"
     )
+
+    X_test, etiquetas_test, auditoria_grupos, metadatos_test = preparar_unidades_test(df, X)
+    auditoria_grupos.to_csv(RUTA_GRUPOS, sep=";", index=False, encoding="utf-8-sig")
+    matriz_test = cosine_similarity(X_test)
+    print(f"Unidades del test: {len(etiquetas_test)}; distribución: {metadatos_test['distribucion_unidades']}")
+    print("Las descripciones usan todos los perfiles; el test usa un vector por unidad.")
 
     matriz_similitud = cosine_similarity(
         X
@@ -947,15 +1068,10 @@ def main() -> int:
         "\nEjecutando test de permutación..."
     )
 
-    (
-        observado,
-        permutados,
-        extremos,
-        p_valor,
-    ) = ejecutar_test_permutacion(
-        matriz_similitud,
-        etiquetas,
-    )
+    observado = calcular_estadistico(matriz_similitud, etiquetas)
+    observado_test, permutados, extremos, p_valor = ejecutar_test_permutacion(matriz_test, etiquetas_test)
+    pd.DataFrame({"permutacion": np.arange(1, len(permutados)+1),
+                  "delta_unidades": permutados}).to_csv(RUTA_PERMUTACIONES, index=False, encoding="utf-8-sig")
 
     generar_grafico_centroides(
         matriz_centroides,
@@ -963,7 +1079,7 @@ def main() -> int:
     )
 
     generar_grafico_permutacion(
-        observado,
+        observado_test,
         permutados,
         p_valor,
     )
@@ -979,6 +1095,8 @@ def main() -> int:
         extremos,
         p_valor,
         homogeneidad_clase,
+        observado_test,
+        metadatos_test,
     )
 
     print(
@@ -1005,6 +1123,7 @@ def main() -> int:
         f"{resumen['similitud_global']['homogeneidad_intra_macro']:.4f}"
     )
 
+    print(f"\nΔ entre unidades del test: {observado_test:.6f}")
     print(
         "\nTest de permutación:"
     )
@@ -1089,6 +1208,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(
-        main()
-    )
+    try:
+        raise SystemExit(main())
+    except (FileNotFoundError, ValueError) as error:
+        raise SystemExit(f"ERROR: {error}") from None

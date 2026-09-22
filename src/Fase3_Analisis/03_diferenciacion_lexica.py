@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
 import os
+from datetime import datetime, timezone
 import unicodedata
 
 import matplotlib.pyplot as plt
@@ -28,39 +31,48 @@ SRC_ROOT = os.path.abspath(
     )
 )
 
-RUTA_ENTRADA = os.path.join(
-    SRC_ROOT,
-    "data",
-    "processed",
-    "perfiles_egreso_etiquetado_v2.csv",
-)
+CORPUS_SELECCIONADO = "actual"
 
-RESULTADOS_DIR = os.path.join(
-    SRC_ROOT,
-    "data",
-    "resultados_cientificos",
-    "diferenciacion_lexica",
-)
 
-RUTA_TERMINOS = os.path.join(
-    RESULTADOS_DIR,
-    "terminos_distintivos_v2.csv",
-)
+def configurar_corpus(corpus: str) -> None:
+    global CORPUS_SELECCIONADO, RUTA_ENTRADA, RESULTADOS_DIR
+    global RUTA_TERMINOS, RUTA_AUDITORIA, RUTA_RESUMEN, RUTA_GRAFICO
+    if corpus not in {"actual", "v2"}:
+        raise ValueError("Corpus no válido: usa actual o v2.")
+    CORPUS_SELECCIONADO = corpus
+    nombre = ("perfiles_egreso_etiquetado_actual_corregido.csv"
+              if corpus == "actual" else "perfiles_egreso_etiquetado_v2.csv")
+    RUTA_ENTRADA = os.path.join(SRC_ROOT, "data", "processed", nombre)
+    RESULTADOS_DIR = os.path.join(SRC_ROOT, "data", "resultados_cientificos", "diferenciacion_lexica")
+    def ruta(nombre, extension):
+        return os.path.join(RESULTADOS_DIR, f"{nombre}_{corpus}.{extension}")
+    RUTA_TERMINOS = ruta("terminos_distintivos", "csv")
+    RUTA_AUDITORIA = ruta("auditoria_terminos_excluidos", "csv")
+    RUTA_RESUMEN = ruta("resumen_diferenciacion_lexica", "json")
+    RUTA_GRAFICO = ruta("terminos_distintivos", "png")
 
-RUTA_AUDITORIA = os.path.join(
-    RESULTADOS_DIR,
-    "auditoria_terminos_excluidos_v2.csv",
-)
 
-RUTA_RESUMEN = os.path.join(
-    RESULTADOS_DIR,
-    "resumen_diferenciacion_lexica_v2.json",
-)
+def solicitar_corpus() -> str:
+    print("\nSelecciona el corpus:")
+    print("1. Actual — salida corregida del encoding")
+    print("2. V2 — corpus histórico")
+    opciones = {"1": "actual", "actual": "actual", "2": "v2", "v2": "v2"}
+    while True:
+        try:
+            respuesta = input("Opción [1/2]: ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            raise SystemExit("Selección cancelada. Usa --corpus actual o --corpus v2.") from None
+        if respuesta in opciones:
+            return opciones[respuesta]
+        print("Opción no válida. Escribe 1 o 2.")
 
-RUTA_GRAFICO = os.path.join(
-    RESULTADOS_DIR,
-    "terminos_distintivos_v2.png",
-)
+
+def sha256_archivo(ruta: str) -> str:
+    with open(ruta, "rb") as archivo:
+        return hashlib.sha256(archivo.read()).hexdigest()
+
+
+configurar_corpus("actual")
 
 
 # =============================================================================
@@ -94,7 +106,7 @@ VECTORIZADOR_CONFIG = {
 # Se utilizan SOLO en este análisis descriptivo.
 #
 # NO modifican:
-# - el corpus V2;
+# - el corpus de entrada;
 # - GWO;
 # - ComplementNB;
 # - las validaciones.
@@ -202,50 +214,42 @@ def clasificar_exclusion(
 # =============================================================================
 
 def cargar_corpus() -> pd.DataFrame:
-
-    if not os.path.exists(
-        RUTA_ENTRADA
-    ):
+    if not os.path.isfile(RUTA_ENTRADA):
         raise FileNotFoundError(
-            "No se encontró el corpus V2:\n"
-            f"{RUTA_ENTRADA}"
+            f"No se encontró el corpus seleccionado ({CORPUS_SELECCIONADO}):\n"
+            f"{RUTA_ENTRADA}\n"
+            "Para actual, ejecuta primero el encoding con --corpus actual."
         )
-
-    df = pd.read_csv(
-        RUTA_ENTRADA,
-        encoding="utf-8-sig",
-    )
-
-    columnas_requeridas = {
-        "perfil_egreso",
-        "grado",
-    }
-
-    faltantes = (
-        columnas_requeridas
-        - set(df.columns)
-    )
-
+    huella = sha256_archivo(RUTA_ENTRADA)
+    # Admite los CSV históricos con comas y los actuales con punto y coma.
+    df = pd.read_csv(RUTA_ENTRADA, sep=None, engine="python",
+                     encoding="utf-8-sig", keep_default_na=False)
+    if sha256_archivo(RUTA_ENTRADA) != huella:
+        raise ValueError("El CSV cambió durante la lectura. Repite la ejecución.")
+    faltantes = {"perfil_egreso", "grado"} - set(df.columns)
     if faltantes:
-        raise ValueError(
-            "Faltan columnas requeridas: "
-            f"{sorted(faltantes)}"
-        )
-
-    df = df.dropna(
-        subset=[
-            "perfil_egreso",
-            "grado",
-        ]
-    ).copy()
-
-    df = df[
-        df["perfil_egreso"]
-        .astype(str)
-        .str.strip()
-        .ne("")
-    ].copy()
-
+        raise ValueError(f"Faltan columnas requeridas: {sorted(faltantes)}")
+    if df.empty:
+        raise ValueError("El corpus está vacío.")
+    for columna in ["perfil_egreso", "grado"]:
+        vacias = df[columna].astype(str).str.strip().eq("")
+        if vacias.any():
+            raise ValueError(
+                f"Hay {int(vacias.sum())} filas sin {columna}; "
+                "corrige el corpus en fase 2. No se eliminaron filas."
+            )
+    desconocidas = set(df["grado"]) - {"Civil", "Informática", "Ejecución"}
+    if desconocidas:
+        raise ValueError(f"Grados fuera del catálogo: {sorted(desconocidas)}")
+    for columna in ["estado_registro", "estado_etiquetado"]:
+        if columna in df:
+            pendientes = df[columna].astype(str).str.strip().str.upper().isin(["REVISAR", "ERROR"])
+            if pendientes.any():
+                raise ValueError(f"El CSV contiene filas REVISAR/ERROR en {columna}.")
+    conteos = df["grado"].value_counts()
+    if len(conteos) != 3 or conteos.min() < 2:
+        raise ValueError("El análisis requiere las tres clases, con al menos dos perfiles cada una.")
+    df.attrs["sha256_entrada"] = huella
     return df
 
 
@@ -313,6 +317,8 @@ def calcular_puntuacion(
         + 2 * ALPHA
     )
 
+    if ALPHA <= 0 or n_clase <= 0 or n_resto <= 0:
+        raise ValueError("El suavizado y los tamaños de clase deben ser positivos.")
     return np.log2(
         prevalencia_clase
         / prevalencia_resto
@@ -444,6 +450,9 @@ def generar_rankings(
                     ),
             }
 
+            if motivo is None and puntuaciones[indice] <= 0:
+                motivo = "prevalencia_suavizada_no_superior_al_resto"
+
             if motivo is not None:
 
                 fila[
@@ -462,15 +471,8 @@ def generar_rankings(
 
         candidatos = sorted(
             candidatos,
-            key=lambda x: (
-                x[
-                    "log2_ratio_prevalencia"
-                ],
-                x[
-                    "documentos_grado"
-                ],
-            ),
-            reverse=True,
+            key=lambda x: (-x["log2_ratio_prevalencia"],
+                           -x["documentos_grado"], x["termino"]),
         )
 
         for ranking, fila in enumerate(
@@ -488,15 +490,11 @@ def generar_rankings(
                 fila
             )
 
-    return (
-        clases,
-        pd.DataFrame(
-            resultados
-        ),
-        pd.DataFrame(
-            excluidos
-        ),
-    )
+    columnas = ["grado", "termino", "log2_ratio_prevalencia", "documentos_grado",
+                "total_documentos_grado", "documentos_resto", "total_documentos_resto",
+                "prevalencia_grado", "prevalencia_resto"]
+    return (clases, pd.DataFrame(resultados, columns=columnas + ["ranking"]),
+            pd.DataFrame(excluidos, columns=columnas + ["motivo_exclusion"]))
 
 
 # =============================================================================
@@ -507,11 +505,7 @@ def generar_grafico(
     df_resultados: pd.DataFrame,
 ) -> None:
 
-    clases = sorted(
-        df_resultados[
-            "grado"
-        ].unique()
-    )
+    clases = ["Civil", "Ejecución", "Informática"]
 
     fig, axes = plt.subplots(
         len(clases),
@@ -542,9 +536,12 @@ def generar_grafico(
                 "log2_ratio_prevalencia",
                 ascending=True,
             )
-            .tail(10)
+            .tail(TOP_N)
         )
 
+        if datos.empty:
+            ax.text(0.5, 0.5, "Sin términos que cumplan los criterios", ha="center",
+                    va="center", transform=ax.transAxes)
         ax.barh(
             datos[
                 "termino"
@@ -580,9 +577,9 @@ def generar_grafico(
 
     fig.suptitle(
         (
-            "Diferenciación léxica — Corpus V2\n"
-            "Presencia documental; términos de grado e "
-            "institucionales excluidos de la interpretación"
+            f"Diferenciación léxica — Corpus {CORPUS_SELECCIONADO.upper()}\n"
+            "Presencia documental; exclusión de términos de grado e "
+            "institucionales según listas declaradas"
         ),
         fontsize=14,
         fontweight="bold",
@@ -625,7 +622,7 @@ def guardar_resumen(
         .to_dict()
     )
 
-    top_por_grado = {}
+    top_por_grado = {str(clase): [] for clase in sorted(distribucion)}
 
     for clase in sorted(
         df_resultados[
@@ -718,7 +715,13 @@ def guardar_resumen(
 
     resumen = {
 
+        "fecha_ejecucion_utc": datetime.now(timezone.utc).isoformat(),
+        "version_analisis": "corpus_seleccionable_ranking_positivo_v1",
         "corpus": {
+            "seleccion": CORPUS_SELECCIONADO,
+            "archivo_entrada": RUTA_ENTRADA,
+            "sha256": df.attrs["sha256_entrada"],
+            "filas_descartadas": 0,
 
             "total":
                 int(
@@ -736,6 +739,11 @@ def guardar_resumen(
         },
 
         "metodo": {
+            "top_maximo_por_grado": TOP_N,
+            "criterio_puntuacion": "log2_ratio_prevalencia > 0",
+            "formula": "log2(((docs_grado+alpha)/(n_grado+2*alpha))/((docs_resto+alpha)/(n_resto+2*alpha)))",
+            "prevalencias_csv": "proporciones sin suavizar; la puntuación aplica alpha",
+            "desempate": "puntuación descendente, documentos del grado descendente, término alfabético",
 
             "unidad_analisis":
                 (
@@ -782,6 +790,11 @@ def guardar_resumen(
         },
 
         "filtrado_interpretativo": {
+            "tokens_grado": sorted(TOKENS_GRADO),
+            "tokens_institucionales": sorted(TOKENS_INSTITUCIONALES),
+            "lista_stopwords": sorted(STOPWORDS_ES),
+            "alcance_auditoria": "pares grado-término del vocabulario con soporte mínimo en el grado, descartados por listas o puntuación no positiva",
+            "orden": "stopwords antes de vectorizar; exclusiones por tokens después de seleccionar el vocabulario",
 
             "stopwords_espanol":
                 True,
@@ -833,8 +846,7 @@ def guardar_resumen(
         "limitaciones": [
 
             (
-                "La clase Ejecución contiene únicamente "
-                "cinco perfiles."
+                f"La clase Ejecución contiene {distribucion.get('Ejecución', 0)} perfiles."
             ),
 
             (
@@ -850,6 +862,20 @@ def guardar_resumen(
         ],
     }
 
+    resumen["grupos_perfil_repetidos"] = {}
+    if "grupo_perfil" in df:
+        grupos = df["grupo_perfil"].astype(str).str.strip()
+        conteos = grupos[grupos.ne("")].value_counts()
+        resumen["grupos_perfil_repetidos"] = {str(k): int(v) for k,v in conteos.items() if v > 1}
+    resumen["limitaciones"].extend([
+        "Cada perfil cuenta como documento, también los de modalidades similares. No se agrupan en este análisis descriptivo.",
+        "Los perfiles similares pueden elevar la prevalencia de términos de una plantilla institucional; el ranking no es una prueba de significancia.",
+        "El filtrado institucional se limita a la lista declarada y no garantiza eliminar todos los nombres propios.",
+        "Los términos excluidos después de vectorizar pueden ocupar parte del límite de 400 características.",
+        "Los bigramas se forman tras retirar stopwords y pueden conectar palabras no contiguas en el original.",
+    ])
+    if sha256_archivo(RUTA_ENTRADA) != df.attrs["sha256_entrada"]:
+        raise ValueError("El CSV cambió durante el análisis. Repite la ejecución.")
     with open(
         RUTA_RESUMEN,
         "w",
@@ -871,13 +897,17 @@ def guardar_resumen(
 # =============================================================================
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Diferenciación léxica descriptiva del corpus seleccionado.")
+    parser.add_argument("--corpus", choices=["actual", "v2"], help="Si se omite, muestra el menú.")
+    args = parser.parse_args()
+    configurar_corpus(args.corpus or solicitar_corpus())
 
     print(
         "=" * 72
     )
 
     print(
-        "DIFERENCIACIÓN LÉXICA INTERPRETABLE — CORPUS V2"
+        f"DIFERENCIACIÓN LÉXICA INTERPRETABLE — {CORPUS_SELECCIONADO.upper()}"
     )
 
     print(
@@ -889,7 +919,9 @@ def main() -> int:
         exist_ok=True,
     )
 
+    print(f"Entrada seleccionada: {RUTA_ENTRADA}")
     df = cargar_corpus()
+    print(f"SHA-256: {df.attrs['sha256_entrada']}")
 
     print(
         f"\nCorpus: {len(df)} perfiles"
@@ -914,7 +946,7 @@ def main() -> int:
     )
 
     print(
-        f"\nVocabulario interpretable: "
+        f"\nVocabulario antes del filtrado interpretativo: "
         f"{len(vocabulario)} características"
     )
 
@@ -964,6 +996,9 @@ def main() -> int:
         "=" * 72
     )
 
+    if resumen["grupos_perfil_repetidos"]:
+        print("Grupos compartidos:", resumen["grupos_perfil_repetidos"])
+        print("Este ranking descriptivo cuenta cada perfil por separado.")
     for clase in clases:
 
         print(
@@ -980,6 +1015,8 @@ def main() -> int:
             ] == clase
         ]
 
+        if datos.empty:
+            print("Sin términos que cumplan los criterios de frecuencia, exclusión y puntuación positiva.")
         for _, fila in datos.iterrows():
 
             print(
@@ -999,7 +1036,7 @@ def main() -> int:
     )
 
     print(
-        f"  Registros excluidos: "
+        f"  Pares grado-término excluidos: "
         f"{len(df_excluidos)}"
     )
 
@@ -1049,7 +1086,7 @@ def main() -> int:
     )
 
     print(
-        "No modifica el corpus V2 ni los "
+        "No modifica el corpus de entrada ni los "
         "resultados GWO."
     )
 
@@ -1070,6 +1107,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(
-        main()
-    )
+    try:
+        raise SystemExit(main())
+    except (FileNotFoundError, ValueError) as error:
+        raise SystemExit(f"ERROR: {error}") from None

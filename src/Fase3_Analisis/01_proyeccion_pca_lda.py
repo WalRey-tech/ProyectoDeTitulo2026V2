@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
 import os
+from datetime import datetime, timezone
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -29,34 +32,54 @@ SRC_ROOT = os.path.abspath(
     )
 )
 
-RUTA_ENTRADA = os.path.join(
-    SRC_ROOT,
-    "data",
-    "processed",
-    "perfiles_egreso_etiquetado_v2.csv",
-)
+CORPUS_SELECCIONADO = "actual"
+RUTA_ENTRADA = ""
+RESULTADOS_DIR = ""
+RUTA_GRAFICO = ""
+RUTA_COORDENADAS = ""
+RUTA_RESUMEN = ""
 
-RESULTADOS_DIR = os.path.join(
-    SRC_ROOT,
-    "data",
-    "resultados_cientificos",
-    "visualizaciones_exploratorias",
-)
 
-RUTA_GRAFICO = os.path.join(
-    RESULTADOS_DIR,
-    "proyeccion_pca_vs_lda_v2.png",
-)
+def configurar_corpus(corpus: str) -> None:
+    """Selecciona una entrada explícita; no busca otro corpus como respaldo."""
+    global CORPUS_SELECCIONADO, RUTA_ENTRADA, RESULTADOS_DIR
+    global RUTA_GRAFICO, RUTA_COORDENADAS, RUTA_RESUMEN
+    if corpus not in {"actual", "v2"}:
+        raise ValueError("Corpus no válido: usa actual o v2.")
+    CORPUS_SELECCIONADO = corpus
+    nombre = ("perfiles_egreso_etiquetado_actual_corregido.csv"
+              if corpus == "actual" else "perfiles_egreso_etiquetado_v2.csv")
+    RUTA_ENTRADA = os.path.join(SRC_ROOT, "data", "processed", nombre)
+    RESULTADOS_DIR = os.path.join(
+        SRC_ROOT, "data", "resultados_cientificos", "visualizaciones_exploratorias"
+    )
+    # Mantiene los nombres históricos V2 y separa los resultados actuales.
+    RUTA_GRAFICO = os.path.join(RESULTADOS_DIR, f"proyeccion_pca_vs_lda_{corpus}.png")
+    RUTA_COORDENADAS = os.path.join(RESULTADOS_DIR, f"coordenadas_pca_lda_{corpus}.csv")
+    RUTA_RESUMEN = os.path.join(RESULTADOS_DIR, f"resumen_pca_lda_{corpus}.json")
 
-RUTA_COORDENADAS = os.path.join(
-    RESULTADOS_DIR,
-    "coordenadas_pca_lda_v2.csv",
-)
 
-RUTA_RESUMEN = os.path.join(
-    RESULTADOS_DIR,
-    "resumen_pca_lda_v2.json",
-)
+def solicitar_corpus() -> str:
+    print("\nSelecciona el corpus:")
+    print("1. Actual — salida corregida del encoding")
+    print("2. V2 — corpus histórico")
+    opciones = {"1": "actual", "actual": "actual", "2": "v2", "v2": "v2"}
+    while True:
+        try:
+            respuesta = input("Opción [1/2]: ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            raise SystemExit("Selección cancelada. Usa --corpus actual o --corpus v2.") from None
+        if respuesta in opciones:
+            return opciones[respuesta]
+        print("Opción no válida. Escribe 1 o 2.")
+
+
+def sha256_archivo(ruta: str) -> str:
+    with open(ruta, "rb") as archivo:
+        return hashlib.sha256(archivo.read()).hexdigest()
+
+
+configurar_corpus("actual")
 
 
 # =============================================================================
@@ -90,48 +113,42 @@ COLORES = {
 # =============================================================================
 
 def cargar_corpus() -> pd.DataFrame:
-
-    if not os.path.exists(RUTA_ENTRADA):
+    if not os.path.isfile(RUTA_ENTRADA):
         raise FileNotFoundError(
-            "No se encontró el corpus V2:\n"
-            f"{RUTA_ENTRADA}"
+            f"No se encontró el corpus seleccionado ({CORPUS_SELECCIONADO}):\n"
+            f"{RUTA_ENTRADA}\n"
+            "Para actual, ejecuta primero el encoding con --corpus actual."
         )
-
-    df = pd.read_csv(
-        RUTA_ENTRADA,
-        encoding="utf-8-sig",
-    )
-
-    columnas_requeridas = {
-        "perfil_egreso",
-        "grado",
-    }
-
-    faltantes = (
-        columnas_requeridas
-        - set(df.columns)
-    )
-
+    huella = sha256_archivo(RUTA_ENTRADA)
+    # Admite los CSV históricos con comas y los actuales con punto y coma.
+    df = pd.read_csv(RUTA_ENTRADA, sep=None, engine="python",
+                     encoding="utf-8-sig", keep_default_na=False)
+    if sha256_archivo(RUTA_ENTRADA) != huella:
+        raise ValueError("El CSV cambió durante la lectura. Repite la ejecución.")
+    faltantes = {"perfil_egreso", "grado"} - set(df.columns)
     if faltantes:
-        raise ValueError(
-            "El corpus no contiene las columnas "
-            f"requeridas: {sorted(faltantes)}"
-        )
-
-    df = df.dropna(
-        subset=[
-            "perfil_egreso",
-            "grado",
-        ]
-    ).copy()
-
-    df = df[
-        df["perfil_egreso"]
-        .astype(str)
-        .str.strip()
-        .ne("")
-    ].copy()
-
+        raise ValueError(f"Faltan columnas requeridas: {sorted(faltantes)}")
+    if df.empty:
+        raise ValueError("El corpus está vacío.")
+    for columna in ["perfil_egreso", "grado"]:
+        vacias = df[columna].astype(str).str.strip().eq("")
+        if vacias.any():
+            raise ValueError(
+                f"Hay {int(vacias.sum())} filas sin {columna}; "
+                "corrige el corpus en fase 2. No se eliminaron filas."
+            )
+    desconocidas = set(df["grado"]) - set(COLORES)
+    if desconocidas:
+        raise ValueError(f"Grados fuera del catálogo: {sorted(desconocidas)}")
+    for columna in ["estado_registro", "estado_etiquetado"]:
+        if columna in df:
+            pendientes = df[columna].astype(str).str.strip().str.upper().isin(["REVISAR", "ERROR"])
+            if pendientes.any():
+                raise ValueError(f"El CSV contiene filas REVISAR/ERROR en {columna}.")
+    conteos = df["grado"].value_counts()
+    if len(conteos) != 3 or conteos.min() < 2:
+        raise ValueError("PCA/LDA 2D requiere las tres clases, con al menos dos perfiles cada una.")
+    df.attrs["sha256_entrada"] = huella
     return df
 
 
@@ -151,10 +168,9 @@ def vectorizar(
         textos.astype(str)
     )
 
-    return (
-        vectorizador,
-        X_tfidf.toarray(),
-    )
+    if X_tfidf.shape[1] < 2:
+        raise ValueError("TF-IDF generó menos de dos características; no permite la proyección 2D.")
+    return vectorizador, X_tfidf.toarray()
 
 
 # =============================================================================
@@ -193,12 +209,9 @@ def calcular_proyecciones(
         y,
     )
 
-    return (
-        pca,
-        X_pca,
-        lda,
-        X_lda,
-    )
+    if X_lda.shape[1] < 2 or not np.isfinite(X_lda).all() or not np.isfinite(X_pca).all():
+        raise ValueError("El corpus no permite dos ejes finitos de PCA/LDA. Revisa su variación textual.")
+    return pca, X_pca, lda, X_lda
 
 
 # =============================================================================
@@ -230,6 +243,13 @@ def guardar_coordenadas(
         }
     )
 
+    # Identidad de cada punto y grupos para su uso en pasos posteriores.
+    coordenadas.insert(0, "fila_datos", np.arange(1, len(df) + 1))
+    for columna in ["indice_fuente", "universidad", "carrera", "url",
+                    "modalidad", "id_programa", "grupo_perfil"]:
+        if columna in df:
+            coordenadas[columna] = df[columna].values
+
     coordenadas.to_csv(
         RUTA_COORDENADAS,
         index=False,
@@ -256,7 +276,7 @@ def generar_grafico(
 
     fig.suptitle(
         (
-            "Perfiles de egreso V2 — "
+            f"Perfiles de egreso {CORPUS_SELECCIONADO.upper()} (n={len(y)}) — "
             "Proyección PCA vs. LDA"
         ),
         fontsize=16,
@@ -433,7 +453,13 @@ def guardar_resumen(
 
     resumen = {
 
+        "fecha_ejecucion_utc": datetime.now(timezone.utc).isoformat(),
+        "random_state": RANDOM_STATE,
         "corpus": {
+            "seleccion": CORPUS_SELECCIONADO,
+            "archivo_entrada": RUTA_ENTRADA,
+            "sha256": df.attrs["sha256_entrada"],
+            "filas_descartadas": 0,
             "total": int(len(df)),
             "distribucion": {
                 str(clase): int(cantidad)
@@ -519,6 +545,21 @@ def guardar_resumen(
         },
     }
 
+    resumen["grupos_perfil_repetidos"] = {}
+    if "grupo_perfil" in df:
+        grupos = df["grupo_perfil"].astype(str).str.strip()
+        conteos = grupos[grupos.ne("")].value_counts()
+        resumen["grupos_perfil_repetidos"] = {
+            str(grupo): int(n) for grupo, n in conteos.items() if n > 1
+        }
+    resumen["alcance"] = (
+        "PCA y LDA ajustados al corpus completo para exploración. "
+        "Este script no realiza particiones ni validación predictiva. "
+        "Los grupos de perfiles deben tratarse en la validación posterior."
+    )
+    if sha256_archivo(RUTA_ENTRADA) != df.attrs["sha256_entrada"]:
+        raise ValueError("El corpus cambió durante el análisis. Repite la ejecución.")
+
     with open(
         RUTA_RESUMEN,
         "w",
@@ -540,13 +581,18 @@ def guardar_resumen(
 # =============================================================================
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Proyección exploratoria PCA/LDA del corpus seleccionado.")
+    parser.add_argument("--corpus", choices=["actual", "v2"],
+                        help="Si se omite, muestra el menú de selección.")
+    args = parser.parse_args()
+    configurar_corpus(args.corpus or solicitar_corpus())
 
     print(
         "=" * 72
     )
 
     print(
-        "VISUALIZACIÓN EXPLORATORIA PCA vs. LDA — CORPUS V2"
+        f"VISUALIZACIÓN EXPLORATORIA PCA vs. LDA — {CORPUS_SELECCIONADO.upper()}"
     )
 
     print(
@@ -558,7 +604,9 @@ def main() -> int:
         exist_ok=True,
     )
 
+    print(f"Entrada seleccionada: {RUTA_ENTRADA}")
     df = cargar_corpus()
+    print(f"SHA-256: {df.attrs['sha256_entrada']}")
 
     print(
         f"\nCorpus: {len(df)} perfiles"
@@ -610,6 +658,10 @@ def main() -> int:
         pca,
         lda,
     )
+
+    if resumen["grupos_perfil_repetidos"]:
+        print("Grupos compartidos conservados:", resumen["grupos_perfil_repetidos"])
+        print("La validación posterior debe mantener juntos los registros de cada grupo.")
 
     print(
         "\nPCA:"
@@ -677,6 +729,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(
-        main()
-    )
+    try:
+        raise SystemExit(main())
+    except (FileNotFoundError, ValueError) as error:
+        raise SystemExit(f"ERROR: {error}") from None
