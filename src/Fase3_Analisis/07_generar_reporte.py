@@ -1,1310 +1,424 @@
 # -*- coding: utf-8 -*-
+"""Consolida las salidas actuales de los pasos 01–06 sin volver a entrenar.
 
+Desde src/Fase3_Analisis:
+    python 07_generar_reporte.py --corpus actual
+Sin --corpus muestra el menú actual/V2. Requiere pandas y scikit-learn.
+
+Lee exclusivamente las rutas del corpus elegido. Exige los seis resúmenes y
+los CSV predictivos; verifica SHA-256, número de perfiles y distribución de
+clases. Recalcula métricas de predicciones OOF y contrasta folds/resúmenes.
+No carga resultados históricos como respaldo ni rellena métricas ausentes.
+Si algo falta o pertenece a otra entrada, informa qué paso repetir y se detiene
+antes de escribir el reporte. No ejecuta scraping, entrenamiento ni GWO.
+
+Salidas en src/data/resultados_cientificos:
+    resultados_finales_{actual|v2}.json
+    reporte_final_{actual|v2}.md
+    resumen_metricas_{actual|v2}.csv
+
+El JSON conserva los seis resúmenes íntegros y la procedencia de los archivos.
+El Markdown explica los resultados sin confundir F1 con precisión, similitud
+con equivalencia semántica, ni ajuste exploratorio con evaluación predictiva.
+"""
 from __future__ import annotations
 
-import json
+import argparse
 import hashlib
+import json
+import math
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
-
-
-# =============================================================================
-# 1. RUTAS GENERALES
-# =============================================================================
-
-BASE = Path(__file__).resolve().parent
-SRC_ROOT = BASE.parent
-
-DATA_DIR = (
-    SRC_ROOT
-    / "data"
-)
-
-PROCESSED_DIR = (
-    DATA_DIR
-    / "processed"
-)
-
-RESULTADOS_DIR = (
-    DATA_DIR
-    / "resultados_cientificos"
-)
-
-CORPUS = (
-    PROCESSED_DIR
-    / "perfiles_egreso_etiquetado_v2.csv"
-)
-
-SALIDA_FINAL = (
-    RESULTADOS_DIR
-    / "resultados_finales.json"
-)
-
-
-# =============================================================================
-# 2. ANÁLISIS SEMÁNTICO
-# =============================================================================
-
-PCA_RESUMEN = (
-    RESULTADOS_DIR
-    / "visualizaciones_exploratorias"
-    / "resumen_pca_lda_v2.json"
-)
-
-HOMOGENEIDAD_RESUMEN = (
-    RESULTADOS_DIR
-    / "homogeneidad_semantica"
-    / "resumen_homogeneidad_v2.json"
-)
-
-LEXICO_RESUMEN = (
-    RESULTADOS_DIR
-    / "diferenciacion_lexica"
-    / "resumen_diferenciacion_lexica_v2.json"
-)
-
-
-# =============================================================================
-# 3. GWO — RESULTADOS DE REFERENCIA
-# =============================================================================
-
-GWO_DIR = (
-    RESULTADOS_DIR
-    / "gwo"
-)
-
-GWO_RESULTADOS = (
-    GWO_DIR
-    / "gwo_resultados.csv"
-)
-
-GWO_FEATURES = (
-    GWO_DIR
-    / "gwo_features_seleccionadas.csv"
-)
-
-GWO_CV5 = (
-    GWO_DIR
-    / "cv5_gwo_resultados.csv"
-)
-
-GWO_CV10 = (
-    GWO_DIR
-    / "cv10_gwo_resultados.csv"
-)
-
-
-# =============================================================================
-# 4. AUDITORÍA METODOLÓGICA
-# =============================================================================
-
-AUDITORIA_DIR = (
-    RESULTADOS_DIR
-    / "auditoria_fuga_lexica"
-)
-
-AUDITORIA_RESUMEN = (
-    AUDITORIA_DIR
-    / "resumen_auditoria_fuga_lexica.json"
-)
-
-AUDITORIA_PROXIES = (
-    AUDITORIA_DIR
-    / "auditoria_features_gwo_proxy.csv"
-)
-
-
-VALIDACION_ANIDADA_RESUMEN = (
-    RESULTADOS_DIR
-    / "validacion_robusta"
-    / "resumen_validacion_anidada.json"
-)
-
-
-SELECCION_MODELO_RESUMEN = (
-    RESULTADOS_DIR
-    / "seleccion_modelo_robusta"
-    / "resumen_seleccion_modelo_robusta.json"
-)
-
-
-# =============================================================================
-# 5. MODELO ROBUSTO FINAL
-# =============================================================================
-
-MODELO_FINAL_DIR = (
-    RESULTADOS_DIR
-    / "modelo_final_robusto"
-)
-
-MODELO_FINAL_RESUMEN = (
-    MODELO_FINAL_DIR
-    / "resumen_modelo_final_robusto.json"
-)
-
-MODELO_FINAL_FOLDS = (
-    MODELO_FINAL_DIR
-    / "metricas_folds_modelo_final.csv"
-)
-
-MODELO_FINAL_CLASES = (
-    MODELO_FINAL_DIR
-    / "metricas_por_clase_modelo_final.csv"
-)
-
-
-# =============================================================================
-# 6. UTILIDADES
-# =============================================================================
-
-def exigir_archivo(
-    ruta: Path,
-    descripcion: str,
-) -> None:
-
-    if not ruta.exists():
-
-        raise FileNotFoundError(
-            f"No se encontró {descripcion}:\n"
-            f"{ruta}"
-        )
-
-
-def leer_json(
-    ruta: Path,
-) -> dict:
-
-    exigir_archivo(
-        ruta,
-        ruta.name,
-    )
-
-    with ruta.open(
-        "r",
-        encoding="utf-8",
-    ) as archivo:
-
-        return json.load(
-            archivo
-        )
-
-
-def leer_json_opcional(
-    ruta: Path,
-):
-
-    if not ruta.exists():
-
-        return None
-
-    with ruta.open(
-        "r",
-        encoding="utf-8",
-    ) as archivo:
-
-        return json.load(
-            archivo
-        )
-
-
-def leer_csv(
-    ruta: Path,
-) -> pd.DataFrame:
-
-    exigir_archivo(
-        ruta,
-        ruta.name,
-    )
-
-    return pd.read_csv(
-        ruta,
-        encoding="utf-8-sig",
-    )
-
-
-def leer_csv_opcional(
-    ruta: Path,
-):
-
-    if not ruta.exists():
-
-        return None
-
-    return pd.read_csv(
-        ruta,
-        encoding="utf-8-sig",
-    )
-
-
-def redondear(
-    valor,
-    decimales: int = 6,
-):
-
-    if valor is None:
-
-        return None
-
-    if pd.isna(
-        valor
-    ):
-
-        return None
-
-    return round(
-        float(valor),
-        decimales,
-    )
-
-
-def contar_booleanos_verdaderos(
-    serie: pd.Series,
-) -> int:
-
-    """
-    Permite leer correctamente columnas booleanas
-    tanto si pandas las interpreta como bool como
-    si vienen almacenadas como texto.
-    """
-
-    if pd.api.types.is_bool_dtype(
-        serie
-    ):
-
-        return int(
-            serie.sum()
-        )
-
-    normalizada = (
-        serie
-        .astype(str)
-        .str.strip()
-        .str.lower()
-    )
-
-    return int(
-        normalizada.isin(
-            [
-                "true",
-                "1",
-                "sí",
-                "si",
-                "yes",
-            ]
-        ).sum()
-    )
-
-
-# =============================================================================
-# 7. VALIDACIÓN DE ARCHIVOS ESENCIALES
-# =============================================================================
-
-def verificar_archivos_esenciales() -> None:
-
-    archivos = {
-
-        "corpus científico V2":
-            CORPUS,
-
-        "resumen PCA/LDA":
-            PCA_RESUMEN,
-
-        "resumen de homogeneidad":
-            HOMOGENEIDAD_RESUMEN,
-
-        "resumen de diferenciación léxica":
-            LEXICO_RESUMEN,
-
-        "resultados GWO":
-            GWO_RESULTADOS,
-
-        "features seleccionadas por GWO":
-            GWO_FEATURES,
-
-        "validación GWO 5-fold":
-            GWO_CV5,
-
-        "diagnóstico GWO 10-fold":
-            GWO_CV10,
-
-        "resumen del modelo robusto final":
-            MODELO_FINAL_RESUMEN,
-
-        "métricas por fold del modelo robusto":
-            MODELO_FINAL_FOLDS,
-
-        "métricas por clase del modelo robusto":
-            MODELO_FINAL_CLASES,
+from sklearn.metrics import accuracy_score, f1_score
+
+SRC_ROOT = Path(__file__).resolve().parent.parent
+CLASES = ['Civil', 'Ejecución', 'Informática']
+PASOS = {
+    '01': '01_proyeccion_pca_lda.py',
+    '02': '02_homogeneidad_significancia.py',
+    '03': '03_diferenciacion_lexica.py',
+    '04': '04_seleccion_caracteristicas_gwo.py',
+    '05': '05_validacion_gwo.py',
+    '06': '06_modelo_final_robusto.py',
+}
+
+
+def sha256_archivo(ruta):
+    return hashlib.sha256(Path(ruta).read_bytes()).hexdigest()
+
+
+def solicitar_corpus():
+    print('\nSelecciona el corpus:\n1. Actual — salida corregida del encoding\n2. V2 — corpus histórico')
+    opciones = {'1': 'actual', 'actual': 'actual', '2': 'v2', 'v2': 'v2'}
+    while True:
+        try:
+            respuesta = input('Opción [1/2]: ').strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            raise SystemExit('Selección cancelada. Usa --corpus actual o --corpus v2.') from None
+        if respuesta in opciones:
+            return opciones[respuesta]
+        print('Opción no válida. Escribe 1 o 2.')
+
+
+def definir_rutas(corpus):
+    base = Path(SRC_ROOT) / 'data' / 'resultados_cientificos'
+    entrada = Path(SRC_ROOT) / 'data' / 'processed' / (
+        'perfiles_egreso_etiquetado_actual_corregido.csv' if corpus == 'actual'
+        else 'perfiles_egreso_etiquetado_v2.csv')
+    gwo = base / 'gwo' / corpus
+    anidada = gwo / 'validacion_anidada'
+    robusto = base / 'modelo_final_robusto' / corpus
+    resumenes = {
+        '01': base / 'visualizaciones_exploratorias' / f'resumen_pca_lda_{corpus}.json',
+        '02': base / 'homogeneidad_semantica' / f'resumen_homogeneidad_{corpus}.json',
+        '03': base / 'diferenciacion_lexica' / f'resumen_diferenciacion_lexica_{corpus}.json',
+        '04': gwo / 'resumen_gwo.json',
+        '05': anidada / 'resumen_validacion_anidada.json',
+        '06': robusto / 'resumen_modelo_final_robusto.json',
+    }
+    tablas = {
+        '04_resultados': gwo / 'gwo_resultados.csv',
+        '04_features': gwo / 'gwo_features_seleccionadas.csv',
+        '05_folds': anidada / 'folds.csv',
+        '05_predicciones': anidada / 'predicciones.csv',
+        '06_folds': robusto / 'metricas_folds_modelo_final.csv',
+        '06_predicciones': robusto / 'predicciones_oof_modelo_final.csv',
+    }
+    return entrada, base, resumenes, tablas
+
+
+def problema(paso, mensaje, corpus):
+    raise ValueError(f'Paso {paso}: {mensaje}\nRepite: python .\\{PASOS[paso]} --corpus {corpus}')
+
+
+def cerca(a, b, contexto, paso, corpus, tolerancia=1e-6):
+    try:
+        valido = math.isfinite(float(a)) and math.isfinite(float(b)) and abs(float(a)-float(b)) <= tolerancia
+    except (TypeError, ValueError):
+        valido = False
+    if not valido:
+        problema(paso, f'{contexto} no coincide: {a!r} frente a {b!r}.', corpus)
+
+
+def exigir_columnas(df, columnas, paso, corpus):
+    faltan = set(columnas) - set(df.columns)
+    if faltan:
+        problema(paso, f'faltan columnas {sorted(faltan)}.', corpus)
+
+
+def validar_procedencia(resumenes, corpus, huella, df):
+    distribucion = {str(k): int(v) for k,v in df.grado.value_counts().items()}
+    for paso, r in resumenes.items():
+        try:
+            if paso in {'01', '02', '03', '04'}:
+                c = r['corpus']
+                seleccion, digest, n, reparto = c['seleccion'], c['sha256'], c['total'], c['distribucion']
+            elif paso == '05':
+                seleccion, digest, n, reparto = r['corpus'], r['sha256_entrada'], r['n_perfiles'], r['distribucion_grados']
+            else:
+                c = r['corpus']
+                seleccion, digest, n, reparto = c['seleccion'], r['sha256_entrada'], c['total_perfiles'], c['distribucion']
+        except (KeyError, TypeError):
+            problema(paso, 'resumen antiguo o incompatible: falta la procedencia del corpus.', corpus)
+        if seleccion != corpus or digest != huella or n != len(df) or reparto != distribucion:
+            problema(paso, 'el resumen corresponde a otro corpus o a una versión anterior del CSV.', corpus)
+
+
+def validar_predicciones(pred, df, columna_fold, columnas_pred, paso, corpus):
+    exigir_columnas(pred, ['fila_datos', 'grupo_cv', 'grado', columna_fold, *columnas_pred], paso, corpus)
+    if len(pred) != len(df) or sorted(pred.fila_datos.tolist()) != list(range(1, len(df)+1)):
+        problema(paso, 'debe existir una predicción por fila, sin duplicados ni omisiones.', corpus)
+    pred = pred.sort_values('fila_datos').reset_index(drop=True)
+    if pred.grado.tolist() != df.grado.tolist():
+        problema(paso, 'las etiquetas de las predicciones no coinciden con las del corpus.', corpus)
+    if pred.grupo_cv.isna().any() or pred.grupo_cv.astype(str).str.strip().eq('').any():
+        problema(paso, 'faltan identificadores de grupo.', corpus)
+    if pred.groupby('grupo_cv')[columna_fold].nunique().gt(1).any():
+        problema(paso, 'un grupo aparece en más de una partición de prueba.', corpus)
+    if pred.groupby('grupo_cv').grado.nunique().gt(1).any():
+        problema(paso, 'hay grupos con grados contradictorios.', corpus)
+    ids = pred[columna_fold]
+    if ids.isna().any() or set(ids) != set(range(1, ids.nunique()+1)) or ids.nunique() < 2:
+        problema(paso, 'identificadores de fold inválidos.', corpus)
+    for _, bloque in pred.groupby(columna_fold):
+        if set(bloque.grado) != set(CLASES):
+            problema(paso, 'una partición de prueba no contiene las tres clases.', corpus)
+    for columna in columnas_pred:
+        if not set(pred[columna]).issubset(CLASES):
+            problema(paso, f'predicciones inválidas en {columna}.', corpus)
+    return pred
+
+
+def verificar_metricas(pred, folds, columna_pred, columna_fold, columna_f1, columna_acc,
+                       columna_n_test, columna_n_train, paso, corpus):
+    exigir_columnas(folds, [columna_fold, columna_f1, columna_acc, columna_n_test, columna_n_train], paso, corpus)
+    if folds[columna_fold].duplicated().any() or set(folds[columna_fold]) != set(pred[columna_fold]):
+        problema(paso, 'las métricas y las predicciones tienen folds distintos.', corpus)
+    valores = []
+    for _, fila in folds.sort_values(columna_fold).iterrows():
+        bloque = pred[pred[columna_fold] == fila[columna_fold]]
+        f1 = f1_score(bloque.grado, bloque[columna_pred], labels=CLASES, average='macro', zero_division=0)
+        acc = accuracy_score(bloque.grado, bloque[columna_pred])
+        cerca(fila[columna_f1], f1, 'F1 por fold', paso, corpus)
+        cerca(fila[columna_acc], acc, 'Accuracy por fold', paso, corpus)
+        cerca(fila[columna_n_test], len(bloque), 'N_test', paso, corpus, 0)
+        cerca(fila[columna_n_train], len(pred)-len(bloque), 'N_train', paso, corpus, 0)
+        valores.append(float(f1))
+    return {
+        'n_folds': len(valores), 'f1_macro_media_folds': float(pd.Series(valores).mean()),
+        'f1_macro_std_folds': float(pd.Series(valores).std(ddof=1)),
+        'f1_macro_oof': float(f1_score(pred.grado, pred[columna_pred], labels=CLASES, average='macro', zero_division=0)),
+        'accuracy_oof': float(accuracy_score(pred.grado, pred[columna_pred])),
+        'f1_por_fold': valores,
     }
 
-    for descripcion, ruta in (
-        archivos.items()
-    ):
 
-        exigir_archivo(
-            ruta,
-            descripcion,
-        )
-
-
-# =============================================================================
-# 8. CORPUS
-# =============================================================================
-
-def construir_bloque_corpus() -> dict:
-
-    df = leer_csv(
-        CORPUS
-    )
-
-    requeridas = {
-        "perfil_egreso",
-        "grado",
-    }
-
-    faltantes = (
-        requeridas
-        - set(
-            df.columns
-        )
-    )
-
+def consolidar(corpus):
+    entrada, base, rutas, rutas_tablas = definir_rutas(corpus)
+    requeridos = {'corpus': entrada, **rutas, **rutas_tablas}
+    faltantes = [(k, p) for k,p in requeridos.items() if not p.is_file()]
     if faltantes:
-
-        raise ValueError(
-            "El corpus V2 no contiene "
-            f"las columnas requeridas: "
-            f"{sorted(faltantes)}"
-        )
-
-
-    distribucion = (
-        df[
-            "grado"
-        ]
-        .value_counts()
-        .to_dict()
-    )
-
-
-    return {
-
-        "version":
-            "V2",
-
-        "archivo":
-            CORPUS.name,
-
-        "total_perfiles":
-            int(
-                len(df)
-            ),
-
-        "distribucion": {
-
-            str(clase):
-                int(cantidad)
-
-            for clase, cantidad
-            in distribucion.items()
-        },
-
-        "uso":
-            (
-                "Corpus científico congelado "
-                "y versionado utilizado para "
-                "la obtención de los resultados "
-                "oficiales del estudio."
-            ),
-    }
-
-
-# =============================================================================
-# 9. ANÁLISIS SEMÁNTICO
-# =============================================================================
-
-def construir_bloque_semantico() -> dict:
-
-    return {
-
-        "pca_lda":
-            leer_json(
-                PCA_RESUMEN
-            ),
-
-        "homogeneidad_semantica":
-            leer_json(
-                HOMOGENEIDAD_RESUMEN
-            ),
-
-        "diferenciacion_lexica":
-            leer_json(
-                LEXICO_RESUMEN
-            ),
-    }
-
-
-# =============================================================================
-# 10. GWO EXPLORATORIO Y DIAGNÓSTICO 10-FOLD
-# =============================================================================
-
-def construir_bloque_gwo() -> dict:
-
-    df_gwo = leer_csv(
-        GWO_RESULTADOS
-    )
-
-    df_features = leer_csv(
-        GWO_FEATURES
-    )
-
-    df_cv5 = leer_csv(
-        GWO_CV5
-    )
-
-    df_cv10 = leer_csv(
-        GWO_CV10
-    )
-
-
-    # -------------------------------------------------------------------------
-    # Validación de estructura GWO
-    # -------------------------------------------------------------------------
-
-    columnas_gwo = {
-        "Modelo",
-        "n_features",
-        "F1_media",
-        "F1_std",
-    }
-
-    if not columnas_gwo.issubset(
-        df_gwo.columns
-    ):
-
-        raise ValueError(
-            "gwo_resultados.csv no contiene "
-            "las columnas esperadas."
-        )
-
-
-    columnas_cv_actualizadas = {
-        "F1_macro",
-        "F1_macro_3clases",
-        "contiene_3_clases",
-    }
-
-
-    if not columnas_cv_actualizadas.issubset(
-        df_cv5.columns
-    ):
-
-        raise ValueError(
-            "cv5_gwo_resultados.csv no corresponde "
-            "a la versión metodológica actualizada "
-            "de 05_validacion_gwo.py."
-        )
-
-
-    if not columnas_cv_actualizadas.issubset(
-        df_cv10.columns
-    ):
-
-        raise ValueError(
-            "cv10_gwo_resultados.csv no corresponde "
-            "a la versión metodológica actualizada "
-            "de 05_validacion_gwo.py."
-        )
-
-
-    # -------------------------------------------------------------------------
-    # Identificar baseline y GWO
-    # -------------------------------------------------------------------------
-
-    baseline = df_gwo[
-        df_gwo[
-            "Modelo"
-        ]
-        .astype(str)
-        .str.contains(
-            "Baseline",
-            case=False,
-            na=False,
-        )
-    ]
-
-
-    gwo = df_gwo[
-        df_gwo[
-            "Modelo"
-        ]
-        .astype(str)
-        .str.contains(
-            "GWO",
-            case=False,
-            na=False,
-        )
-    ]
-
-
-    if baseline.empty:
-
-        baseline = df_gwo.iloc[
-            [0]
-        ]
-
-
-    if gwo.empty:
-
-        gwo = df_gwo.iloc[
-            [
-                len(df_gwo) - 1
-            ]
-        ]
-
-
-    baseline_row = (
-        baseline.iloc[
-            0
-        ]
-    )
-
-    gwo_row = (
-        gwo.iloc[
-            0
-        ]
-    )
-
-
-    # -------------------------------------------------------------------------
-    # Reducción de características
-    # -------------------------------------------------------------------------
-
-    total_features = int(
-        baseline_row[
-            "n_features"
-        ]
-    )
-
-
-    seleccionadas = int(
-        len(
-            df_features
-        )
-    )
-
-
-    reduccion = (
-        100.0
-        * (
-            1.0
-            - (
-                seleccionadas
-                / total_features
-            )
-        )
-    )
-
-
-    # -------------------------------------------------------------------------
-    # Folds que realmente contienen las tres clases
-    # -------------------------------------------------------------------------
-
-    folds_5_completos = (
-        contar_booleanos_verdaderos(
-            df_cv5[
-                "contiene_3_clases"
-            ]
-        )
-    )
-
-
-    folds_10_completos = (
-        contar_booleanos_verdaderos(
-            df_cv10[
-                "contiene_3_clases"
-            ]
-        )
-    )
-
-
-    folds_10_incompletos = int(
-        len(
-            df_cv10
-        )
-        - folds_10_completos
-    )
-
-
-    # -------------------------------------------------------------------------
-    # Métricas
-    # -------------------------------------------------------------------------
-
-    f1_5 = float(
-        df_cv5[
-            "F1_macro_3clases"
-        ].mean()
-    )
-
-    std_5 = float(
-        df_cv5[
-            "F1_macro_3clases"
-        ].std()
-    )
-
-
-    f1_10_historico = float(
-        df_cv10[
-            "F1_macro"
-        ].mean()
-    )
-
-    std_10_historico = float(
-        df_cv10[
-            "F1_macro"
-        ].std()
-    )
-
-
-    f1_10_3clases = float(
-        df_cv10[
-            "F1_macro_3clases"
-        ].mean()
-    )
-
-    std_10_3clases = float(
-        df_cv10[
-            "F1_macro_3clases"
-        ].std()
-    )
-
-
-    # -------------------------------------------------------------------------
-    # Resultado
-    # -------------------------------------------------------------------------
-
-    return {
-
-        "estado":
-            "exploratorio",
-
-        "metodo":
-            (
-                "Grey Wolf Optimizer (GWO) "
-                "aplicado sobre representación "
-                "TF-IDF de hasta 400 características."
-            ),
-
-        "features_originales":
-            total_features,
-
-        "features_seleccionadas":
-            seleccionadas,
-
-        "reduccion_porcentual":
-            redondear(
-                reduccion,
-                2,
-            ),
-
-        "resultado_archivo_gwo_referencia": {
-
-            "f1_macro_baseline":
-                redondear(
-                    baseline_row[
-                        "F1_media"
-                    ]
-                ),
-
-            "f1_std_baseline":
-                redondear(
-                    baseline_row[
-                        "F1_std"
-                    ]
-                ),
-
-            "f1_macro_gwo":
-                redondear(
-                    gwo_row[
-                        "F1_media"
-                    ]
-                ),
-
-            "f1_std_gwo":
-                redondear(
-                    gwo_row[
-                        "F1_std"
-                    ]
-                ),
-        },
-
-        "gwo_5fold_exploratorio": {
-
-            "f1_macro":
-                redondear(
-                    f1_5
-                ),
-
-            "f1_std":
-                redondear(
-                    std_5
-                ),
-
-            "numero_folds":
-                int(
-                    len(
-                        df_cv5
-                    )
-                ),
-
-            "folds_con_3_clases":
-                folds_5_completos,
-
-            "folds_sin_alguna_clase":
-                int(
-                    len(
-                        df_cv5
-                    )
-                    - folds_5_completos
-                ),
-
-            "todas_las_clases_en_cada_fold":
-                bool(
-                    folds_5_completos
-                    == len(
-                        df_cv5
-                    )
-                ),
-
-            "interpretacion":
-                (
-                    "Reproduce el resultado "
-                    "exploratorio GWO de referencia. "
-                    "Los cinco folds contienen las "
-                    "tres clases. No obstante, "
-                    "la selección de características "
-                    "GWO y la construcción del "
-                    "vocabulario TF-IDF se realizaron "
-                    "sobre el corpus disponible antes "
-                    "de esta comparación, por lo que "
-                    "el resultado no constituye una "
-                    "estimación final insesgada de "
-                    "generalización."
-                ),
-        },
-
-        "gwo_10fold_diagnostico": {
-
-            "f1_referencia_historico":
-                redondear(
-                    f1_10_historico
-                ),
-
-            "f1_referencia_std":
-                redondear(
-                    std_10_historico
-                ),
-
-            "f1_macro_3clases_fijas":
-                redondear(
-                    f1_10_3clases
-                ),
-
-            "f1_macro_3clases_std":
-                redondear(
-                    std_10_3clases
-                ),
-
-            "numero_folds":
-                int(
-                    len(
-                        df_cv10
-                    )
-                ),
-
-            "folds_con_3_clases":
-                folds_10_completos,
-
-            "folds_sin_alguna_clase":
-                folds_10_incompletos,
-
-            "valido_como_resultado_final":
-                False,
-
-            "motivo_limitacion":
-                (
-                    "La clase Ejecución contiene "
-                    "solo cinco observaciones. "
-                    "Con StratifiedKFold de diez "
-                    "pliegues no es posible incluir "
-                    "las tres clases en todos los "
-                    "conjuntos de prueba."
-                ),
-
-            "interpretacion_f1_historico":
-                (
-                    "El F1 histórico reproduce el "
-                    "comportamiento del protocolo "
-                    "original, donde el promedio macro "
-                    "de sklearn considera únicamente "
-                    "las clases presentes o predichas "
-                    "en cada fold."
-                ),
-
-            "interpretacion_f1_3clases":
-                (
-                    "El cálculo con tres clases fijas "
-                    "incluye explícitamente Civil, "
-                    "Ejecución e Informática en el "
-                    "promedio de cada fold. Se utiliza "
-                    "como diagnóstico para mostrar la "
-                    "sensibilidad del resultado 10-fold "
-                    "ante la ausencia de Ejecución en "
-                    "cinco de los diez folds."
-                ),
-
-            "uso":
-                (
-                    "Se conserva para reproducibilidad "
-                    "y análisis de sensibilidad. "
-                    "No se emplea como estimación "
-                    "robusta final de generalización."
-                ),
-        },
-
-        "advertencia_metodologica_general":
-            (
-                "La selección GWO y el espacio TF-IDF "
-                "se construyeron utilizando el corpus "
-                "disponible completo antes de la "
-                "comparación mediante validación "
-                "cruzada. Por esta razón los "
-                "resultados GWO se clasifican como "
-                "exploratorios."
-            ),
-
-        "resultado_robusto_relacionado":
-            (
-                "La estimación conservadora principal "
-                "de generalización se obtiene mediante "
-                "06_modelo_final_robusto.py, donde "
-                "el TF-IDF se ajusta exclusivamente "
-                "sobre entrenamiento y se controlan "
-                "las denominaciones explícitas del "
-                "grado."
-            ),
-    }
-
-
-# =============================================================================
-# 11. AUDITORÍA METODOLÓGICA
-# =============================================================================
-
-def construir_bloque_auditoria() -> dict:
-
-    resumen_fuga = (
-        leer_json_opcional(
-            AUDITORIA_RESUMEN
-        )
-    )
-
-
-    df_proxies = (
-        leer_csv_opcional(
-            AUDITORIA_PROXIES
-        )
-    )
-
-
-    validacion_anidada = (
-        leer_json_opcional(
-            VALIDACION_ANIDADA_RESUMEN
-        )
-    )
-
-
-    seleccion_modelo = (
-        leer_json_opcional(
-            SELECCION_MODELO_RESUMEN
-        )
-    )
-
-
-    proxies_directos = None
-    porcentaje_proxy = None
-
-
-    if df_proxies is not None:
-
-        proxies_directos = int(
-            len(
-                df_proxies
-            )
-        )
-
-
-    if (
-        proxies_directos
-        is not None
-        and GWO_FEATURES.exists()
-    ):
-
-        total_gwo = int(
-            len(
-                leer_csv(
-                    GWO_FEATURES
-                )
-            )
-        )
-
-
-        if total_gwo > 0:
-
-            porcentaje_proxy = (
-                100.0
-                * proxies_directos
-                / total_gwo
-            )
-
-
-    return {
-
-        "estado":
-            "auditoria_metodologica_posterior",
-
-        "proxies_directos_gwo": {
-
-            "cantidad":
-                proxies_directos,
-
-            "porcentaje":
-                (
-                    redondear(
-                        porcentaje_proxy,
-                        2,
-                    )
-                    if porcentaje_proxy
-                    is not None
-                    else None
-                ),
-        },
-
-        "auditoria_fuga_lexica":
-            resumen_fuga,
-
-        "validacion_gwo_anidada":
-            validacion_anidada,
-
-        "seleccion_modelos_robusta":
-            seleccion_modelo,
-
-        "interpretacion":
-            (
-                "Las auditorías se conservan como "
-                "trazabilidad metodológica del estudio. "
-                "Permiten cuantificar cuánto del "
-                "rendimiento exploratorio puede estar "
-                "asociado a pistas léxicas directas "
-                "del grado y comprobar si las mejoras "
-                "se sostienen bajo protocolos de "
-                "evaluación más estrictos."
-            ),
-    }
-
-
-# =============================================================================
-# 12. MODELO ROBUSTO FINAL
-# =============================================================================
-
-def construir_bloque_modelo_final() -> dict:
-    resumen = leer_json(MODELO_FINAL_RESUMEN)
-    if resumen.get('validacion', {}).get('protocolo_id') != 'gwo_nested_v2':
-        raise ValueError('El resultado pertenece al modelo anterior. Ejecuta primero el nuevo 06_modelo_final_robusto.py.')
-    df_folds = leer_csv(MODELO_FINAL_FOLDS)
-    baseline = leer_csv(MODELO_FINAL_DIR / 'metricas_folds_baseline.csv')
-    requeridas = {'Fold', 'F1_macro', 'Accuracy', 'run_id'}
-    for tabla in [df_folds, baseline]:
-        if not requeridas.issubset(tabla.columns):
-            raise ValueError('Las métricas no contienen todas las columnas del protocolo nuevo.')
-        if len(tabla) != 5 or sorted(tabla['Fold'].tolist()) != [1, 2, 3, 4, 5]:
-            raise ValueError('Se requieren exactamente cinco folds externos completos.')
-        if set(tabla['run_id'].astype(str)) != {resumen.get('run_id')}:
-            raise ValueError('CSV y JSON pertenecen a ejecuciones diferentes. Vuelve a ejecutar 06.')
-        if tabla[['F1_macro', 'Accuracy']].isna().any().any():
-            raise ValueError('Hay métricas incompletas.')
-    hash_actual = hashlib.sha256(CORPUS.read_bytes()).hexdigest()
-    if resumen.get('corpus', {}).get('sha256') != hash_actual:
-        raise ValueError('El corpus cambió después de la evaluación. Vuelve a ejecutar 06.')
-    resultados = resumen['resultados_principales']
-    f1_media = float(df_folds['F1_macro'].mean())
-    f1_std = float(df_folds['F1_macro'].std(ddof=1))
-    accuracy_media = float(df_folds['Accuracy'].mean())
-    valores = {'f1_macro_media_folds': f1_media, 'f1_macro_std_folds': f1_std,
-               'accuracy_media_folds': accuracy_media}
-    for clave, observado in valores.items():
-        if abs(float(resultados[clave]) - observado) > 1e-9:
-            raise ValueError(f'CSV y JSON discrepan en {clave}. Vuelve a ejecutar 06.')
-    f1_base = float(baseline['F1_macro'].mean())
-    if abs(f1_base - float(resumen['baseline_sin_gwo']['f1_macro_media_folds'])) > 1e-9:
-        raise ValueError('CSV y JSON discrepan en el baseline.')
-    return {
-        'estado': resumen['estado'], 'modelo': 'TF-IDF + GWO + SMOTE + Complement Naive Bayes',
-        'representacion': 'TF-IDF de palabras y bigramas; selección GWO en cada entrenamiento externo.',
-        'balanceo': 'SMOTE exclusivamente en entrenamiento interno o externo, nunca en prueba.',
-        'control_fuga': 'Enmascaramiento de denominaciones y aislamiento de la prueba externa.',
-        'validacion': resumen['validacion']['metodo'],
-        'metrica_principal': 'F1-macro medio en los cinco tests externos',
-        'f1_macro_media': f1_media, 'f1_macro_std': f1_std, 'accuracy_media': accuracy_media,
-        'f1_macro_oof_secundario': resultados['f1_macro_oof'],
-        'accuracy_oof_secundaria': resultados['accuracy_oof'],
-        'metricas_oof_por_clase': resumen['metricas_oof_por_clase'],
-        'numero_folds': len(df_folds), 'presupuesto_referencia': resumen['presupuesto_referencia'],
-        'baseline_sin_gwo': resumen['baseline_sin_gwo'],
-        'seleccion_gwo': resumen['seleccion_gwo'], 'resultado_completo': resumen,
-        'interpretacion': 'Estimación externa del procedimiento con selección GWO interna. La comparación con baseline es descriptiva y no garantiza una mejora.',
-        'limitacion_principal': resumen['interpretacion']['limitacion'],
-    }
-
-
-
-# =============================================================================
-# 13. CONCLUSIÓN INTEGRADA
-# =============================================================================
-
-def construir_conclusion_integrada(gwo: dict, modelo_final: dict, auditoria: dict) -> dict:
-    cv5 = gwo['gwo_5fold_exploratorio']
-    cv10 = gwo['gwo_10fold_diagnostico']
-    base = modelo_final['baseline_sin_gwo']
-    seleccion = modelo_final['seleccion_gwo']
-    cantidad_proxies = auditoria['proxies_directos_gwo']['cantidad']
-    return {
-        'hallazgo_central': 'La similitud y la diferenciación deben interpretarse junto con los resultados semánticos del reporte; la clasificación evalúa separabilidad textual, no calidad educativa.',
-        'gwo': (f"La ejecución exploratoria registrada seleccionó {gwo['features_seleccionadas']} "
-                f"de {gwo['features_originales']} características y obtuvo "
-                f"F1-macro={cv5['f1_macro']:.4f}. La selección previa a los folds impide tratarlo como evaluación externa independiente."),
-        'diagnostico_10fold': (
-            f"F1 de referencia={cv10['f1_referencia_historico']:.4f}; "
-            f"con tres clases fijas={cv10['f1_macro_3clases_fijas']:.4f}. "
-            f"{cv10['folds_con_3_clases']}/{cv10['numero_folds']} folds contienen todas las clases. Uso diagnóstico."),
-        'auditoria': ('No se adjuntó una auditoría de proxies; no se presume su resultado.'
-                      if cantidad_proxies is None else
-                      f'La auditoría disponible registra {cantidad_proxies} características proxy.'),
-        'resultado_robusto': (
-            f"GWO dentro del entrenamiento externo obtuvo F1-macro medio={modelo_final['f1_macro_media']:.4f} "
-            f"(desviación={modelo_final['f1_macro_std']:.4f}). "
-            f"Subconjuntos por fold: {seleccion['features_por_fold']}."),
-        'comparacion_baseline': (
-            f"Sin GWO, en las mismas particiones, F1-macro={base['f1_macro_media_folds']:.4f}. "
-            f"Diferencia GWO menos baseline={base['delta_f1_gwo_menos_baseline']:+.4f}. "
-            'Esta diferencia descriptiva no demuestra significancia estadística ni justifica elegir y reevaluar un ganador con los mismos tests.'),
-        'limitacion_principal': modelo_final['limitacion_principal'],
-        'metricas_clave': {
-            'gwo_5fold_exploratorio': cv5['f1_macro'], 'gwo_5fold_std': cv5['f1_std'],
-            'gwo_10fold_historico': cv10['f1_referencia_historico'],
-            'gwo_10fold_3clases_diagnostico': cv10['f1_macro_3clases_fijas'],
-            'gwo_10fold_folds_con_3_clases': cv10['folds_con_3_clases'],
-            'proxies_directos_gwo': cantidad_proxies,
-            'modelo_robusto_f1_macro': modelo_final['f1_macro_media'],
-            'modelo_robusto_f1_std': modelo_final['f1_macro_std'],
-            'modelo_robusto_accuracy': modelo_final['accuracy_media'],
-            'baseline_f1_macro': base['f1_macro_media_folds'],
-            'delta_gwo_baseline': base['delta_f1_gwo_menos_baseline'],
-        },
-    }
-
-
-
-# =============================================================================
-# 14. ARTEFACTOS OFICIALES
-# =============================================================================
-
-def construir_bloque_artefactos() -> dict:
-
-    return {
-
-        "analisis_semantico": {
-
-            "pca_lda":
-                (
-                    "visualizaciones_exploratorias/"
-                    "proyeccion_pca_vs_lda_v2.png"
-                ),
-
-            "similitud_centroides":
-                (
-                    "homogeneidad_semantica/"
-                    "similitud_centroides_v2.png"
-                ),
-
-            "test_permutacion":
-                (
-                    "homogeneidad_semantica/"
-                    "test_permutacion_homogeneidad_v2.png"
-                ),
-
-            "diferenciacion_lexica":
-                (
-                    "diferenciacion_lexica/"
-                    "terminos_distintivos_v2.png"
-                ),
-        },
-
-        "gwo_exploratorio": {
-
-            "seleccion":
-                (
-                    "gwo/"
-                    "gwo_seleccion.png"
-                ),
-
-            "mapa_features":
-                (
-                    "gwo/"
-                    "gwo_mapa_features.png"
-                ),
-
-            "diagnostico_validacion":
-                (
-                    "gwo/"
-                    "cv10_gwo_resultados.png"
-                ),
-
-            "f1_por_clase":
-                (
-                    "gwo/"
-                    "cv10_gwo_f1_clase.png"
-                ),
-
-            "resultados_5fold":
-                (
-                    "gwo/"
-                    "cv5_gwo_resultados.csv"
-                ),
-
-            "resultados_10fold":
-                (
-                    "gwo/"
-                    "cv10_gwo_resultados.csv"
-                ),
-        },
-
-        "auditoria_metodologica": {
-
-            "comparacion_fuga_lexica":
-                (
-                    "auditoria_fuga_lexica/"
-                    "comparacion_f1_fuga_lexica.png"
-                ),
-
-            "validacion_gwo_anidada":
-                (
-                    "validacion_robusta/"
-                    "comparacion_validacion_robusta.png"
-                ),
-
-            "seleccion_modelo_robusta":
-                (
-                    "seleccion_modelo_robusta/"
-                    "comparacion_modelos_robustos.png"
-                ),
-        },
-
-        "modelo_final_robusto": {
-
-            "f1_por_fold":
-                (
-                    "modelo_final_robusto/"
-                    "f1_por_fold_modelo_final.png"
-                ),
-
-            "matriz_confusion":
-                (
-                    "modelo_final_robusto/"
-                    "matriz_confusion_modelo_final.png"
-                ),
-
-            "metricas_folds":
-                (
-                    "modelo_final_robusto/"
-                    "metricas_folds_modelo_final.csv"
-                ),
-
-            "metricas_por_clase":
-                (
-                    "modelo_final_robusto/"
-                    "metricas_por_clase_modelo_final.csv"
-                ),
-
-            "predicciones_oof":
-                (
-                    "modelo_final_robusto/"
-                    "predicciones_oof_modelo_final.csv"
-                ),
-        },
-    }
-
-
-# =============================================================================
-# 15. FLUJO PRINCIPAL
-# =============================================================================
-
-def main() -> int:
-    print('GENERACIÓN DEL REPORTE: GWO EXPLORATORIO Y GWO CON VALIDACIÓN EXTERNA')
-    verificar_archivos_esenciales()
-    corpus = construir_bloque_corpus()
-    analisis_semantico = construir_bloque_semantico()
-    gwo = construir_bloque_gwo()
-    auditoria = construir_bloque_auditoria()
-    modelo_final = construir_bloque_modelo_final()
-    conclusion = construir_conclusion_integrada(gwo, modelo_final, auditoria)
-    artefactos = construir_bloque_artefactos()
-    artefactos['modelo_final_robusto'].update({
-        'baseline': 'modelo_final_robusto/metricas_folds_baseline.csv',
-        'comparacion': 'modelo_final_robusto/comparacion_gwo_baseline.csv',
-        'features_por_fold': 'modelo_final_robusto/features_gwo_por_fold.csv',
-        'auditoria_cv': 'modelo_final_robusto/auditoria_cv_gwo.json',
-    })
+        lineas = ['Faltan archivos para consolidar el corpus seleccionado:']
+        lineas.extend(f'  {k}: {p}' for k,p in faltantes)
+        pasos = sorted({k[:2] for k,_ in faltantes if k != 'corpus'})
+        lineas.extend(f'Repite: python .\\{PASOS[p]} --corpus {corpus}' for p in pasos)
+        if any(k == 'corpus' for k,_ in faltantes):
+            lineas.append('Completa primero la fase 2 para el corpus seleccionado.')
+        raise FileNotFoundError('\n'.join(lineas))
+    huellas = {k: sha256_archivo(p) for k,p in requeridos.items()}
+    df = pd.read_csv(entrada, sep=None, engine='python', encoding='utf-8-sig', keep_default_na=False)
+    if not {'grado', 'perfil_egreso'}.issubset(df.columns) or df.empty:
+        raise ValueError('El corpus debe contener grado y perfil_egreso y al menos una fila.')
+    if set(df.grado) != set(CLASES) or df.perfil_egreso.astype(str).str.strip().eq('').any():
+        raise ValueError('El corpus contiene grados inválidos o perfiles vacíos; revisa fase 2.')
+    for columna in ['estado_registro', 'estado_etiquetado']:
+        if columna in df and df[columna].astype(str).str.upper().str.strip().isin(['REVISAR','ERROR']).any():
+            raise ValueError(f'El corpus contiene filas pendientes en {columna}; revisa fase 2.')
+    def invalido(valor):
+        raise ValueError(f'Número JSON no finito: {valor}')
+    resumenes = {paso: json.loads(p.read_text(encoding='utf-8-sig'), parse_constant=invalido)
+                 for paso,p in rutas.items()}
+    validar_procedencia(resumenes, corpus, huellas['corpus'], df)
+    tablas = {k: pd.read_csv(p, encoding='utf-8-sig') for k,p in rutas_tablas.items()}
+    # Las revisiones viejas de 05/06 no pueden pasar como validación actual.
+    if resumenes['05'].get('protocolo') != 'validacion_anidada_gwo_por_grupos_v1':
+        problema('05', 'protocolo de validación anidada no reconocido.', corpus)
+    if resumenes['06'].get('protocolo') != 'complementnb_smote_titulos_enmascarados_grupos_v1':
+        problema('06', 'protocolo del modelo enmascarado no reconocido.', corpus)
+    p5 = validar_predicciones(tablas['05_predicciones'], df, 'fold_prueba_externa',
+                             ['prediccion_TFIDF_completo', 'prediccion_GWO'], '05', corpus)
+    p6 = validar_predicciones(tablas['06_predicciones'], df, 'Fold', ['grado_predicho'], '06', corpus)
+    if (p5.grupo_cv.tolist() != p6.grupo_cv.tolist()
+            or p5.fold_prueba_externa.tolist() != p6.Fold.tolist()):
+        raise ValueError('Los pasos 05 y 06 usan grupos o folds distintos. Repite ambos con las versiones actualizadas.')
+    cerca(resumenes['05']['n_grupos'], p5.grupo_cv.nunique(), 'Número de grupos', '05', corpus, 0)
+    cerca(resumenes['06']['corpus']['total_grupos'], p6.grupo_cv.nunique(), 'Número de grupos', '06', corpus, 0)
+    exigir_columnas(tablas['05_folds'], ['modelo'], '05', corpus)
+    if set(tablas['05_folds'].modelo) != {'TFIDF_completo', 'GWO'}:
+        problema('05', 'deben estar los dos modelos: TFIDF_completo y GWO.', corpus)
+    metricas = []
+    for nombre in ['TFIDF_completo', 'GWO']:
+        folds = tablas['05_folds'][tablas['05_folds'].modelo == nombre]
+        pred = p5.rename(columns={'fold_prueba_externa': 'fold_externo'})
+        met = verificar_metricas(pred, folds, 'prediccion_'+nombre, 'fold_externo', 'F1_macro',
+                                 'accuracy', 'n_test', 'n_train', '05', corpus)
+        r = resumenes['05']['modelos'][nombre]
+        cerca(met['n_folds'], resumenes['05']['parametros']['folds_externos_efectivos'], 'Folds efectivos', '05', corpus, 0)
+        for campo, esperado in [('f1_macro_media_folds', r['media_folds']['F1_macro']),
+                                ('f1_macro_std_folds', r['desviacion_folds_ddof1']['F1_macro']),
+                                ('f1_macro_oof', r['metricas_predicciones_externas_conjuntas']['F1_macro']),
+                                ('accuracy_oof', r['metricas_predicciones_externas_conjuntas']['accuracy'])]:
+            cerca(met[campo], esperado, campo, '05', corpus)
+        metricas.append({'paso': '05', 'modelo': nombre, 'texto': 'original', **met})
+    met = verificar_metricas(p6, tablas['06_folds'], 'grado_predicho', 'Fold', 'F1_macro',
+                             'Accuracy', 'N_test', 'N_train', '06', corpus)
+    cerca(met['n_folds'], resumenes['06']['validacion']['n_splits'], 'Folds efectivos', '06', corpus, 0)
+    for campo in ['f1_macro_media_folds','f1_macro_std_folds','f1_macro_oof','accuracy_oof']:
+        cerca(met[campo], resumenes['06']['resultados_principales'][campo], campo, '06', corpus)
+    metricas.append({'paso': '06', 'modelo': 'ComplementNB_SMOTE', 'texto': 'titulos_enmascarados', **met})
+    # GWO exploratorio queda separado de las métricas de prueba externa.
+    r4 = resumenes['04']
+    exigir_columnas(tablas['04_resultados'], ['Modelo','n_features','F1_media','F1_std','n_folds','alcance'], '04', corpus)
+    exigir_columnas(tablas['04_features'], ['feature'], '04', corpus)
+    if len(tablas['04_resultados']) != 2 or set(tablas['04_resultados'].alcance) != {'exploratorio'}:
+        problema('04', 'se esperan dos resultados exploratorios.', corpus)
+    n_sel = r4['seleccion']['features_seleccionadas']
+    n_orig = r4['seleccion']['features_entrada']
+    if not 0 < n_sel < n_orig:
+        problema('04', 'recuento de características inválido.', corpus)
+    cerca(n_sel, tablas['04_features'].feature.nunique(), 'Features seleccionadas únicas', '04', corpus, 0)
+    cerca(n_sel, len(tablas['04_features']), 'Filas de features', '04', corpus, 0)
+    exploratorios = []
+    for nombre, prefijo, n in [('Baseline','f1_baseline_comparacion',n_orig), ('GWO','f1_gwo_comparacion',n_sel)]:
+        filas = tablas['04_resultados'][tablas['04_resultados'].Modelo.str.startswith(nombre)]
+        if len(filas) != 1:
+            problema('04', f'falta el resultado único de {nombre}.', corpus)
+        valores = pd.Series(r4['cv'][prefijo], dtype=float)
+        if len(valores)<2 or not valores.between(0,1).all():
+            problema('04', 'F1 exploratorios inválidos.', corpus)
+        fila = filas.iloc[0]
+        for columna, esperado in [('n_features',n), ('n_folds',len(valores)), ('F1_media',valores.mean()), ('F1_std',valores.std(ddof=1))]:
+            cerca(fila[columna], esperado, columna, '04', corpus)
+        exploratorios.append({'modelo': nombre, 'n_features': int(n),
+                              'f1_media': float(valores.mean()), 'f1_std': float(valores.std(ddof=1))})
+    test = resumenes['02']['test_permutacion']
+    p = test['p_valor']
+    cerca(p, (test['permutaciones_extremas']+1)/(test['n_permutaciones']+1), 'p-valor corregido', '02', corpus, 1e-8)
+    if not 0 <= p <= 1 or bool(test['significativo']) != (p < test['alpha']):
+        problema('02', 'p-valor o decisión de significancia inconsistente.', corpus)
+    media_base, media_gwo, media_rob = [m['f1_macro_media_folds'] for m in metricas]
     reporte = {
-        'metadata': {'version': '6.0',
-            'fecha_generacion_utc': datetime.now(timezone.utc).isoformat(),
-            'estado': 'resultados_consolidados_gwo_anidado',
-            'proyecto': 'Análisis de perfiles de egreso de carreras de informática en Chile',
-            'run_id_modelo_final': modelo_final['resultado_completo']['run_id'],
-            'presupuesto_referencia': modelo_final['presupuesto_referencia']},
-        'corpus': corpus, 'analisis_semantico': analisis_semantico,
-        'gwo_exploratorio': gwo, 'auditoria_metodologica': auditoria,
-        'resultado_robusto_final': modelo_final, 'conclusion_integrada': conclusion,
+        'metadata': {'version': '6.0', 'fecha_generacion_utc': datetime.now(timezone.utc).isoformat(),
+                     'estado': 'resultados_consolidados_verificados', 'sha256_script': sha256_archivo(__file__)},
+        'corpus': {'seleccion': corpus, 'archivo': str(entrada.resolve()), 'sha256': huellas['corpus'],
+                   'total_perfiles': len(df), 'grupos_validacion': int(p5.grupo_cv.nunique()),
+                   'distribucion': {str(k):int(v) for k,v in df.grado.value_counts().items()}},
+        'analisis_semantico': {'pca_lda': resumenes['01'], 'homogeneidad': resumenes['02'], 'diferenciacion_lexica': resumenes['03']},
+        'gwo_exploratorio': {'resumen': r4, 'metricas': exploratorios},
+        'gwo_validacion_anidada': resumenes['05'],
+        'resultado_robusto_final': resumenes['06'],
+        'metricas_evaluacion': metricas,
+        'comparaciones_descriptivas': {
+            'delta_f1_medio_gwo_menos_baseline': media_gwo-media_base,
+            'delta_f1_medio_enmascarado_menos_baseline': media_rob-media_base,
+            'nota': 'Mismos perfiles, grupos y folds. Diferencias descriptivas; no se realizó un test de superioridad.'},
         'advertencias_metodologicas': [
-            'Los pasos 04/05 siguen siendo exploratorios. El paso 06 realiza una selección nueva en cada entrenamiento externo.',
-            'Los resultados se leen de archivos; no se reutiliza un F1 histórico como resultado de esta ejecución.',
-            'Los subconjuntos GWO pueden cambiar entre folds y no tienen que contener 249 términos.',
-            'El F1 interno es un criterio de búsqueda; el rendimiento se estima en los tests externos.',
-            'PCA y LDA se mantienen como visualizaciones independientes.',
-            'F1-macro no equivale a precisión ni al porcentaje de aciertos.',
-            'La media de F1 por fold puede diferir del F1 de las predicciones OOF reunidas.',
-            'La comparación con baseline es descriptiva: no garantiza mejora ni significancia.',
-            'Los resúmenes semánticos y exploratorios previos carecen de hash obligatorio; verifica que correspondan al mismo V2 antes de consolidarlos.',
-            'No se ajusta ni serializa aquí un modelo de despliegue entrenado sobre todo el corpus.',
-        ],
-        'artefactos_oficiales': artefactos,
+            'PCA y LDA son visualizaciones del corpus completo; LDA utiliza etiquetas y no demuestra rendimiento predictivo.',
+            'La similitud TF-IDF mide coincidencia léxica ponderada; no demuestra equivalencia de competencias.',
+            'El p-valor del paso 02 corresponde a unidades agrupadas, distintas de los pares descriptivos de perfiles.',
+            'La ausencia de significancia no demuestra igualdad entre grados.',
+            'Los términos distintivos describen este corpus; no son competencias exclusivas ni pruebas de significancia.',
+            'Paso 04 es exploratorio: selección e IDF usan información global. Paso 05 evalúa selección dentro de train externo.',
+            'Paso 06 usa ComplementNB + SMOTE con títulos enmascarados y sin GWO; no es GWO con enmascaramiento.',
+            'F1 macro no equivale a precisión ni accuracy. Media de folds y F1 conjunto son agregaciones diferentes.',
+            'La desviación de los folds no es un intervalo de confianza. No se demuestra superioridad con una diferencia de medias.',
+            'Agrupar perfiles vinculados reduce dependencia conocida, pero no constituye prueba en universidades desconocidas.',
+            'Enmascarar títulos no elimina todas las pistas institucionales o de grado.',
+            'Las métricas ponderan perfiles, no grupos. La clase minoritaria limita la validación.',
+            'Cambiar el protocolo después de observar resultados requiere una evaluación futura independiente.'],
+        'fuentes': {k: {'archivo': str(p.resolve()), 'sha256': huellas[k]} for k,p in requeridos.items()},
     }
-    if not modelo_final['presupuesto_referencia']:
-        reporte['advertencias_metodologicas'].append(
-            'El presupuesto GWO es distinto de 100 iteraciones y 30 lobos; identifícalo al comparar resultados.')
-    RESULTADOS_DIR.mkdir(parents=True, exist_ok=True)
-    with SALIDA_FINAL.open('w', encoding='utf-8') as f:
-        json.dump(reporte, f, ensure_ascii=False, indent=4)
-    print(conclusion['resultado_robusto'])
-    print(conclusion['comparacion_baseline'])
-    print(f'Reporte generado: {SALIDA_FINAL}')
+    # No mezclar archivos que cambian mientras se prepara el reporte.
+    for k,p in requeridos.items():
+        if sha256_archivo(p) != huellas[k]:
+            raise ValueError(f'El archivo {p} cambió durante la lectura. Repite el reporte.')
+    return reporte, base
+
+
+def celda(valor):
+    return str(valor).replace('|', '\\|').replace('\n', ' ')
+
+
+def renderizar_markdown(r):
+    corpus = r['corpus']
+    analisis = r['analisis_semantico']
+    test = analisis['homogeneidad']['test_permutacion']
+    met = r['metricas_evaluacion']
+    filas = [f"# Reporte de resultados — corpus {corpus['seleccion']}", '',
+             f"Generado: {r['metadata']['fecha_generacion_utc']}", '',
+             f"**{corpus['total_perfiles']} perfiles; {corpus['grupos_validacion']} grupos de validación.**", '',
+             '| Grado | Perfiles |', '|---|---:|']
+    filas.extend(f'| {c} | {corpus["distribucion"][c]} |' for c in CLASES)
+    filas.extend(['', '## Evaluación predictiva', '',
+                  'F1 macro entre 0 y 1. OOF reúne una predicción de prueba por perfil. '
+                  'La desviación entre folds no es un intervalo de confianza.', '',
+                  '| Paso y modelo | Folds | F1 medio | Desv. folds | F1 OOF | Accuracy OOF |',
+                  '|---|---:|---:|---:|---:|---:|'])
+    nombres = ['05 — TF-IDF completo + SMOTE + ComplementNB', '05 — GWO + SMOTE + ComplementNB',
+               '06 — Títulos enmascarados + SMOTE + ComplementNB']
+    for nombre, m in zip(nombres, met):
+        filas.append(f"| {nombre} | {m['n_folds']} | {m['f1_macro_media_folds']:.4f} | "
+                     f"{m['f1_macro_std_folds']:.4f} | {m['f1_macro_oof']:.4f} | {m['accuracy_oof']:.4f} |")
+    dif = r['comparaciones_descriptivas']
+    parametros_gwo = r['gwo_validacion_anidada']['parametros']
+    filas.extend(['', f"GWO menos baseline: **{dif['delta_f1_medio_gwo_menos_baseline']:+.4f}** en F1 medio. "
+                  f"Enmascarado menos baseline: **{dif['delta_f1_medio_enmascarado_menos_baseline']:+.4f}**. "
+                  'Son diferencias descriptivas; no prueban superioridad estadística.', '',
+                  'El paso 05 repite la selección de características dentro de cada entrenamiento externo. '
+                  'El paso 06 evalúa un modelo fijo con títulos enmascarados, sin selección GWO.', '',
+                  f"Búsqueda GWO del paso 05: {parametros_gwo['epochs']} iteraciones y "
+                  f"{parametros_gwo['poblacion']} lobos por entrenamiento externo.", '',
+                  '## Selección GWO exploratoria (paso 04)', '',
+                  '| Modelo | Características | F1 medio exploratorio |', '|---|---:|---:|'])
+    for m in r['gwo_exploratorio']['metricas']:
+        filas.append(f"| {m['modelo']} | {m['n_features']} | {m['f1_media']:.4f} |")
+    exploracion = r['gwo_exploratorio']['resumen']['optimizador']
+    filas.extend(['', f"Búsqueda exploratoria: {exploracion['epochs']} iteraciones y "
+                  f"{exploracion['poblacion']} lobos.", '',
+                  'Estas cifras usan un vocabulario global y una selección previa a la comparación; '
+                  'no se interpretan como rendimiento de prueba independiente.', '', '## Estructura del corpus', '',
+                  f"PCA, varianza explicada en dos componentes: "
+                  f"{analisis['pca_lda']['pca']['varianza_explicada_total_2d']:.2%}. "
+                  'LDA utiliza las etiquetas y su gráfico es exploratorio.', '',
+                  f"Test de permutación: p = **{test['p_valor']:.8f}**, "
+                  f"{test['n_permutaciones']} permutaciones; "
+                  f"{test['agrupacion']['n_unidades']} unidades del test. "
+                  + ('Alcanza' if test['significativo'] else 'No alcanza')
+                  + f" el umbral declarado α = {test['alpha']}. "
+                  'El resultado describe asociación bajo este protocolo; no demuestra igualdad o equivalencia de competencias.', '',
+                  '### Similitud coseno entre centroides', '', '| Grados | Similitud |', '|---|---:|'])
+    matriz = analisis['homogeneidad']['similitud_centroides']
+    for i,c in enumerate(CLASES):
+        for otro in CLASES[i+1:]:
+            filas.append(f'| {c}–{otro} | {matriz[c][otro]:.4f} |')
+    filas.extend(['', '### Vocabulario distintivo', '',
+                  'Hasta cinco términos por grado, ordenados por la razón de prevalencia del paso 03. '
+                  'No implican competencias exclusivas.', ''])
+    for c in CLASES:
+        terminos = analisis['diferenciacion_lexica']['top_terminos_por_grado'].get(c, [])
+        lista = ', '.join(celda(t['termino']) for t in terminos[:5]) or 'sin términos que cumplan el criterio'
+        filas.append(f'- **{c}:** {lista}.')
+    mascaras = r['resultado_robusto_final']['control_fuga_lexica']
+    filas.extend(['', '## Enmascaramiento', '',
+                  f"Se eliminaron {mascaras['denominaciones_enmascaradas']} menciones de títulos en "
+                  f"{mascaras['documentos_con_titulos_enmascarados']} perfiles. "
+                  'La auditoría del paso 06 conserva los textos originales y transformados.', '',
+                  '## Alcance y límites', ''])
+    filas.extend('- '+a for a in r['advertencias_metodologicas'])
+    filas.extend(['', '## Procedencia', '', f"SHA-256 del corpus: `{corpus['sha256']}`.", '',
+                  'Se verificaron el corpus de los seis resúmenes, la cobertura de predicciones y '
+                  'la concordancia de métricas con sus CSV. El JSON conserva los resúmenes completos y '
+                  'las rutas y huellas de todos los archivos leídos. Esta comprobación no sustituye '
+                  'la revisión de la extracción y las etiquetas del corpus.', ''])
+    return '\n'.join(filas)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--corpus', choices=['actual', 'v2'])
+    args = parser.parse_args(argv)
+    corpus = args.corpus or solicitar_corpus()
+    print(f'\nFASE 3 — REPORTE CONSOLIDADO ({corpus})')
+    reporte, base = consolidar(corpus)
+    # Preparar todas las representaciones antes de escribir cualquiera.
+    contenido_json = json.dumps(reporte, ensure_ascii=False, indent=2, allow_nan=False)
+    contenido_md = renderizar_markdown(reporte)
+    tabla = pd.DataFrame([{k:v for k,v in m.items() if k != 'f1_por_fold'}
+                          for m in reporte['metricas_evaluacion']])
+    base.mkdir(parents=True, exist_ok=True)
+    salidas = [base/f'resultados_finales_{corpus}.json', base/f'reporte_final_{corpus}.md',
+               base/f'resumen_metricas_{corpus}.csv']
+    salidas[0].write_text(contenido_json, encoding='utf-8')
+    salidas[1].write_text(contenido_md, encoding='utf-8')
+    tabla.to_csv(salidas[2], index=False, encoding='utf-8-sig')
+    print(f"Verificados: {reporte['corpus']['total_perfiles']} perfiles; "
+          f"{reporte['corpus']['grupos_validacion']} grupos; pasos 01–06.")
+    print(tabla[['paso','modelo','f1_macro_media_folds','f1_macro_oof']].to_string(index=False))
+    for salida in salidas:
+        print(f'Generado: {salida}')
     return 0
 
 
-
-if __name__ == "__main__":
-
-    raise SystemExit(
-        main()
-    )
+if __name__ == '__main__':
+    try:
+        sys.exit(main())
+    except (ValueError, FileNotFoundError, KeyError, TypeError) as exc:
+        print(f'ERROR: no se generó el reporte. {exc}\n'
+              'Revisa que los pasos 01–06 estén actualizados y ejecutados para el mismo corpus.', file=sys.stderr)
+        sys.exit(1)
+    except ImportError as exc:
+        print(f'Dependencia ausente o incompatible: {exc}', file=sys.stderr)
+        sys.exit(1)

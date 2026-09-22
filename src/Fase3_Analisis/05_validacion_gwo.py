@@ -1,1434 +1,524 @@
 # -*- coding: utf-8 -*-
+"""Validación anidada de GWO frente a TF-IDF completo + SMOTE + ComplementNB.
+
+Ejecutar desde src/Fase3_Analisis:
+    python 05_validacion_gwo.py --corpus actual
+Sin --corpus muestra el menú actual/V2. No depende de la salida del paso 04.
+Prueba rápida del funcionamiento: --epochs 3 --poblacion 6 (no resultados finales).
+Instalación: python -m pip install mealpy imbalanced-learn scikit-learn pandas matplotlib
+Entorno probado: Python 3.12, numpy 1.26.0, scikit-learn 1.7.2,
+imbalanced-learn 0.14.0, mealpy 3.0.3.
+
+Protocolo predefinido:
+* Hasta 5 particiones externas y 3 internas, limitadas por grupos/clase.
+* Los grupos declarados, UCSC vinculado y duplicados textuales no se separan.
+* Cada entrenamiento externo define su vocabulario candidato (hasta 400).
+* Cada entrenamiento interno aprende su propio vocabulario e IDF; las máscaras
+  se alinean por nombre de término con los candidatos del entrenamiento externo.
+* El fitness interno guía la búsqueda; NO estima generalización. El universo
+  candidato pertenece al train externo completo, no a una muestra independiente.
+* SMOTE solamente en train, después de seleccionar columnas; k=min(2, n_min-1).
+* GWO continuo OriginalGWO con umbral V determinista 0.5; máscaras vacía y
+  completa inválidas, como en el paso 04. Objetivo: media interna de F1 macro.
+* La prueba externa se transforma después de cerrar la selección. Ambos modelos
+  usan los mismos folds, TF-IDF externo y parámetros de SMOTE/ComplementNB.
+* Cada perfil obtiene una predicción externa por modelo. No se entrena ni
+  exporta aquí un modelo final sobre todo el corpus.
+
+Las métricas ponderan perfiles (no grupos). Se conservan términos de grado e
+institución. No es una prueba de generalización a instituciones desconocidas.
+No se generan CV10 ni intervalos de confianza a partir de folds dependientes.
+Los resultados de este protocolo sustituyen la antigua validación exploratoria
+solo para este paso; los consumidores 06/07 deben adaptarse por separado.
 """
-Reproducción exploratoria GWO y diagnóstico de sensibilidad
-============================================================
-
-Modelo:
-    TF-IDF word (1,2)-grams + ComplementNB + SMOTE
-
-Features:
-    Subconjunto GWO cargado desde CSV.
-    Ejecución de referencia: 249 de 400 características.
-
-IMPORTANTE
-----------
-Este script reproduce el protocolo exploratorio asociado a la selección
-GWO del paquete de referencia.
-
-La selección GWO y el vocabulario TF-IDF fueron obtenidos utilizando
-el corpus disponible completo antes de esta comparación. Por tanto,
-los resultados obtenidos aquí NO constituyen una estimación final
-insesgada de generalización.
-
-El protocolo robusto final se evalúa separadamente en:
-    06_modelo_final_robusto.py
-
-La evaluación de 10 folds se conserva exclusivamente como diagnóstico
-de sensibilidad y para reproducir el resultado de referencia. Debido a
-que la clase Ejecución contiene solo 5 documentos, no es posible que
-los 10 folds contengan las tres clases.
-"""
-
 from __future__ import annotations
 
-import io
+import argparse
+import hashlib
+import json
 import os
 import sys
-import warnings
+import time
+from datetime import datetime, timezone
+from importlib.metadata import version
+from pathlib import Path
+from urllib.parse import urlparse
 
-sys.stdout = io.TextIOWrapper(
-    sys.stdout.buffer,
-    encoding="utf-8",
-    errors="replace",
-)
-
-sys.stderr = io.TextIOWrapper(
-    sys.stderr.buffer,
-    encoding="utf-8",
-    errors="replace",
-)
-
-import ftfy
 import matplotlib
-
 matplotlib.use("Agg")
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
-
-# =============================================================================
-# ADVERTENCIA CONTROLADA
-# =============================================================================
-#
-# sklearn emite automáticamente una advertencia porque la clase minoritaria
-# posee 5 muestras y se ejecuta un diagnóstico de 10 folds.
-#
-# La advertencia NO se oculta metodológicamente: el script la explica de forma
-# explícita antes de ejecutar el bloque 10-fold. Aquí solamente evitamos que
-# sklearn imprima el mismo mensaje fuera de orden en stderr.
-# =============================================================================
-
-warnings.filterwarnings(
-    "ignore",
-    message=(
-        r"The least populated class in y has only 5 members, "
-        r"which is less than n_splits=10\."
-    ),
-    category=UserWarning,
-    module=r"sklearn\.model_selection\._split",
-)
-
-from imblearn.over_sampling import SMOTE
-
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import (
-    accuracy_score,
-    classification_report,
-    confusion_matrix,
-    f1_score,
-)
 from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import (f1_score, accuracy_score, balanced_accuracy_score,
+                             classification_report, confusion_matrix, ConfusionMatrixDisplay)
 from sklearn.naive_bayes import ComplementNB
-from sklearn.preprocessing import LabelEncoder
 
-
-# =============================================================================
-# 1. RUTAS
-# =============================================================================
-
-BASE = os.path.dirname(
-    os.path.abspath(__file__)
-)
-
-SRC_ROOT = os.path.abspath(
-    os.path.join(
-        BASE,
-        "..",
-    )
-)
-
-CSV_V2 = os.path.join(
-    SRC_ROOT,
-    "data",
-    "processed",
-    "perfiles_egreso_etiquetado_v2.csv",
-)
-
-OUT_DIR = os.path.join(
-    SRC_ROOT,
-    "data",
-    "resultados_cientificos",
-    "gwo",
-)
-
-GWO_CSV = os.path.join(
-    OUT_DIR,
-    "gwo_features_seleccionadas.csv",
-)
-
-os.makedirs(
-    OUT_DIR,
-    exist_ok=True,
-)
-
-
-# =============================================================================
-# 2. CONFIGURACIÓN
-# =============================================================================
-
+SRC_ROOT = str(Path(__file__).resolve().parent.parent)
 SEED = 42
-np.random.seed(SEED)
+CLASES = ["Civil", "Ejecución", "Informática"]
+TFIDF_CONFIG = dict(max_features=400, ngram_range=(1, 2), min_df=2,
+                    max_df=0.9, sublinear_tf=True)
+CORPUS_SELECCIONADO = "actual"
 
-CLASES_ESPERADAS = [
-    "Civil",
-    "Ejecución",
-    "Informática",
-]
+
+def configurar_corpus(corpus: str) -> None:
+    global CORPUS_SELECCIONADO, RUTA_ENTRADA, OUT_DIR
+    if corpus not in {"actual", "v2"}:
+        raise ValueError("Corpus no válido: usa actual o v2.")
+    CORPUS_SELECCIONADO = corpus
+    archivo = ("perfiles_egreso_etiquetado_actual_corregido.csv"
+               if corpus == "actual" else "perfiles_egreso_etiquetado_v2.csv")
+    RUTA_ENTRADA = os.path.join(SRC_ROOT, "data", "processed", archivo)
+    OUT_DIR = Path(SRC_ROOT) / "data" / "resultados_cientificos" / "gwo" / corpus / "validacion_anidada"
+
+
+def solicitar_corpus() -> str:
+    print("\nSelecciona el corpus:")
+    print("1. Actual — salida corregida del encoding")
+    print("2. V2 — corpus histórico")
+    opciones = {"1": "actual", "actual": "actual", "2": "v2", "v2": "v2"}
+    while True:
+        try:
+            respuesta = input("Opción [1/2]: ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            raise SystemExit("Selección cancelada. Usa --corpus actual o --corpus v2.") from None
+        if respuesta in opciones:
+            return opciones[respuesta]
+        print("Opción no válida. Escribe 1 o 2.")
+
+
+def sha256_archivo(ruta: str) -> str:
+    with open(ruta, "rb") as archivo:
+        return hashlib.sha256(archivo.read()).hexdigest()
 
 
 STOPWORDS_ES = [
-    "a", "al", "algo", "algunas", "algunos", "ante", "antes",
-    "como", "con", "contra", "cual", "cuando", "de", "del",
-    "desde", "donde", "durante", "e", "el", "ella", "ellas",
-    "ellos", "en", "entre", "era", "erais", "eran", "eras",
-    "eres", "es", "esa", "esas", "ese", "eso", "esos", "esta",
-    "estaba", "estaban", "estado", "estar", "estas", "este",
-    "esto", "estos", "estoy", "fue", "fueron", "fui", "ha",
-    "han", "has", "hasta", "hay", "he", "hun", "la", "las",
-    "le", "les", "lo", "los", "mas", "me", "mi", "mia",
-    "mias", "mientras", "mis", "mo", "mucho", "muchos", "muy",
-    "más", "mí", "nada", "ni", "no", "nos", "nosotras",
-    "nosotros", "nuestra", "nuestras", "nuestro", "nuestros",
-    "o", "os", "otra", "otras", "otro", "otros", "para",
-    "pero", "poco", "por", "porque", "que", "quien", "quienes",
-    "qué", "se", "sea", "seais", "sean", "seas", "ser", "si",
-    "sin", "sobre", "sois", "somos", "son", "su", "sus",
-    "también", "tanto", "te", "tenemos", "tengo", "ti",
-    "tiene", "tienen", "toda", "todas", "todo", "todos",
-    "tu", "tus", "un", "una", "unas", "uno", "unos",
-    "vosotras", "vosotros", "vuestra", "vuestras", "vuestro",
-    "vuestros", "y", "ya", "yo", "él", "ésta", "éstas",
-    "éste", "éstos", "última", "últimas", "último", "últimos",
+    'a','al','algo','algunas','algunos','ante','antes','como','con','contra',
+    'cual','cuando','de','del','desde','donde','durante','e','el','ella',
+    'ellas','ellos','en','entre','era','erais','eran','eras','eres','es',
+    'esa','esas','ese','eso','esos','esta','estaba','estaban','estado',
+    'estar','estas','este','esto','estos','estoy','fue','fueron','fui',
+    'ha','han','has','hasta','hay','he','hun','la','las','le','les','lo',
+    'los','mas','me','mi','mia','mias','mientras','mis','mo','mucho',
+    'muchos','muy','más','mí','nada','ni','no','nos','nosotras','nosotros',
+    'nuestra','nuestras','nuestro','nuestros','o','os','otra','otras','otro',
+    'otros','para','pero','poco','por','porque','que','quien','quienes',
+    'qué','se','sea','seais','sean','seas','ser','si','sin','sobre','sois',
+    'somos','son','su','sus','también','tanto','te','tenemos','tengo','ti',
+    'tiene','tienen','toda','todas','todo','todos','tu','tus','un','una',
+    'unas','uno','unos','vosotras','vosotros','vuestra','vuestras','vuestro',
+    'vuestros','y','ya','yo','él','ésta','éstas','éste','éstos','última',
+    'últimas','último','últimos',
 ]
 
 
-# =============================================================================
-# 3. CARGA DEL CORPUS
-# =============================================================================
-
-print("=" * 76)
-print("REPRODUCCIÓN EXPLORATORIA GWO Y DIAGNÓSTICO DE SENSIBILIDAD")
-print("=" * 76)
-
-
-if not os.path.exists(CSV_V2):
-
-    raise FileNotFoundError(
-        f"No se encontró el corpus V2:\n{CSV_V2}"
-    )
-
-
-if not os.path.exists(GWO_CSV):
-
-    raise FileNotFoundError(
-        f"No se encontró el archivo de features GWO:\n{GWO_CSV}"
-    )
-
-
-df = pd.read_csv(
-    CSV_V2,
-    encoding="utf-8-sig",
-)
-
-
-columnas_requeridas = {
-    "perfil_egreso",
-    "grado",
-}
-
-faltantes = (
-    columnas_requeridas
-    - set(df.columns)
-)
-
-if faltantes:
-
-    raise ValueError(
-        "El corpus V2 no contiene las columnas "
-        f"requeridas: {sorted(faltantes)}"
-    )
-
-
-df["perfil_egreso"] = df[
-    "perfil_egreso"
-].apply(
-    lambda x:
-        ftfy.fix_text(
-            str(x)
+def cargar_corpus() -> pd.DataFrame:
+    if not os.path.isfile(RUTA_ENTRADA):
+        raise FileNotFoundError(
+            f"No se encontró el corpus seleccionado ({CORPUS_SELECCIONADO}):\n"
+            f"{RUTA_ENTRADA}\n"
+            "Para actual, ejecuta primero el encoding con --corpus actual."
         )
-)
-
-df["grado"] = df[
-    "grado"
-].apply(
-    lambda x:
-        ftfy.fix_text(
-            str(x)
-        )
-)
-
-
-textos = df[
-    "perfil_egreso"
-].tolist()
-
-
-le = LabelEncoder()
-
-y = le.fit_transform(
-    df[
-        "grado"
-    ].tolist()
-)
-
-clases_enc = list(
-    le.classes_
-)
-
-
-if clases_enc != CLASES_ESPERADAS:
-
-    raise ValueError(
-        "Las clases detectadas no coinciden con "
-        "el orden esperado.\n"
-        f"Detectadas: {clases_enc}\n"
-        f"Esperadas : {CLASES_ESPERADAS}"
-    )
-
-
-conteos_clase = (
-    df[
-        "grado"
-    ]
-    .value_counts()
-    .to_dict()
-)
-
-
-print(
-    f"\nDataset: {len(df)} documentos"
-)
-
-print(
-    f"Distribución: {conteos_clase}"
-)
-
-
-# =============================================================================
-# 4. RECONSTRUCCIÓN DEL ESPACIO GWO DE REFERENCIA
-# =============================================================================
-#
-# IMPORTANTE:
-#
-# Se reconstruye deliberadamente el mismo espacio TF-IDF empleado por el
-# experimento GWO de referencia. El vectorizador se ajusta sobre el corpus
-# completo porque esta sección tiene como objetivo REPRODUCIR ese experimento.
-#
-# Por esta razón este bloque es exploratorio y NO una evaluación final
-# libre de fuga.
-# =============================================================================
-
-df_gwo = pd.read_csv(
-    GWO_CSV,
-    encoding="utf-8-sig",
-)
-
-if "feature" not in df_gwo.columns:
-
-    raise ValueError(
-        "gwo_features_seleccionadas.csv "
-        "no contiene la columna 'feature'."
-    )
-
-
-gwo_feats = set(
-    df_gwo[
-        "feature"
-    ].astype(str)
-)
-
-
-VEC = TfidfVectorizer(
-    max_features=400,
-    ngram_range=(1, 2),
-    min_df=2,
-    max_df=0.9,
-    sublinear_tf=True,
-    stop_words=STOPWORDS_ES,
-)
-
-
-X_full = VEC.fit_transform(
-    textos
-).toarray()
-
-
-feature_names = np.array(
-    VEC.get_feature_names_out()
-)
-
-
-mask_gwo = np.array(
-    [
-        feature in gwo_feats
-        for feature
-        in feature_names
-    ]
-)
-
-
-X_gwo = X_full[
-    :,
-    mask_gwo,
-]
-
-
-n_feat = int(
-    X_gwo.shape[1]
-)
-
-
-print(
-    f"Features GWO: {n_feat} "
-    f"(de {X_full.shape[1]} totales)"
-)
-
-
-if n_feat == 0:
-
-    raise ValueError(
-        "Ninguna característica del CSV coincide "
-        "con el vocabulario TF-IDF."
-    )
-
-
-if n_feat != len(gwo_feats):
-
-    print()
-    print(
-        "ADVERTENCIA:"
-    )
-
-    print(
-        f"El CSV contiene {len(gwo_feats)} features, "
-        f"pero {n_feat} coinciden con el vocabulario "
-        "TF-IDF reconstruido."
-    )
-
-
-print()
-print(
-    "NOTA METODOLÓGICA:"
-)
-
-print(
-    "  Este bloque reproduce el espacio GWO de referencia."
-)
-
-print(
-    "  La selección de features y el TF-IDF preceden a esta CV."
-)
-
-print(
-    "  Por ello sus métricas se interpretan como exploratorias."
-)
-
-
-# =============================================================================
-# 5. SMOTE
-# =============================================================================
-
-def aplicar_smote(
-    X_train,
-    y_train,
-):
-
-    conteos = np.bincount(
-        y_train
-    )
-
-    conteos = conteos[
-        conteos > 0
-    ]
-
-    minimo = int(
-        conteos.min()
-    )
-
-    if minimo < 2:
-
-        return (
-            X_train,
-            y_train,
-            None,
-        )
-
-
-    k = min(
-        2,
-        minimo - 1,
-    )
-
-
-    smote = SMOTE(
-        k_neighbors=k,
-        random_state=SEED,
-    )
-
-
-    X_balanceado, y_balanceado = (
-        smote.fit_resample(
-            X_train,
-            y_train,
-        )
-    )
-
-
-    return (
-        X_balanceado,
-        y_balanceado,
-        k,
-    )
-
-
-# =============================================================================
-# 6. EVALUACIÓN
-# =============================================================================
-
-def evaluar_cv(
-    X,
-    y,
-    cv,
-    etiqueta,
-):
-
-    resultados_fold = []
-
-    y_true_all = []
-    y_pred_all = []
-
-
-    print()
-    print("─" * 76)
-
-    print(
-        etiqueta
-    )
-
-    print("─" * 76)
-
-    print(
-        "  Fold  n_test  F1-ref   F1-3cl  Accuracy  "
-        "F1-Civil  F1-Ejec  F1-Info  clases_test"
-    )
-
-    print(
-        "  ----  ------  -------  -------  --------  "
-        "--------  -------  -------  -----------"
-    )
-
-
-    labels_fijas = np.arange(
-        len(
-            clases_enc
-        )
-    )
-
-
-    for fold, (
-        tr,
-        te,
-    ) in enumerate(
-        cv.split(
-            X,
-            y,
-        ),
-        start=1,
-    ):
-
-
-        X_tr = X[
-            tr
-        ]
-
-        X_te = X[
-            te
-        ]
-
-        y_tr = y[
-            tr
-        ]
-
-        y_te = y[
-            te
-        ]
-
-
-        (
-            X_r,
-            y_r,
-            smote_k,
-        ) = aplicar_smote(
-            X_tr,
-            y_tr,
-        )
-
-
-        clf = ComplementNB()
-
-        clf.fit(
-            X_r,
-            y_r,
-        )
-
-
-        y_pred = clf.predict(
-            X_te
-        )
-
-
-        # ---------------------------------------------------------------------
-        # F1-ref:
-        #
-        # Reproduce exactamente el comportamiento histórico de sklearn con
-        # average='macro' sin fijar labels. Si una clase está ausente del fold
-        # y tampoco es predicha, esa clase no participa del promedio.
-        #
-        # Se conserva para reproducibilidad del resultado 10-fold original.
-        # ---------------------------------------------------------------------
-
-        f1_referencia = f1_score(
-            y_te,
-            y_pred,
-            average="macro",
-            zero_division=0,
-        )
-
-
-        # ---------------------------------------------------------------------
-        # F1-3cl:
-        #
-        # Fuerza explícitamente las tres clases. Esto permite observar la
-        # consecuencia de ejecutar 10-fold cuando Ejecución solo posee
-        # cinco documentos.
-        # ---------------------------------------------------------------------
-
-        f1_tres_clases = f1_score(
-            y_te,
-            y_pred,
-            labels=labels_fijas,
-            average="macro",
-            zero_division=0,
-        )
-
-
-        acc = accuracy_score(
-            y_te,
-            y_pred,
-        )
-
-
-        f1_cls = f1_score(
-            y_te,
-            y_pred,
-            labels=labels_fijas,
-            average=None,
-            zero_division=0,
-        )
-
-
-        clases_presentes_indices = (
-            np.unique(
-                y_te
+    huella = sha256_archivo(RUTA_ENTRADA)
+    # Admite los CSV históricos con comas y los actuales con punto y coma.
+    df = pd.read_csv(RUTA_ENTRADA, sep=None, engine="python",
+                     encoding="utf-8-sig", keep_default_na=False)
+    if sha256_archivo(RUTA_ENTRADA) != huella:
+        raise ValueError("El CSV cambió durante la lectura. Repite la ejecución.")
+    faltantes = {"perfil_egreso", "grado"} - set(df.columns)
+    if faltantes:
+        raise ValueError(f"Faltan columnas requeridas: {sorted(faltantes)}")
+    if df.empty:
+        raise ValueError("El corpus está vacío.")
+    for columna in ["perfil_egreso", "grado"]:
+        vacias = df[columna].astype(str).str.strip().eq("")
+        if vacias.any():
+            raise ValueError(
+                f"Hay {int(vacias.sum())} filas sin {columna}; "
+                "corrige el corpus en fase 2. No se eliminaron filas."
             )
-        )
-
-
-        clases_presentes = [
-            clases_enc[
-                indice
-            ]
-            for indice
-            in clases_presentes_indices
-        ]
-
-
-        clases_texto = (
-            "/".join(
-                clases_presentes
-            )
-        )
-
-
-        contiene_tres_clases = (
-            len(
-                clases_presentes
-            )
-            == len(
-                clases_enc
-            )
-        )
-
-
-        print(
-            f"  {fold:>4}  "
-            f"{len(y_te):>6}  "
-            f"{f1_referencia:>7.4f}  "
-            f"{f1_tres_clases:>7.4f}  "
-            f"{acc:>8.4f}  "
-            f"{f1_cls[0]:>8.4f}  "
-            f"{f1_cls[1]:>7.4f}  "
-            f"{f1_cls[2]:>7.4f}  "
-            f"{clases_texto}"
-        )
-
-
-        resultados_fold.append(
-            {
-                "fold":
-                    fold,
-
-                "n_test":
-                    int(
-                        len(
-                            y_te
-                        )
-                    ),
-
-                # Compatibilidad histórica con resultados anteriores.
-                "F1_macro":
-                    f1_referencia,
-
-                "F1_macro_3clases":
-                    f1_tres_clases,
-
-                "Accuracy":
-                    acc,
-
-                "F1_Civil":
-                    f1_cls[
-                        0
-                    ],
-
-                "F1_Ejecucion":
-                    f1_cls[
-                        1
-                    ],
-
-                "F1_Informatica":
-                    f1_cls[
-                        2
-                    ],
-
-                "SMOTE_k":
-                    smote_k,
-
-                "clases_reales_test":
-                    clases_texto,
-
-                "contiene_3_clases":
-                    contiene_tres_clases,
-            }
-        )
-
-
-        y_true_all.extend(
-            y_te
-        )
-
-        y_pred_all.extend(
-            y_pred
-        )
-
-
-    df_r = pd.DataFrame(
-        resultados_fold
-    )
-
-
-    y_ta = np.asarray(
-        y_true_all
-    )
-
-    y_pa = np.asarray(
-        y_pred_all
-    )
-
-
-    f1_oof = f1_score(
-        y_ta,
-        y_pa,
-        labels=labels_fijas,
-        average="macro",
-        zero_division=0,
-    )
-
-
-    acc_oof = accuracy_score(
-        y_ta,
-        y_pa,
-    )
-
-
-    folds_completos = int(
-        df_r[
-            "contiene_3_clases"
-        ].sum()
-    )
-
-
-    folds_incompletos = int(
-        len(
-            df_r
-        )
-        - folds_completos
-    )
-
-
-    print()
-    print(
-        "Resumen:"
-    )
-
-    print(
-        f"  F1-ref media            : "
-        f"{df_r['F1_macro'].mean():.4f}"
-    )
-
-    print(
-        f"  F1-ref std              : "
-        f"{df_r['F1_macro'].std():.4f}"
-    )
-
-    print(
-        f"  F1-3cl media            : "
-        f"{df_r['F1_macro_3clases'].mean():.4f}"
-    )
-
-    print(
-        f"  F1-3cl std              : "
-        f"{df_r['F1_macro_3clases'].std():.4f}"
-    )
-
-    print(
-        f"  Accuracy media          : "
-        f"{df_r['Accuracy'].mean():.4f}"
-    )
-
-    print(
-        f"  F1-macro OOF 3 clases  : "
-        f"{f1_oof:.4f}"
-    )
-
-    print(
-        f"  Accuracy OOF            : "
-        f"{acc_oof:.4f}"
-    )
-
-    print(
-        f"  Folds con las 3 clases  : "
-        f"{folds_completos}/{len(df_r)}"
-    )
-
-    print(
-        f"  Folds sin alguna clase  : "
-        f"{folds_incompletos}/{len(df_r)}"
-    )
-
-
-    print()
-    print(
-        "Reporte OOF agregado:"
-    )
-
-    print(
-        classification_report(
-            y_ta,
-            y_pa,
-            labels=labels_fijas,
-            target_names=clases_enc,
-            zero_division=0,
-        )
-    )
-
-
-    return (
-        df_r,
-        y_ta,
-        y_pa,
-        f1_oof,
-        acc_oof,
-    )
-
-
-# =============================================================================
-# 7. 5-FOLD — REPRODUCCIÓN EXPLORATORIA PRINCIPAL
-# =============================================================================
-
-CV5 = StratifiedKFold(
-    n_splits=5,
-    shuffle=True,
-    random_state=SEED,
-)
-
-
-(
-    df_5,
-    yt5,
-    yp5,
-    f1_oof_5,
-    acc_oof_5,
-) = evaluar_cv(
-    X_gwo,
-    y,
-    CV5,
-    (
-        "5-FOLD — REPRODUCCIÓN EXPLORATORIA "
-        "GWO DE REFERENCIA"
-    ),
-)
-
-
-# =============================================================================
-# 8. 10-FOLD — DIAGNÓSTICO DE SENSIBILIDAD
-# =============================================================================
-
-n_minoritario = int(
-    df[
-        "grado"
-    ]
-    .value_counts()
-    .min()
-)
-
-
-print()
-print("=" * 76)
-
-print(
-    "ADVERTENCIA METODOLÓGICA — 10-FOLD"
-)
-
-print("=" * 76)
-
-print(
-    f"La clase minoritaria contiene "
-    f"{n_minoritario} documentos."
-)
-
-print(
-    "Con 10 folds no es posible incluir "
-    "las tres clases en todos los folds de test."
-)
-
-print(
-    "La ejecución 10-fold se conserva exclusivamente "
-    "para reproducir el diagnóstico"
-)
-
-print(
-    "de sensibilidad del paquete GWO de referencia."
-)
-
-print(
-    "El valor histórico F1-ref no se utilizará como "
-    "métrica robusta final de generalización."
-)
-
-
-CV10 = StratifiedKFold(
-    n_splits=10,
-    shuffle=True,
-    random_state=SEED,
-)
-
-
-(
-    df_10,
-    yt10,
-    yp10,
-    f1_oof_10,
-    acc_oof_10,
-) = evaluar_cv(
-    X_gwo,
-    y,
-    CV10,
-    (
-        "10-FOLD — DIAGNÓSTICO DE "
-        "SENSIBILIDAD GWO"
-    ),
-)
-
-
-# =============================================================================
-# 9. GUARDAR CSV
-# =============================================================================
-
-RUTA_CV5 = os.path.join(
-    OUT_DIR,
-    "cv5_gwo_resultados.csv",
-)
-
-RUTA_CV10 = os.path.join(
-    OUT_DIR,
-    "cv10_gwo_resultados.csv",
-)
-
-
-df_5.to_csv(
-    RUTA_CV5,
-    index=False,
-    encoding="utf-8-sig",
-)
-
-df_10.to_csv(
-    RUTA_CV10,
-    index=False,
-    encoding="utf-8-sig",
-)
-
-
-print()
-print(
-    "CSVs guardados:"
-)
-
-print(
-    f"  {RUTA_CV5}"
-)
-
-print(
-    f"  {RUTA_CV10}"
-)
-
-
-# =============================================================================
-# 10. VISUALIZACIÓN PRINCIPAL
-# =============================================================================
-
-fig, axes = plt.subplots(
-    1,
-    3,
-    figsize=(18, 5.5),
-)
-
-
-# -----------------------------------------------------------------------------
-# A. 5-fold
-# -----------------------------------------------------------------------------
-
-ax = axes[
-    0
-]
-
-ax.plot(
-    df_5[
-        "fold"
-    ],
-    df_5[
-        "F1_macro_3clases"
-    ],
-    marker="o",
-    linewidth=2,
-)
-
-ax.axhline(
-    df_5[
-        "F1_macro_3clases"
-    ].mean(),
-    linestyle="--",
-    label=(
-        "Media = "
-        f"{df_5['F1_macro_3clases'].mean():.3f}"
-    ),
-)
-
-ax.set_ylim(
-    0,
-    1.05,
-)
-
-ax.set_xlabel(
-    "Fold"
-)
-
-ax.set_ylabel(
-    "F1-macro"
-)
-
-ax.set_title(
-    "5-fold exploratorio\n"
-    "todos los folds contienen 3 clases"
-)
-
-ax.set_xticks(
-    range(
-        1,
-        6,
-    )
-)
-
-ax.grid(
-    alpha=0.3,
-)
-
-ax.legend()
-
-
-# -----------------------------------------------------------------------------
-# B. 10-fold: diferencia entre cálculo histórico y tres clases fijas
-# -----------------------------------------------------------------------------
-
-ax = axes[
-    1
-]
-
-ax.plot(
-    df_10[
-        "fold"
-    ],
-    df_10[
-        "F1_macro"
-    ],
-    marker="o",
-    linewidth=2,
-    label="F1-ref histórico",
-)
-
-ax.plot(
-    df_10[
-        "fold"
-    ],
-    df_10[
-        "F1_macro_3clases"
-    ],
-    marker="s",
-    linewidth=2,
-    label="F1 con 3 clases fijas",
-)
-
-ax.set_ylim(
-    0,
-    1.05,
-)
-
-ax.set_xlabel(
-    "Fold"
-)
-
-ax.set_ylabel(
-    "F1-macro"
-)
-
-ax.set_title(
-    "10-fold diagnóstico\n"
-    "Ejecución n=5"
-)
-
-ax.set_xticks(
-    range(
-        1,
-        11,
-    )
-)
-
-ax.grid(
-    alpha=0.3,
-)
-
-ax.legend(
-    fontsize=8,
-)
-
-
-# -----------------------------------------------------------------------------
-# C. Matriz de confusión OOF 10-fold
-# -----------------------------------------------------------------------------
-
-ax = axes[
-    2
-]
-
-cm = confusion_matrix(
-    yt10,
-    yp10,
-    labels=np.arange(
-        len(
-            clases_enc
-        )
-    ),
-)
-
-sns.heatmap(
-    cm,
-    annot=True,
-    fmt="d",
-    cmap="Blues",
-    xticklabels=clases_enc,
-    yticklabels=clases_enc,
-    ax=ax,
-    cbar=False,
-    linewidths=0.5,
-)
-
-ax.set_xlabel(
-    "Predicción"
-)
-
-ax.set_ylabel(
-    "Real"
-)
-
-ax.set_title(
-    "Matriz de confusión OOF\n"
-    "10-fold diagnóstico"
-)
-
-
-plt.tight_layout()
-
-
-RUTA_GRAFICO = os.path.join(
-    OUT_DIR,
-    "cv10_gwo_resultados.png",
-)
-
-
-plt.savefig(
-    RUTA_GRAFICO,
-    dpi=150,
-)
-
-plt.close()
-
-
-print(
-    f"Gráfica guardada: {RUTA_GRAFICO}"
-)
-
-
-# =============================================================================
-# 11. F1 POR CLASE — 10-FOLD
-# =============================================================================
-
-fig, ax = plt.subplots(
-    figsize=(12, 4.5)
-)
-
-
-x = df_10[
-    "fold"
-]
-
-
-ax.plot(
-    x,
-    df_10[
-        "F1_Civil"
-    ],
-    marker="o",
-    linewidth=2,
-    label="Civil",
-)
-
-ax.plot(
-    x,
-    df_10[
-        "F1_Ejecucion"
-    ],
-    marker="s",
-    linewidth=2,
-    label="Ejecución",
-)
-
-ax.plot(
-    x,
-    df_10[
-        "F1_Informatica"
-    ],
-    marker="^",
-    linewidth=2,
-    label="Informática",
-)
-
-
-ax.set_xlabel(
-    "Fold"
-)
-
-ax.set_ylabel(
-    "F1 por clase"
-)
-
-ax.set_title(
-    "F1 por clase — diagnóstico 10-fold GWO\n"
-    "Los folds sin soporte para Ejecución se muestran con F1=0"
-)
-
-ax.legend(
-    loc="lower left"
-)
-
-ax.grid(
-    alpha=0.3
-)
-
-ax.set_ylim(
-    -0.05,
-    1.05,
-)
-
-ax.set_xticks(
-    range(
-        1,
-        11,
-    )
-)
-
-
-plt.tight_layout()
-
-
-RUTA_GRAFICO_CLASE = os.path.join(
-    OUT_DIR,
-    "cv10_gwo_f1_clase.png",
-)
-
-
-plt.savefig(
-    RUTA_GRAFICO_CLASE,
-    dpi=150,
-)
-
-plt.close()
-
-
-print(
-    f"Gráfica guardada: {RUTA_GRAFICO_CLASE}"
-)
-
-
-# =============================================================================
-# 12. RESUMEN FINAL
-# =============================================================================
-
-m5 = float(
-    df_5[
-        "F1_macro_3clases"
-    ].mean()
-)
-
-s5 = float(
-    df_5[
-        "F1_macro_3clases"
-    ].std()
-)
-
-
-m10_ref = float(
-    df_10[
-        "F1_macro"
-    ].mean()
-)
-
-s10_ref = float(
-    df_10[
-        "F1_macro"
-    ].std()
-)
-
-
-m10_3cl = float(
-    df_10[
-        "F1_macro_3clases"
-    ].mean()
-)
-
-s10_3cl = float(
-    df_10[
-        "F1_macro_3clases"
-    ].std()
-)
-
-
-folds_10_completos = int(
-    df_10[
-        "contiene_3_clases"
-    ].sum()
-)
-
-
-print()
-print("=" * 76)
-
-print(
-    "RESUMEN GWO — REPRODUCCIÓN Y DIAGNÓSTICO"
-)
-
-print("=" * 76)
-
-
-print()
-print(
-    "5-fold exploratorio:"
-)
-
-print(
-    f"  F1-macro 3 clases : "
-    f"{m5:.4f}"
-)
-
-print(
-    f"  Std               : "
-    f"{s5:.4f}"
-)
-
-print(
-    f"  F1-macro OOF      : "
-    f"{f1_oof_5:.4f}"
-)
-
-
-print()
-print(
-    "10-fold diagnóstico:"
-)
-
-print(
-    f"  F1-ref histórico       : "
-    f"{m10_ref:.4f}"
-)
-
-print(
-    f"  Std F1-ref             : "
-    f"{s10_ref:.4f}"
-)
-
-print(
-    f"  F1 con 3 clases fijas  : "
-    f"{m10_3cl:.4f}"
-)
-
-print(
-    f"  Std F1 3 clases        : "
-    f"{s10_3cl:.4f}"
-)
-
-print(
-    f"  F1-macro OOF           : "
-    f"{f1_oof_10:.4f}"
-)
-
-print(
-    f"  Folds con 3 clases     : "
-    f"{folds_10_completos}/10"
-)
-
-
-print()
-print(
-    "INTERPRETACIÓN:"
-)
-
-print(
-    "  - El 5-fold reproduce el resultado exploratorio GWO de referencia."
-)
-
-print(
-    "  - El 10-fold se conserva como diagnóstico histórico de sensibilidad."
-)
-
-print(
-    "  - Con Ejecución n=5, 10-fold no contiene las tres clases en cada fold."
-)
-
-print(
-    "  - El F1-ref 10-fold no debe tratarse como estimación robusta final."
-)
-
-print(
-    "  - La generalización conservadora se reporta desde "
-    "06_modelo_final_robusto.py."
-)
-
-
-print()
-print("=" * 76)
-
-print(
-    "VALIDACIÓN EXPLORATORIA GWO COMPLETADA"
-)
-
-print("=" * 76)
+    desconocidas = set(df["grado"]) - set(CLASES)
+    if desconocidas:
+        raise ValueError(f"Grados fuera del catálogo: {sorted(desconocidas)}")
+    for columna in ["estado_registro", "estado_etiquetado"]:
+        if columna in df:
+            pendientes = df[columna].astype(str).str.strip().str.upper().isin(["REVISAR", "ERROR"])
+            if pendientes.any():
+                raise ValueError(f"El CSV contiene filas REVISAR/ERROR en {columna}.")
+    conteos = df["grado"].value_counts()
+    if len(conteos) != 3 or conteos.min() < 2:
+        raise ValueError("GWO requiere las tres clases, con al menos dos perfiles cada una.")
+    df.attrs["sha256_entrada"] = huella
+    return df
+
+
+
+
+def construir_grupos(df: pd.DataFrame):
+    """Une grupos declarados, el par UCSC conocido y duplicados textuales.
+
+    No usa similitud ajustada a etiquetas ni resultados del optimizador.
+    Conserva cada perfil; solo impide separar sus grupos entre train y test.
+    """
+    n = len(df)
+    padres = list(range(n))
+    def raiz(i):
+        while padres[i] != i:
+            padres[i] = padres[padres[i]]
+            i = padres[i]
+        return i
+    def unir(i, j):
+        padres[raiz(j)] = raiz(i)
+    vistos_grupos, vistos_textos = {}, {}
+    criterios = [[] for _ in range(n)]
+    for i, (_, fila) in enumerate(df.iterrows()):
+        grupo = str(fila.get("grupo_perfil", "")).strip()
+        claves = [grupo] if grupo else []
+        url = urlparse(str(fila.get("url", "")))
+        if (url.hostname in {"it.ucsc.cl", "advance.ucsc.cl"}
+                and url.path.rstrip("/") == "/carreras/ingenieria-de-ejecucion-en-informatica"):
+            claves.append("ucsc_ejecucion_informatica")
+        for clave in claves:
+            if clave in vistos_grupos:
+                unir(vistos_grupos[clave], i)
+            else:
+                vistos_grupos[clave] = i
+            criterios[i].append("grupo:" + clave)
+        texto = " ".join(str(fila["perfil_egreso"]).casefold().split())
+        if texto in vistos_textos:
+            unir(vistos_textos[texto], i)
+            criterios[i].append("duplicado textual normalizado")
+        else:
+            vistos_textos[texto] = i
+    nombres = {}
+    grupos = np.asarray([nombres.setdefault(raiz(i), f"grupo_{len(nombres)+1:03d}")
+                         for i in range(n)])
+    auditoria = pd.DataFrame({"fila_datos": np.arange(1, n+1), "grupo_cv": grupos,
+                             "grado": df.grado.to_numpy(),
+                             "criterio": ["; ".join(c) or "perfil individual" for c in criterios]})
+    for columna in ["indice_fuente", "universidad", "carrera", "url", "modalidad", "grupo_perfil"]:
+        if columna in df:
+            auditoria[columna] = df[columna].to_numpy()
+    if auditoria.groupby("grupo_cv")["grado"].nunique().gt(1).any():
+        raise ValueError("Un grupo reúne perfiles con distintos grados. Revisa su etiquetado.")
+    return grupos, auditoria
+
+
+def crear_particiones(y: np.ndarray, grupos: np.ndarray, solicitadas: int, semilla=SEED):
+    """Estratifica IDs únicos por grado y expande a documentos sin separarlos."""
+    tabla = pd.DataFrame({"grupo": grupos, "grado": y})
+    if tabla.groupby("grupo").grado.nunique().gt(1).any():
+        raise ValueError("Cada grupo debe tener un único grado.")
+    tabla = tabla.drop_duplicates("grupo").reset_index(drop=True)
+    cantidades = tabla.grado.value_counts()
+    if set(cantidades.index) != set(CLASES):
+        raise ValueError("Falta alguna clase en las unidades de validación.")
+    n_splits = min(solicitadas, int(cantidades.min()))
+    if n_splits < 2:
+        raise ValueError("No hay grupos suficientes para validación estratificada.")
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=semilla)
+    particiones, detalles = [], []
+    for fold, (trg, teg) in enumerate(cv.split(tabla.grupo, tabla.grado), 1):
+        tr = np.flatnonzero(np.isin(grupos, tabla.grupo.iloc[trg]))
+        te = np.flatnonzero(np.isin(grupos, tabla.grupo.iloc[teg]))
+        if set(grupos[tr]) & set(grupos[te]):
+            raise ValueError("Hay grupos compartidos entre entrenamiento y prueba.")
+        if set(y[tr]) != set(CLASES) or set(y[te]) != set(CLASES):
+            raise ValueError("Una partición no contiene todas las clases.")
+        conteos = pd.Series(y[tr]).value_counts()
+        k = min(2, int(conteos.min())-1)
+        if k < 1:
+            raise ValueError("Un entrenamiento tiene menos de dos perfiles por clase; SMOTE no es viable.")
+        particiones.append((tr, te))
+        detalles.append({"fold": fold, "n_train": len(tr), "n_test": len(te),
+                         "grados_train": {str(a):int(b) for a,b in conteos.items()},
+                         "grados_test": {str(a):int(b) for a,b in pd.Series(y[te]).value_counts().items()},
+                         "grupos_train": sorted(set(grupos[tr])), "grupos_test": sorted(set(grupos[te])),
+                         "smote_k": k})
+    return particiones, detalles
+
+
+def ajustar_tfidf(textos):
+    vectorizador = TfidfVectorizer(stop_words=STOPWORDS_ES, **TFIDF_CONFIG)
+    try:
+        X = vectorizador.fit_transform(textos)
+    except ValueError as exc:
+        raise ValueError(f"TF-IDF no pudo ajustarse al entrenamiento: {exc}") from exc
+    return vectorizador, X
+
+
+def entrenar_modelo(X, y, semilla):
+    from imblearn.over_sampling import SMOTE
+    minimo = int(pd.Series(y).value_counts().min())
+    if set(y) != set(CLASES) or minimo < 2:
+        raise ValueError("SMOTE requiere las tres clases y dos perfiles por clase en train.")
+    k = min(2, minimo - 1)
+    X_r, y_r = SMOTE(k_neighbors=k, random_state=semilla).fit_resample(X, y)
+    modelo = ComplementNB(alpha=1.0)
+    modelo.fit(X_r, y_r)
+    return modelo, k
+
+
+def preparar_internas(textos, y, candidatos, particiones):
+    """Solo recibe textos del entrenamiento externo; no recibe su prueba."""
+    posicion = {str(t): i for i, t in enumerate(candidatos)}
+    preparadas, vocabularios = [], []
+    for fold, (tr, va) in enumerate(particiones, 1):
+        vec, X_tr = ajustar_tfidf(textos[tr])
+        X_va = vec.transform(textos[va])
+        nombres = vec.get_feature_names_out()
+        indices = np.asarray([posicion.get(str(t), -1) for t in nombres])
+        if not (indices >= 0).any():
+            raise ValueError("No hay términos comunes entre un train interno y los candidatos.")
+        preparadas.append((X_tr, X_va, y[tr], y[va], indices))
+        vocabularios.extend({"fold_interno": fold, "feature": str(t),
+                             "idf": float(idf), "indice_candidato": int(i)}
+                            for t, idf, i in zip(nombres, vec.idf_, indices))
+    return preparadas, vocabularios
+
+
+def binarizar(posicion):
+    return np.abs((2 / np.pi) * np.arctan((np.pi / 2) * np.asarray(posicion))) > 0.5
+
+
+def fitness_mascara(mascara, preparadas, semilla):
+    puntuaciones = []
+    for X_tr, X_va, y_tr, y_va, indices in preparadas:
+        presentes = indices >= 0
+        columnas = np.zeros(len(indices), dtype=bool)
+        columnas[presentes] = mascara[indices[presentes]]
+        if not columnas.any():
+            # Máscara inviable; no se ocultan fallos de SMOTE o del clasificador.
+            return -1.0
+        modelo, _ = entrenar_modelo(X_tr[:, columnas], y_tr, semilla)
+        pred = modelo.predict(X_va[:, columnas])
+        puntuaciones.append(f1_score(y_va, pred, labels=CLASES,
+                                     average="macro", zero_division=0))
+    return float(np.mean(puntuaciones))
+
+
+def seleccionar_gwo(preparadas, n_features, epochs, poblacion, semilla):
+    from mealpy import GWO, FloatVar, Problem
+    if n_features < 2:
+        raise ValueError("Se requieren al menos dos términos candidatos para reducir el vocabulario.")
+    cache = {}
+    class ProblemaGWO(Problem):
+        def obj_func(self, solution):
+            mascara = binarizar(solution)
+            if not 0 < mascara.sum() < n_features:
+                return -1.0
+            clave = mascara.tobytes()
+            if clave not in cache:
+                cache[clave] = fitness_mascara(mascara, preparadas, semilla)
+            return cache[clave]
+    problema = ProblemaGWO(bounds=FloatVar(lb=(-6.,)*n_features, ub=(6.,)*n_features,
+                                         name="features"), minmax="max", log_to=None)
+    optimizador = GWO.OriginalGWO(epoch=epochs, pop_size=poblacion)
+    inicio = time.perf_counter()
+    optimizador.solve(problema, seed=semilla)
+    mascara = binarizar(optimizador.g_best.solution)
+    fitness = float(optimizador.g_best.target.fitness)
+    historial = np.asarray(optimizador.history.list_global_best_fit, dtype=float)
+    if (not 0 < mascara.sum() < n_features or fitness < 0
+            or not np.isfinite(fitness) or not np.isfinite(historial).all()):
+        raise ValueError("GWO no encontró una selección válida; revisa datos o aumenta la búsqueda.")
+    return mascara, {"fitness_interno_busqueda": fitness,
+                     "historial_fitness": historial.tolist(), "semilla": semilla,
+                     "subconjuntos_evaluados": len(cache),
+                     "segundos": round(time.perf_counter() - inicio, 3)}
+
+
+def metricas(y, pred):
+    return {"F1_macro": float(f1_score(y, pred, labels=CLASES, average="macro", zero_division=0)),
+            "accuracy": float(accuracy_score(y, pred)),
+            "balanced_accuracy": float(balanced_accuracy_score(y, pred))}
+
+
+def evaluar_fold(textos_train, y_train, textos_test, internas, epochs, poblacion, semilla):
+    """La selección no recibe textos_test; las etiquetas test no entran aquí."""
+    vec, X_train = ajustar_tfidf(textos_train)
+    nombres = vec.get_feature_names_out()
+    preparadas, vocab_inner = preparar_internas(textos_train, y_train, nombres, internas)
+    mascara, detalle = seleccionar_gwo(preparadas, len(nombres), epochs, poblacion, semilla)
+    # Transformar no ajusta vocabulario ni IDF.
+    X_test = vec.transform(textos_test)
+    predicciones = {}
+    for nombre, columnas in [("TFIDF_completo", np.ones(len(nombres), dtype=bool)),
+                             ("GWO", mascara)]:
+        modelo, k = entrenar_modelo(X_train[:, columnas], y_train, semilla)
+        predicciones[nombre] = modelo.predict(X_test[:, columnas])
+    vocab_outer = [{"indice": i, "feature": str(t), "idf": float(idf),
+                    "seleccionada": bool(mascara[i])}
+                   for i, (t, idf) in enumerate(zip(nombres, vec.idf_))]
+    detalle.update(n_features=len(nombres), n_seleccionadas=int(mascara.sum()), smote_k=k)
+    return predicciones, detalle, vocab_outer, vocab_inner
+
+
+def evaluar_anidada(df, epochs=100, poblacion=30):
+    textos, y = df.perfil_egreso.to_numpy(), df.grado.to_numpy()
+    grupos, audit_grupos = construir_grupos(df)
+    externas, detalles_ext = crear_particiones(y, grupos, 5)
+    # Verificar todas las particiones antes de invertir tiempo en GWO.
+    internas_por_fold = [crear_particiones(y[tr], grupos[tr], 3, SEED+fold)
+                         for fold, (tr, _) in enumerate(externas, 1)]
+    print(f"Perfiles: {len(df)} | Grupos: {len(set(grupos))} | "
+          f"Folds externos: {len(externas)}", flush=True)
+    oof = {nombre: np.empty(len(y), dtype=object) for nombre in ["TFIDF_completo", "GWO"]}
+    visitas = np.zeros(len(y), dtype=int)
+    folds_oof = np.zeros(len(y), dtype=int)
+    resultados, vocab_ext, vocab_int, auditoria, detalles = [], [], [], [], []
+    for fold, ((tr, te), detalle_ext, (internas, detalles_int)) in enumerate(
+            zip(externas, detalles_ext, internas_por_fold), 1):
+        print(f"Fold externo {fold}/{len(externas)}: train={len(tr)}, test={len(te)}, "
+              f"búsqueda con {len(internas)} folds internos...", flush=True)
+        pred, detalle, vocab, vocab_inner = evaluar_fold(
+            textos[tr], y[tr], textos[te], internas, epochs, poblacion, SEED+fold)
+        visitas[te] += 1
+        folds_oof[te] = fold
+        for nombre, valores in pred.items():
+            oof[nombre][te] = valores
+            resultados.append({"fold_externo": fold, "modelo": nombre,
+                               "n_train": len(tr), "n_test": len(te),
+                               "n_features": detalle["n_seleccionadas" if nombre == "GWO" else "n_features"],
+                               "smote_k": detalle["smote_k"], **metricas(y[te], valores)})
+        vocab_ext.extend({"fold_externo": fold, **fila} for fila in vocab)
+        vocab_int.extend({"fold_externo": fold, **fila} for fila in vocab_inner)
+        for rol, indices in [("train", tr), ("test", te)]:
+            auditoria.extend({"fold_externo": fold, "fold_interno": 0, "rol": rol,
+                              "fila_datos": int(i)+1, "grupo_cv": grupos[i], "grado": y[i]}
+                             for i in indices)
+        for fi, ((itr, iva), di) in enumerate(zip(internas, detalles_int), 1):
+            di["filas_train"] = (tr[itr]+1).tolist()
+            di["filas_validacion"] = (tr[iva]+1).tolist()
+            for rol, indices in [("train", tr[itr]), ("validacion", tr[iva])]:
+                auditoria.extend({"fold_externo": fold, "fold_interno": fi, "rol": rol,
+                                  "fila_datos": int(i)+1, "grupo_cv": grupos[i], "grado": y[i]}
+                                 for i in indices)
+        detalles.append({**detalle_ext, **detalle, "filas_train": (tr+1).tolist(),
+                         "filas_test": (te+1).tolist(), "particiones_internas": detalles_int})
+        print(f"  F1 externo: completo={resultados[-2]['F1_macro']:.4f}, "
+              f"GWO={resultados[-1]['F1_macro']:.4f}; "
+              f"variables {detalle['n_features']} -> {detalle['n_seleccionadas']}", flush=True)
+    if not np.all(visitas == 1):
+        raise RuntimeError("Cada perfil debe recibir exactamente una predicción externa por modelo.")
+    audit_grupos["fold_prueba_externa"] = folds_oof
+    for nombre in oof:
+        audit_grupos[f"prediccion_{nombre}"] = oof[nombre]
+    return {"folds": pd.DataFrame(resultados), "predicciones": audit_grupos,
+            "vocabularios_externos": pd.DataFrame(vocab_ext),
+            "vocabularios_internos": pd.DataFrame(vocab_int),
+            "particiones": pd.DataFrame(auditoria), "detalles": detalles}
+
+
+def guardar_resultados(resultado, df, epochs, poblacion):
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    for nombre in ["folds", "predicciones", "vocabularios_externos", "vocabularios_internos", "particiones"]:
+        resultado[nombre].to_csv(OUT_DIR / f"{nombre}.csv", index=False, encoding="utf-8-sig")
+    resumen_modelos, informes = {}, []
+    folds = resultado["folds"]
+    y = df.grado.to_numpy()
+    for nombre in ["TFIDF_completo", "GWO"]:
+        pred = resultado["predicciones"][f"prediccion_{nombre}"].to_numpy()
+        seleccion = folds[folds.modelo == nombre]
+        resumen_modelos[nombre] = {
+            "metricas_predicciones_externas_conjuntas": metricas(y, pred),
+            "media_folds": {m: float(seleccion[m].mean()) for m in metricas(y, pred)},
+            "desviacion_folds_ddof1": {m: float(seleccion[m].std(ddof=1)) for m in metricas(y, pred)},
+            "matriz_confusion_orden_clases": confusion_matrix(y, pred, labels=CLASES).tolist()}
+        informe = classification_report(y, pred, labels=CLASES, output_dict=True, zero_division=0)
+        informes.extend({"modelo": nombre, "grado": clase, **informe[clase]} for clase in CLASES)
+    pd.DataFrame(informes).to_csv(OUT_DIR / "metricas_por_clase.csv", index=False, encoding="utf-8-sig")
+    trazas = [{"fold_externo": d["fold"], "epoch": i, "fitness_interno": float(f)}
+              for d in resultado["detalles"] for i, f in enumerate(d["historial_fitness"], 1)]
+    pd.DataFrame(trazas).to_csv(OUT_DIR / "convergencia.csv", index=False, encoding="utf-8-sig")
+    resumen = {
+        "protocolo": "validacion_anidada_gwo_por_grupos_v1",
+        "fecha_utc": datetime.now(timezone.utc).isoformat(), "corpus": CORPUS_SELECCIONADO,
+        "entrada": str(Path(RUTA_ENTRADA).resolve()), "sha256_entrada": df.attrs["sha256_entrada"],
+        "sha256_script": sha256_archivo(__file__), "n_perfiles": len(df),
+        "n_grupos": int(resultado["predicciones"].grupo_cv.nunique()),
+        "clases": CLASES, "distribucion_grados": {str(k): int(v) for k,v in df.grado.value_counts().items()},
+        "parametros": {"epochs": epochs, "poblacion": poblacion, "seed": SEED,
+                       "tfidf": TFIDF_CONFIG, "stopwords": STOPWORDS_ES, "alpha_nb": 1.0,
+                       "folds_externos_solicitados": 5, "folds_internos_solicitados": 3,
+                       "folds_externos_efectivos": len(resultado["detalles"]),
+                       "gwo": "OriginalGWO; V determinista >0.5; limites [-6,6]",
+                       "mascaras_invalidas": "vacia, completa o sin columnas en algun train interno",
+                       "smote": "solo train; k=min(2,minimo_clase_train-1); seed=42+fold_externo"},
+        "versiones": {p: version(p) for p in ["numpy", "pandas", "scikit-learn", "imbalanced-learn", "mealpy"]},
+        "modelos": resumen_modelos, "particiones": resultado["detalles"],
+        "notas": [
+            "Candidatos definidos en train externo; vocabulario e IDF internos ajustados en cada train interno.",
+            "Fitness interno es un criterio de búsqueda; la evaluación procede de predicciones externas.",
+            "F1 macro conjunto y media de F1 por fold son agregaciones distintas.",
+            "La desviación entre folds describe variabilidad; no es un intervalo de confianza.",
+            "Se retienen todos los perfiles; las métricas ponderan filas y los grupos solo gobiernan particiones.",
+            "Se conservan palabras de grado/institución; no mide generalización a instituciones no vistas.",
+            "Revisar los resultados para cambiar el protocolo requiere una evaluación futura independiente.",
+            "No utiliza la selección global del paso 04 ni exporta un modelo entrenado con todo el corpus."]}
+    (OUT_DIR / "resumen_validacion_anidada.json").write_text(
+        json.dumps(resumen, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
+    fig, ax = plt.subplots(figsize=(8, 4.5))
+    for nombre in ["TFIDF_completo", "GWO"]:
+        datos = folds[folds.modelo == nombre]
+        ax.plot(datos.fold_externo, datos.F1_macro, marker="o", label=nombre)
+    ax.set(xlabel="Fold externo", ylabel="F1 macro", ylim=(0, 1.03),
+           title=f"Validación anidada — corpus {CORPUS_SELECCIONADO}")
+    ax.set_xticks(sorted(folds.fold_externo.unique()))
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(OUT_DIR / "comparacion_externa.png", dpi=160)
+    plt.close(fig)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
+    for ax, nombre in zip(axes, ["TFIDF_completo", "GWO"]):
+        matriz = resumen_modelos[nombre]["matriz_confusion_orden_clases"]
+        ConfusionMatrixDisplay(np.asarray(matriz), display_labels=CLASES).plot(
+            ax=ax, colorbar=False, cmap="Blues", values_format="d")
+        ax.set_title(nombre)
+        ax.set_xlabel("Predicción externa")
+        ax.set_ylabel("Grado real")
+    fig.suptitle(f"Predicciones externas: {len(df)} perfiles — {CORPUS_SELECCIONADO}")
+    fig.tight_layout()
+    fig.savefig(OUT_DIR / "matrices_confusion.png", dpi=160)
+    plt.close(fig)
+    return resumen
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--corpus", choices=["actual", "v2"])
+    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--poblacion", type=int, default=30)
+    args = parser.parse_args(argv)
+    if not 1 <= args.epochs <= 100000 or not 5 <= args.poblacion <= 10000:
+        parser.error("epochs debe estar entre 1 y 100000; poblacion entre 5 y 10000.")
+    configurar_corpus(args.corpus or solicitar_corpus())
+    print("\nFASE 3 — VALIDACIÓN ANIDADA GWO")
+    print(f"Entrada: {RUTA_ENTRADA}\nSalida: {OUT_DIR}")
+    df = cargar_corpus()
+    print(f"Registros leídos: {len(df)}; no se eliminan filas.")
+    resultado = evaluar_anidada(df, args.epochs, args.poblacion)
+    if sha256_archivo(RUTA_ENTRADA) != df.attrs["sha256_entrada"]:
+        raise ValueError("El corpus cambió durante la ejecución; no se guardaron resultados.")
+    resumen = guardar_resultados(resultado, df, args.epochs, args.poblacion)
+    for nombre, valores in resumen["modelos"].items():
+        print(f"{nombre}: F1 macro externo conjunto="
+              f"{valores['metricas_predicciones_externas_conjuntas']['F1_macro']:.4f}; "
+              f"media por fold={valores['media_folds']['F1_macro']:.4f}")
+    print(f"Resultados guardados en: {OUT_DIR}")
+    print("La selección se repite en cada fold: no existe una única máscara final en este paso.")
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except ImportError as exc:
+        print(f"Dependencia ausente o incompatible: {exc}\n"
+              "Revisa mealpy, imbalanced-learn y scikit-learn en tu entorno virtual.", file=sys.stderr)
+        sys.exit(1)
+    except (ValueError, FileNotFoundError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        sys.exit(1)

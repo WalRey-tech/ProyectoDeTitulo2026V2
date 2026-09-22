@@ -1,955 +1,489 @@
 # -*- coding: utf-8 -*-
+"""Evaluación robusta: títulos enmascarados + TF-IDF + SMOTE + ComplementNB.
 
+Ejecutar desde src/Fase3_Analisis:
+    python 06_modelo_final_robusto.py --corpus actual
+Sin --corpus muestra el menú actual/V2. No necesita resultados del paso 05.
+Instalación: python -m pip install imbalanced-learn scikit-learn pandas matplotlib
+Entorno probado: Python 3.12, numpy 1.26.0, scikit-learn 1.7.2,
+imbalanced-learn 0.14.0. Se registran las versiones efectivas en el resumen.
+
+Se mantiene el método de este paso: ComplementNB(alpha=1) con hasta 400
+características, SIN selección GWO ni búsqueda de hiperparámetros. El paso 05
+valida GWO por separado; aquí se controla la presencia explícita del título.
+Las reglas de enmascaramiento son fijas y no consultan el grado de la fila.
+No se aplica ftfy: la corrección de encoding corresponde a la fase 2.
+
+Los grupos se construyen con el corpus de entrada (igual que en 05), antes
+del enmascaramiento. Se conservan todas las filas y los perfiles vinculados
+no se separan. Hasta 5 folds estratificados por grupos, limitados por la clase
+con menos grupos. TF-IDF y SMOTE se ajustan solo en cada entrenamiento.
+Una sola predicción fuera de entrenamiento por perfil. La métrica principal
+sigue siendo la media de F1 macro por fold; se informa también el F1 conjunto.
+No se exporta un modelo para uso posterior: este archivo evalúa el protocolo.
+
+Eliminar títulos no elimina todas las pistas de grado o institución. Tampoco
+constituye validación en universidades desconocidas. Los folds no son muestras
+independientes: su desviación no es un intervalo de confianza. Los valores
+históricos (por ejemplo 0.5742) no se copian ni se fuerzan en los resultados.
+"""
 from __future__ import annotations
 
-import json
 import argparse
 import hashlib
-import importlib.metadata
-import time
-from pathlib import Path
+import json
 import os
+import sys
 import re
 from datetime import datetime, timezone
+from importlib.metadata import version
+from pathlib import Path
+from urllib.parse import urlparse
 
-import ftfy
 import matplotlib
-
 matplotlib.use("Agg")
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
-from imblearn.over_sampling import SMOTE
-
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import (
-    accuracy_score,
-    classification_report,
-    confusion_matrix,
-    f1_score,
-    precision_score,
-    recall_score,
-)
 from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import (f1_score, accuracy_score, balanced_accuracy_score,
+                             classification_report, confusion_matrix, ConfusionMatrixDisplay,
+                             precision_score, recall_score)
 from sklearn.naive_bayes import ComplementNB
 
-
-
-
-# =============================================================================
-# 1. RUTAS
-# =============================================================================
-
-DIRECTORIO_ACTUAL = os.path.dirname(
-    os.path.abspath(__file__)
-)
-
-SRC_ROOT = os.path.abspath(
-    os.path.join(
-        DIRECTORIO_ACTUAL,
-        "..",
-    )
-)
-
-RUTA_CORPUS = os.path.join(
-    SRC_ROOT,
-    "data",
-    "processed",
-    "perfiles_egreso_etiquetado_v2.csv",
-)
-
-RESULTADOS_DIR = os.path.join(
-    SRC_ROOT,
-    "data",
-    "resultados_cientificos",
-    "modelo_final_robusto",
-)
-
-RUTA_FOLDS = os.path.join(
-    RESULTADOS_DIR,
-    "metricas_folds_modelo_final.csv",
-)
-
-RUTA_PREDICCIONES = os.path.join(
-    RESULTADOS_DIR,
-    "predicciones_oof_modelo_final.csv",
-)
-
-RUTA_REPORTE_CLASES = os.path.join(
-    RESULTADOS_DIR,
-    "metricas_por_clase_modelo_final.csv",
-)
-
-RUTA_MATRIZ = os.path.join(
-    RESULTADOS_DIR,
-    "matriz_confusion_modelo_final.csv",
-)
-
-RUTA_AUDITORIA_MASCARA = os.path.join(
-    RESULTADOS_DIR,
-    "auditoria_enmascaramiento_modelo_final.csv",
-)
-
-RUTA_RESUMEN = os.path.join(
-    RESULTADOS_DIR,
-    "resumen_modelo_final_robusto.json",
-)
-
-RUTA_GRAFICO_FOLDS = os.path.join(
-    RESULTADOS_DIR,
-    "f1_por_fold_modelo_final.png",
-)
-
-RUTA_GRAFICO_MATRIZ = os.path.join(
-    RESULTADOS_DIR,
-    "matriz_confusion_modelo_final.png",
-)
-
-
-# =============================================================================
-# 2. CONFIGURACIÓN CONGELADA
-# =============================================================================
-
+SRC_ROOT = str(Path(__file__).resolve().parent.parent)
 SEED = 42
-N_SPLITS = 5
-
-CLASES = [
-    "Civil",
-    "Ejecución",
-    "Informática",
-]
+CLASES = ["Civil", "Ejecución", "Informática"]
+TFIDF_CONFIG = dict(max_features=400, ngram_range=(1, 2), min_df=2,
+                    max_df=0.9, sublinear_tf=True)
+CORPUS_SELECCIONADO = "actual"
 
 
-# =============================================================================
-# 3. STOPWORDS
-# =============================================================================
-#
-# Se conserva la misma configuración utilizada en los experimentos
-# robustos previos.
-# =============================================================================
+def configurar_corpus(corpus: str) -> None:
+    global CORPUS_SELECCIONADO, RUTA_ENTRADA, OUT_DIR
+    if corpus not in {"actual", "v2"}:
+        raise ValueError("Corpus no válido: usa actual o v2.")
+    CORPUS_SELECCIONADO = corpus
+    archivo = ("perfiles_egreso_etiquetado_actual_corregido.csv"
+               if corpus == "actual" else "perfiles_egreso_etiquetado_v2.csv")
+    RUTA_ENTRADA = os.path.join(SRC_ROOT, "data", "processed", archivo)
+    OUT_DIR = Path(SRC_ROOT) / "data" / "resultados_cientificos" / "modelo_final_robusto" / corpus
+
+
+def solicitar_corpus() -> str:
+    print("\nSelecciona el corpus:")
+    print("1. Actual — salida corregida del encoding")
+    print("2. V2 — corpus histórico")
+    opciones = {"1": "actual", "actual": "actual", "2": "v2", "v2": "v2"}
+    while True:
+        try:
+            respuesta = input("Opción [1/2]: ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            raise SystemExit("Selección cancelada. Usa --corpus actual o --corpus v2.") from None
+        if respuesta in opciones:
+            return opciones[respuesta]
+        print("Opción no válida. Escribe 1 o 2.")
+
+
+def sha256_archivo(ruta: str) -> str:
+    with open(ruta, "rb") as archivo:
+        return hashlib.sha256(archivo.read()).hexdigest()
+
 
 STOPWORDS_ES = [
-    "a", "al", "algo", "algunas", "algunos", "ante", "antes",
-    "como", "con", "contra", "cual", "cuando", "de", "del",
-    "desde", "donde", "durante", "e", "el", "ella", "ellas",
-    "ellos", "en", "entre", "era", "erais", "eran", "eras",
-    "eres", "es", "esa", "esas", "ese", "eso", "esos", "esta",
-    "estaba", "estaban", "estado", "estar", "estas", "este",
-    "esto", "estos", "estoy", "fue", "fueron", "fui", "ha",
-    "han", "has", "hasta", "hay", "he", "hun", "la", "las",
-    "le", "les", "lo", "los", "mas", "me", "mi", "mia",
-    "mias", "mientras", "mis", "mo", "mucho", "muchos", "muy",
-    "más", "mí", "nada", "ni", "no", "nos", "nosotras",
-    "nosotros", "nuestra", "nuestras", "nuestro", "nuestros",
-    "o", "os", "otra", "otras", "otro", "otros", "para",
-    "pero", "poco", "por", "porque", "que", "quien", "quienes",
-    "qué", "se", "sea", "seais", "sean", "seas", "ser", "si",
-    "sin", "sobre", "sois", "somos", "son", "su", "sus",
-    "también", "tanto", "te", "tenemos", "tengo", "ti",
-    "tiene", "tienen", "toda", "todas", "todo", "todos",
-    "tu", "tus", "un", "una", "unas", "uno", "unos",
-    "vosotras", "vosotros", "vuestra", "vuestras", "vuestro",
-    "vuestros", "y", "ya", "yo", "él", "ésta", "éstas",
-    "éste", "éstos", "última", "últimas", "último", "últimos",
+    'a','al','algo','algunas','algunos','ante','antes','como','con','contra',
+    'cual','cuando','de','del','desde','donde','durante','e','el','ella',
+    'ellas','ellos','en','entre','era','erais','eran','eras','eres','es',
+    'esa','esas','ese','eso','esos','esta','estaba','estaban','estado',
+    'estar','estas','este','esto','estos','estoy','fue','fueron','fui',
+    'ha','han','has','hasta','hay','he','hun','la','las','le','les','lo',
+    'los','mas','me','mi','mia','mias','mientras','mis','mo','mucho',
+    'muchos','muy','más','mí','nada','ni','no','nos','nosotras','nosotros',
+    'nuestra','nuestras','nuestro','nuestros','o','os','otra','otras','otro',
+    'otros','para','pero','poco','por','porque','que','quien','quienes',
+    'qué','se','sea','seais','sean','seas','ser','si','sin','sobre','sois',
+    'somos','son','su','sus','también','tanto','te','tenemos','tengo','ti',
+    'tiene','tienen','toda','todas','todo','todos','tu','tus','un','una',
+    'unas','uno','unos','vosotras','vosotros','vuestra','vuestras','vuestro',
+    'vuestros','y','ya','yo','él','ésta','éstas','éste','éstos','última',
+    'últimas','último','últimos',
 ]
 
-
-TFIDF_CONFIG = {
-    "max_features": 400,
-    "ngram_range": (1, 2),
-    "min_df": 2,
-    "max_df": 0.90,
-    "sublinear_tf": True,
-    "stop_words": STOPWORDS_ES,
-}
-
-
-# =============================================================================
-# 4. DENOMINACIONES EXPLÍCITAS DEL GRADO
-# =============================================================================
-#
-# IMPORTANTE:
-# Se eliminan expresiones que revelan directamente el nombre de la carrera.
-#
-# NO se eliminan de manera general palabras como:
-#
-#   civil
-#   ejecución
-#   informática
-#
-# cuando aparecen de forma aislada.
-#
-# De esta forma evitamos el enmascaramiento agresivo de la prueba de estrés.
-# =============================================================================
-
-PATRONES_TITULO = [
-
-    r"\bingenier[ií]a\s+civil"
-    r"(?:\s+en\s+inform[aá]tica)?\b",
-
-    r"\bingenier[ií]a\s+civil\s+inform[aá]tica\b",
-
-    r"\bingenier[ií]a\s+de\s+ejecuci[oó]n"
-    r"(?:\s+en\s+inform[aá]tica)?\b",
-
-    r"\bingenier[ií]a\s+en\s+inform[aá]tica\b",
-
-    r"\bingenier[ií]a\s+inform[aá]tica\b",
-
-    r"\bingenier[oa]\s+civil"
-    r"(?:\s+en\s+inform[aá]tica)?\b",
-
-    r"\bingenier[oa]\s+de\s+ejecuci[oó]n"
-    r"(?:\s+en\s+inform[aá]tica)?\b",
-
-    r"\bingenier[oa]\s+en\s+inform[aá]tica\b",
-]
-
-
-# =============================================================================
-# 5. UTILIDADES
-# =============================================================================
-
-def enmascarar_y_contar(
-    texto: str,
-) -> tuple[str, int]:
-
-    resultado = ftfy.fix_text(
-        str(texto)
-    )
-
-    total_reemplazos = 0
-
-    for patron in PATRONES_TITULO:
-
-        resultado, reemplazos = re.subn(
-            patron,
-            " ",
-            resultado,
-            flags=re.IGNORECASE,
-        )
-
-        total_reemplazos += (
-            reemplazos
-        )
-
-    resultado = re.sub(
-        r"\s+",
-        " ",
-        resultado,
-    )
-
-    return (
-        resultado.strip(),
-        int(total_reemplazos),
-    )
-
-
-def aplicar_smote(
-    X,
-    y: np.ndarray,
-):
-
-    conteos = pd.Series(
-        y
-    ).value_counts()
-
-    minimo = int(
-        conteos.min()
-    )
-
-    if minimo < 2:
-
-        return X, y, None
-
-    k = min(
-        2,
-        minimo - 1,
-    )
-
-    smote = SMOTE(
-        k_neighbors=k,
-        random_state=SEED,
-    )
-
-    X_balanceado, y_balanceado = (
-        smote.fit_resample(
-            X,
-            y,
-        )
-    )
-
-    return (
-        X_balanceado,
-        y_balanceado,
-        k,
-    )
-
-
-# =============================================================================
-# 6. CARGA DEL CORPUS
-# =============================================================================
 
 def cargar_corpus() -> pd.DataFrame:
-    if not os.path.exists(RUTA_CORPUS):
-        raise FileNotFoundError(f"No se encontró el corpus: {RUTA_CORPUS}")
-    df = pd.read_csv(RUTA_CORPUS, encoding="utf-8-sig")
+    if not os.path.isfile(RUTA_ENTRADA):
+        raise FileNotFoundError(
+            f"No se encontró el corpus seleccionado ({CORPUS_SELECCIONADO}):\n"
+            f"{RUTA_ENTRADA}\n"
+            "Para actual, ejecuta primero el encoding con --corpus actual."
+        )
+    huella = sha256_archivo(RUTA_ENTRADA)
+    # Admite los CSV históricos con comas y los actuales con punto y coma.
+    df = pd.read_csv(RUTA_ENTRADA, sep=None, engine="python",
+                     encoding="utf-8-sig", keep_default_na=False)
+    if sha256_archivo(RUTA_ENTRADA) != huella:
+        raise ValueError("El CSV cambió durante la lectura. Repite la ejecución.")
     faltantes = {"perfil_egreso", "grado"} - set(df.columns)
     if faltantes:
-        raise ValueError(f"Faltan columnas: {sorted(faltantes)}")
-    if df[["perfil_egreso", "grado"]].isna().any().any():
-        raise ValueError("Hay valores vacíos. Auditar el corpus antes de evaluar.")
-    for col in ["perfil_egreso", "grado"]:
-        df[col] = df[col].map(lambda x: ftfy.fix_text(str(x)).strip())
-    if df["perfil_egreso"].eq("").any() or set(df["grado"]) != set(CLASES):
-        raise ValueError("Se requieren textos no vacíos y las tres clases oficiales.")
-    if int(df["grado"].value_counts().min()) < N_SPLITS:
-        raise ValueError("Cada clase necesita al menos 5 documentos para los cinco folds externos.")
-    return df.reset_index(drop=True)
-
-
-# =============================================================================
-# 7. PREPARACIÓN AUDITADA
-# =============================================================================
-
-def preparar_textos(
-    df: pd.DataFrame,
-):
-
-    textos_enmascarados = []
-
-    auditoria = []
-
-    for indice, fila in df.iterrows():
-
-        texto_original = str(
-            fila[
-                "perfil_egreso"
-            ]
-        )
-
-        (
-            texto_enmascarado,
-            reemplazos,
-        ) = enmascarar_y_contar(
-            texto_original
-        )
-
-        textos_enmascarados.append(
-            texto_enmascarado
-        )
-
-        auditoria.append(
-            {
-                "indice":
-                    int(indice),
-
-                "grado":
-                    str(
-                        fila[
-                            "grado"
-                        ]
-                    ),
-
-                "denominaciones_enmascaradas":
-                    int(
-                        reemplazos
-                    ),
-
-                "texto_modificado":
-                    bool(
-                        reemplazos > 0
-                    ),
-            }
-        )
-
-    return (
-        np.asarray(
-            textos_enmascarados,
-            dtype=object,
-        ),
-        pd.DataFrame(
-            auditoria
-        ),
-    )
-
-
-# =============================================================================
-# 8. MÉTRICAS
-# =============================================================================
-
-def calcular_metricas(
-    y_true: np.ndarray,
-    y_pred: np.ndarray,
-) -> dict:
-
-    return {
-
-        "F1_macro":
-            f1_score(
-                y_true,
-                y_pred,
-                labels=CLASES,
-                average="macro",
-                zero_division=0,
-            ),
-
-        "Accuracy":
-            accuracy_score(
-                y_true,
-                y_pred,
-            ),
-
-        "Precision_macro":
-            precision_score(
-                y_true,
-                y_pred,
-                labels=CLASES,
-                average="macro",
-                zero_division=0,
-            ),
-
-        "Recall_macro":
-            recall_score(
-                y_true,
-                y_pred,
-                labels=CLASES,
-                average="macro",
-                zero_division=0,
-            ),
-
-        "F1_Civil":
-            f1_score(
-                y_true,
-                y_pred,
-                labels=[
-                    "Civil"
-                ],
-                average="macro",
-                zero_division=0,
-            ),
-
-        "F1_Ejecucion":
-            f1_score(
-                y_true,
-                y_pred,
-                labels=[
-                    "Ejecución"
-                ],
-                average="macro",
-                zero_division=0,
-            ),
-
-        "F1_Informatica":
-            f1_score(
-                y_true,
-                y_pred,
-                labels=[
-                    "Informática"
-                ],
-                average="macro",
-                zero_division=0,
-            ),
-    }
-
-
-# =============================================================================
-# 9. GRÁFICO F1 POR FOLD
-# =============================================================================
-
-def generar_grafico_folds(
-    df_folds: pd.DataFrame,
-) -> None:
-
-    fig, ax = plt.subplots(
-        figsize=(8, 5.5)
-    )
-
-    ax.bar(
-        df_folds[
-            "Fold"
-        ].astype(str),
-        df_folds[
-            "F1_macro"
-        ],
-    )
-
-    ax.axhline(
-        df_folds[
-            "F1_macro"
-        ].mean(),
-        linestyle="--",
-        label=(
-            "Media "
-            f"{df_folds['F1_macro'].mean():.4f}"
-        ),
-    )
-
-    ax.set_ylim(
-        0,
-        1,
-    )
-
-    ax.set_xlabel(
-        "Fold"
-    )
-
-    ax.set_ylabel(
-        "F1-macro"
-    )
-
-    ax.set_title(
-        (
-            "Modelo final robusto — "
-            "F1-macro por fold\n"
-            "TF-IDF + GWO + SMOTE + ComplementNB"
-        )
-    )
-
-    ax.legend()
-
-    ax.grid(
-        axis="y",
-        alpha=0.25,
-    )
-
-    fig.tight_layout()
-
-    fig.savefig(
-        RUTA_GRAFICO_FOLDS,
-        dpi=300,
-        bbox_inches="tight",
-    )
-
-    plt.close(
-        fig
-    )
-
-
-# =============================================================================
-# 10. MATRIZ DE CONFUSIÓN
-# =============================================================================
-
-def generar_matriz_confusion(
-    y_true: np.ndarray,
-    y_pred: np.ndarray,
-) -> None:
-
-    matriz = confusion_matrix(
-        y_true,
-        y_pred,
-        labels=CLASES,
-    )
-
-    normalizada = confusion_matrix(
-        y_true,
-        y_pred,
-        labels=CLASES,
-        normalize="true",
-    )
-
-    df_matriz = pd.DataFrame(
-        matriz,
-        index=CLASES,
-        columns=CLASES,
-    )
-
-    df_matriz.index.name = (
-        "Real"
-    )
-
-    df_matriz.columns.name = (
-        "Predicho"
-    )
-
-    df_matriz.to_csv(
-        RUTA_MATRIZ,
-        encoding="utf-8-sig",
-    )
-
-
-    fig, ax = plt.subplots(
-        figsize=(8, 7)
-    )
-
-    imagen = ax.imshow(
-        normalizada,
-        vmin=0,
-        vmax=1,
-    )
-
-    fig.colorbar(
-        imagen,
-        ax=ax,
-        label=(
-            "Proporción dentro "
-            "de la clase real"
-        ),
-    )
-
-    ax.set_xticks(
-        np.arange(
-            len(CLASES)
-        )
-    )
-
-    ax.set_yticks(
-        np.arange(
-            len(CLASES)
-        )
-    )
-
-    ax.set_xticklabels(
-        CLASES,
-        rotation=25,
-        ha="right",
-    )
-
-    ax.set_yticklabels(
-        CLASES
-    )
-
-    ax.set_xlabel(
-        "Clase predicha"
-    )
-
-    ax.set_ylabel(
-        "Clase real"
-    )
-
-    ax.set_title(
-        (
-            "Matriz de confusión — modelo final robusto\n"
-            "Denominaciones explícitas del grado enmascaradas"
-        )
-    )
-
-    for fila in range(
-        len(CLASES)
-    ):
-
-        for columna in range(
-            len(CLASES)
-        ):
-
-            ax.text(
-                columna,
-                fila,
-                (
-                    f"{matriz[fila, columna]}\n"
-                    f"{normalizada[fila, columna] * 100:.1f}%"
-                ),
-                ha="center",
-                va="center",
-                fontweight="bold",
+        raise ValueError(f"Faltan columnas requeridas: {sorted(faltantes)}")
+    if df.empty:
+        raise ValueError("El corpus está vacío.")
+    for columna in ["perfil_egreso", "grado"]:
+        vacias = df[columna].astype(str).str.strip().eq("")
+        if vacias.any():
+            raise ValueError(
+                f"Hay {int(vacias.sum())} filas sin {columna}; "
+                "corrige el corpus en fase 2. No se eliminaron filas."
             )
+    desconocidas = set(df["grado"]) - set(CLASES)
+    if desconocidas:
+        raise ValueError(f"Grados fuera del catálogo: {sorted(desconocidas)}")
+    for columna in ["estado_registro", "estado_etiquetado"]:
+        if columna in df:
+            pendientes = df[columna].astype(str).str.strip().str.upper().isin(["REVISAR", "ERROR"])
+            if pendientes.any():
+                raise ValueError(f"El CSV contiene filas REVISAR/ERROR en {columna}.")
+    conteos = df["grado"].value_counts()
+    if len(conteos) != 3 or conteos.min() < 2:
+        raise ValueError("El modelo requiere las tres clases, con al menos dos perfiles cada una.")
+    df.attrs["sha256_entrada"] = huella
+    return df
 
-    fig.tight_layout()
-
-    fig.savefig(
-        RUTA_GRAFICO_MATRIZ,
-        dpi=300,
-        bbox_inches="tight",
-    )
-
-    plt.close(
-        fig
-    )
 
 
-# =============================================================================
-# 11. FLUJO PRINCIPAL
-# =============================================================================
 
-def preparar_validacion_interna(textos, etiquetas, nombres_candidatos):
-    """Precalcula TF-IDF por fold interno, sin recibir la prueba externa.
+def construir_grupos(df: pd.DataFrame):
+    """Une grupos declarados, el par UCSC conocido y duplicados textuales.
 
-    El espacio de candidatos procede SOLO del entrenamiento externo. Cada
-    vectorizador interno aprende su vocabulario e IDF en su propio train;
-    la máscara se alinea por nombre de término, nunca por posición de columna.
-    El fitness interno sirve para buscar, no para estimar generalización.
+    No usa similitud ajustada a etiquetas ni resultados del optimizador.
+    Conserva cada perfil; solo impide separar sus grupos entre train y test.
     """
-    minimo = int(pd.Series(etiquetas).value_counts().min())
-    n_splits = min(3, minimo)
+    n = len(df)
+    padres = list(range(n))
+    def raiz(i):
+        while padres[i] != i:
+            padres[i] = padres[padres[i]]
+            i = padres[i]
+        return i
+    def unir(i, j):
+        padres[raiz(j)] = raiz(i)
+    vistos_grupos, vistos_textos = {}, {}
+    criterios = [[] for _ in range(n)]
+    for i, (_, fila) in enumerate(df.iterrows()):
+        grupo = str(fila.get("grupo_perfil", "")).strip()
+        claves = [grupo] if grupo else []
+        url = urlparse(str(fila.get("url", "")))
+        if (url.hostname in {"it.ucsc.cl", "advance.ucsc.cl"}
+                and url.path.rstrip("/") == "/carreras/ingenieria-de-ejecucion-en-informatica"):
+            claves.append("ucsc_ejecucion_informatica")
+        for clave in claves:
+            if clave in vistos_grupos:
+                unir(vistos_grupos[clave], i)
+            else:
+                vistos_grupos[clave] = i
+            criterios[i].append("grupo:" + clave)
+        texto = " ".join(str(fila["perfil_egreso"]).casefold().split())
+        if texto in vistos_textos:
+            unir(vistos_textos[texto], i)
+            criterios[i].append("duplicado textual normalizado")
+        else:
+            vistos_textos[texto] = i
+    nombres = {}
+    grupos = np.asarray([nombres.setdefault(raiz(i), f"grupo_{len(nombres)+1:03d}")
+                         for i in range(n)])
+    auditoria = pd.DataFrame({"fila_datos": np.arange(1, n+1), "grupo_cv": grupos,
+                             "grado": df.grado.to_numpy(),
+                             "criterio": ["; ".join(c) or "perfil individual" for c in criterios]})
+    for columna in ["id_programa", "indice_fuente", "universidad", "carrera", "url", "modalidad", "grupo_perfil"]:
+        if columna in df:
+            auditoria[columna] = df[columna].to_numpy()
+    if auditoria.groupby("grupo_cv")["grado"].nunique().gt(1).any():
+        raise ValueError("Un grupo reúne perfiles con distintos grados. Revisa su etiquetado.")
+    return grupos, auditoria
+
+
+def crear_particiones(y: np.ndarray, grupos: np.ndarray, solicitadas: int, semilla=SEED):
+    """Estratifica IDs únicos por grado y expande a documentos sin separarlos."""
+    tabla = pd.DataFrame({"grupo": grupos, "grado": y})
+    if tabla.groupby("grupo").grado.nunique().gt(1).any():
+        raise ValueError("Cada grupo debe tener un único grado.")
+    tabla = tabla.drop_duplicates("grupo").reset_index(drop=True)
+    cantidades = tabla.grado.value_counts()
+    if set(cantidades.index) != set(CLASES):
+        raise ValueError("Falta alguna clase en las unidades de validación.")
+    n_splits = min(solicitadas, int(cantidades.min()))
     if n_splits < 2:
-        raise ValueError('No hay suficientes ejemplos para la validación interna.')
-    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=SEED)
-    posicion = {nombre: i for i, nombre in enumerate(nombres_candidatos)}
-    particiones = []
-    for tr, va in cv.split(textos, etiquetas):
-        vec = TfidfVectorizer(**TFIDF_CONFIG)
-        X_tr = vec.fit_transform(textos[tr])
-        X_va = vec.transform(textos[va])
-        indices = np.array([posicion.get(t, -1) for t in vec.get_feature_names_out()])
-        particiones.append((X_tr, X_va, etiquetas[tr], etiquetas[va], indices))
-    return particiones
+        raise ValueError("No hay grupos suficientes para validación estratificada.")
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=semilla)
+    particiones, detalles = [], []
+    for fold, (trg, teg) in enumerate(cv.split(tabla.grupo, tabla.grado), 1):
+        tr = np.flatnonzero(np.isin(grupos, tabla.grupo.iloc[trg]))
+        te = np.flatnonzero(np.isin(grupos, tabla.grupo.iloc[teg]))
+        if set(grupos[tr]) & set(grupos[te]):
+            raise ValueError("Hay grupos compartidos entre entrenamiento y prueba.")
+        if set(y[tr]) != set(CLASES) or set(y[te]) != set(CLASES):
+            raise ValueError("Una partición no contiene todas las clases.")
+        conteos = pd.Series(y[tr]).value_counts()
+        k = min(2, int(conteos.min())-1)
+        if k < 1:
+            raise ValueError("Un entrenamiento tiene menos de dos perfiles por clase; SMOTE no es viable.")
+        particiones.append((tr, te))
+        detalles.append({"fold": fold, "n_train": len(tr), "n_test": len(te),
+                         "grados_train": {str(a):int(b) for a,b in conteos.items()},
+                         "grados_test": {str(a):int(b) for a,b in pd.Series(y[te]).value_counts().items()},
+                         "grupos_train": sorted(set(grupos[tr])), "grupos_test": sorted(set(grupos[te])),
+                         "smote_k": k})
+    return particiones, detalles
 
 
-def seleccionar_gwo(textos_train, y_train, nombres_candidatos, epochs, poblacion, seed):
-    """Busca un subconjunto usando únicamente el entrenamiento externo.
-
-    No lee gwo_features_seleccionadas.csv: se repite la búsqueda en cada fold.
-    Un subconjunto vacío se invalida; el completo es válido, porque no debemos
-    imponer una reducción si la evaluación interna no la respalda.
-    """
-    from mealpy import GWO, FloatVar, Problem
-
-    particiones = preparar_validacion_interna(textos_train, y_train, nombres_candidatos)
-    n_features = len(nombres_candidatos)
-    cache = {}
-
-    def binarizar(solucion):
-        return np.abs(2 / np.pi * np.arctan(np.pi / 2 * solucion)) > 0.5
-
-    def fitness(mask):
-        if not mask.any():
-            return -1.0
-        clave = np.packbits(mask).tobytes()
-        if clave in cache:
-            return cache[clave]
-        f1s = []
-        for X_tr, X_va, y_tr, y_va, indices in particiones:
-            presentes = indices >= 0
-            columnas = np.zeros(len(indices), dtype=bool)
-            columnas[presentes] = mask[indices[presentes]]
-            if not columnas.any():
-                # Este candidato no tiene ninguna variable aprendible en ese train.
-                f1s.append(0.0)
-                continue
-            X_r, y_r, _ = aplicar_smote(X_tr[:, columnas], y_tr)
-            modelo = ComplementNB(alpha=1.0)
-            modelo.fit(X_r, y_r)
-            pred = modelo.predict(X_va[:, columnas])
-            f1s.append(f1_score(y_va, pred, labels=CLASES,
-                               average='macro', zero_division=0))
-        valor = float(np.mean(f1s))
-        cache[clave] = valor
-        return valor
-
-    class ProblemaGWO(Problem):
-        def obj_func(self, solution):
-            return fitness(binarizar(solution))
-
-    problema = ProblemaGWO(
-        bounds=FloatVar(lb=(-6.0,) * n_features, ub=(6.0,) * n_features,
-                        name='caracteristicas'),
-        minmax='max', log_to=None)
-    optimizador = GWO.OriginalGWO(epoch=epochs, pop_size=poblacion)
-    inicio = time.perf_counter()
-    optimizador.solve(problema, seed=seed)
-    mask = binarizar(optimizador.g_best.solution)
-    if not mask.any():
-        raise RuntimeError('GWO no encontró un subconjunto no vacío.')
-    return mask, {
-        'fitness_interno': fitness(mask),
-        'n_splits_internos': len(particiones),
-        'subconjuntos_evaluados': len(cache),
-        'segundos': round(time.perf_counter() - inicio, 3),
-        'seed_gwo': seed,
-        'historial_fitness': [float(v) for v in optimizador.history.list_global_best_fit],
-    }
-
-
-def evaluar_modelos(textos, etiquetas, epochs=100, poblacion=30):
-    """CV externa común a GWO y baseline; cada documento se prueba una vez."""
-    cv = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=SEED)
-    oof = np.empty(len(etiquetas), dtype=object)
-    oof_base = np.empty(len(etiquetas), dtype=object)
-    fold_oof = np.zeros(len(etiquetas), dtype=int)
-    folds, folds_base, features, auditoria = [], [], [], []
-    for fold, (tr, te) in enumerate(cv.split(textos, etiquetas), start=1):
-        print(f'Fold externo {fold}/{N_SPLITS}: búsqueda GWO en entrenamiento...', flush=True)
-        y_tr, y_te = etiquetas[tr], etiquetas[te]
-        vec = TfidfVectorizer(**TFIDF_CONFIG)
-        X_tr = vec.fit_transform(textos[tr])
-        nombres = vec.get_feature_names_out()
-        mask, detalle = seleccionar_gwo(
-            textos[tr], y_tr, nombres, epochs, poblacion, SEED + fold)
-        # La prueba externa se transforma después de cerrar la selección.
-        X_te = vec.transform(textos[te])
-        X_r, y_r, k = aplicar_smote(X_tr[:, mask], y_tr)
-        modelo = ComplementNB(alpha=1.0)
-        modelo.fit(X_r, y_r)
-        pred = modelo.predict(X_te[:, mask])
-        oof[te] = pred
-        fold_oof[te] = fold
-        metricas = calcular_metricas(y_te, pred)
-        folds.append({
-            'Fold': fold, 'N_train': len(tr), 'N_test': len(te),
-            'N_features': int(mask.sum()), 'N_features_antes_gwo': len(nombres),
-            'Reduccion_pct': 100.0 * (1 - mask.mean()), 'SMOTE_k': k,
-            'F1_interno_busqueda': detalle['fitness_interno'], **metricas,
-        })
-        # Comparador predefinido: mismos textos, vectorizador, folds y clasificador.
-        X_b, y_b, k_b = aplicar_smote(X_tr, y_tr)
-        baseline = ComplementNB(alpha=1.0)
-        baseline.fit(X_b, y_b)
-        pred_b = baseline.predict(X_te)
-        oof_base[te] = pred_b
-        folds_base.append({'Fold': fold, 'N_train': len(tr), 'N_test': len(te),
-                           'N_features': len(nombres), 'SMOTE_k': k_b,
-                           **calcular_metricas(y_te, pred_b)})
-        features.extend({'Fold': fold, 'feature': str(t)} for t in nombres[mask])
-        auditoria.append({
-            'fold': fold, 'indices_train': tr.tolist(), 'indices_test': te.tolist(),
-            'distribucion_train': {str(c): int(n) for c, n in pd.Series(y_tr).value_counts().items()},
-            'distribucion_test': {str(c): int(n) for c, n in pd.Series(y_te).value_counts().items()},
-            'n_candidatos_train': len(nombres), 'n_seleccionados': int(mask.sum()), **detalle,
-        })
-        print(f"  GWO F1={metricas['F1_macro']:.4f}; "
-              f"baseline F1={folds_base[-1]['F1_macro']:.4f}; "
-              f'variables {len(nombres)} -> {int(mask.sum())}', flush=True)
-    if not np.all(fold_oof > 0):
-        raise RuntimeError('Hay documentos sin predicción externa.')
-    return (pd.DataFrame(folds), pd.DataFrame(folds_base), oof, oof_base,
-            fold_oof, pd.DataFrame(features), auditoria)
-
-
-def construir_parser():
-    parser = argparse.ArgumentParser(description='GWO anidado + SMOTE + ComplementNB, con baseline.')
-    parser.add_argument('--corpus', default=RUTA_CORPUS, help='CSV de perfiles etiquetados.')
-    parser.add_argument('--output-dir', default=RESULTADOS_DIR, help='Directorio de resultados.')
-    parser.add_argument('--epochs', type=int, default=100, help='Iteraciones GWO (100 por defecto).')
-    parser.add_argument('--poblacion', type=int, default=30, help='Lobos GWO (30 por defecto, mínimo 5).')
-    return parser
-
-
-def main(argv=None) -> int:
-    global RUTA_CORPUS, RESULTADOS_DIR
-    args = construir_parser().parse_args(argv)
-    if not 1 <= args.epochs <= 100000 or not 5 <= args.poblacion <= 10000:
-        raise ValueError('epochs debe estar entre 1 y 100000; poblacion entre 5 y 10000.')
-    # Comprobar la dependencia antes de producir salidas de una ejecución incompleta.
+def ajustar_tfidf(textos):
+    vectorizador = TfidfVectorizer(stop_words=STOPWORDS_ES, **TFIDF_CONFIG)
     try:
-        import mealpy
-    except ImportError as error:
-        raise SystemExit('Falta mealpy. Instala las dependencias de requirements_gwo.txt.') from error
-    RUTA_CORPUS = os.path.abspath(args.corpus)
-    RESULTADOS_DIR = os.path.abspath(args.output_dir)
-    # Mantener nombres de salida compatibles con 07_generar_reporte.py.
-    for nombre, valor in list(globals().items()):
-        if nombre.startswith('RUTA_') and nombre != 'RUTA_CORPUS' and isinstance(valor, str):
-            globals()[nombre] = os.path.join(RESULTADOS_DIR, os.path.basename(valor))
-    os.makedirs(RESULTADOS_DIR, exist_ok=True)
-    df = cargar_corpus()
-    textos, auditoria_mascara = preparar_textos(df)
-    if any(not str(t).strip() for t in textos):
-        raise ValueError('Hay textos vacíos después del enmascaramiento. Auditar antes de evaluar.')
-    etiquetas = df['grado'].to_numpy()
-    print('TF-IDF + GWO + SMOTE + ComplementNB: validación externa de 5 folds', flush=True)
-    folds, baseline, oof, oof_base, fold_oof, features, auditoria = evaluar_modelos(
-        textos, etiquetas, epochs=args.epochs, poblacion=args.poblacion)
-    run_id = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
-    folds['run_id'] = run_id
-    baseline['run_id'] = run_id
-    folds.to_csv(RUTA_FOLDS, index=False, encoding='utf-8-sig')
-    baseline.to_csv(os.path.join(RESULTADOS_DIR, 'metricas_folds_baseline.csv'),
-                    index=False, encoding='utf-8-sig')
-    features.to_csv(os.path.join(RESULTADOS_DIR, 'features_gwo_por_fold.csv'),
-                    index=False, encoding='utf-8-sig')
-    auditoria_mascara.to_csv(RUTA_AUDITORIA_MASCARA, index=False, encoding='utf-8-sig')
-    pd.DataFrame({'indice_corpus': np.arange(len(df)), 'fold': fold_oof,
-                  'grado_real': etiquetas, 'grado_predicho': oof,
-                  'grado_predicho_baseline': oof_base, 'correcto': etiquetas == oof,
-                  'run_id': run_id}).to_csv(RUTA_PREDICCIONES, index=False, encoding='utf-8-sig')
-    reporte = classification_report(etiquetas, oof, labels=CLASES, target_names=CLASES,
-                                    output_dict=True, zero_division=0)
-    pd.DataFrame(reporte).transpose().to_csv(RUTA_REPORTE_CLASES, encoding='utf-8-sig')
-    generar_grafico_folds(folds)
-    generar_matriz_confusion(etiquetas, oof)
-    f1_media = float(folds['F1_macro'].mean())
-    f1_base = float(baseline['F1_macro'].mean())
-    delta = f1_media - f1_base
-    comparacion = pd.DataFrame({
-        'Fold': folds['Fold'], 'F1_GWO': folds['F1_macro'],
-        'F1_baseline': baseline['F1_macro'],
-        'Delta_GWO_menos_baseline': folds['F1_macro'] - baseline['F1_macro'],
-        'N_features_GWO': folds['N_features'], 'N_features_baseline': baseline['N_features'],
-        'run_id': run_id})
-    comparacion.to_csv(os.path.join(RESULTADOS_DIR, 'comparacion_gwo_baseline.csv'),
-                       index=False, encoding='utf-8-sig')
-    presupuesto_referencia = args.epochs == 100 and args.poblacion == 30
-    resumen = {
-        'version': '2.0', 'run_id': run_id,
-        'fecha_generacion_utc': datetime.now(timezone.utc).isoformat(),
-        'estado': 'evaluado_gwo_anidado',
-        'presupuesto_referencia': presupuesto_referencia,
-        'objetivo': 'Evaluar GWO dentro del entrenamiento externo y compararlo con el baseline.',
-        'corpus': {'total_perfiles': len(df),
-                   'distribucion': {str(c): int(n) for c, n in df['grado'].value_counts().items()},
-                   'archivo': os.path.basename(RUTA_CORPUS),
-                   'sha256': hashlib.sha256(Path(RUTA_CORPUS).read_bytes()).hexdigest()},
-        'control_fuga_lexica': {
-            'metodo': 'Enmascaramiento de denominaciones explícitas del grado.',
-            'documentos_modificados': int(auditoria_mascara['texto_modificado'].sum()),
-            'denominaciones_enmascaradas': int(auditoria_mascara['denominaciones_enmascaradas'].sum()),
-            'nota': 'No elimina todas las palabras aisladas ni todas las pistas institucionales.'},
-        'representacion': {**{k: v for k, v in TFIDF_CONFIG.items() if k != 'stop_words'},
-            'metodo': 'TF-IDF', 'stopwords': 'Lista española conservada del modelo anterior.',
-            'ajuste': 'TF-IDF externo solo en train externo; cada TF-IDF interno solo en su train.'},
-        'modelo': {'clasificador': 'Complement Naive Bayes', 'alpha': 1.0,
-                   'seleccion': 'GWO anidado', 'balanceo': 'SMOTE solo en entrenamiento',
-                   'smote_k_maximo': 2, 'semilla': SEED},
-        'validacion': {'metodo': 'CV externa estratificada 5-fold con búsqueda GWO interna',
-            'protocolo_id': 'gwo_nested_v2', 'n_splits': N_SPLITS,
-            'n_splits_internos_maximo': 3, 'shuffle': True, 'random_state': SEED,
-            'metrica_principal': 'Promedio del F1-macro en los cinco tests externos.',
-            'nota_interna': 'El universo de candidatos se define con train externo; los vocabularios e IDF internos se ajustan por train interno. El fitness es de optimización, no una estimación de generalización.',
-            'pca_lda': 'Visualizaciones separadas; no intervienen en este clasificador.'},
-        'seleccion_gwo': {'algoritmo': 'mealpy.GWO.OriginalGWO',
-            'epochs': args.epochs, 'poblacion': args.poblacion,
-            'binarizacion': 'V-shape, umbral 0.5',
-            'fitness': 'F1-macro interno; vacío inválido y subconjunto completo permitido.',
-            'features_por_fold': folds['N_features'].astype(int).tolist(),
-            'reduccion_media_pct': float(folds['Reduccion_pct'].mean()),
-            'nota': 'No existe un subconjunto global de 249 variables. Cada train produce su selección.'},
-        'resultados_principales': {
-            'f1_macro_media_folds': f1_media,
-            'f1_macro_std_folds': float(folds['F1_macro'].std(ddof=1)),
-            'accuracy_media_folds': float(folds['Accuracy'].mean()),
-            'f1_macro_oof': float(f1_score(etiquetas, oof, labels=CLASES, average='macro', zero_division=0)),
-            'accuracy_oof': float(accuracy_score(etiquetas, oof))},
-        'baseline_sin_gwo': {
-            'f1_macro_media_folds': f1_base,
-            'f1_macro_std_folds': float(baseline['F1_macro'].std(ddof=1)),
-            'accuracy_media_folds': float(baseline['Accuracy'].mean()),
-            'f1_macro_oof': float(f1_score(etiquetas, oof_base, labels=CLASES, average='macro', zero_division=0)),
-            'accuracy_oof': float(accuracy_score(etiquetas, oof_base)),
-            'delta_f1_gwo_menos_baseline': delta,
-            'comparacion': 'Mismos folds externos y preprocesamiento; comparación descriptiva, sin elegir ganador para volver a estimar sobre estos mismos tests.'},
-        'metricas_oof_por_clase': {c: {'precision': reporte[c]['precision'],
-            'recall': reporte[c]['recall'], 'f1_score': reporte[c]['f1-score'],
-            'support': int(reporte[c]['support'])} for c in CLASES},
-        'interpretacion': {
-            'resultado_principal': 'Evaluación externa del procedimiento TF-IDF + GWO + SMOTE + ComplementNB.',
-            'relacion_con_gwo': 'Los pasos 04/05 mantienen su carácter exploratorio; esta selección se vuelve a ejecutar dentro de cada train externo.',
-            'comparacion_baseline': f'Diferencia media GWO menos baseline: {delta:+.4f}; no implica significancia estadística.',
-            'limitacion': 'Corpus pequeño y desbalanceado; cinco particiones y enmascaramiento parcial no garantizan generalización a nuevas instituciones.'},
-        'versiones_librerias': {p: importlib.metadata.version(p) for p in
-            ['numpy', 'pandas', 'scikit-learn', 'imbalanced-learn', 'mealpy', 'ftfy']},
-        'artefactos': {'folds': os.path.basename(RUTA_FOLDS),
-            'predicciones_oof': os.path.basename(RUTA_PREDICCIONES),
-            'metricas_por_clase': os.path.basename(RUTA_REPORTE_CLASES),
-            'matriz_confusion_csv': os.path.basename(RUTA_MATRIZ),
-            'auditoria_enmascaramiento': os.path.basename(RUTA_AUDITORIA_MASCARA),
-            'grafico_folds': os.path.basename(RUTA_GRAFICO_FOLDS),
-            'grafico_matriz': os.path.basename(RUTA_GRAFICO_MATRIZ),
-            'baseline': 'metricas_folds_baseline.csv', 'features_por_fold': 'features_gwo_por_fold.csv',
-            'comparacion': 'comparacion_gwo_baseline.csv', 'auditoria_cv': 'auditoria_cv_gwo.json'},
+        X = vectorizador.fit_transform(textos)
+    except ValueError as exc:
+        raise ValueError(f"TF-IDF no pudo ajustarse al entrenamiento: {exc}") from exc
+    return vectorizador, X
+
+
+def entrenar_modelo(X, y, semilla):
+    from imblearn.over_sampling import SMOTE
+    minimo = int(pd.Series(y).value_counts().min())
+    if set(y) != set(CLASES) or minimo < 2:
+        raise ValueError("SMOTE requiere las tres clases y dos perfiles por clase en train.")
+    k = min(2, minimo - 1)
+    X_r, y_r = SMOTE(k_neighbors=k, random_state=semilla).fit_resample(X, y)
+    modelo = ComplementNB(alpha=1.0)
+    modelo.fit(X_r, y_r)
+    return modelo, k
+
+
+# Alternativas más largas primero: no dejar "Informática" como resto de
+# "Ingeniería Civil Informática" por haber consumido solo "Ingeniería Civil".
+DISCIPLINA = (r"(?:computaci[oó]n\s+(?:e|y)\s+inform[aá]tica|"
+              r"inform[aá]tica\s+(?:e|y)\s+computaci[oó]n|"
+              r"inform[aá]tica|computaci[oó]n)")
+PATRONES_TITULO = [
+    r"\bingenier(?:[ií]as?|[oa]s?)\s+"
+    r"(?:civil(?:es)?|(?:de\s+)?ejecuci[oó]n)"
+    r"(?:\s+(?:en\s+)?" + DISCIPLINA + r")?\b",
+    r"\bingenier[ií]as?\s+(?:en\s+)?inform[aá]tica\b",
+    r"\bingenier[oa]s?\s+(?:en\s+)?inform[aá]tic[oa]s?\b",
+]
+PATRON_TITULO = re.compile("|".join(f"(?:{p})" for p in PATRONES_TITULO), re.IGNORECASE)
+
+
+def enmascarar_y_contar(texto):
+    original = str(texto)
+    coincidencias = [m.group(0) for m in PATRON_TITULO.finditer(original)]
+    limpio = re.sub(r"\s+", " ", PATRON_TITULO.sub(" ", original)).strip()
+    return limpio, coincidencias
+
+
+def preparar_textos(df):
+    textos, filas = [], []
+    for i, (_, fila) in enumerate(df.iterrows(), 1):
+        original = str(fila.perfil_egreso)
+        limpio, coincidencias = enmascarar_y_contar(original)
+        # No eliminar silenciosamente perfiles que solo contuvieran el título.
+        if not re.search(r"\w", limpio):
+            raise ValueError(f"El perfil de la fila de datos {i} queda vacío tras enmascarar el título.")
+        textos.append(limpio)
+        registro = {"fila_datos": i, "grado": str(fila.grado),
+                    "denominaciones_enmascaradas": len(coincidencias),
+                    "titulo_enmascarado": bool(coincidencias),
+                    "texto_modificado": original != limpio,
+                    "expresiones_eliminadas": json.dumps(coincidencias, ensure_ascii=False),
+                    "texto_original": original, "texto_enmascarado": limpio}
+        for columna in ["id_programa", "universidad", "carrera", "url", "modalidad"]:
+            if columna in df:
+                registro[columna] = fila[columna]
+        filas.append(registro)
+    return np.asarray(textos, dtype=object), pd.DataFrame(filas)
+
+
+def calcular_metricas(y, pred):
+    resultado = {
+        "F1_macro": float(f1_score(y, pred, labels=CLASES, average="macro", zero_division=0)),
+        "Accuracy": float(accuracy_score(y, pred)),
+        "Precision_macro": float(precision_score(y, pred, labels=CLASES, average="macro", zero_division=0)),
+        "Recall_macro": float(recall_score(y, pred, labels=CLASES, average="macro", zero_division=0)),
+        "Balanced_accuracy": float(balanced_accuracy_score(y, pred)),
     }
-    with open(os.path.join(RESULTADOS_DIR, 'auditoria_cv_gwo.json'), 'w', encoding='utf-8') as f:
-        json.dump({'run_id': run_id, 'folds': auditoria}, f, ensure_ascii=False, indent=2)
-    # Escribir el resumen al final: el reporte verifica run_id y hash del corpus.
-    with open(RUTA_RESUMEN, 'w', encoding='utf-8') as f:
-        json.dump(resumen, f, ensure_ascii=False, indent=2)
-    print(f'F1-macro externo GWO: {f1_media:.4f}; baseline: {f1_base:.4f}; delta: {delta:+.4f}')
-    print(f'Resumen: {RUTA_RESUMEN}')
-    if not presupuesto_referencia:
-        print('Se utilizó un presupuesto de búsqueda distinto de 100 iteraciones y 30 lobos.')
+    por_clase = f1_score(y, pred, labels=CLASES, average=None, zero_division=0)
+    resultado.update(zip(["F1_Civil", "F1_Ejecucion", "F1_Informatica"], map(float, por_clase)))
+    return resultado
+
+
+def evaluar_modelo(df):
+    grupos, predicciones = construir_grupos(df)
+    y = df.grado.to_numpy()
+    particiones, detalles = crear_particiones(y, grupos, 5)
+    textos, audit_mascara = preparar_textos(df)
+    print(f"Perfiles: {len(df)} | Grupos: {len(set(grupos))} | Folds: {len(particiones)}")
+    print(f"Títulos enmascarados: {audit_mascara.denominaciones_enmascaradas.sum()} "
+          f"en {audit_mascara.titulo_enmascarado.sum()} perfiles.")
+    oof = np.empty(len(y), dtype=object)
+    visitas = np.zeros(len(y), dtype=int)
+    fold_oof = np.zeros(len(y), dtype=int)
+    resultados, vocabularios, auditoria = [], [], []
+    for fold, ((tr, te), detalle) in enumerate(zip(particiones, detalles), 1):
+        vectorizador, X_train = ajustar_tfidf(textos[tr])
+        X_test = vectorizador.transform(textos[te])
+        # Misma semilla por fold que el baseline del paso 05.
+        modelo, k = entrenar_modelo(X_train, y[tr], SEED+fold)
+        pred = modelo.predict(X_test)
+        oof[te] = pred
+        visitas[te] += 1
+        fold_oof[te] = fold
+        met = calcular_metricas(y[te], pred)
+        resultados.append({"Fold": fold, "N_train": len(tr), "N_test": len(te),
+                           "N_features": X_train.shape[1], "SMOTE_k": k, **met})
+        vocabularios.extend({"Fold": fold, "feature": str(t), "idf": float(idf)}
+                            for t, idf in zip(vectorizador.get_feature_names_out(), vectorizador.idf_))
+        for rol, indices in [("train", tr), ("test", te)]:
+            auditoria.extend({"Fold": fold, "rol": rol, "fila_datos": int(i)+1,
+                              "grupo_cv": grupos[i], "grado": y[i]} for i in indices)
+        detalle.update(filas_train=(tr+1).tolist(), filas_test=(te+1).tolist(),
+                       n_features=X_train.shape[1], semilla_smote=SEED+fold,
+                       perfiles_test_sin_terminos=int((X_test.getnnz(axis=1) == 0).sum()))
+        print(f"Fold {fold}/{len(particiones)}: F1 macro={met['F1_macro']:.4f}; "
+              f"train={len(tr)}, test={len(te)}, variables={X_train.shape[1]}", flush=True)
+    if not np.all(visitas == 1):
+        raise RuntimeError("Cada perfil debe tener exactamente una predicción de prueba.")
+    predicciones["Fold"] = fold_oof
+    predicciones["grado_real"] = y
+    predicciones["grado_predicho"] = oof
+    predicciones["correcto"] = y == oof
+    return {"folds": pd.DataFrame(resultados), "predicciones": predicciones,
+            "auditoria_mascara": audit_mascara, "particiones": pd.DataFrame(auditoria),
+            "vocabularios": pd.DataFrame(vocabularios), "detalles": detalles}
+
+
+def guardar_resultados(resultado, df):
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    artefactos = {
+        "folds": "metricas_folds_modelo_final.csv",
+        "predicciones": "predicciones_oof_modelo_final.csv",
+        "auditoria_mascara": "auditoria_enmascaramiento_modelo_final.csv",
+        "particiones": "auditoria_particiones_modelo_final.csv",
+        "vocabularios": "vocabularios_modelo_final.csv",
+    }
+    for clave, nombre in artefactos.items():
+        resultado[clave].to_csv(OUT_DIR / nombre, index=False, encoding="utf-8-sig")
+    y = df.grado.to_numpy()
+    pred = resultado["predicciones"].grado_predicho.to_numpy()
+    folds = resultado["folds"]
+    audit = resultado["auditoria_mascara"]
+    met = calcular_metricas(y, pred)
+    informe = classification_report(y, pred, labels=CLASES, output_dict=True, zero_division=0)
+    por_clase = {clase: {"precision": float(informe[clase]["precision"]),
+                         "recall": float(informe[clase]["recall"]),
+                         "f1_score": float(informe[clase]["f1-score"]),
+                         "support": int(informe[clase]["support"])} for clase in CLASES}
+    pd.DataFrame([{"clase": c, **v} for c,v in por_clase.items()]).to_csv(
+        OUT_DIR / "metricas_por_clase_modelo_final.csv", index=False, encoding="utf-8-sig")
+    matriz = confusion_matrix(y, pred, labels=CLASES)
+    pd.DataFrame(matriz, index=CLASES, columns=CLASES).rename_axis("grado_real").to_csv(
+        OUT_DIR / "matriz_confusion_modelo_final.csv", encoding="utf-8-sig")
+    resumen = {
+        "version": "2.0", "protocolo": "complementnb_smote_titulos_enmascarados_grupos_v1",
+        "fecha_generacion_utc": datetime.now(timezone.utc).isoformat(),
+        "estado": "evaluacion_modelo_robusto_parametros_fijos",
+        "sha256_entrada": df.attrs["sha256_entrada"], "sha256_script": sha256_archivo(__file__),
+        "corpus": {"seleccion": CORPUS_SELECCIONADO, "archivo": str(Path(RUTA_ENTRADA).resolve()),
+                   "total_perfiles": len(df), "total_grupos": int(resultado["predicciones"].grupo_cv.nunique()),
+                   "distribucion": {str(k): int(v) for k,v in df.grado.value_counts().items()}},
+        "control_fuga_lexica": {"metodo": "Reglas fijas de títulos, independientes de la etiqueta",
+                               "patrones": PATRONES_TITULO,
+                               "documentos_con_titulos_enmascarados": int(audit.titulo_enmascarado.sum()),
+                               "documentos_modificados": int(audit.texto_modificado.sum()),
+                               "denominaciones_enmascaradas": int(audit.denominaciones_enmascaradas.sum()),
+                               "nota": "Se conservan términos aislados e instituciones; no es anonimización completa."},
+        "representacion": {"metodo": "TF-IDF", **TFIDF_CONFIG, "stop_words": STOPWORDS_ES,
+                           "ajuste": "Vocabulario e IDF exclusivamente en train de cada fold"},
+        "modelo": {"clasificador": "ComplementNB", "alpha": 1.0, "balanceo": "SMOTE solo train",
+                   "smote_k_maximo": 2, "semilla_smote": "42 + fold", "seleccion_gwo": False},
+        "validacion": {"metodo": "StratifiedKFold sobre grupos homogéneos y expansión a filas",
+                       "n_splits_solicitados": 5, "n_splits": len(folds), "random_state": SEED,
+                       "metrica_principal": "Media de F1 macro de los folds",
+                       "unidad_metricas": "perfil", "unidad_particionado": "grupo",
+                       "grupos_definidos_antes_del_enmascaramiento": True,
+                       "particiones": resultado["detalles"]},
+        "resultados_principales": {"f1_macro_media_folds": float(folds.F1_macro.mean()),
+                                   "f1_macro_std_folds": float(folds.F1_macro.std(ddof=1)),
+                                   "accuracy_media_folds": float(folds.Accuracy.mean()),
+                                   "f1_macro_oof": met["F1_macro"], "accuracy_oof": met["Accuracy"]},
+        "metricas_oof": met, "metricas_oof_por_clase": por_clase,
+        "matriz_confusion": {"orden_clases": CLASES, "valores": matriz.tolist()},
+        "versiones": {**{p: version(p) for p in ["numpy", "pandas", "scipy", "scikit-learn", "imbalanced-learn"]},
+                      "python": sys.version.split()[0]},
+        "interpretacion": {
+            "resultado_principal": "Evaluación con títulos explícitos enmascarados y parámetros fijos.",
+            "relacion_con_gwo": "Paso 04: exploración GWO; paso 05: validación anidada GWO; paso 06: modelo fijo enmascarado.",
+            "limitaciones": [
+                "El enmascaramiento reduce pistas directas, pero no garantiza eliminarlas todas.",
+                "Los grupos se fijan con los textos originales; no es validación por universidad.",
+                "Los parámetros fijos no constituyen prerregistro: cambios tras observar resultados necesitan evaluación independiente.",
+                "La clase con menos grupos limita las particiones y vuelve sensibles sus métricas.",
+                "La desviación entre folds no es un intervalo de confianza.",
+                "F1 conjunto y media de F1 por fold son agregaciones distintas.",
+                "Este paso evalúa modelos por fold; no produce un modelo único para despliegue."]},
+        "artefactos": {**artefactos, "metricas_por_clase": "metricas_por_clase_modelo_final.csv",
+                       "matriz_confusion_csv": "matriz_confusion_modelo_final.csv",
+                       "grafico_folds": "f1_por_fold_modelo_final.png",
+                       "grafico_matriz": "matriz_confusion_modelo_final.png"},
+    }
+    (OUT_DIR / "resumen_modelo_final_robusto.json").write_text(
+        json.dumps(resumen, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
+    fig, ax = plt.subplots(figsize=(8, 4.5))
+    ax.plot(folds.Fold, folds.F1_macro, marker="o", label="F1 macro por fold")
+    ax.axhline(folds.F1_macro.mean(), linestyle="--", color="gray", label="Media de folds")
+    ax.set(xlabel="Fold", ylabel="F1 macro", ylim=(0, 1.03),
+           title=f"ComplementNB + SMOTE con títulos enmascarados — {CORPUS_SELECCIONADO}")
+    ax.set_xticks(folds.Fold)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(OUT_DIR / "f1_por_fold_modelo_final.png", dpi=160)
+    plt.close(fig)
+    fig, ax = plt.subplots(figsize=(6.5, 5.5))
+    ConfusionMatrixDisplay(matriz, display_labels=CLASES).plot(
+        ax=ax, colorbar=False, cmap="Blues", values_format="d")
+    ax.set(xlabel="Grado predicho", ylabel="Grado real",
+           title=f"Predicciones de prueba: {len(df)} perfiles\nTítulos enmascarados — {CORPUS_SELECCIONADO}")
+    fig.tight_layout()
+    fig.savefig(OUT_DIR / "matriz_confusion_modelo_final.png", dpi=160)
+    plt.close(fig)
+    return resumen
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--corpus", choices=["actual", "v2"])
+    args = parser.parse_args(argv)
+    configurar_corpus(args.corpus or solicitar_corpus())
+    print("\nFASE 3 — MODELO ROBUSTO CON TÍTULOS ENMASCARADOS")
+    print(f"Entrada: {RUTA_ENTRADA}\nSalida: {OUT_DIR}")
+    df = cargar_corpus()
+    print(f"Registros leídos: {len(df)}; no se eliminan filas.")
+    resultado = evaluar_modelo(df)
+    if sha256_archivo(RUTA_ENTRADA) != df.attrs["sha256_entrada"]:
+        raise ValueError("El corpus cambió durante la ejecución; no se guardaron resultados.")
+    resumen = guardar_resultados(resultado, df)
+    principal = resumen["resultados_principales"]
+    print(f"F1 macro medio por fold: {principal['f1_macro_media_folds']:.4f}")
+    print(f"F1 macro conjunto (OOF): {principal['f1_macro_oof']:.4f}")
+    print(f"Resultados guardados en: {OUT_DIR}")
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        sys.exit(main())
+    except ImportError as exc:
+        print(f"Dependencia ausente o incompatible: {exc}\n"
+              "Revisa imbalanced-learn y scikit-learn en tu entorno virtual.", file=sys.stderr)
+        sys.exit(1)
+    except (ValueError, FileNotFoundError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        sys.exit(1)
