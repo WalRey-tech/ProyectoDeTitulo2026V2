@@ -1,0 +1,95 @@
+{
+    "fecha_ejecucion_utc": "2026-09-22T23:53:18.771192+00:00",
+    "corpus": {
+        "seleccion": "actual",
+        "archivo_entrada": "C:\\Users\\Brayan\\Desktop\\Proyecto_Titulo_V2_Final\\ProyectoDeTitulo2026V2\\src\\data\\processed\\perfiles_egreso_etiquetado_actual_corregido.csv",
+        "sha256": "dc822ace9d53064eab3bc5279f82bc43a608d034750601af10321036918af59b",
+        "filas_descartadas": 0,
+        "total": 63,
+        "distribucion": {
+            "Civil": 32,
+            "Informática": 26,
+            "Ejecución": 5
+        }
+    },
+    "representacion": {
+        "metodo": "TF-IDF",
+        "max_features": 400,
+        "features_generadas": 400,
+        "ngram_range": [
+            1,
+            2
+        ],
+        "min_df": 2,
+        "max_df": 0.9,
+        "sublinear_tf": true
+    },
+    "similitud_global": {
+        "intra_clase_media": 0.248629,
+        "inter_clase_media": 0.228214,
+        "diferencia_intra_inter": 0.020415,
+        "homogeneidad_intra_macro": 0.281556
+    },
+    "test_permutacion": {
+        "agrupacion": {
+            "unidad": "grupo de perfiles",
+            "n_unidades": 62,
+            "distribucion_unidades": {
+                "Civil": 32,
+                "Informática": 26,
+                "Ejecución": 4
+            },
+            "grupos_con_varios_perfiles": 1,
+            "vector_por_unidad": "media de los vectores TF-IDF de sus perfiles",
+            "tfidf_ajustado_sobre": "todos los perfiles de entrada, sin etiquetas",
+            "supuesto": "Intercambiabilidad de etiquetas entre unidades bajo H0; no garantiza independencia institucional."
+        },
+        "estadistico_observado_unidades": 0.01829883653863626,
+        "estadistico": "media de similitudes intra menos media inter entre unidades",
+        "recuentos_preservados": "número de unidades por grado",
+        "correccion_p_valor": "(extremas + 1) / (permutaciones + 1)",
+        "referencia_calculo_p": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.permutation_test.html",
+        "archivo_asignacion_unidades": "C:\\Users\\Brayan\\Desktop\\Proyecto_Titulo_V2_Final\\ProyectoDeTitulo2026V2\\src\\data\\resultados_cientificos\\homogeneidad_semantica\\unidades_test_homogeneidad_actual.csv",
+        "archivo_distribucion_nula": "C:\\Users\\Brayan\\Desktop\\Proyecto_Titulo_V2_Final\\ProyectoDeTitulo2026V2\\src\\data\\resultados_cientificos\\homogeneidad_semantica\\distribucion_nula_homogeneidad_actual.csv",
+        "hipotesis_nula": "La asociación entre unidades del test y grados no produce una diferencia intra/inter mayor a la esperada por azar.",
+        "hipotesis_alternativa": "Entre unidades del test, la similitud intra-grado es mayor que la similitud inter-grado.",
+        "tipo": "unilateral",
+        "n_permutaciones": 5000,
+        "semilla": 42,
+        "permutaciones_extremas": 29,
+        "p_valor": 0.0059988,
+        "alpha": 0.05,
+        "significativo": true
+    },
+    "similitud_centroides": {
+        "Civil": {
+            "Civil": 1.0,
+            "Ejecución": 0.648039,
+            "Informática": 0.834972
+        },
+        "Ejecución": {
+            "Civil": 0.648039,
+            "Ejecución": 1.0,
+            "Informática": 0.638704
+        },
+        "Informática": {
+            "Civil": 0.834972,
+            "Ejecución": 0.638704,
+            "Informática": 1.0
+        }
+    },
+    "interpretacion": {
+        "resultado": "Los perfiles del mismo grado presentan una similitud promedio mayor que los perfiles de grados diferentes.",
+        "significancia": "La diferencia entre unidades del test es estadísticamente significativa bajo el test de permutación.",
+        "advertencia": "Este es un análisis descriptivo y de asociación del corpus. No constituye una estimación de rendimiento predictivo."
+    },
+    "limitaciones": [
+        "La clase Ejecución contiene 5 perfiles y 4 unidades del test; sus estimaciones presentan mayor incertidumbre.",
+        "El corpus utiliza el texto original de los perfiles de egreso. Algunos documentos pueden contener términos directamente asociados al nombre del programa o grado.",
+        "La similitud global intra-clase está influida por el número de pares de cada clase; por ello también se reporta homogeneidad por clase.",
+        "Las medias descriptivas usan todos los perfiles; el p-valor corresponde al estadístico entre unidades agrupadas.",
+        "Los pares de similitudes comparten perfiles: no son observaciones independientes. Se permutan etiquetas de unidades, no pares.",
+        "Solo se agrupan vínculos declarados, modalidades UCSC conocidas y duplicados textuales normalizados. Pueden existir otras dependencias.",
+        "TF-IDF mide coincidencia léxica ponderada, no equivalencia semántica completa."
+    ]
+}

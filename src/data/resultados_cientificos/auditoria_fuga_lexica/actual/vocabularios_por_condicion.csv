@@ -1,0 +1,3201 @@
+﻿condicion,fold,feature,idf
+Original,1,000,3.751535313041949
+Original,1,10,2.904237452654745
+Original,1,2026,3.463853240590168
+Original,1,25,3.751535313041949
+Original,1,académico,3.2407096892759584
+Original,1,acciones,3.2407096892759584
+Original,1,acreditación,3.751535313041949
+Original,1,actitud,3.0583881324820035
+Original,1,actualización,3.0583881324820035
+Original,1,adaptarse,2.904237452654745
+Original,1,además,2.0169342576538423
+Original,1,administración,3.0583881324820035
+Original,1,administrar,3.0583881324820035
+Original,1,admisión,3.463853240590168
+Original,1,alto,3.0583881324820035
+Original,1,ambiental,2.904237452654745
+Original,1,ambiente,3.0583881324820035
+Original,1,amplio,3.2407096892759584
+Original,1,analizar,2.547562508716013
+Original,1,analítica,3.2407096892759584
+Original,1,anual,3.751535313041949
+Original,1,análisis,2.6529230243738393
+Original,1,análisis datos,3.0583881324820035
+Original,1,aplica,3.2407096892759584
+Original,1,aplicaciones,2.904237452654745
+Original,1,aplicación,2.6529230243738393
+Original,1,aplicada,2.7707060600302227
+Original,1,aplicando,2.7707060600302227
+Original,1,aplicar,2.3652409519220585
+Original,1,aprendizaje,2.2110902720948
+Original,1,arancel,3.751535313041949
+Original,1,arancel anual,3.751535313041949
+Original,1,aranceles,3.751535313041949
+Original,1,artificial,2.285198244248522
+Original,1,as,3.463853240590168
+Original,1,asimismo,3.0583881324820035
+Original,1,asociados,3.0583881324820035
+Original,1,así,2.3652409519220585
+Original,1,año,3.0583881324820035
+Original,1,años,3.751535313041949
+Original,1,basadas,3.463853240590168
+Original,1,base,2.547562508716013
+Original,1,bases,2.904237452654745
+Original,1,bases datos,3.0583881324820035
+Original,1,bien,2.904237452654745
+Original,1,bien común,3.0583881324820035
+Original,1,buenas,3.463853240590168
+Original,1,buenas prácticas,3.463853240590168
+Original,1,básicas,2.0775588794702773
+Original,1,básicas ciencias,2.7707060600302227
+Original,1,básicas ingeniería,3.0583881324820035
+Original,1,calidad,2.0169342576538423
+Original,1,calidad seguridad,3.463853240590168
+Original,1,campo,2.904237452654745
+Original,1,campus,3.463853240590168
+Original,1,capaces,2.547562508716013
+Original,1,capacidad,1.714653385780909
+Original,1,capacidad trabajar,3.0583881324820035
+Original,1,capacidades,2.904237452654745
+Original,1,capacitado,2.7707060600302227
+Original,1,capaz,2.0169342576538423
+Original,1,capaz concebir,3.463853240590168
+Original,1,carrera,1.672093771362113
+Original,1,carrera ingeniería,2.3652409519220585
+Original,1,carreras,3.463853240590168
+Original,1,católica,2.904237452654745
+Original,1,ciberseguridad,3.2407096892759584
+Original,1,ciencia,2.6529230243738393
+Original,1,ciencia datos,3.0583881324820035
+Original,1,ciencias,1.672093771362113
+Original,1,ciencias básicas,2.0775588794702773
+Original,1,ciencias ingeniería,2.4522523289116878
+Original,1,civil,1.672093771362113
+Original,1,civil computación,2.904237452654745
+Original,1,civil informática,2.142097400607849
+Original,1,competencias,1.9057086225436182
+Original,1,complejos,2.4522523289116878
+Original,1,compromiso,2.285198244248522
+Original,1,compromiso ético,3.2407096892759584
+Original,1,computacionales,2.547562508716013
+Original,1,computación,1.9057086225436182
+Original,1,computación informática,2.3652409519220585
+Original,1,comunicaciones,2.547562508716013
+Original,1,comunicación,1.8056251639866356
+Original,1,comunicación efectiva,2.6529230243738393
+Original,1,comunicarse,2.904237452654745
+Original,1,común,2.7707060600302227
+Original,1,concebir,3.0583881324820035
+Original,1,concebir diseñar,3.2407096892759584
+Original,1,conocimiento,2.7707060600302227
+Original,1,conocimientos,1.6312717768418579
+Original,1,considerando,2.4522523289116878
+Original,1,constante,2.904237452654745
+Original,1,construir,3.0583881324820035
+Original,1,consultor,3.0583881324820035
+Original,1,contexto,2.285198244248522
+Original,1,contexto global,3.463853240590168
+Original,1,contextos,2.3652409519220585
+Original,1,continua,3.0583881324820035
+Original,1,continuo,3.0583881324820035
+Original,1,contribuir,3.0583881324820035
+Original,1,contribuyendo,3.0583881324820035
+Original,1,creación,3.2407096892759584
+Original,1,crear,3.0583881324820035
+Original,1,criterios,2.904237452654745
+Original,1,crítico,2.7707060600302227
+Original,1,cuenta,2.7707060600302227
+Original,1,datos,1.672093771362113
+Original,1,decisiones,2.285198244248522
+Original,1,desafíos,2.6529230243738393
+Original,1,desarrolla,2.904237452654745
+Original,1,desarrollar,1.959775843813894
+Original,1,desarrollar soluciones,3.0583881324820035
+Original,1,desarrollo,1.5543107357057295
+Original,1,desarrollo sostenible,3.0583881324820035
+Original,1,desempeñarse,2.3652409519220585
+Original,1,desempeño,2.6529230243738393
+Original,1,diferentes,3.2407096892759584
+Original,1,digital,2.904237452654745
+Original,1,digitales,2.7707060600302227
+Original,1,dirección,3.463853240590168
+Original,1,disciplina,2.6529230243738393
+Original,1,disciplinar,3.2407096892759584
+Original,1,diseñar,1.9057086225436182
+Original,1,diseñar desarrollar,3.0583881324820035
+Original,1,diseñar implementar,2.4522523289116878
+Original,1,diseño,2.3652409519220585
+Original,1,distintas,2.904237452654745
+Original,1,distintos,2.904237452654745
+Original,1,diversa,3.2407096892759584
+Original,1,diversas,2.904237452654745
+Original,1,diversidad,2.904237452654745
+Original,1,diversos,2.7707060600302227
+Original,1,docente,3.463853240590168
+Original,1,duración,3.0583881324820035
+Original,1,económico,3.0583881324820035
+Original,1,educación,3.2407096892759584
+Original,1,educación superior,3.751535313041949
+Original,1,efectiva,2.3652409519220585
+Original,1,eficiencia,2.547562508716013
+Original,1,eficiente,3.0583881324820035
+Original,1,eficientes,3.0583881324820035
+Original,1,egresado,2.547562508716013
+Original,1,egreso,2.285198244248522
+Original,1,ejecución,3.2407096892759584
+Original,1,ejercicio,2.904237452654745
+Original,1,ello,3.0583881324820035
+Original,1,emergentes,3.0583881324820035
+Original,1,emprender,3.0583881324820035
+Original,1,emprendimiento,2.6529230243738393
+Original,1,empresarial,3.463853240590168
+Original,1,empresariales,3.751535313041949
+Original,1,empresas,2.4522523289116878
+Original,1,enfoque,2.7707060600302227
+Original,1,entorno,2.547562508716013
+Original,1,equipo,2.6529230243738393
+Original,1,equipos,1.672093771362113
+Original,1,equipos multidisciplinarios,2.547562508716013
+Original,1,equipos trabajo,2.3652409519220585
+Original,1,especialidad,2.904237452654745
+Original,1,estrategias,3.0583881324820035
+Original,1,estudiantes,3.463853240590168
+Original,1,estudios,2.904237452654745
+Original,1,está,3.2407096892759584
+Original,1,estándares,2.6529230243738393
+Original,1,estándares calidad,3.463853240590168
+Original,1,evaluación,3.0583881324820035
+Original,1,evaluar,2.6529230243738393
+Original,1,evaluar gestionar,3.463853240590168
+Original,1,evolución,2.7707060600302227
+Original,1,experiencia,3.463853240590168
+Original,1,fin,2.904237452654745
+Original,1,forma,1.959775843813894
+Original,1,formación,1.672093771362113
+Original,1,formación ciencias,2.904237452654745
+Original,1,formar,2.904237452654745
+Original,1,formativo,3.2407096892759584
+Original,1,generación,3.0583881324820035
+Original,1,generar,2.904237452654745
+Original,1,genéricas,3.0583881324820035
+Original,1,gestiona,3.463853240590168
+Original,1,gestionar,2.0169342576538423
+Original,1,gestionar proyectos,3.0583881324820035
+Original,1,gestión,1.672093771362113
+Original,1,gestión información,3.463853240590168
+Original,1,gestión proyectos,2.547562508716013
+Original,1,global,2.904237452654745
+Original,1,habilidades,2.2110902720948
+Original,1,hardware,2.7707060600302227
+Original,1,herramientas,2.142097400607849
+Original,1,herramientas tecnológicas,3.2407096892759584
+Original,1,identificar,2.904237452654745
+Original,1,idioma,2.7707060600302227
+Original,1,idioma inglés,2.7707060600302227
+Original,1,impacto,2.904237452654745
+Original,1,implementa,3.463853240590168
+Original,1,implementación,2.547562508716013
+Original,1,implementar,1.959775843813894
+Original,1,implementar soluciones,2.904237452654745
+Original,1,industria,2.7707060600302227
+Original,1,información,1.2666286632539485
+Original,1,información comunicaciones,2.7707060600302227
+Original,1,información comunicación,2.6529230243738393
+Original,1,informática instituto,3.2407096892759584
+Original,1,informática universidad,2.0169342576538423
+Original,1,informáticas,2.3652409519220585
+Original,1,informático,2.6529230243738393
+Original,1,informáticos,1.714653385780909
+Original,1,ingeniera,3.0583881324820035
+Original,1,ingeniero,1.4828517717235845
+Original,1,ingeniero civil,2.285198244248522
+Original,1,ingeniero informática,2.7707060600302227
+Original,1,ingenieros,3.0583881324820035
+Original,1,ingeniería,1.1124779834266902
+Original,1,ingeniería civil,2.2110902720948
+Original,1,ingeniería informática,2.0775588794702773
+Original,1,ingeniería software,2.285198244248522
+Original,1,inglés,2.547562508716013
+Original,1,innovación,1.8056251639866356
+Original,1,innovación tecnológica,3.0583881324820035
+Original,1,innovador,3.463853240590168
+Original,1,innovadoras,2.547562508716013
+Original,1,instituciones,3.2407096892759584
+Original,1,instituto,3.2407096892759584
+Original,1,instituto profesional,3.2407096892759584
+Original,1,integración,2.904237452654745
+Original,1,integral,2.285198244248522
+Original,1,integrar,2.547562508716013
+Original,1,inteligencia,2.2110902720948
+Original,1,inteligencia artificial,2.285198244248522
+Original,1,interdisciplinarios,2.904237452654745
+Original,1,internacionales,3.463853240590168
+Original,1,investigación,2.904237452654745
+Original,1,jefe,2.904237452654745
+Original,1,junto,2.904237452654745
+Original,1,laboral,3.0583881324820035
+Original,1,legal,3.463853240590168
+Original,1,legal vigente,3.463853240590168
+Original,1,liderando,3.463853240590168
+Original,1,liderar,2.7707060600302227
+Original,1,liderar equipos,2.904237452654745
+Original,1,liderazgo,2.285198244248522
+Original,1,malla,3.2407096892759584
+Original,1,manejo,3.0583881324820035
+Original,1,manera,2.2110902720948
+Original,1,mantención,3.2407096892759584
+Original,1,mediante,2.6529230243738393
+Original,1,medio,2.7707060600302227
+Original,1,mejora,3.0583881324820035
+Original,1,metodologías,2.7707060600302227
+Original,1,modelos,3.0583881324820035
+Original,1,multidisciplinarios,2.0775588794702773
+Original,1,mundo,2.4522523289116878
+Original,1,nacional,2.904237452654745
+Original,1,necesidades,2.0775588794702773
+Original,1,negocio,3.0583881324820035
+Original,1,negocios,2.6529230243738393
+Original,1,nivel,2.7707060600302227
+Original,1,normativa,3.2407096892759584
+Original,1,normativa legal,3.463853240590168
+Original,1,nuevas,2.904237452654745
+Original,1,nuevos,3.0583881324820035
+Original,1,objetivos,3.0583881324820035
+Original,1,operar,2.904237452654745
+Original,1,oportunidades,2.904237452654745
+Original,1,organizacional,3.2407096892759584
+Original,1,organizacionales,2.6529230243738393
+Original,1,organizaciones,1.8544153281560676
+Original,1,organización,2.3652409519220585
+Original,1,partir,3.2407096892759584
+Original,1,país,2.7707060600302227
+Original,1,pensamiento,2.904237452654745
+Original,1,perfil,2.0169342576538423
+Original,1,perfil egreso,2.3652409519220585
+Original,1,permanente,2.4522523289116878
+Original,1,permitan,2.6529230243738393
+Original,1,permite,2.142097400607849
+Original,1,personas,2.3652409519220585
+Original,1,plan,3.0583881324820035
+Original,1,planificación,3.2407096892759584
+Original,1,planificar,2.7707060600302227
+Original,1,plataformas,2.904237452654745
+Original,1,podrá,3.2407096892759584
+Original,1,posee,2.0775588794702773
+Original,1,principios,2.6529230243738393
+Original,1,privadas,3.0583881324820035
+Original,1,privado,2.904237452654745
+Original,1,problemas,1.7591051483517428
+Original,1,problemas complejos,2.7707060600302227
+Original,1,problemáticas,2.904237452654745
+Original,1,procesos,1.8544153281560676
+Original,1,productivo,3.2407096892759584
+Original,1,productos,2.3652409519220585
+Original,1,profesional,1.2666286632539485
+Original,1,profesional capaz,3.0583881324820035
+Original,1,profesional ingeniero,3.2407096892759584
+Original,1,profesional integral,3.0583881324820035
+Original,1,profesionales,1.959775843813894
+Original,1,profesionales capaces,3.2407096892759584
+Original,1,profesión,3.0583881324820035
+Original,1,programa,2.3652409519220585
+Original,1,propios,2.904237452654745
+Original,1,proyectos,1.2666286632539485
+Original,1,proyectos informáticos,2.4522523289116878
+Original,1,proyectos ingeniería,3.0583881324820035
+Original,1,proyectos tecnologías,3.2407096892759584
+Original,1,proyectos tecnológicos,2.904237452654745
+Original,1,prácticas,3.0583881324820035
+Original,1,puede,2.904237452654745
+Original,1,públicas,3.0583881324820035
+Original,1,públicas privadas,3.0583881324820035
+Original,1,público,3.0583881324820035
+Original,1,quehacer,2.7707060600302227
+Original,1,quehacer profesional,3.0583881324820035
+Original,1,reconoce,3.2407096892759584
+Original,1,recursos,2.4522523289116878
+Original,1,redes,2.547562508716013
+Original,1,región,3.0583881324820035
+Original,1,requerimientos,3.0583881324820035
+Original,1,resolución,3.0583881324820035
+Original,1,resolución problemas,3.2407096892759584
+Original,1,resolver,1.9057086225436182
+Original,1,resolver problemas,2.142097400607849
+Original,1,respeto,3.0583881324820035
+Original,1,responsabilidad,2.0169342576538423
+Original,1,responsabilidad social,2.285198244248522
+Original,1,responsable,2.904237452654745
+Original,1,riesgos,3.0583881324820035
+Original,1,rol,3.463853240590168
+Original,1,santiago,3.0583881324820035
+Original,1,sector,2.6529230243738393
+Original,1,sector público,3.2407096892759584
+Original,1,sede,3.463853240590168
+Original,1,seguridad,2.2110902720948
+Original,1,según,3.0583881324820035
+Original,1,sello,2.904237452654745
+Original,1,semestres,3.0583881324820035
+Original,1,sentido,2.6529230243738393
+Original,1,servicios,2.142097400607849
+Original,1,siendo,2.904237452654745
+Original,1,siendo capaz,3.0583881324820035
+Original,1,sistemas,1.3844116989103321
+Original,1,sistemas computacionales,3.0583881324820035
+Original,1,sistemas información,2.285198244248522
+Original,1,sistemas informáticos,2.3652409519220585
+Original,1,social,1.672093771362113
+Original,1,sociales,2.904237452654745
+Original,1,sociedad,2.547562508716013
+Original,1,software,1.4828517717235845
+Original,1,soluciones,1.4828517717235845
+Original,1,soluciones informáticas,2.7707060600302227
+Original,1,soluciones innovadoras,3.0583881324820035
+Original,1,soluciones tecnológicas,2.547562508716013
+Original,1,sostenible,2.547562508716013
+Original,1,superior,3.463853240590168
+Original,1,sustentable,3.0583881324820035
+Original,1,sólida,2.3652409519220585
+Original,1,sólida formación,2.4522523289116878
+Original,1,sólidos,3.0583881324820035
+Original,1,tecnología,2.6529230243738393
+Original,1,tecnologías,1.2666286632539485
+Original,1,tecnologías información,1.5179430915348546
+Original,1,tecnológica,2.285198244248522
+Original,1,tecnológicas,2.2110902720948
+Original,1,tecnológico,2.904237452654745
+Original,1,tecnológicos,2.142097400607849
+Original,1,telecomunicaciones,3.2407096892759584
+Original,1,tic,2.6529230243738393
+Original,1,toma,2.6529230243738393
+Original,1,toma decisiones,2.6529230243738393
+Original,1,trabajar,2.6529230243738393
+Original,1,trabajo,1.6312717768418579
+Original,1,trabajo equipo,2.904237452654745
+Original,1,transformación,2.4522523289116878
+Original,1,transformación digital,2.904237452654745
+Original,1,través,2.142097400607849
+Original,1,trayectoria,3.0583881324820035
+Original,1,técnicas,2.7707060600302227
+Original,1,técnico,3.463853240590168
+Original,1,técnicos,2.904237452654745
+Original,1,título,3.0583881324820035
+Original,1,título profesional,3.2407096892759584
+Original,1,universidad,1.5179430915348546
+Original,1,universidad católica,2.904237452654745
+Original,1,uso,2.3652409519220585
+Original,1,utilizando,3.0583881324820035
+Original,1,utilizando herramientas,3.463853240590168
+Original,1,valor,2.3652409519220585
+Original,1,vanguardia,3.463853240590168
+Original,1,vida,2.904237452654745
+Original,1,vigente,3.2407096892759584
+Original,1,visión,2.547562508716013
+Original,1,ámbito,2.3652409519220585
+Original,1,ámbitos,3.0583881324820035
+Original,1,área,2.547562508716013
+Original,1,áreas,2.3652409519220585
+Original,1,énfasis,3.463853240590168
+Original,1,ética,2.142097400607849
+Original,1,ético,2.6529230243738393
+Original,1,éticos,2.7707060600302227
+Original,2,000,3.4849066497880004
+Original,2,000 arancel,3.772588722239781
+Original,2,10,3.0794415416798357
+Original,2,2026,3.4849066497880004
+Original,2,25,3.4849066497880004
+Original,2,académico,3.0794415416798357
+Original,2,acuerdo,2.9252908618525773
+Original,2,además,2.386294361119891
+Original,2,admisión,3.4849066497880004
+Original,2,alto,2.9252908618525773
+Original,2,analizar,2.5686159179138452
+Original,2,analítica,2.9252908618525773
+Original,2,anual,3.772588722239781
+Original,2,análisis,2.791759469228055
+Original,2,aplicaciones,3.0794415416798357
+Original,2,aplicada,2.6739764335716716
+Original,2,aplicando,2.791759469228055
+Original,2,aplicar,2.47330573810952
+Original,2,aprendizaje,2.47330573810952
+Original,2,arancel,3.4849066497880004
+Original,2,arancel anual,3.772588722239781
+Original,2,aranceles,3.4849066497880004
+Original,2,artificial,2.6739764335716716
+Original,2,as,3.4849066497880004
+Original,2,así,2.386294361119891
+Original,2,autónoma,2.791759469228055
+Original,2,año,3.4849066497880004
+Original,2,basadas,3.0794415416798357
+Original,2,base,2.9252908618525773
+Original,2,bases,2.6739764335716716
+Original,2,bases datos,2.791759469228055
+Original,2,bien,2.791759469228055
+Original,2,bien común,2.791759469228055
+Original,2,buenas,3.4849066497880004
+Original,2,buenas prácticas,3.4849066497880004
+Original,2,básicas,2.163150809805681
+Original,2,básicas ciencias,2.791759469228055
+Original,2,calidad,2.09861228866811
+Original,2,calidad seguridad,3.2617630984737906
+Original,2,campo,2.791759469228055
+Original,2,campus,3.4849066497880004
+Original,2,capaces,2.386294361119891
+Original,2,capacidad,1.826678573184468
+Original,2,capacidades,3.4849066497880004
+Original,2,capacitado,2.5686159179138452
+Original,2,capaz,2.2321436812926323
+Original,2,carrera,1.7357067949787413
+Original,2,carrera ingeniería,2.386294361119891
+Original,2,católica,3.0794415416798357
+Original,2,chile,3.0794415416798357
+Original,2,ciclo,3.2617630984737906
+Original,2,ciclo vida,3.4849066497880004
+Original,2,ciencia,2.6739764335716716
+Original,2,ciencias,1.7357067949787413
+Original,2,ciencias básicas,2.163150809805681
+Original,2,ciencias ingeniería,2.3062516534463544
+Original,2,civil,1.826678573184468
+Original,2,civil computación,2.9252908618525773
+Original,2,civil informática,2.386294361119891
+Original,2,colaborativamente,3.2617630984737906
+Original,2,colaborativo,3.2617630984737906
+Original,2,competencias,1.9267620317414504
+Original,2,complejos,2.386294361119891
+Original,2,comprometido,3.4849066497880004
+Original,2,compromiso,2.3062516534463544
+Original,2,compromiso ético,3.4849066497880004
+Original,2,computacionales,2.386294361119891
+Original,2,computación,2.3062516534463544
+Original,2,computación informática,2.9252908618525773
+Original,2,comunicaciones,3.0794415416798357
+Original,2,comunicación,1.9267620317414504
+Original,2,comunicación efectiva,2.9252908618525773
+Original,2,comunicación tic,3.2617630984737906
+Original,2,comunicarse,3.0794415416798357
+Original,2,común,2.791759469228055
+Original,2,concepción,3.2617630984737906
+Original,2,conocimiento,2.791759469228055
+Original,2,conocimientos,1.826678573184468
+Original,2,conocimientos ciencias,3.2617630984737906
+Original,2,considerando,2.791759469228055
+Original,2,constante,3.0794415416798357
+Original,2,construir,3.0794415416798357
+Original,2,consultor,3.0794415416798357
+Original,2,contexto,2.791759469228055
+Original,2,contextos,2.3062516534463544
+Original,2,continua,2.9252908618525773
+Original,2,contribuir,3.2617630984737906
+Original,2,creación,3.0794415416798357
+Original,2,cristiana,3.0794415416798357
+Original,2,criterios,3.2617630984737906
+Original,2,crítica,3.2617630984737906
+Original,2,crítico,2.6739764335716716
+Original,2,cuenta,3.0794415416798357
+Original,2,cultura,3.2617630984737906
+Original,2,curricular,3.4849066497880004
+Original,2,datos,1.613104472886409
+Original,2,datos sistemas,3.4849066497880004
+Original,2,decil,3.772588722239781
+Original,2,decisiones,2.47330573810952
+Original,2,desafíos,3.0794415416798357
+Original,2,desarrolla,2.5686159179138452
+Original,2,desarrollar,1.826678573184468
+Original,2,desarrollar proyectos,3.0794415416798357
+Original,2,desarrollar soluciones,3.0794415416798357
+Original,2,desarrollo,1.538996500732687
+Original,2,desarrollo software,2.9252908618525773
+Original,2,desarrollo sostenible,3.2617630984737906
+Original,2,desempeñarse,2.386294361119891
+Original,2,desempeño,2.791759469228055
+Original,2,desenvolverse,3.0794415416798357
+Original,2,destacan,3.0794415416798357
+Original,2,digital,2.47330573810952
+Original,2,digitales,2.6739764335716716
+Original,2,disciplina,3.4849066497880004
+Original,2,disciplinar,3.0794415416798357
+Original,2,disciplinares,3.2617630984737906
+Original,2,diseña,3.0794415416798357
+Original,2,diseñar,1.9808292530117262
+Original,2,diseñar desarrollar,2.9252908618525773
+Original,2,diseñar implementar,2.791759469228055
+Original,2,diseño,2.2321436812926323
+Original,2,distintas,3.2617630984737906
+Original,2,distintos,2.791759469228055
+Original,2,diversa,3.2617630984737906
+Original,2,diversas,2.9252908618525773
+Original,2,diversidad,2.791759469228055
+Original,2,diversos,2.5686159179138452
+Original,2,duración,3.2617630984737906
+Original,2,efectiva,2.5686159179138452
+Original,2,eficiencia,2.3062516534463544
+Original,2,eficientes,2.9252908618525773
+Original,2,egresado,2.47330573810952
+Original,2,egreso,2.3062516534463544
+Original,2,ejecución,3.2617630984737906
+Original,2,ejercicio,3.0794415416798357
+Original,2,ello,3.0794415416798357
+Original,2,emergentes,3.0794415416798357
+Original,2,emprendimiento,2.9252908618525773
+Original,2,empresarial,3.2617630984737906
+Original,2,empresas,2.9252908618525773
+Original,2,enfoque,2.9252908618525773
+Original,2,entorno,3.0794415416798357
+Original,2,equipo,2.9252908618525773
+Original,2,equipos,1.7357067949787413
+Original,2,equipos multidisciplinarios,2.2321436812926323
+Original,2,equipos trabajo,2.9252908618525773
+Original,2,especialidad,3.772588722239781
+Original,2,estrategias,3.4849066497880004
+Original,2,estudiantes,3.772588722239781
+Original,2,está,3.2617630984737906
+Original,2,estándares,2.47330573810952
+Original,2,estándares calidad,3.0794415416798357
+Original,2,evaluación,2.791759469228055
+Original,2,evaluando,3.2617630984737906
+Original,2,evaluar,2.6739764335716716
+Original,2,evolución,2.791759469228055
+Original,2,fin,3.0794415416798357
+Original,2,forma,2.037987666851675
+Original,2,formación,1.7357067949787413
+Original,2,formación integral,3.2617630984737906
+Original,2,formar,2.791759469228055
+Original,2,formar profesionales,3.772588722239781
+Original,2,formativo,3.4849066497880004
+Original,2,formular,3.2617630984737906
+Original,2,fundamentos,3.0794415416798357
+Original,2,generación,3.0794415416798357
+Original,2,generar,2.791759469228055
+Original,2,generar soluciones,2.9252908618525773
+Original,2,gestiona,3.2617630984737906
+Original,2,gestionar,1.9808292530117262
+Original,2,gestionar desarrollar,3.2617630984737906
+Original,2,gestionar proyectos,2.791759469228055
+Original,2,gestión,1.9267620317414504
+Original,2,gestión informática,3.2617630984737906
+Original,2,gestión proyectos,2.9252908618525773
+Original,2,global,2.9252908618525773
+Original,2,grandes,3.2617630984737906
+Original,2,grandes volúmenes,3.2617630984737906
+Original,2,habilidades,2.47330573810952
+Original,2,hardware,3.2617630984737906
+Original,2,herramientas,2.386294361119891
+Original,2,herramientas tecnológicas,3.2617630984737906
+Original,2,humana,3.2617630984737906
+Original,2,humanos,3.0794415416798357
+Original,2,identificar,2.791759469228055
+Original,2,idioma,3.0794415416798357
+Original,2,idioma inglés,3.0794415416798357
+Original,2,impacto,3.2617630984737906
+Original,2,implementa,3.4849066497880004
+Original,2,implementación,3.0794415416798357
+Original,2,implementar,2.2321436812926323
+Original,2,inclusión,3.2617630984737906
+Original,2,incorporando,3.2617630984737906
+Original,2,industria,2.9252908618525773
+Original,2,industrial,3.4849066497880004
+Original,2,información,1.3448404862917296
+Original,2,información comunicaciones,3.2617630984737906
+Original,2,información comunicación,2.791759469228055
+Original,2,informática,1.1823215567939547
+Original,2,informática egresado,3.2617630984737906
+Original,2,informática innovación,3.772588722239781
+Original,2,informática instituto,3.2617630984737906
+Original,2,informática universidad,2.3062516534463544
+Original,2,informáticas,2.6739764335716716
+Original,2,informático,2.9252908618525773
+Original,2,informáticos,1.613104472886409
+Original,2,ingeniera,3.0794415416798357
+Original,2,ingeniero,1.503905180921417
+Original,2,ingeniero civil,2.386294361119891
+Original,2,ingeniero ejecución,3.2617630984737906
+Original,2,ingeniero informática,2.5686159179138452
+Original,2,ingenieros,2.9252908618525773
+Original,2,ingeniería,1.1823215567939547
+Original,2,ingeniería civil,2.386294361119891
+Original,2,ingeniería informática,2.037987666851675
+Original,2,ingeniería ingeniería,3.0794415416798357
+Original,2,ingeniería software,2.47330573810952
+Original,2,inglés,2.791759469228055
+Original,2,innovación,2.037987666851675
+Original,2,innovadoras,2.163150809805681
+Original,2,instituciones,3.0794415416798357
+Original,2,instituciones públicas,3.2617630984737906
+Original,2,instituto,2.9252908618525773
+Original,2,instituto profesional,3.2617630984737906
+Original,2,integración,3.2617630984737906
+Original,2,integral,2.5686159179138452
+Original,2,integrales,3.0794415416798357
+Original,2,integrar,2.791759469228055
+Original,2,inteligencia,2.47330573810952
+Original,2,inteligencia artificial,2.6739764335716716
+Original,2,interdisciplinarios,3.2617630984737906
+Original,2,investigación,3.0794415416798357
+Original,2,laboral,3.0794415416798357
+Original,2,lenguajes,3.2617630984737906
+Original,2,lenguajes programación,3.2617630984737906
+Original,2,lidera,3.4849066497880004
+Original,2,liderando,3.772588722239781
+Original,2,liderar,2.386294361119891
+Original,2,liderar equipos,2.791759469228055
+Original,2,liderazgo,2.6739764335716716
+Original,2,malla,3.2617630984737906
+Original,2,malla curricular,3.772588722239781
+Original,2,manejo,3.2617630984737906
+Original,2,manera,2.386294361119891
+Original,2,mantención,3.2617630984737906
+Original,2,marco,3.2617630984737906
+Original,2,marcos,3.772588722239781
+Original,2,matrícula,3.4849066497880004
+Original,2,mediante,2.6739764335716716
+Original,2,mediante uso,3.2617630984737906
+Original,2,medio,2.9252908618525773
+Original,2,mejora,2.6739764335716716
+Original,2,mercado,3.2617630984737906
+Original,2,metodologías,2.6739764335716716
+Original,2,metodologías herramientas,3.4849066497880004
+Original,2,metropolitana,3.4849066497880004
+Original,2,multidisciplinarios,2.037987666851675
+Original,2,mundo,2.5686159179138452
+Original,2,nacional,2.9252908618525773
+Original,2,necesidades,2.09861228866811
+Original,2,negocios,2.791759469228055
+Original,2,nivel,2.386294361119891
+Original,2,nivel superior,3.4849066497880004
+Original,2,niveles,3.2617630984737906
+Original,2,normativa,3.772588722239781
+Original,2,nuevas,2.9252908618525773
+Original,2,nuevas tecnologías,3.2617630984737906
+Original,2,nuevos,3.2617630984737906
+Original,2,objetivos,2.9252908618525773
+Original,2,operar,3.2617630984737906
+Original,2,oportunidades,3.0794415416798357
+Original,2,organizacional,3.4849066497880004
+Original,2,organizacionales,2.47330573810952
+Original,2,organizaciones,1.9267620317414504
+Original,2,organización,2.386294361119891
+Original,2,partir,3.0794415416798357
+Original,2,país,3.0794415416798357
+Original,2,pensamiento,2.791759469228055
+Original,2,pensamiento crítico,2.9252908618525773
+Original,2,perfil,2.037987666851675
+Original,2,perfil egreso,2.386294361119891
+Original,2,permanente,2.6739764335716716
+Original,2,permitan,3.0794415416798357
+Original,2,permite,1.9808292530117262
+Original,2,permitirá,3.2617630984737906
+Original,2,persona,2.791759469228055
+Original,2,personas,2.791759469228055
+Original,2,planificación,3.2617630984737906
+Original,2,planificar,2.9252908618525773
+Original,2,plataformas,3.0794415416798357
+Original,2,podrá,3.0794415416798357
+Original,2,posee,2.2321436812926323
+Original,2,principios,2.5686159179138452
+Original,2,privadas,2.9252908618525773
+Original,2,problemas,1.6523251860396901
+Original,2,problemas complejos,2.5686159179138452
+Original,2,problemáticas,3.2617630984737906
+Original,2,procesos,1.8754687373538999
+Original,2,productivo,3.4849066497880004
+Original,2,productos,2.6739764335716716
+Original,2,profesional,1.3158529494184772
+Original,2,profesional ingeniero,3.0794415416798357
+Original,2,profesionales,1.9267620317414504
+Original,2,profesionales capaces,3.0794415416798357
+Original,2,profesión,3.0794415416798357
+Original,2,programa,2.6739764335716716
+Original,2,programación,2.9252908618525773
+Original,2,promoción,3.2617630984737906
+Original,2,propios,2.9252908618525773
+Original,2,proyectos,1.3448404862917296
+Original,2,proyectos informáticos,2.386294361119891
+Original,2,proyectos tecnologías,3.2617630984737906
+Original,2,prácticas,3.2617630984737906
+Original,2,prácticas industria,3.4849066497880004
+Original,2,puede,2.9252908618525773
+Original,2,públicas,2.9252908618525773
+Original,2,públicas privadas,2.9252908618525773
+Original,2,público,3.2617630984737906
+Original,2,públicos,3.0794415416798357
+Original,2,reconoce,3.4849066497880004
+Original,2,recursos,2.386294361119891
+Original,2,redes,2.5686159179138452
+Original,2,región,3.4849066497880004
+Original,2,requerimientos,2.9252908618525773
+Original,2,resolución,3.0794415416798357
+Original,2,resolución problemas,3.0794415416798357
+Original,2,resolver,1.8754687373538999
+Original,2,resolver problemas,2.037987666851675
+Original,2,respeto,3.0794415416798357
+Original,2,responsabilidad,2.2321436812926323
+Original,2,responsabilidad social,2.47330573810952
+Original,2,responsable,3.0794415416798357
+Original,2,riesgos,3.0794415416798357
+Original,2,santiago,3.0794415416798357
+Original,2,sector,2.791759469228055
+Original,2,sede,3.2617630984737906
+Original,2,seguridad,2.163150809805681
+Original,2,seguridad información,2.791759469228055
+Original,2,según,2.6739764335716716
+Original,2,sello,2.6739764335716716
+Original,2,semestres,3.0794415416798357
+Original,2,sentido,3.0794415416798357
+Original,2,servicios,2.3062516534463544
+Original,2,sistemas,1.4054651081081644
+Original,2,sistemas computacionales,2.9252908618525773
+Original,2,sistemas información,2.47330573810952
+Original,2,sistemas informáticos,2.386294361119891
+Original,2,social,1.826678573184468
+Original,2,sociales,2.791759469228055
+Original,2,sociedad,2.6739764335716716
+Original,2,software,1.538996500732687
+Original,2,soluciones,1.4054651081081644
+Original,2,soluciones eficientes,3.2617630984737906
+Original,2,soluciones informáticas,2.791759469228055
+Original,2,soluciones innovadoras,2.9252908618525773
+Original,2,soluciones software,3.0794415416798357
+Original,2,soluciones tecnológicas,2.6739764335716716
+Original,2,sostenible,2.791759469228055
+Original,2,superior,3.2617630984737906
+Original,2,sólida,2.5686159179138452
+Original,2,sólida formación,2.6739764335716716
+Original,2,tecnología,2.791759469228055
+Original,2,tecnologías,1.3158529494184772
+Original,2,tecnologías información,1.5753641449035618
+Original,2,tecnológica,2.163150809805681
+Original,2,tecnológicas,2.3062516534463544
+Original,2,tecnológico,2.6739764335716716
+Original,2,tecnológicos,2.386294361119891
+Original,2,telecomunicaciones,3.0794415416798357
+Original,2,tic,3.2617630984737906
+Original,2,toma,2.791759469228055
+Original,2,toma decisiones,2.791759469228055
+Original,2,trabajar,2.791759469228055
+Original,2,trabajo,1.9267620317414504
+Original,2,transformación,2.3062516534463544
+Original,2,transformación digital,2.47330573810952
+Original,2,través,2.386294361119891
+Original,2,técnicas,2.791759469228055
+Original,2,técnico,3.0794415416798357
+Original,2,técnicos,2.9252908618525773
+Original,2,título,3.0794415416798357
+Original,2,título profesional,3.2617630984737906
+Original,2,universidad,1.5753641449035618
+Original,2,universidad católica,3.0794415416798357
+Original,2,universitario,3.772588722239781
+Original,2,uso,2.47330573810952
+Original,2,utilizando,3.0794415416798357
+Original,2,vacantes,3.4849066497880004
+Original,2,valor,2.6739764335716716
+Original,2,valores,3.2617630984737906
+Original,2,vida,2.6739764335716716
+Original,2,vigente,3.4849066497880004
+Original,2,visión,2.386294361119891
+Original,2,ámbito,2.9252908618525773
+Original,2,ámbitos,3.0794415416798357
+Original,2,área,2.5686159179138452
+Original,2,áreas,2.5686159179138452
+Original,2,ética,2.09861228866811
+Original,2,ético,2.5686159179138452
+Original,2,éticos,3.0794415416798357
+Original,3,10,3.1000608288825715
+Original,3,2026,3.505525936990736
+Original,3,académico,3.1000608288825715
+Original,3,acciones,3.505525936990736
+Original,3,acreditación,3.505525936990736
+Original,3,acuerdo,3.2823823856765264
+Original,3,adaptarse,2.9459101490553135
+Original,3,además,2.4939250253122562
+Original,3,administración,3.1000608288825715
+Original,3,administrar,3.1000608288825715
+Original,3,admisión,3.505525936990736
+Original,3,alto,2.9459101490553135
+Original,3,ambiental,3.1000608288825715
+Original,3,amplio,3.2823823856765264
+Original,3,analista,3.1000608288825715
+Original,3,analista sistemas,3.505525936990736
+Original,3,analizar,2.6945957207744073
+Original,3,analítica,3.1000608288825715
+Original,3,análisis,2.406913648322626
+Original,3,análisis datos,2.9459101490553135
+Original,3,aplica,3.1000608288825715
+Original,3,aplicaciones,2.9459101490553135
+Original,3,aplicación,2.8123787564307907
+Original,3,aplicada,2.589235205116581
+Original,3,aplicando,2.8123787564307907
+Original,3,aplicar,2.6945957207744073
+Original,3,apoyar,3.2823823856765264
+Original,3,aprendizaje,2.406913648322626
+Original,3,artificial,2.4939250253122562
+Original,3,asimismo,2.9459101490553135
+Original,3,así,2.406913648322626
+Original,3,años,3.505525936990736
+Original,3,basadas,3.505525936990736
+Original,3,base,2.589235205116581
+Original,3,bases,2.6945957207744073
+Original,3,bases datos,2.6945957207744073
+Original,3,bien,2.8123787564307907
+Original,3,bien común,2.9459101490553135
+Original,3,buenas,3.2823823856765264
+Original,3,buenas prácticas,3.2823823856765264
+Original,3,básicas,2.252762968495368
+Original,3,básicas ciencias,2.6945957207744073
+Original,3,básicas ingeniería,3.2823823856765264
+Original,3,calidad,2.0586069540544107
+Original,3,cambio,3.2823823856765264
+Original,3,campo,2.9459101490553135
+Original,3,campus,3.505525936990736
+Original,3,capaces,2.8123787564307907
+Original,3,capacidad,1.8960880245566356
+Original,3,capacitado,2.589235205116581
+Original,3,capaz,2.001448540214462
+Original,3,capaz concebir,3.505525936990736
+Original,3,carrera,1.8007778447523106
+Original,3,carrera ingeniería,2.589235205116581
+Original,3,carreras,3.505525936990736
+Original,3,católica,2.6945957207744073
+Original,3,chile,2.9459101490553135
+Original,3,ciberseguridad,3.505525936990736
+Original,3,ciclo,3.2823823856765264
+Original,3,ciclo vida,3.505525936990736
+Original,3,ciencia,2.589235205116581
+Original,3,ciencia datos,3.2823823856765264
+Original,3,ciencias,1.756326082181477
+Original,3,ciencias básicas,2.252762968495368
+Original,3,ciencias computación,3.2823823856765264
+Original,3,ciencias ingeniería,2.3268709406490897
+Original,3,civil,1.756326082181477
+Original,3,civil computación,2.589235205116581
+Original,3,civil informática,2.4939250253122562
+Original,3,competencias,2.001448540214462
+Original,3,complejos,2.589235205116581
+Original,3,comprometido,2.8123787564307907
+Original,3,compromiso,2.589235205116581
+Original,3,computacionales,2.4939250253122562
+Original,3,computación,1.9473813189441862
+Original,3,computación informática,2.406913648322626
+Original,3,comunicaciones,2.589235205116581
+Original,3,comunicación,1.8472978603872037
+Original,3,comunicación efectiva,2.9459101490553135
+Original,3,comunicarse,2.9459101490553135
+Original,3,común,2.6945957207744073
+Original,3,concebir,3.2823823856765264
+Original,3,concebir diseñar,3.505525936990736
+Original,3,concepción,3.2823823856765264
+Original,3,conocimiento,2.8123787564307907
+Original,3,conocimientos,1.672944473242426
+Original,3,considerando,2.406913648322626
+Original,3,constante,3.1000608288825715
+Original,3,construir,2.9459101490553135
+Original,3,consultor,2.9459101490553135
+Original,3,contexto,2.3268709406490897
+Original,3,contextos,2.4939250253122562
+Original,3,continua,2.8123787564307907
+Original,3,contribuir,2.8123787564307907
+Original,3,contribuyendo,2.8123787564307907
+Original,3,crear,2.9459101490553135
+Original,3,cristiana,3.1000608288825715
+Original,3,criterios,2.8123787564307907
+Original,3,crítico,2.8123787564307907
+Original,3,cuenta,2.6945957207744073
+Original,3,cultura,3.1000608288825715
+Original,3,datos,1.6337237600891445
+Original,3,decisiones,2.252762968495368
+Original,3,desafíos,2.6945957207744073
+Original,3,desarrolla,2.589235205116581
+Original,3,desarrollar,1.9473813189441862
+Original,3,desarrollar proyectos,3.1000608288825715
+Original,3,desarrollar soluciones,3.1000608288825715
+Original,3,desarrollo,1.5596157879354227
+Original,3,desarrollo software,2.589235205116581
+Original,3,desarrollo sostenible,3.2823823856765264
+Original,3,desempeña,3.2823823856765264
+Original,3,desempeñarse,2.406913648322626
+Original,3,desempeño,2.6945957207744073
+Original,3,diferentes,3.505525936990736
+Original,3,digital,2.6945957207744073
+Original,3,digitales,2.589235205116581
+Original,3,dirección,3.505525936990736
+Original,3,director,3.793208009442517
+Original,3,disciplina,2.9459101490553135
+Original,3,disciplinar,3.1000608288825715
+Original,3,diseña,3.1000608288825715
+Original,3,diseñar,1.9473813189441862
+Original,3,diseñar desarrollar,2.9459101490553135
+Original,3,diseñar implementar,2.8123787564307907
+Original,3,diseño,2.3268709406490897
+Original,3,distintos,2.8123787564307907
+Original,3,diversas,3.2823823856765264
+Original,3,diversidad,2.9459101490553135
+Original,3,diversos,2.6945957207744073
+Original,3,docente,3.505525936990736
+Original,3,económico,3.2823823856765264
+Original,3,educación,3.505525936990736
+Original,3,educación superior,3.793208009442517
+Original,3,efectiva,2.6945957207744073
+Original,3,eficiencia,2.406913648322626
+Original,3,eficiente,3.1000608288825715
+Original,3,eficientes,2.9459101490553135
+Original,3,egresado,2.589235205116581
+Original,3,egresado ingeniería,3.2823823856765264
+Original,3,egreso,2.4939250253122562
+Original,3,ejecución,3.1000608288825715
+Original,3,ejercicio,3.1000608288825715
+Original,3,ello,3.2823823856765264
+Original,3,emergentes,2.6945957207744073
+Original,3,emprendedora,3.2823823856765264
+Original,3,emprendimiento,2.589235205116581
+Original,3,emprendimientos,3.1000608288825715
+Original,3,empresarial,3.1000608288825715
+Original,3,empresariales,3.793208009442517
+Original,3,empresas,2.6945957207744073
+Original,3,enfoque,2.8123787564307907
+Original,3,entorno,2.406913648322626
+Original,3,entornos,3.1000608288825715
+Original,3,equipos,1.6337237600891445
+Original,3,equipos multidisciplinarios,2.406913648322626
+Original,3,equipos trabajo,2.6945957207744073
+Original,3,especialidad,3.1000608288825715
+Original,3,especialización,3.505525936990736
+Original,3,estudiantes,3.505525936990736
+Original,3,estudios,3.1000608288825715
+Original,3,está,2.9459101490553135
+Original,3,está capacitado,3.1000608288825715
+Original,3,estándares,2.6945957207744073
+Original,3,evaluación,3.2823823856765264
+Original,3,evaluar,2.8123787564307907
+Original,3,evaluar gestionar,3.2823823856765264
+Original,3,evolución,2.9459101490553135
+Original,3,experiencia,3.505525936990736
+Original,3,fin,3.2823823856765264
+Original,3,forma,2.1192315758708453
+Original,3,formación,1.5245244681241528
+Original,3,formación ciencias,2.6945957207744073
+Original,3,formación integral,3.1000608288825715
+Original,3,formación permite,3.1000608288825715
+Original,3,formar,2.9459101490553135
+Original,3,generar,2.9459101490553135
+Original,3,generar soluciones,3.2823823856765264
+Original,3,genéricas,3.2823823856765264
+Original,3,gestiona,3.2823823856765264
+Original,3,gestionar,1.8960880245566356
+Original,3,gestionar desarrollar,3.2823823856765264
+Original,3,gestionar proyectos,2.589235205116581
+Original,3,gestión,1.756326082181477
+Original,3,gestión proyectos,2.8123787564307907
+Original,3,global,2.6945957207744073
+Original,3,global social,3.793208009442517
+Original,3,habilidades,2.1837700970084164
+Original,3,hardware,3.1000608288825715
+Original,3,herramientas,2.252762968495368
+Original,3,humana,3.2823823856765264
+Original,3,idioma,3.2823823856765264
+Original,3,idioma inglés,3.2823823856765264
+Original,3,impacto,2.9459101490553135
+Original,3,impacto acciones,3.793208009442517
+Original,3,implementa,3.2823823856765264
+Original,3,implementación,2.8123787564307907
+Original,3,implementar,2.1192315758708453
+Original,3,implementar operar,3.2823823856765264
+Original,3,independiente,3.2823823856765264
+Original,3,industria,2.6945957207744073
+Original,3,industrial,3.505525936990736
+Original,3,información,1.3953127366441465
+Original,3,información comunicaciones,2.8123787564307907
+Original,3,información comunicación,2.9459101490553135
+Original,3,informática,1.1782482314063187
+Original,3,informática universidad,2.0586069540544107
+Original,3,informáticas,2.1837700970084164
+Original,3,informático,2.8123787564307907
+Original,3,informáticos,1.756326082181477
+Original,3,infraestructura,3.2823823856765264
+Original,3,ingeniera,3.2823823856765264
+Original,3,ingeniero,1.4260843953109001
+Original,3,ingeniero civil,2.1837700970084164
+Original,3,ingeniero ejecución,3.2823823856765264
+Original,3,ingeniero informática,2.8123787564307907
+Original,3,ingenieros,3.2823823856765264
+Original,3,ingeniería,1.1782482314063187
+Original,3,ingeniería aplicada,3.2823823856765264
+Original,3,ingeniería ciencias,3.2823823856765264
+Original,3,ingeniería civil,2.252762968495368
+Original,3,ingeniería computación,3.2823823856765264
+Original,3,ingeniería informática,2.3268709406490897
+Original,3,ingeniería software,2.406913648322626
+Original,3,inglés,2.8123787564307907
+Original,3,innovación,1.8472978603872037
+Original,3,innovadoras,2.406913648322626
+Original,3,instituciones,2.9459101490553135
+Original,3,instituciones públicas,3.2823823856765264
+Original,3,integra,3.1000608288825715
+Original,3,integración,3.1000608288825715
+Original,3,integral,2.3268709406490897
+Original,3,integrar,2.8123787564307907
+Original,3,inteligencia,2.252762968495368
+Original,3,inteligencia artificial,2.4939250253122562
+Original,3,interdisciplinarios,2.9459101490553135
+Original,3,investigación,2.9459101490553135
+Original,3,jefe,3.1000608288825715
+Original,3,junto,2.9459101490553135
+Original,3,laboral,3.2823823856765264
+Original,3,lenguajes,2.9459101490553135
+Original,3,lenguajes programación,3.1000608288825715
+Original,3,liderar,2.589235205116581
+Original,3,liderar equipos,3.1000608288825715
+Original,3,liderazgo,2.406913648322626
+Original,3,manager,3.793208009442517
+Original,3,manera,2.252762968495368
+Original,3,mantención,3.1000608288825715
+Original,3,mediante,2.6945957207744073
+Original,3,medio,2.6945957207744073
+Original,3,medio ambiente,3.2823823856765264
+Original,3,mejora,2.4939250253122562
+Original,3,mejora continua,3.1000608288825715
+Original,3,metodologías,2.6945957207744073
+Original,3,modelos,3.505525936990736
+Original,3,multidisciplinarios,2.1837700970084164
+Original,3,mundo,2.589235205116581
+Original,3,mundo vida,3.505525936990736
+Original,3,nacional,3.2823823856765264
+Original,3,necesidades,2.252762968495368
+Original,3,negocio,3.1000608288825715
+Original,3,negocios,2.8123787564307907
+Original,3,nivel,2.4939250253122562
+Original,3,normas,3.1000608288825715
+Original,3,nuevas,2.9459101490553135
+Original,3,objetivos,3.2823823856765264
+Original,3,oportunidades,3.1000608288825715
+Original,3,organizacionales,2.589235205116581
+Original,3,organizaciones,1.756326082181477
+Original,3,organización,2.4939250253122562
+Original,3,país,3.1000608288825715
+Original,3,pensamiento,2.8123787564307907
+Original,3,pensamiento crítico,3.1000608288825715
+Original,3,perfil,2.0586069540544107
+Original,3,perfil egreso,2.589235205116581
+Original,3,perfil profesional,3.1000608288825715
+Original,3,permanente,2.589235205116581
+Original,3,permitan,2.8123787564307907
+Original,3,permite,1.8960880245566356
+Original,3,persona,2.9459101490553135
+Original,3,persona humana,3.2823823856765264
+Original,3,personas,2.406913648322626
+Original,3,plan,3.505525936990736
+Original,3,planificar,2.9459101490553135
+Original,3,plataformas,2.8123787564307907
+Original,3,posee,2.0586069540544107
+Original,3,principios,2.3268709406490897
+Original,3,principios éticos,3.2823823856765264
+Original,3,privadas,2.8123787564307907
+Original,3,problemas,1.756326082181477
+Original,3,problemas complejos,2.6945957207744073
+Original,3,problemáticas,3.1000608288825715
+Original,3,procesos,1.713766467762681
+Original,3,productos,2.4939250253122562
+Original,3,profesional,1.2282586519809802
+Original,3,profesional capaz,3.1000608288825715
+Original,3,profesional integral,3.1000608288825715
+Original,3,profesionales,2.3268709406490897
+Original,3,profesión,2.9459101490553135
+Original,3,programa,2.9459101490553135
+Original,3,programación,2.8123787564307907
+Original,3,promoción,3.2823823856765264
+Original,3,promueve,3.2823823856765264
+Original,3,propios,2.8123787564307907
+Original,3,proyectos,1.2809023854664021
+Original,3,proyectos informáticos,2.252762968495368
+Original,3,proyectos ingeniería,2.9459101490553135
+Original,3,proyectos tecnológicos,3.2823823856765264
+Original,3,prácticas,2.9459101490553135
+Original,3,puede,2.8123787564307907
+Original,3,puede desempeñarse,3.2823823856765264
+Original,3,públicas,2.8123787564307907
+Original,3,públicas privadas,2.8123787564307907
+Original,3,quehacer,2.9459101490553135
+Original,3,quehacer profesional,3.2823823856765264
+Original,3,reconoce,3.505525936990736
+Original,3,recursos,2.406913648322626
+Original,3,redes,2.4939250253122562
+Original,3,relacionados,2.9459101490553135
+Original,3,requerimientos,2.8123787564307907
+Original,3,resolver,1.8960880245566356
+Original,3,resolver problemas,2.1192315758708453
+Original,3,respeto,2.9459101490553135
+Original,3,responsabilidad,2.1192315758708453
+Original,3,responsabilidad social,2.3268709406490897
+Original,3,responsable,3.1000608288825715
+Original,3,resultados,3.505525936990736
+Original,3,riesgos,3.2823823856765264
+Original,3,rol,3.505525936990736
+Original,3,sector,3.2823823856765264
+Original,3,seguridad,2.1192315758708453
+Original,3,seguridad información,2.6945957207744073
+Original,3,según,2.589235205116581
+Original,3,sello,2.8123787564307907
+Original,3,sentido,2.589235205116581
+Original,3,servicios,2.252762968495368
+Original,3,siendo,3.1000608288825715
+Original,3,siendo capaz,3.1000608288825715
+Original,3,sistemas,1.5245244681241528
+Original,3,sistemas computacionales,2.9459101490553135
+Original,3,sistemas información,2.406913648322626
+Original,3,sistemas informáticos,2.8123787564307907
+Original,3,situaciones,3.1000608288825715
+Original,3,social,1.8007778447523106
+Original,3,sociales,2.8123787564307907
+Original,3,sociedad,2.589235205116581
+Original,3,software,1.3953127366441465
+Original,3,soluciones,1.4260843953109001
+Original,3,soluciones eficientes,3.505525936990736
+Original,3,soluciones informáticas,2.4939250253122562
+Original,3,soluciones software,3.1000608288825715
+Original,3,soluciones tecnológicas,2.4939250253122562
+Original,3,sostenible,2.589235205116581
+Original,3,sostenibles,3.2823823856765264
+Original,3,superior,3.2823823856765264
+Original,3,sólida,2.4939250253122562
+Original,3,sólida formación,2.589235205116581
+Original,3,tecnología,2.6945957207744073
+Original,3,tecnologías,1.2809023854664021
+Original,3,tecnologías información,1.6337237600891445
+Original,3,tecnológica,2.1837700970084164
+Original,3,tecnológicas,2.252762968495368
+Original,3,tecnológico,2.4939250253122562
+Original,3,tecnológicos,2.1192315758708453
+Original,3,telecomunicaciones,3.2823823856765264
+Original,3,tic,2.9459101490553135
+Original,3,titulado,3.1000608288825715
+Original,3,toma,2.4939250253122562
+Original,3,toma decisiones,2.4939250253122562
+Original,3,trabajar,2.8123787564307907
+Original,3,trabajo,1.8007778447523106
+Original,3,trabajo equipo,3.2823823856765264
+Original,3,transformación,2.406913648322626
+Original,3,transformación digital,2.6945957207744073
+Original,3,través,2.1837700970084164
+Original,3,trayectoria,3.2823823856765264
+Original,3,técnicas,3.1000608288825715
+Original,3,técnico,3.1000608288825715
+Original,3,técnicos,3.1000608288825715
+Original,3,título,3.505525936990736
+Original,3,universidad,1.4260843953109001
+Original,3,universidad católica,2.6945957207744073
+Original,3,universitario,3.505525936990736
+Original,3,uso,2.4939250253122562
+Original,3,utilizando,3.1000608288825715
+Original,3,valor,2.6945957207744073
+Original,3,valores,3.2823823856765264
+Original,3,vanguardia,3.505525936990736
+Original,3,vida,2.589235205116581
+Original,3,vida según,3.2823823856765264
+Original,3,visión,2.3268709406490897
+Original,3,visión cristiana,3.2823823856765264
+Original,3,ámbito,2.4939250253122562
+Original,3,ámbitos,2.8123787564307907
+Original,3,área,2.8123787564307907
+Original,3,áreas,2.3268709406490897
+Original,3,énfasis,3.505525936990736
+Original,3,ética,2.406913648322626
+Original,3,ético,2.589235205116581
+Original,3,éticos,2.589235205116581
+Original,4,000,3.505525936990736
+Original,4,10,3.1000608288825715
+Original,4,2026,3.505525936990736
+Original,4,acciones,3.2823823856765264
+Original,4,acreditación,3.793208009442517
+Original,4,actualización,2.9459101490553135
+Original,4,acuerdo,2.9459101490553135
+Original,4,adaptarse,3.1000608288825715
+Original,4,además,2.1837700970084164
+Original,4,admisión,3.505525936990736
+Original,4,ambiental,2.9459101490553135
+Original,4,analista,3.2823823856765264
+Original,4,analizar,2.8123787564307907
+Original,4,analítica,2.9459101490553135
+Original,4,análisis,2.8123787564307907
+Original,4,análisis datos,3.2823823856765264
+Original,4,aplica,3.1000608288825715
+Original,4,aplicaciones,3.2823823856765264
+Original,4,aplicación,2.6945957207744073
+Original,4,aplicada,2.9459101490553135
+Original,4,aplicando,2.589235205116581
+Original,4,aplicando conocimientos,3.2823823856765264
+Original,4,aplicar,2.8123787564307907
+Original,4,apoyar,3.1000608288825715
+Original,4,aprendizaje,2.406913648322626
+Original,4,arancel,3.793208009442517
+Original,4,artificial,2.589235205116581
+Original,4,asimismo,2.9459101490553135
+Original,4,asociados,3.1000608288825715
+Original,4,así,2.589235205116581
+Original,4,autónoma,2.9459101490553135
+Original,4,año,3.2823823856765264
+Original,4,años,3.793208009442517
+Original,4,basadas,3.2823823856765264
+Original,4,base,2.9459101490553135
+Original,4,bases,2.6945957207744073
+Original,4,bases datos,2.8123787564307907
+Original,4,bien,2.8123787564307907
+Original,4,bien común,2.9459101490553135
+Original,4,buenas,3.1000608288825715
+Original,4,buenas prácticas,3.1000608288825715
+Original,4,básicas,2.3268709406490897
+Original,4,básicas ciencias,3.1000608288825715
+Original,4,básicas ingeniería,3.1000608288825715
+Original,4,calidad,2.252762968495368
+Original,4,calidad seguridad,3.1000608288825715
+Original,4,cambio,3.2823823856765264
+Original,4,campo,3.1000608288825715
+Original,4,campus,3.505525936990736
+Original,4,capaces,2.589235205116581
+Original,4,capacidad,1.8472978603872037
+Original,4,capacidad trabajar,2.9459101490553135
+Original,4,capacidades,2.9459101490553135
+Original,4,capacitado,3.1000608288825715
+Original,4,capaz,2.001448540214462
+Original,4,capaz concebir,3.505525936990736
+Original,4,carrera,1.9473813189441862
+Original,4,carrera ingeniería,2.6945957207744073
+Original,4,carreras,3.505525936990736
+Original,4,católica,2.6945957207744073
+Original,4,ciberseguridad,3.505525936990736
+Original,4,ciclo,3.2823823856765264
+Original,4,ciclo vida,3.505525936990736
+Original,4,ciencia,2.6945957207744073
+Original,4,ciencia datos,3.1000608288825715
+Original,4,ciencias,1.713766467762681
+Original,4,ciencias básicas,2.3268709406490897
+Original,4,ciencias ingeniería,2.406913648322626
+Original,4,civil,1.756326082181477
+Original,4,civil computación,2.9459101490553135
+Original,4,civil informática,2.252762968495368
+Original,4,civil informático,2.9459101490553135
+Original,4,competencias,2.0586069540544107
+Original,4,complejos,2.589235205116581
+Original,4,comprometido,2.8123787564307907
+Original,4,compromiso,2.3268709406490897
+Original,4,compromiso ético,3.1000608288825715
+Original,4,computacionales,2.9459101490553135
+Original,4,computación,2.1192315758708453
+Original,4,computación informática,2.6945957207744073
+Original,4,computadores,3.505525936990736
+Original,4,comunicaciones,2.8123787564307907
+Original,4,comunicación,2.001448540214462
+Original,4,comunicación efectiva,2.8123787564307907
+Original,4,comunicarse,2.8123787564307907
+Original,4,común,2.6945957207744073
+Original,4,concebir,3.2823823856765264
+Original,4,concebir diseñar,3.2823823856765264
+Original,4,concepción,3.2823823856765264
+Original,4,conocimiento,2.9459101490553135
+Original,4,conocimientos,1.756326082181477
+Original,4,considerando,2.6945957207744073
+Original,4,constante,3.1000608288825715
+Original,4,consultor,3.1000608288825715
+Original,4,contexto,2.406913648322626
+Original,4,contextos,2.3268709406490897
+Original,4,continua,2.589235205116581
+Original,4,contribuir,3.1000608288825715
+Original,4,contribuyendo,2.9459101490553135
+Original,4,cristiana,3.1000608288825715
+Original,4,criterios,3.2823823856765264
+Original,4,crítico,2.6945957207744073
+Original,4,cualquier,3.1000608288825715
+Original,4,datos,1.5959834321062976
+Original,4,decisiones,2.252762968495368
+Original,4,desafíos,2.9459101490553135
+Original,4,desarrolla,2.589235205116581
+Original,4,desarrollar,2.001448540214462
+Original,4,desarrollar soluciones,2.9459101490553135
+Original,4,desarrollo,1.5245244681241528
+Original,4,desarrollo software,2.6945957207744073
+Original,4,desempeña,3.2823823856765264
+Original,4,desempeñarse,2.3268709406490897
+Original,4,desempeño,2.8123787564307907
+Original,4,desenvolverse,2.9459101490553135
+Original,4,diferentes,3.1000608288825715
+Original,4,digital,2.589235205116581
+Original,4,digitales,2.589235205116581
+Original,4,director,3.793208009442517
+Original,4,disciplina,2.8123787564307907
+Original,4,disciplinar,3.2823823856765264
+Original,4,diseña,2.9459101490553135
+Original,4,diseñar,2.0586069540544107
+Original,4,diseñar implementar,2.589235205116581
+Original,4,diseño,2.3268709406490897
+Original,4,distintas,2.8123787564307907
+Original,4,diversa,3.1000608288825715
+Original,4,diversa índole,3.2823823856765264
+Original,4,diversas,3.1000608288825715
+Original,4,diversidad,3.1000608288825715
+Original,4,diversos,2.589235205116581
+Original,4,económico,3.2823823856765264
+Original,4,educación,3.793208009442517
+Original,4,efectiva,2.406913648322626
+Original,4,efectivamente,3.1000608288825715
+Original,4,eficiencia,2.4939250253122562
+Original,4,egresado,2.1837700970084164
+Original,4,egresado ingeniería,3.1000608288825715
+Original,4,egreso,2.406913648322626
+Original,4,egreso ingeniero,3.1000608288825715
+Original,4,ejecución,3.1000608288825715
+Original,4,ello,3.2823823856765264
+Original,4,emergentes,2.9459101490553135
+Original,4,emprendimiento,2.8123787564307907
+Original,4,emprendimientos,2.9459101490553135
+Original,4,empresarial,3.505525936990736
+Original,4,empresariales,3.793208009442517
+Original,4,empresas,2.9459101490553135
+Original,4,entorno,2.6945957207744073
+Original,4,equipo,2.9459101490553135
+Original,4,equipos,1.5959834321062976
+Original,4,equipos multidisciplinarios,2.3268709406490897
+Original,4,equipos trabajo,2.406913648322626
+Original,4,especialidad,3.1000608288825715
+Original,4,especialización,3.2823823856765264
+Original,4,estrategias,3.2823823856765264
+Original,4,está,3.2823823856765264
+Original,4,estándares,2.4939250253122562
+Original,4,estándares calidad,3.505525936990736
+Original,4,evaluación,2.6945957207744073
+Original,4,evaluar,2.4939250253122562
+Original,4,evaluar gestionar,3.1000608288825715
+Original,4,evolución,2.8123787564307907
+Original,4,experiencia,3.793208009442517
+Original,4,fin,3.505525936990736
+Original,4,forma,1.9473813189441862
+Original,4,formación,1.5959834321062976
+Original,4,formación ciencias,2.9459101490553135
+Original,4,formación permite,2.9459101490553135
+Original,4,función,3.505525936990736
+Original,4,generación,3.1000608288825715
+Original,4,generando,3.1000608288825715
+Original,4,generar,2.6945957207744073
+Original,4,generar soluciones,3.1000608288825715
+Original,4,gestiona,3.2823823856765264
+Original,4,gestionar,2.001448540214462
+Original,4,gestionar proyectos,2.589235205116581
+Original,4,gestión,1.9473813189441862
+Original,4,gestión información,3.505525936990736
+Original,4,gestión proyectos,2.6945957207744073
+Original,4,global,2.8123787564307907
+Original,4,habilidades,2.406913648322626
+Original,4,hardware,2.6945957207744073
+Original,4,herramientas,2.252762968495368
+Original,4,humana,3.2823823856765264
+Original,4,identificar,3.1000608288825715
+Original,4,idioma,3.1000608288825715
+Original,4,idioma inglés,3.1000608288825715
+Original,4,impacto,3.1000608288825715
+Original,4,implementa,3.1000608288825715
+Original,4,implementación,2.589235205116581
+Original,4,implementar,2.1192315758708453
+Original,4,implementar soluciones,3.1000608288825715
+Original,4,industria,2.589235205116581
+Original,4,información,1.3083013596545165
+Original,4,información comunicaciones,2.9459101490553135
+Original,4,información comunicación,2.9459101490553135
+Original,4,informática,1.1541506798272583
+Original,4,informática universidad,2.0586069540544107
+Original,4,informáticas,2.3268709406490897
+Original,4,informático,2.589235205116581
+Original,4,informático universidad,3.1000608288825715
+Original,4,informáticos,1.5596157879354227
+Original,4,ingeniera,3.2823823856765264
+Original,4,ingeniero,1.4578330936254802
+Original,4,ingeniero civil,2.1837700970084164
+Original,4,ingeniero ejecución,3.2823823856765264
+Original,4,ingeniero informática,2.8123787564307907
+Original,4,ingeniería,1.2029408439966904
+Original,4,ingeniería civil,2.406913648322626
+Original,4,ingeniería informática,2.001448540214462
+Original,4,ingeniería software,2.3268709406490897
+Original,4,inglés,2.8123787564307907
+Original,4,innovación,1.756326082181477
+Original,4,innovación emprendimiento,3.1000608288825715
+Original,4,innovador,3.505525936990736
+Original,4,innovadoras,2.406913648322626
+Original,4,instituciones,2.9459101490553135
+Original,4,instituciones públicas,3.1000608288825715
+Original,4,instituto,3.1000608288825715
+Original,4,integración,2.9459101490553135
+Original,4,integral,2.589235205116581
+Original,4,integrales,3.2823823856765264
+Original,4,inteligencia,2.3268709406490897
+Original,4,inteligencia artificial,2.589235205116581
+Original,4,interdisciplinarios,3.1000608288825715
+Original,4,internacionales,3.505525936990736
+Original,4,investigación,2.8123787564307907
+Original,4,jefe,3.2823823856765264
+Original,4,junto,3.2823823856765264
+Original,4,laboral,3.2823823856765264
+Original,4,legal,3.505525936990736
+Original,4,legal vigente,3.505525936990736
+Original,4,lenguajes,2.9459101490553135
+Original,4,lenguajes programación,3.1000608288825715
+Original,4,liderando,3.505525936990736
+Original,4,liderar,2.3268709406490897
+Original,4,liderar equipos,2.589235205116581
+Original,4,liderazgo,2.6945957207744073
+Original,4,manager,3.793208009442517
+Original,4,manejo,3.2823823856765264
+Original,4,manera,2.6945957207744073
+Original,4,mantención,3.1000608288825715
+Original,4,marco,3.1000608288825715
+Original,4,marcos,3.793208009442517
+Original,4,mediante,2.9459101490553135
+Original,4,medio,2.589235205116581
+Original,4,mejora,2.4939250253122562
+Original,4,mejora continua,3.1000608288825715
+Original,4,metodologías,2.4939250253122562
+Original,4,modelos,3.2823823856765264
+Original,4,multidisciplinarios,1.9473813189441862
+Original,4,mundo,2.6945957207744073
+Original,4,nacional,3.1000608288825715
+Original,4,necesidades,2.1837700970084164
+Original,4,negocios,2.6945957207744073
+Original,4,nivel,2.406913648322626
+Original,4,normativa,3.2823823856765264
+Original,4,normativa legal,3.505525936990736
+Original,4,nuevas,2.9459101490553135
+Original,4,objetivos,2.9459101490553135
+Original,4,organizacionales,2.589235205116581
+Original,4,organizaciones,1.756326082181477
+Original,4,organización,2.252762968495368
+Original,4,partir,2.9459101490553135
+Original,4,país,2.8123787564307907
+Original,4,pensamiento,2.8123787564307907
+Original,4,pensamiento crítico,2.9459101490553135
+Original,4,perfil,2.1192315758708453
+Original,4,perfil egreso,2.406913648322626
+Original,4,permanente,2.589235205116581
+Original,4,permitan,2.8123787564307907
+Original,4,permite,2.0586069540544107
+Original,4,persona,2.8123787564307907
+Original,4,personas,2.4939250253122562
+Original,4,plan,3.1000608288825715
+Original,4,planificar,3.1000608288825715
+Original,4,plataformas,2.9459101490553135
+Original,4,podrá,3.505525936990736
+Original,4,posee,2.252762968495368
+Original,4,presencial,3.2823823856765264
+Original,4,principios,2.252762968495368
+Original,4,principios éticos,3.2823823856765264
+Original,4,privadas,2.9459101490553135
+Original,4,privado,3.1000608288825715
+Original,4,problemas,1.8472978603872037
+Original,4,problemas complejos,2.9459101490553135
+Original,4,problemáticas,2.9459101490553135
+Original,4,procesos,1.8472978603872037
+Original,4,productivo,3.793208009442517
+Original,4,profesional,1.1782482314063187
+Original,4,profesional capaz,3.1000608288825715
+Original,4,profesionales,2.252762968495368
+Original,4,profesionales capaces,3.2823823856765264
+Original,4,profesión,3.1000608288825715
+Original,4,programa,2.6945957207744073
+Original,4,programación,2.6945957207744073
+Original,4,promoción,3.2823823856765264
+Original,4,promoción bien,3.2823823856765264
+Original,4,propios,3.1000608288825715
+Original,4,proyectos,1.336472236621213
+Original,4,proyectos informáticos,2.1837700970084164
+Original,4,proyectos tecnologías,3.2823823856765264
+Original,4,proyectos tecnológicos,2.8123787564307907
+Original,4,prácticas,2.9459101490553135
+Original,4,prácticas industria,3.505525936990736
+Original,4,públicas,2.9459101490553135
+Original,4,públicas privadas,2.9459101490553135
+Original,4,público,3.2823823856765264
+Original,4,quehacer,3.2823823856765264
+Original,4,quehacer profesional,3.2823823856765264
+Original,4,recursos,2.4939250253122562
+Original,4,redes,2.6945957207744073
+Original,4,región,3.505525936990736
+Original,4,relacionados,3.1000608288825715
+Original,4,requerimientos,2.9459101490553135
+Original,4,resolución,3.2823823856765264
+Original,4,resolver,2.0586069540544107
+Original,4,resolver problemas,2.3268709406490897
+Original,4,respetando,3.1000608288825715
+Original,4,respeto,3.1000608288825715
+Original,4,responsabilidad,2.252762968495368
+Original,4,responsabilidad social,2.406913648322626
+Original,4,responsable,3.1000608288825715
+Original,4,resultados,3.505525936990736
+Original,4,rol,3.505525936990736
+Original,4,sector,3.1000608288825715
+Original,4,sector público,3.2823823856765264
+Original,4,sede,3.505525936990736
+Original,4,seguridad,2.1192315758708453
+Original,4,seguridad información,3.1000608288825715
+Original,4,según,2.6945957207744073
+Original,4,sello,2.589235205116581
+Original,4,semestres,3.2823823856765264
+Original,4,sentido,3.1000608288825715
+Original,4,servicios,2.3268709406490897
+Original,4,siendo,2.9459101490553135
+Original,4,siendo capaz,3.1000608288825715
+Original,4,sistemas,1.4578330936254802
+Original,4,sistemas computacionales,3.2823823856765264
+Original,4,sistemas información,2.589235205116581
+Original,4,sistemas informáticos,2.4939250253122562
+Original,4,sistemas redes,3.1000608288825715
+Original,4,social,1.8472978603872037
+Original,4,sociales,3.2823823856765264
+Original,4,sociedad,2.4939250253122562
+Original,4,software,1.4578330936254802
+Original,4,software hardware,3.1000608288825715
+Original,4,soluciones,1.3654597734944653
+Original,4,soluciones informáticas,2.589235205116581
+Original,4,soluciones innovadoras,3.2823823856765264
+Original,4,soluciones tecnológicas,2.589235205116581
+Original,4,sostenible,3.1000608288825715
+Original,4,superior,3.2823823856765264
+Original,4,sólida,2.589235205116581
+Original,4,sólida formación,2.589235205116581
+Original,4,sólidos,3.1000608288825715
+Original,4,tecnología,2.8123787564307907
+Original,4,tecnologías,1.2809023854664021
+Original,4,tecnologías información,1.5596157879354227
+Original,4,tecnológica,2.406913648322626
+Original,4,tecnológicas,2.252762968495368
+Original,4,tecnológico,2.9459101490553135
+Original,4,tecnológicos,2.1837700970084164
+Original,4,telecomunicaciones,3.1000608288825715
+Original,4,tic,2.9459101490553135
+Original,4,toma,2.406913648322626
+Original,4,toma decisiones,2.406913648322626
+Original,4,trabajar,2.6945957207744073
+Original,4,trabajo,1.672944473242426
+Original,4,transformación,2.3268709406490897
+Original,4,transformación digital,2.589235205116581
+Original,4,través,2.1192315758708453
+Original,4,trayectoria,3.2823823856765264
+Original,4,técnicas,3.1000608288825715
+Original,4,técnico,3.1000608288825715
+Original,4,técnicos,3.2823823856765264
+Original,4,título,3.1000608288825715
+Original,4,título profesional,3.2823823856765264
+Original,4,universidad,1.4578330936254802
+Original,4,universidad católica,2.6945957207744073
+Original,4,universitario,3.505525936990736
+Original,4,uso,2.6945957207744073
+Original,4,utilizando,2.9459101490553135
+Original,4,utilizando herramientas,3.505525936990736
+Original,4,valor,2.589235205116581
+Original,4,vida,2.8123787564307907
+Original,4,vida según,3.2823823856765264
+Original,4,vigente,3.1000608288825715
+Original,4,visión,2.4939250253122562
+Original,4,visión cristiana,3.2823823856765264
+Original,4,ámbito,2.589235205116581
+Original,4,ámbitos,2.8123787564307907
+Original,4,área,2.6945957207744073
+Original,4,áreas,2.4939250253122562
+Original,4,énfasis,3.2823823856765264
+Original,4,ética,2.1837700970084164
+Original,4,ético,2.4939250253122562
+Original,4,éticos,2.9459101490553135
+Original,4,índole,3.2823823856765264
+Enmascarado,1,000,3.751535313041949
+Enmascarado,1,10,2.904237452654745
+Enmascarado,1,2026,3.463853240590168
+Enmascarado,1,25,3.751535313041949
+Enmascarado,1,académico,3.2407096892759584
+Enmascarado,1,acciones,3.2407096892759584
+Enmascarado,1,acreditación,3.751535313041949
+Enmascarado,1,actitud,3.0583881324820035
+Enmascarado,1,actualización,3.0583881324820035
+Enmascarado,1,adaptarse,2.904237452654745
+Enmascarado,1,además,2.0169342576538423
+Enmascarado,1,administración,3.0583881324820035
+Enmascarado,1,administrar,3.0583881324820035
+Enmascarado,1,admisión,3.463853240590168
+Enmascarado,1,alto,3.0583881324820035
+Enmascarado,1,ambiental,2.904237452654745
+Enmascarado,1,ambiente,3.0583881324820035
+Enmascarado,1,amplio,3.2407096892759584
+Enmascarado,1,analizar,2.547562508716013
+Enmascarado,1,analítica,3.2407096892759584
+Enmascarado,1,anual,3.751535313041949
+Enmascarado,1,análisis,2.6529230243738393
+Enmascarado,1,análisis datos,3.0583881324820035
+Enmascarado,1,aplica,3.2407096892759584
+Enmascarado,1,aplicaciones,2.904237452654745
+Enmascarado,1,aplicación,2.6529230243738393
+Enmascarado,1,aplicada,2.7707060600302227
+Enmascarado,1,aplicando,2.7707060600302227
+Enmascarado,1,aplicar,2.3652409519220585
+Enmascarado,1,apoyar,3.463853240590168
+Enmascarado,1,aprendizaje,2.2110902720948
+Enmascarado,1,arancel,3.751535313041949
+Enmascarado,1,arancel anual,3.751535313041949
+Enmascarado,1,aranceles,3.751535313041949
+Enmascarado,1,artificial,2.285198244248522
+Enmascarado,1,as,3.463853240590168
+Enmascarado,1,asimismo,3.0583881324820035
+Enmascarado,1,asociados,3.0583881324820035
+Enmascarado,1,así,2.3652409519220585
+Enmascarado,1,autoaprendizaje,3.2407096892759584
+Enmascarado,1,año,3.0583881324820035
+Enmascarado,1,años,3.751535313041949
+Enmascarado,1,basadas,3.463853240590168
+Enmascarado,1,base,2.547562508716013
+Enmascarado,1,bases,2.904237452654745
+Enmascarado,1,bases datos,3.0583881324820035
+Enmascarado,1,bien,2.904237452654745
+Enmascarado,1,bien común,3.0583881324820035
+Enmascarado,1,buenas,3.463853240590168
+Enmascarado,1,buenas prácticas,3.463853240590168
+Enmascarado,1,básicas,2.0775588794702773
+Enmascarado,1,básicas ciencias,2.7707060600302227
+Enmascarado,1,básicas ingeniería,3.0583881324820035
+Enmascarado,1,calidad,2.0169342576538423
+Enmascarado,1,calidad seguridad,3.463853240590168
+Enmascarado,1,campo,2.904237452654745
+Enmascarado,1,campus,3.463853240590168
+Enmascarado,1,capaces,2.547562508716013
+Enmascarado,1,capacidad,1.714653385780909
+Enmascarado,1,capacidad trabajar,3.0583881324820035
+Enmascarado,1,capacidades,2.904237452654745
+Enmascarado,1,capacitado,2.7707060600302227
+Enmascarado,1,capaz,2.0169342576538423
+Enmascarado,1,capaz concebir,3.463853240590168
+Enmascarado,1,carrera,1.672093771362113
+Enmascarado,1,carrera universidad,2.7707060600302227
+Enmascarado,1,carreras,3.463853240590168
+Enmascarado,1,católica,2.904237452654745
+Enmascarado,1,ciberseguridad,3.2407096892759584
+Enmascarado,1,ciencia,2.6529230243738393
+Enmascarado,1,ciencia datos,3.0583881324820035
+Enmascarado,1,ciencias,1.672093771362113
+Enmascarado,1,ciencias básicas,2.0775588794702773
+Enmascarado,1,ciencias ingeniería,2.4522523289116878
+Enmascarado,1,competencias,1.9057086225436182
+Enmascarado,1,competencias genéricas,3.0583881324820035
+Enmascarado,1,complejos,2.4522523289116878
+Enmascarado,1,compromiso,2.285198244248522
+Enmascarado,1,compromiso ético,3.2407096892759584
+Enmascarado,1,computacionales,2.547562508716013
+Enmascarado,1,computación,2.0169342576538423
+Enmascarado,1,computación universidad,2.7707060600302227
+Enmascarado,1,comunicaciones,2.547562508716013
+Enmascarado,1,comunicación,1.8056251639866356
+Enmascarado,1,comunicación efectiva,2.6529230243738393
+Enmascarado,1,comunicarse,2.904237452654745
+Enmascarado,1,común,2.7707060600302227
+Enmascarado,1,concebir,3.0583881324820035
+Enmascarado,1,concebir diseñar,3.2407096892759584
+Enmascarado,1,conocimiento,2.7707060600302227
+Enmascarado,1,conocimientos,1.6312717768418579
+Enmascarado,1,considerando,2.4522523289116878
+Enmascarado,1,constante,2.904237452654745
+Enmascarado,1,construir,3.0583881324820035
+Enmascarado,1,consultor,3.0583881324820035
+Enmascarado,1,contexto,2.285198244248522
+Enmascarado,1,contexto global,3.463853240590168
+Enmascarado,1,contextos,2.3652409519220585
+Enmascarado,1,continua,3.0583881324820035
+Enmascarado,1,continuo,3.0583881324820035
+Enmascarado,1,contribuir,3.0583881324820035
+Enmascarado,1,contribuyendo,3.0583881324820035
+Enmascarado,1,creación,3.2407096892759584
+Enmascarado,1,crear,3.0583881324820035
+Enmascarado,1,cristiana,3.463853240590168
+Enmascarado,1,criterios,2.904237452654745
+Enmascarado,1,crítico,2.7707060600302227
+Enmascarado,1,cuenta,2.7707060600302227
+Enmascarado,1,curricular,3.463853240590168
+Enmascarado,1,datos,1.672093771362113
+Enmascarado,1,decisiones,2.285198244248522
+Enmascarado,1,desafíos,2.6529230243738393
+Enmascarado,1,desarrolla,2.904237452654745
+Enmascarado,1,desarrollar,1.959775843813894
+Enmascarado,1,desarrollar soluciones,3.0583881324820035
+Enmascarado,1,desarrollo,1.5543107357057295
+Enmascarado,1,desarrollo sostenible,3.0583881324820035
+Enmascarado,1,desempeñarse,2.3652409519220585
+Enmascarado,1,desempeño,2.6529230243738393
+Enmascarado,1,diferentes,3.2407096892759584
+Enmascarado,1,digital,2.904237452654745
+Enmascarado,1,digitales,2.7707060600302227
+Enmascarado,1,dirección,3.463853240590168
+Enmascarado,1,disciplina,2.6529230243738393
+Enmascarado,1,disciplinar,3.2407096892759584
+Enmascarado,1,diseñar,1.9057086225436182
+Enmascarado,1,diseñar desarrollar,3.0583881324820035
+Enmascarado,1,diseñar implementar,2.4522523289116878
+Enmascarado,1,diseño,2.3652409519220585
+Enmascarado,1,distintas,2.904237452654745
+Enmascarado,1,distintos,2.904237452654745
+Enmascarado,1,diversa,3.2407096892759584
+Enmascarado,1,diversas,2.904237452654745
+Enmascarado,1,diversidad,2.904237452654745
+Enmascarado,1,diversos,2.7707060600302227
+Enmascarado,1,docente,3.463853240590168
+Enmascarado,1,duración,3.0583881324820035
+Enmascarado,1,económico,3.0583881324820035
+Enmascarado,1,educación,3.2407096892759584
+Enmascarado,1,educación superior,3.751535313041949
+Enmascarado,1,efectiva,2.3652409519220585
+Enmascarado,1,eficiencia,2.547562508716013
+Enmascarado,1,eficiente,3.0583881324820035
+Enmascarado,1,eficientes,3.0583881324820035
+Enmascarado,1,egresado,2.547562508716013
+Enmascarado,1,egreso,2.285198244248522
+Enmascarado,1,ejercicio,2.904237452654745
+Enmascarado,1,ello,3.0583881324820035
+Enmascarado,1,emergentes,3.0583881324820035
+Enmascarado,1,emprender,3.0583881324820035
+Enmascarado,1,emprendimiento,2.6529230243738393
+Enmascarado,1,empresarial,3.463853240590168
+Enmascarado,1,empresariales,3.751535313041949
+Enmascarado,1,empresas,2.4522523289116878
+Enmascarado,1,enfoque,2.7707060600302227
+Enmascarado,1,entorno,2.547562508716013
+Enmascarado,1,equipo,2.6529230243738393
+Enmascarado,1,equipos,1.672093771362113
+Enmascarado,1,equipos multidisciplinarios,2.547562508716013
+Enmascarado,1,equipos trabajo,2.3652409519220585
+Enmascarado,1,especialidad,2.904237452654745
+Enmascarado,1,especialización,3.463853240590168
+Enmascarado,1,estrategias,3.0583881324820035
+Enmascarado,1,estudiantes,3.463853240590168
+Enmascarado,1,estudios,2.904237452654745
+Enmascarado,1,está,3.2407096892759584
+Enmascarado,1,estándares,2.6529230243738393
+Enmascarado,1,estándares calidad,3.463853240590168
+Enmascarado,1,evaluación,3.0583881324820035
+Enmascarado,1,evaluar,2.6529230243738393
+Enmascarado,1,evaluar gestionar,3.463853240590168
+Enmascarado,1,evolución,2.7707060600302227
+Enmascarado,1,experiencia,3.463853240590168
+Enmascarado,1,extraer,3.2407096892759584
+Enmascarado,1,fin,2.904237452654745
+Enmascarado,1,forma,1.959775843813894
+Enmascarado,1,formación,1.672093771362113
+Enmascarado,1,formación ciencias,2.904237452654745
+Enmascarado,1,formar,2.904237452654745
+Enmascarado,1,formativo,3.2407096892759584
+Enmascarado,1,generación,3.0583881324820035
+Enmascarado,1,generar,2.904237452654745
+Enmascarado,1,genéricas,3.0583881324820035
+Enmascarado,1,gestiona,3.463853240590168
+Enmascarado,1,gestionar,2.0169342576538423
+Enmascarado,1,gestionar proyectos,3.0583881324820035
+Enmascarado,1,gestión,1.672093771362113
+Enmascarado,1,gestión información,3.463853240590168
+Enmascarado,1,gestión proyectos,2.547562508716013
+Enmascarado,1,global,2.904237452654745
+Enmascarado,1,habilidades,2.2110902720948
+Enmascarado,1,hardware,2.7707060600302227
+Enmascarado,1,herramientas,2.142097400607849
+Enmascarado,1,herramientas tecnológicas,3.2407096892759584
+Enmascarado,1,identificar,2.904237452654745
+Enmascarado,1,idioma,2.7707060600302227
+Enmascarado,1,idioma inglés,2.7707060600302227
+Enmascarado,1,impacto,2.904237452654745
+Enmascarado,1,implementa,3.463853240590168
+Enmascarado,1,implementación,2.547562508716013
+Enmascarado,1,implementar,1.959775843813894
+Enmascarado,1,implementar operar,3.0583881324820035
+Enmascarado,1,implementar soluciones,2.904237452654745
+Enmascarado,1,industria,2.7707060600302227
+Enmascarado,1,información,1.2666286632539485
+Enmascarado,1,información comunicaciones,2.7707060600302227
+Enmascarado,1,información comunicación,2.6529230243738393
+Enmascarado,1,ingeniero,1.714653385780909
+Enmascarado,1,ingeniero computación,2.4522523289116878
+Enmascarado,1,ingeniero universidad,3.2407096892759584
+Enmascarado,1,ingenieros,3.0583881324820035
+Enmascarado,1,ingeniería,1.4161603972249124
+Enmascarado,1,ingeniería software,2.285198244248522
+Enmascarado,1,inglés,2.547562508716013
+Enmascarado,1,innovación,1.8056251639866356
+Enmascarado,1,innovación tecnológica,3.0583881324820035
+Enmascarado,1,innovador,3.463853240590168
+Enmascarado,1,innovadoras,2.547562508716013
+Enmascarado,1,instituciones,3.2407096892759584
+Enmascarado,1,instituto,3.2407096892759584
+Enmascarado,1,instituto profesional,3.2407096892759584
+Enmascarado,1,integración,2.904237452654745
+Enmascarado,1,integral,2.285198244248522
+Enmascarado,1,integrar,2.547562508716013
+Enmascarado,1,inteligencia,2.2110902720948
+Enmascarado,1,inteligencia artificial,2.285198244248522
+Enmascarado,1,interdisciplinarios,2.904237452654745
+Enmascarado,1,internacionales,3.463853240590168
+Enmascarado,1,investigación,2.904237452654745
+Enmascarado,1,jefe,2.904237452654745
+Enmascarado,1,junto,2.904237452654745
+Enmascarado,1,laboral,3.0583881324820035
+Enmascarado,1,legal,3.463853240590168
+Enmascarado,1,legal vigente,3.463853240590168
+Enmascarado,1,lidera,3.463853240590168
+Enmascarado,1,liderando,3.463853240590168
+Enmascarado,1,liderar,2.7707060600302227
+Enmascarado,1,liderar equipos,2.904237452654745
+Enmascarado,1,liderazgo,2.285198244248522
+Enmascarado,1,malla,3.2407096892759584
+Enmascarado,1,manejo,3.0583881324820035
+Enmascarado,1,manera,2.2110902720948
+Enmascarado,1,mantención,3.2407096892759584
+Enmascarado,1,mediante,2.6529230243738393
+Enmascarado,1,medio,2.7707060600302227
+Enmascarado,1,medio ambiente,3.0583881324820035
+Enmascarado,1,mejora,3.0583881324820035
+Enmascarado,1,metodologías,2.7707060600302227
+Enmascarado,1,modelos,3.0583881324820035
+Enmascarado,1,multidisciplinarios,2.0775588794702773
+Enmascarado,1,mundo,2.4522523289116878
+Enmascarado,1,nacional,2.904237452654745
+Enmascarado,1,necesidades,2.0775588794702773
+Enmascarado,1,negocio,3.0583881324820035
+Enmascarado,1,negocios,2.6529230243738393
+Enmascarado,1,nivel,2.7707060600302227
+Enmascarado,1,normativa,3.2407096892759584
+Enmascarado,1,normativa legal,3.463853240590168
+Enmascarado,1,nuevas,2.904237452654745
+Enmascarado,1,nuevos,3.0583881324820035
+Enmascarado,1,objetivos,3.0583881324820035
+Enmascarado,1,operación,3.0583881324820035
+Enmascarado,1,operar,2.904237452654745
+Enmascarado,1,oportunidades,2.904237452654745
+Enmascarado,1,organizacional,3.2407096892759584
+Enmascarado,1,organizacionales,2.6529230243738393
+Enmascarado,1,organizaciones,1.8544153281560676
+Enmascarado,1,organización,2.3652409519220585
+Enmascarado,1,partir,3.2407096892759584
+Enmascarado,1,país,2.7707060600302227
+Enmascarado,1,pensamiento,2.904237452654745
+Enmascarado,1,pensamiento crítico,3.2407096892759584
+Enmascarado,1,perfil,2.0169342576538423
+Enmascarado,1,perfil egreso,2.3652409519220585
+Enmascarado,1,permanente,2.4522523289116878
+Enmascarado,1,permitan,2.6529230243738393
+Enmascarado,1,permite,2.142097400607849
+Enmascarado,1,personas,2.3652409519220585
+Enmascarado,1,plan,3.0583881324820035
+Enmascarado,1,planificación,3.2407096892759584
+Enmascarado,1,planificar,2.7707060600302227
+Enmascarado,1,plataformas,2.904237452654745
+Enmascarado,1,podrá,3.2407096892759584
+Enmascarado,1,posee,2.0775588794702773
+Enmascarado,1,principios,2.6529230243738393
+Enmascarado,1,privadas,3.0583881324820035
+Enmascarado,1,privado,2.904237452654745
+Enmascarado,1,problemas,1.7591051483517428
+Enmascarado,1,problemas complejos,2.7707060600302227
+Enmascarado,1,problemáticas,2.904237452654745
+Enmascarado,1,procesos,1.8544153281560676
+Enmascarado,1,productivo,3.2407096892759584
+Enmascarado,1,productos,2.3652409519220585
+Enmascarado,1,profesional,1.2666286632539485
+Enmascarado,1,profesional capaz,3.0583881324820035
+Enmascarado,1,profesional ingeniero,3.463853240590168
+Enmascarado,1,profesional integral,3.0583881324820035
+Enmascarado,1,profesionales,1.959775843813894
+Enmascarado,1,profesionales capaces,3.2407096892759584
+Enmascarado,1,profesión,3.0583881324820035
+Enmascarado,1,programa,2.3652409519220585
+Enmascarado,1,propios,2.904237452654745
+Enmascarado,1,proyectos,1.2666286632539485
+Enmascarado,1,proyectos ingeniería,3.0583881324820035
+Enmascarado,1,proyectos tecnologías,3.0583881324820035
+Enmascarado,1,proyectos tecnológicos,2.904237452654745
+Enmascarado,1,prácticas,3.0583881324820035
+Enmascarado,1,puede,2.904237452654745
+Enmascarado,1,puede desempeñarse,3.2407096892759584
+Enmascarado,1,públicas,3.0583881324820035
+Enmascarado,1,públicas privadas,3.0583881324820035
+Enmascarado,1,público,3.0583881324820035
+Enmascarado,1,quehacer,2.7707060600302227
+Enmascarado,1,quehacer profesional,3.0583881324820035
+Enmascarado,1,reconoce,3.2407096892759584
+Enmascarado,1,recursos,2.4522523289116878
+Enmascarado,1,redes,2.547562508716013
+Enmascarado,1,región,3.0583881324820035
+Enmascarado,1,requerimientos,3.0583881324820035
+Enmascarado,1,resolución,3.0583881324820035
+Enmascarado,1,resolución problemas,3.2407096892759584
+Enmascarado,1,resolver,1.9057086225436182
+Enmascarado,1,resolver problemas,2.142097400607849
+Enmascarado,1,respeto,3.0583881324820035
+Enmascarado,1,responsabilidad,2.0169342576538423
+Enmascarado,1,responsabilidad social,2.285198244248522
+Enmascarado,1,responsable,2.904237452654745
+Enmascarado,1,riesgos,3.0583881324820035
+Enmascarado,1,rol,3.463853240590168
+Enmascarado,1,santiago,3.0583881324820035
+Enmascarado,1,sector,2.6529230243738393
+Enmascarado,1,sector público,3.2407096892759584
+Enmascarado,1,sede,3.463853240590168
+Enmascarado,1,seguridad,2.2110902720948
+Enmascarado,1,seguridad información,3.0583881324820035
+Enmascarado,1,según,3.0583881324820035
+Enmascarado,1,sello,2.904237452654745
+Enmascarado,1,semestres,3.0583881324820035
+Enmascarado,1,sentido,2.6529230243738393
+Enmascarado,1,servicios,2.142097400607849
+Enmascarado,1,siendo,2.904237452654745
+Enmascarado,1,siendo capaz,3.0583881324820035
+Enmascarado,1,sistemas,1.3844116989103321
+Enmascarado,1,sistemas computacionales,3.0583881324820035
+Enmascarado,1,sistemas información,2.285198244248522
+Enmascarado,1,social,1.672093771362113
+Enmascarado,1,sociales,2.904237452654745
+Enmascarado,1,sociedad,2.547562508716013
+Enmascarado,1,software,1.4828517717235845
+Enmascarado,1,soluciones,1.4828517717235845
+Enmascarado,1,soluciones eficientes,3.2407096892759584
+Enmascarado,1,soluciones innovadoras,3.0583881324820035
+Enmascarado,1,soluciones tecnológicas,2.547562508716013
+Enmascarado,1,sostenible,2.547562508716013
+Enmascarado,1,superior,3.463853240590168
+Enmascarado,1,sustentable,3.0583881324820035
+Enmascarado,1,sólida,2.3652409519220585
+Enmascarado,1,sólida formación,2.4522523289116878
+Enmascarado,1,sólidos,3.0583881324820035
+Enmascarado,1,tecnología,2.6529230243738393
+Enmascarado,1,tecnologías,1.2666286632539485
+Enmascarado,1,tecnologías información,1.5179430915348546
+Enmascarado,1,tecnológica,2.285198244248522
+Enmascarado,1,tecnológicas,2.2110902720948
+Enmascarado,1,tecnológico,2.904237452654745
+Enmascarado,1,tecnológicos,2.142097400607849
+Enmascarado,1,telecomunicaciones,3.2407096892759584
+Enmascarado,1,tic,2.6529230243738393
+Enmascarado,1,toma,2.6529230243738393
+Enmascarado,1,toma decisiones,2.6529230243738393
+Enmascarado,1,trabajar,2.6529230243738393
+Enmascarado,1,trabajo,1.6312717768418579
+Enmascarado,1,trabajo equipo,2.904237452654745
+Enmascarado,1,transformación,2.4522523289116878
+Enmascarado,1,transformación digital,2.904237452654745
+Enmascarado,1,través,2.142097400607849
+Enmascarado,1,trayectoria,3.0583881324820035
+Enmascarado,1,técnicas,2.7707060600302227
+Enmascarado,1,técnico,3.463853240590168
+Enmascarado,1,técnicos,2.904237452654745
+Enmascarado,1,título,3.0583881324820035
+Enmascarado,1,título profesional,3.2407096892759584
+Enmascarado,1,universidad,1.5179430915348546
+Enmascarado,1,universidad católica,2.904237452654745
+Enmascarado,1,uso,2.3652409519220585
+Enmascarado,1,utilizando,3.0583881324820035
+Enmascarado,1,utilizando herramientas,3.463853240590168
+Enmascarado,1,valor,2.3652409519220585
+Enmascarado,1,vanguardia,3.463853240590168
+Enmascarado,1,vida,2.904237452654745
+Enmascarado,1,vigente,3.2407096892759584
+Enmascarado,1,visión,2.547562508716013
+Enmascarado,1,ámbito,2.3652409519220585
+Enmascarado,1,ámbitos,3.0583881324820035
+Enmascarado,1,área,2.547562508716013
+Enmascarado,1,áreas,2.3652409519220585
+Enmascarado,1,énfasis,3.463853240590168
+Enmascarado,1,ética,2.142097400607849
+Enmascarado,1,ético,2.6529230243738393
+Enmascarado,1,éticos,2.7707060600302227
+Enmascarado,2,000,3.4849066497880004
+Enmascarado,2,000 arancel,3.772588722239781
+Enmascarado,2,10,3.0794415416798357
+Enmascarado,2,2026,3.4849066497880004
+Enmascarado,2,25,3.4849066497880004
+Enmascarado,2,académico,3.0794415416798357
+Enmascarado,2,acuerdo,2.9252908618525773
+Enmascarado,2,además,2.386294361119891
+Enmascarado,2,admisión,3.4849066497880004
+Enmascarado,2,alto,2.9252908618525773
+Enmascarado,2,analizar,2.5686159179138452
+Enmascarado,2,analítica,2.9252908618525773
+Enmascarado,2,anual,3.772588722239781
+Enmascarado,2,análisis,2.791759469228055
+Enmascarado,2,aplicaciones,3.0794415416798357
+Enmascarado,2,aplicada,2.6739764335716716
+Enmascarado,2,aplicando,2.791759469228055
+Enmascarado,2,aplicar,2.47330573810952
+Enmascarado,2,aprendizaje,2.47330573810952
+Enmascarado,2,arancel,3.4849066497880004
+Enmascarado,2,arancel anual,3.772588722239781
+Enmascarado,2,aranceles,3.4849066497880004
+Enmascarado,2,artificial,2.6739764335716716
+Enmascarado,2,as,3.4849066497880004
+Enmascarado,2,así,2.386294361119891
+Enmascarado,2,autónoma,2.791759469228055
+Enmascarado,2,año,3.4849066497880004
+Enmascarado,2,basadas,3.0794415416798357
+Enmascarado,2,base,2.9252908618525773
+Enmascarado,2,bases,2.6739764335716716
+Enmascarado,2,bases datos,2.791759469228055
+Enmascarado,2,bien,2.791759469228055
+Enmascarado,2,bien común,2.791759469228055
+Enmascarado,2,buenas,3.4849066497880004
+Enmascarado,2,buenas prácticas,3.4849066497880004
+Enmascarado,2,básicas,2.163150809805681
+Enmascarado,2,básicas ciencias,2.791759469228055
+Enmascarado,2,calidad,2.09861228866811
+Enmascarado,2,calidad seguridad,3.2617630984737906
+Enmascarado,2,campo,2.791759469228055
+Enmascarado,2,campus,3.4849066497880004
+Enmascarado,2,capaces,2.386294361119891
+Enmascarado,2,capacidad,1.826678573184468
+Enmascarado,2,capacidades,3.4849066497880004
+Enmascarado,2,capacitado,2.5686159179138452
+Enmascarado,2,capaz,2.2321436812926323
+Enmascarado,2,carrera,1.7357067949787413
+Enmascarado,2,carrera universidad,2.6739764335716716
+Enmascarado,2,católica,3.0794415416798357
+Enmascarado,2,chile,3.0794415416798357
+Enmascarado,2,ciclo,3.2617630984737906
+Enmascarado,2,ciclo vida,3.4849066497880004
+Enmascarado,2,ciencia,2.6739764335716716
+Enmascarado,2,ciencias,1.7357067949787413
+Enmascarado,2,ciencias básicas,2.163150809805681
+Enmascarado,2,ciencias ingeniería,2.386294361119891
+Enmascarado,2,competencias,1.9267620317414504
+Enmascarado,2,complejos,2.386294361119891
+Enmascarado,2,compromiso,2.3062516534463544
+Enmascarado,2,computacionales,2.386294361119891
+Enmascarado,2,computación,2.386294361119891
+Enmascarado,2,comunicaciones,3.0794415416798357
+Enmascarado,2,comunicación,1.9267620317414504
+Enmascarado,2,comunicación efectiva,2.9252908618525773
+Enmascarado,2,comunicarse,3.0794415416798357
+Enmascarado,2,común,2.791759469228055
+Enmascarado,2,concepción,3.2617630984737906
+Enmascarado,2,conocimiento,2.791759469228055
+Enmascarado,2,conocimientos,1.826678573184468
+Enmascarado,2,considerando,2.791759469228055
+Enmascarado,2,constante,3.0794415416798357
+Enmascarado,2,construir,3.0794415416798357
+Enmascarado,2,consultor,3.0794415416798357
+Enmascarado,2,contexto,2.791759469228055
+Enmascarado,2,contextos,2.3062516534463544
+Enmascarado,2,continua,2.9252908618525773
+Enmascarado,2,creación,3.0794415416798357
+Enmascarado,2,cristiana,3.0794415416798357
+Enmascarado,2,criterios,3.2617630984737906
+Enmascarado,2,crítico,2.6739764335716716
+Enmascarado,2,cuenta,3.0794415416798357
+Enmascarado,2,curricular,3.4849066497880004
+Enmascarado,2,datos,1.613104472886409
+Enmascarado,2,decisiones,2.47330573810952
+Enmascarado,2,desafíos,3.0794415416798357
+Enmascarado,2,desarrolla,2.5686159179138452
+Enmascarado,2,desarrollar,1.826678573184468
+Enmascarado,2,desarrollar proyectos,3.0794415416798357
+Enmascarado,2,desarrollar soluciones,3.0794415416798357
+Enmascarado,2,desarrollo,1.538996500732687
+Enmascarado,2,desarrollo software,2.9252908618525773
+Enmascarado,2,desarrollo sostenible,3.2617630984737906
+Enmascarado,2,desempeñarse,2.386294361119891
+Enmascarado,2,desempeño,2.791759469228055
+Enmascarado,2,desenvolverse,3.0794415416798357
+Enmascarado,2,destacan,3.0794415416798357
+Enmascarado,2,digital,2.47330573810952
+Enmascarado,2,digitales,2.6739764335716716
+Enmascarado,2,disciplinar,3.0794415416798357
+Enmascarado,2,diseña,3.0794415416798357
+Enmascarado,2,diseñar,1.9808292530117262
+Enmascarado,2,diseñar desarrollar,2.9252908618525773
+Enmascarado,2,diseñar implementar,2.791759469228055
+Enmascarado,2,diseño,2.2321436812926323
+Enmascarado,2,distintas,3.2617630984737906
+Enmascarado,2,distintos,2.791759469228055
+Enmascarado,2,diversa,3.2617630984737906
+Enmascarado,2,diversas,2.9252908618525773
+Enmascarado,2,diversidad,2.791759469228055
+Enmascarado,2,diversos,2.5686159179138452
+Enmascarado,2,duración,3.2617630984737906
+Enmascarado,2,efectiva,2.5686159179138452
+Enmascarado,2,eficiencia,2.3062516534463544
+Enmascarado,2,eficientes,2.9252908618525773
+Enmascarado,2,egresado,2.47330573810952
+Enmascarado,2,egreso,2.3062516534463544
+Enmascarado,2,ejercicio,3.0794415416798357
+Enmascarado,2,ello,3.0794415416798357
+Enmascarado,2,emergentes,3.0794415416798357
+Enmascarado,2,emprendimiento,2.9252908618525773
+Enmascarado,2,empresarial,3.2617630984737906
+Enmascarado,2,empresas,2.9252908618525773
+Enmascarado,2,enfoque,2.9252908618525773
+Enmascarado,2,entorno,3.0794415416798357
+Enmascarado,2,entornos,3.2617630984737906
+Enmascarado,2,equipo,2.9252908618525773
+Enmascarado,2,equipos,1.7357067949787413
+Enmascarado,2,equipos multidisciplinarios,2.2321436812926323
+Enmascarado,2,equipos trabajo,2.9252908618525773
+Enmascarado,2,especialidad,3.772588722239781
+Enmascarado,2,estrategias,3.4849066497880004
+Enmascarado,2,estudiantes,3.772588722239781
+Enmascarado,2,estudio,3.2617630984737906
+Enmascarado,2,estudios,3.2617630984737906
+Enmascarado,2,está,3.2617630984737906
+Enmascarado,2,está capacitado,3.2617630984737906
+Enmascarado,2,estándares,2.47330573810952
+Enmascarado,2,estándares calidad,3.0794415416798357
+Enmascarado,2,evaluación,2.791759469228055
+Enmascarado,2,evaluando,3.2617630984737906
+Enmascarado,2,evaluar,2.6739764335716716
+Enmascarado,2,evaluar gestionar,3.4849066497880004
+Enmascarado,2,evolución,2.791759469228055
+Enmascarado,2,excelencia,3.2617630984737906
+Enmascarado,2,fin,3.0794415416798357
+Enmascarado,2,forma,2.037987666851675
+Enmascarado,2,formación,1.7357067949787413
+Enmascarado,2,formación ciencias,3.2617630984737906
+Enmascarado,2,formación integral,3.2617630984737906
+Enmascarado,2,formar,2.791759469228055
+Enmascarado,2,formar profesionales,3.772588722239781
+Enmascarado,2,formativo,3.4849066497880004
+Enmascarado,2,formular,3.2617630984737906
+Enmascarado,2,fundamentos,3.0794415416798357
+Enmascarado,2,generación,3.0794415416798357
+Enmascarado,2,generar,2.791759469228055
+Enmascarado,2,generar soluciones,2.9252908618525773
+Enmascarado,2,gestionar,1.9808292530117262
+Enmascarado,2,gestionar desarrollar,3.2617630984737906
+Enmascarado,2,gestionar proyectos,2.791759469228055
+Enmascarado,2,gestión,1.9267620317414504
+Enmascarado,2,gestión proyectos,2.9252908618525773
+Enmascarado,2,global,2.9252908618525773
+Enmascarado,2,grandes,3.2617630984737906
+Enmascarado,2,grandes volúmenes,3.2617630984737906
+Enmascarado,2,habilidades,2.47330573810952
+Enmascarado,2,hardware,3.2617630984737906
+Enmascarado,2,herramientas,2.386294361119891
+Enmascarado,2,herramientas tecnológicas,3.2617630984737906
+Enmascarado,2,humana,3.2617630984737906
+Enmascarado,2,humanos,3.0794415416798357
+Enmascarado,2,identificar,2.791759469228055
+Enmascarado,2,idioma,3.0794415416798357
+Enmascarado,2,idioma inglés,3.0794415416798357
+Enmascarado,2,impacto,3.2617630984737906
+Enmascarado,2,implementación,3.0794415416798357
+Enmascarado,2,implementar,2.2321436812926323
+Enmascarado,2,industria,2.9252908618525773
+Enmascarado,2,información,1.3448404862917296
+Enmascarado,2,información comunicaciones,3.2617630984737906
+Enmascarado,2,información comunicación,2.791759469228055
+Enmascarado,2,ingeniero,1.826678573184468
+Enmascarado,2,ingeniero computación,3.0794415416798357
+Enmascarado,2,ingenieros,2.9252908618525773
+Enmascarado,2,ingeniería,1.4700036292457357
+Enmascarado,2,ingeniería aplicada,3.2617630984737906
+Enmascarado,2,ingeniería software,2.47330573810952
+Enmascarado,2,inglés,2.791759469228055
+Enmascarado,2,innovación,2.037987666851675
+Enmascarado,2,innovadoras,2.163150809805681
+Enmascarado,2,instituciones,3.0794415416798357
+Enmascarado,2,instituciones públicas,3.2617630984737906
+Enmascarado,2,instituto,2.9252908618525773
+Enmascarado,2,instituto profesional,3.2617630984737906
+Enmascarado,2,integra,3.2617630984737906
+Enmascarado,2,integración,3.2617630984737906
+Enmascarado,2,integral,2.5686159179138452
+Enmascarado,2,integrales,3.0794415416798357
+Enmascarado,2,integrar,2.791759469228055
+Enmascarado,2,inteligencia,2.47330573810952
+Enmascarado,2,inteligencia artificial,2.6739764335716716
+Enmascarado,2,interdisciplinarios,3.2617630984737906
+Enmascarado,2,investigación,3.0794415416798357
+Enmascarado,2,laboral,3.0794415416798357
+Enmascarado,2,lenguajes,3.2617630984737906
+Enmascarado,2,lenguajes programación,3.2617630984737906
+Enmascarado,2,lidera,3.4849066497880004
+Enmascarado,2,liderando,3.772588722239781
+Enmascarado,2,liderar,2.386294361119891
+Enmascarado,2,liderar equipos,2.791759469228055
+Enmascarado,2,liderazgo,2.6739764335716716
+Enmascarado,2,malla,3.2617630984737906
+Enmascarado,2,malla curricular,3.772588722239781
+Enmascarado,2,manejo,3.2617630984737906
+Enmascarado,2,manera,2.386294361119891
+Enmascarado,2,mantención,3.2617630984737906
+Enmascarado,2,marco,3.2617630984737906
+Enmascarado,2,marcos,3.772588722239781
+Enmascarado,2,matrícula,3.4849066497880004
+Enmascarado,2,mediante,2.6739764335716716
+Enmascarado,2,mediante uso,3.2617630984737906
+Enmascarado,2,medio,2.9252908618525773
+Enmascarado,2,mejora,2.6739764335716716
+Enmascarado,2,mercado,3.2617630984737906
+Enmascarado,2,metodologías,2.6739764335716716
+Enmascarado,2,metodologías herramientas,3.4849066497880004
+Enmascarado,2,multidisciplinarios,2.037987666851675
+Enmascarado,2,mundo,2.5686159179138452
+Enmascarado,2,nacional,2.9252908618525773
+Enmascarado,2,necesidades,2.09861228866811
+Enmascarado,2,negocios,2.791759469228055
+Enmascarado,2,nivel,2.386294361119891
+Enmascarado,2,nivel superior,3.4849066497880004
+Enmascarado,2,niveles,3.2617630984737906
+Enmascarado,2,normativa,3.772588722239781
+Enmascarado,2,nuevas,2.9252908618525773
+Enmascarado,2,nuevas tecnologías,3.2617630984737906
+Enmascarado,2,nuevos,3.2617630984737906
+Enmascarado,2,objetivos,2.9252908618525773
+Enmascarado,2,operar,3.2617630984737906
+Enmascarado,2,oportunidades,3.0794415416798357
+Enmascarado,2,organizacional,3.4849066497880004
+Enmascarado,2,organizacionales,2.47330573810952
+Enmascarado,2,organizaciones,1.9267620317414504
+Enmascarado,2,organizaciones públicas,3.4849066497880004
+Enmascarado,2,organización,2.386294361119891
+Enmascarado,2,partir,3.0794415416798357
+Enmascarado,2,país,3.0794415416798357
+Enmascarado,2,pensamiento,2.791759469228055
+Enmascarado,2,pensamiento crítico,2.9252908618525773
+Enmascarado,2,perfil,2.037987666851675
+Enmascarado,2,perfil egreso,2.386294361119891
+Enmascarado,2,permanente,2.6739764335716716
+Enmascarado,2,permitan,3.0794415416798357
+Enmascarado,2,permite,1.9808292530117262
+Enmascarado,2,permitirá,3.2617630984737906
+Enmascarado,2,persona,2.791759469228055
+Enmascarado,2,persona humana,3.4849066497880004
+Enmascarado,2,personas,2.791759469228055
+Enmascarado,2,planificación,3.2617630984737906
+Enmascarado,2,planificar,2.9252908618525773
+Enmascarado,2,plataformas,3.0794415416798357
+Enmascarado,2,podrá,3.0794415416798357
+Enmascarado,2,posee,2.2321436812926323
+Enmascarado,2,presencial,3.4849066497880004
+Enmascarado,2,principios,2.5686159179138452
+Enmascarado,2,privadas,2.9252908618525773
+Enmascarado,2,privado,3.2617630984737906
+Enmascarado,2,problemas,1.6523251860396901
+Enmascarado,2,problemas complejos,2.5686159179138452
+Enmascarado,2,problemáticas,3.2617630984737906
+Enmascarado,2,proceso,3.2617630984737906
+Enmascarado,2,procesos,1.8754687373538999
+Enmascarado,2,productivo,3.4849066497880004
+Enmascarado,2,productos,2.6739764335716716
+Enmascarado,2,profesional,1.3158529494184772
+Enmascarado,2,profesional ingeniero,3.2617630984737906
+Enmascarado,2,profesional podrá,3.4849066497880004
+Enmascarado,2,profesionales,1.9267620317414504
+Enmascarado,2,profesionales capaces,3.0794415416798357
+Enmascarado,2,profesión,3.0794415416798357
+Enmascarado,2,programa,2.6739764335716716
+Enmascarado,2,programación,2.9252908618525773
+Enmascarado,2,promoción,3.2617630984737906
+Enmascarado,2,promoción bien,3.4849066497880004
+Enmascarado,2,promueve,3.4849066497880004
+Enmascarado,2,propios,2.9252908618525773
+Enmascarado,2,propuestas,3.2617630984737906
+Enmascarado,2,proyectos,1.3448404862917296
+Enmascarado,2,proyectos software,3.2617630984737906
+Enmascarado,2,proyectos tecnologías,3.2617630984737906
+Enmascarado,2,proyectos tecnológicos,3.2617630984737906
+Enmascarado,2,prácticas,3.2617630984737906
+Enmascarado,2,prácticas industria,3.4849066497880004
+Enmascarado,2,puede,2.9252908618525773
+Enmascarado,2,puede desempeñarse,3.4849066497880004
+Enmascarado,2,públicas,2.9252908618525773
+Enmascarado,2,públicas privadas,2.9252908618525773
+Enmascarado,2,público,3.2617630984737906
+Enmascarado,2,públicos,3.0794415416798357
+Enmascarado,2,quehacer,3.2617630984737906
+Enmascarado,2,realizar,3.2617630984737906
+Enmascarado,2,reconoce,3.4849066497880004
+Enmascarado,2,recursos,2.386294361119891
+Enmascarado,2,redes,2.5686159179138452
+Enmascarado,2,región,3.4849066497880004
+Enmascarado,2,requerimientos,2.9252908618525773
+Enmascarado,2,resolución,3.0794415416798357
+Enmascarado,2,resolución problemas,3.0794415416798357
+Enmascarado,2,resolver,1.8754687373538999
+Enmascarado,2,resolver problemas,2.037987666851675
+Enmascarado,2,respeto,3.0794415416798357
+Enmascarado,2,responsabilidad,2.2321436812926323
+Enmascarado,2,responsabilidad social,2.47330573810952
+Enmascarado,2,responsable,3.0794415416798357
+Enmascarado,2,riesgos,3.0794415416798357
+Enmascarado,2,santiago,3.0794415416798357
+Enmascarado,2,satisfacer,3.4849066497880004
+Enmascarado,2,sector,2.791759469228055
+Enmascarado,2,sede,3.2617630984737906
+Enmascarado,2,seguridad,2.163150809805681
+Enmascarado,2,seguridad información,2.791759469228055
+Enmascarado,2,según,2.6739764335716716
+Enmascarado,2,sello,2.6739764335716716
+Enmascarado,2,semestres,3.0794415416798357
+Enmascarado,2,sentido,3.0794415416798357
+Enmascarado,2,servicio,3.2617630984737906
+Enmascarado,2,servicios,2.3062516534463544
+Enmascarado,2,siendo,3.2617630984737906
+Enmascarado,2,sistemas,1.4054651081081644
+Enmascarado,2,sistemas computacionales,2.9252908618525773
+Enmascarado,2,sistemas información,2.47330573810952
+Enmascarado,2,sistemas redes,3.2617630984737906
+Enmascarado,2,social,1.826678573184468
+Enmascarado,2,sociales,2.791759469228055
+Enmascarado,2,sociedad,2.6739764335716716
+Enmascarado,2,software,1.538996500732687
+Enmascarado,2,soluciones,1.4054651081081644
+Enmascarado,2,soluciones computacionales,3.2617630984737906
+Enmascarado,2,soluciones eficientes,3.2617630984737906
+Enmascarado,2,soluciones innovadoras,2.9252908618525773
+Enmascarado,2,soluciones integrales,3.2617630984737906
+Enmascarado,2,soluciones software,3.0794415416798357
+Enmascarado,2,soluciones tecnológicas,2.6739764335716716
+Enmascarado,2,solución,3.2617630984737906
+Enmascarado,2,soporte,3.772588722239781
+Enmascarado,2,sostenible,2.791759469228055
+Enmascarado,2,sostenibles,3.2617630984737906
+Enmascarado,2,superior,3.2617630984737906
+Enmascarado,2,sólida,2.5686159179138452
+Enmascarado,2,sólida formación,2.6739764335716716
+Enmascarado,2,sólidos,3.2617630984737906
+Enmascarado,2,tecnología,2.791759469228055
+Enmascarado,2,tecnologías,1.3158529494184772
+Enmascarado,2,tecnologías información,1.5753641449035618
+Enmascarado,2,tecnológica,2.163150809805681
+Enmascarado,2,tecnológicas,2.3062516534463544
+Enmascarado,2,tecnológico,2.6739764335716716
+Enmascarado,2,tecnológicos,2.386294361119891
+Enmascarado,2,telecomunicaciones,3.0794415416798357
+Enmascarado,2,tic,3.2617630984737906
+Enmascarado,2,toma,2.791759469228055
+Enmascarado,2,toma decisiones,2.791759469228055
+Enmascarado,2,trabajar,2.791759469228055
+Enmascarado,2,trabajo,1.9267620317414504
+Enmascarado,2,trabajo colaborativo,3.2617630984737906
+Enmascarado,2,trabajo equipo,3.2617630984737906
+Enmascarado,2,transformación,2.3062516534463544
+Enmascarado,2,transformación digital,2.47330573810952
+Enmascarado,2,través,2.386294361119891
+Enmascarado,2,técnicas,2.791759469228055
+Enmascarado,2,técnico,3.0794415416798357
+Enmascarado,2,técnicos,2.9252908618525773
+Enmascarado,2,título,3.0794415416798357
+Enmascarado,2,título profesional,3.2617630984737906
+Enmascarado,2,universidad,1.5753641449035618
+Enmascarado,2,universidad católica,3.0794415416798357
+Enmascarado,2,universitario,3.772588722239781
+Enmascarado,2,uso,2.47330573810952
+Enmascarado,2,usuario,3.4849066497880004
+Enmascarado,2,utilizando,3.0794415416798357
+Enmascarado,2,utilizando herramientas,3.772588722239781
+Enmascarado,2,vacantes,3.4849066497880004
+Enmascarado,2,valor,2.6739764335716716
+Enmascarado,2,valores,3.2617630984737906
+Enmascarado,2,vanguardia,3.4849066497880004
+Enmascarado,2,ver,3.4849066497880004
+Enmascarado,2,vida,2.6739764335716716
+Enmascarado,2,vida según,3.4849066497880004
+Enmascarado,2,vigente,3.4849066497880004
+Enmascarado,2,visión,2.386294361119891
+Enmascarado,2,visión cristiana,3.4849066497880004
+Enmascarado,2,volúmenes,3.2617630984737906
+Enmascarado,2,ámbito,2.9252908618525773
+Enmascarado,2,ámbitos,3.0794415416798357
+Enmascarado,2,área,2.5686159179138452
+Enmascarado,2,áreas,2.5686159179138452
+Enmascarado,2,ética,2.09861228866811
+Enmascarado,2,ético,2.5686159179138452
+Enmascarado,2,éticos,3.0794415416798357
+Enmascarado,3,10,3.1000608288825715
+Enmascarado,3,2026,3.505525936990736
+Enmascarado,3,académico,3.1000608288825715
+Enmascarado,3,acciones,3.505525936990736
+Enmascarado,3,acciones contexto,3.793208009442517
+Enmascarado,3,acreditación,3.505525936990736
+Enmascarado,3,actitud,3.2823823856765264
+Enmascarado,3,acuerdo,3.2823823856765264
+Enmascarado,3,adaptarse,2.9459101490553135
+Enmascarado,3,además,2.4939250253122562
+Enmascarado,3,administración,3.1000608288825715
+Enmascarado,3,administrar,3.1000608288825715
+Enmascarado,3,admisión,3.505525936990736
+Enmascarado,3,alto,2.9459101490553135
+Enmascarado,3,ambiental,3.1000608288825715
+Enmascarado,3,ambiente,3.2823823856765264
+Enmascarado,3,amplio,3.2823823856765264
+Enmascarado,3,analista,3.1000608288825715
+Enmascarado,3,analista sistemas,3.505525936990736
+Enmascarado,3,analizar,2.6945957207744073
+Enmascarado,3,analizar diseñar,3.2823823856765264
+Enmascarado,3,analítica,3.1000608288825715
+Enmascarado,3,análisis,2.406913648322626
+Enmascarado,3,análisis datos,2.9459101490553135
+Enmascarado,3,aplica,3.1000608288825715
+Enmascarado,3,aplicaciones,2.9459101490553135
+Enmascarado,3,aplicación,2.8123787564307907
+Enmascarado,3,aplicada,2.589235205116581
+Enmascarado,3,aplicando,2.8123787564307907
+Enmascarado,3,aplicar,2.6945957207744073
+Enmascarado,3,apoyar,3.2823823856765264
+Enmascarado,3,aprendizaje,2.406913648322626
+Enmascarado,3,artificial,2.4939250253122562
+Enmascarado,3,asimismo,2.9459101490553135
+Enmascarado,3,así,2.406913648322626
+Enmascarado,3,automatización,3.2823823856765264
+Enmascarado,3,autónoma,3.2823823856765264
+Enmascarado,3,año,3.505525936990736
+Enmascarado,3,años,3.505525936990736
+Enmascarado,3,bajo,3.2823823856765264
+Enmascarado,3,basadas,3.505525936990736
+Enmascarado,3,base,2.589235205116581
+Enmascarado,3,bases,2.6945957207744073
+Enmascarado,3,bases datos,2.6945957207744073
+Enmascarado,3,bien,2.8123787564307907
+Enmascarado,3,bien común,2.9459101490553135
+Enmascarado,3,buenas,3.2823823856765264
+Enmascarado,3,buenas prácticas,3.2823823856765264
+Enmascarado,3,básicas,2.252762968495368
+Enmascarado,3,básicas ciencias,2.6945957207744073
+Enmascarado,3,calidad,2.0586069540544107
+Enmascarado,3,cambio,3.2823823856765264
+Enmascarado,3,campo,2.9459101490553135
+Enmascarado,3,campus,3.505525936990736
+Enmascarado,3,capaces,2.8123787564307907
+Enmascarado,3,capacidad,1.8960880245566356
+Enmascarado,3,capacitado,2.589235205116581
+Enmascarado,3,capaz,2.001448540214462
+Enmascarado,3,capaz concebir,3.505525936990736
+Enmascarado,3,carrera,1.8007778447523106
+Enmascarado,3,carrera universidad,2.9459101490553135
+Enmascarado,3,carreras,3.505525936990736
+Enmascarado,3,católica,2.6945957207744073
+Enmascarado,3,chile,2.9459101490553135
+Enmascarado,3,ciberseguridad,3.505525936990736
+Enmascarado,3,ciclo,3.2823823856765264
+Enmascarado,3,ciclo vida,3.505525936990736
+Enmascarado,3,ciencia,2.589235205116581
+Enmascarado,3,ciencia datos,3.2823823856765264
+Enmascarado,3,ciencias,1.756326082181477
+Enmascarado,3,ciencias básicas,2.252762968495368
+Enmascarado,3,ciencias computación,3.2823823856765264
+Enmascarado,3,ciencias ingeniería,2.406913648322626
+Enmascarado,3,competencias,2.001448540214462
+Enmascarado,3,complejos,2.589235205116581
+Enmascarado,3,comprometido,2.8123787564307907
+Enmascarado,3,compromiso,2.589235205116581
+Enmascarado,3,computacionales,2.4939250253122562
+Enmascarado,3,computación,2.0586069540544107
+Enmascarado,3,computación universidad,2.8123787564307907
+Enmascarado,3,comunicaciones,2.589235205116581
+Enmascarado,3,comunicación,1.8472978603872037
+Enmascarado,3,comunicación efectiva,2.9459101490553135
+Enmascarado,3,comunicarse,2.9459101490553135
+Enmascarado,3,común,2.6945957207744073
+Enmascarado,3,concebir,3.2823823856765264
+Enmascarado,3,concebir diseñar,3.505525936990736
+Enmascarado,3,concepción,3.2823823856765264
+Enmascarado,3,conocimiento,2.8123787564307907
+Enmascarado,3,conocimientos,1.672944473242426
+Enmascarado,3,considerando,2.406913648322626
+Enmascarado,3,constante,3.1000608288825715
+Enmascarado,3,construir,2.9459101490553135
+Enmascarado,3,consultor,2.9459101490553135
+Enmascarado,3,contexto,2.3268709406490897
+Enmascarado,3,contextos,2.4939250253122562
+Enmascarado,3,continua,2.8123787564307907
+Enmascarado,3,contribuir,2.8123787564307907
+Enmascarado,3,contribuyendo,2.8123787564307907
+Enmascarado,3,crear,2.9459101490553135
+Enmascarado,3,cristiana,3.1000608288825715
+Enmascarado,3,criterios,2.8123787564307907
+Enmascarado,3,crítico,2.8123787564307907
+Enmascarado,3,cuenta,2.6945957207744073
+Enmascarado,3,cultura,3.1000608288825715
+Enmascarado,3,datos,1.6337237600891445
+Enmascarado,3,decisiones,2.252762968495368
+Enmascarado,3,desafíos,2.6945957207744073
+Enmascarado,3,desarrolla,2.589235205116581
+Enmascarado,3,desarrollar,1.9473813189441862
+Enmascarado,3,desarrollar proyectos,3.1000608288825715
+Enmascarado,3,desarrollar soluciones,3.1000608288825715
+Enmascarado,3,desarrollo,1.5596157879354227
+Enmascarado,3,desarrollo software,2.589235205116581
+Enmascarado,3,desarrollo sostenible,3.2823823856765264
+Enmascarado,3,desempeña,3.2823823856765264
+Enmascarado,3,desempeñarse,2.406913648322626
+Enmascarado,3,desempeño,2.6945957207744073
+Enmascarado,3,diferentes,3.505525936990736
+Enmascarado,3,digital,2.6945957207744073
+Enmascarado,3,digitales,2.589235205116581
+Enmascarado,3,dirección,3.505525936990736
+Enmascarado,3,director,3.793208009442517
+Enmascarado,3,disciplina,2.9459101490553135
+Enmascarado,3,disciplinar,3.1000608288825715
+Enmascarado,3,diseña,3.1000608288825715
+Enmascarado,3,diseñar,1.9473813189441862
+Enmascarado,3,diseñar desarrollar,2.9459101490553135
+Enmascarado,3,diseñar implementar,2.8123787564307907
+Enmascarado,3,diseño,2.3268709406490897
+Enmascarado,3,distintos,2.8123787564307907
+Enmascarado,3,diversas,3.2823823856765264
+Enmascarado,3,diversidad,2.9459101490553135
+Enmascarado,3,diversos,2.6945957207744073
+Enmascarado,3,docente,3.505525936990736
+Enmascarado,3,económico,3.2823823856765264
+Enmascarado,3,educación,3.505525936990736
+Enmascarado,3,educación superior,3.793208009442517
+Enmascarado,3,efectiva,2.6945957207744073
+Enmascarado,3,eficiencia,2.406913648322626
+Enmascarado,3,eficiente,3.1000608288825715
+Enmascarado,3,eficientes,2.9459101490553135
+Enmascarado,3,egresado,2.589235205116581
+Enmascarado,3,egreso,2.4939250253122562
+Enmascarado,3,ejercicio,3.1000608288825715
+Enmascarado,3,ello,3.2823823856765264
+Enmascarado,3,emergentes,2.6945957207744073
+Enmascarado,3,emprendedora,3.2823823856765264
+Enmascarado,3,emprendimiento,2.589235205116581
+Enmascarado,3,emprendimientos,3.1000608288825715
+Enmascarado,3,empresarial,3.1000608288825715
+Enmascarado,3,empresariales,3.793208009442517
+Enmascarado,3,empresas,2.6945957207744073
+Enmascarado,3,encuentra,3.505525936990736
+Enmascarado,3,enfoque,2.8123787564307907
+Enmascarado,3,entorno,2.406913648322626
+Enmascarado,3,entornos,3.1000608288825715
+Enmascarado,3,entregar,3.505525936990736
+Enmascarado,3,equipo,3.2823823856765264
+Enmascarado,3,equipos,1.6337237600891445
+Enmascarado,3,equipos multidisciplinarios,2.406913648322626
+Enmascarado,3,equipos trabajo,2.6945957207744073
+Enmascarado,3,especialidad,3.1000608288825715
+Enmascarado,3,especialización,3.505525936990736
+Enmascarado,3,estudiantes,3.505525936990736
+Enmascarado,3,estudios,3.1000608288825715
+Enmascarado,3,está,2.9459101490553135
+Enmascarado,3,está capacitado,3.1000608288825715
+Enmascarado,3,estándares,2.6945957207744073
+Enmascarado,3,estándares calidad,3.2823823856765264
+Enmascarado,3,evaluación,3.2823823856765264
+Enmascarado,3,evaluar,2.8123787564307907
+Enmascarado,3,evaluar gestionar,3.2823823856765264
+Enmascarado,3,evolución,2.9459101490553135
+Enmascarado,3,experiencia,3.505525936990736
+Enmascarado,3,fin,3.2823823856765264
+Enmascarado,3,forma,2.1192315758708453
+Enmascarado,3,formación,1.5245244681241528
+Enmascarado,3,formación ciencias,2.6945957207744073
+Enmascarado,3,formación integral,3.1000608288825715
+Enmascarado,3,formación permite,3.1000608288825715
+Enmascarado,3,formar,2.9459101490553135
+Enmascarado,3,generar,2.9459101490553135
+Enmascarado,3,generar soluciones,3.2823823856765264
+Enmascarado,3,gestiona,3.2823823856765264
+Enmascarado,3,gestionar,1.8960880245566356
+Enmascarado,3,gestionar proyectos,2.589235205116581
+Enmascarado,3,gestión,1.756326082181477
+Enmascarado,3,gestión proyectos,2.8123787564307907
+Enmascarado,3,global,2.6945957207744073
+Enmascarado,3,habilidades,2.1837700970084164
+Enmascarado,3,hardware,3.1000608288825715
+Enmascarado,3,herramientas,2.252762968495368
+Enmascarado,3,humana,3.2823823856765264
+Enmascarado,3,idioma,3.2823823856765264
+Enmascarado,3,impacto,2.9459101490553135
+Enmascarado,3,implementa,3.2823823856765264
+Enmascarado,3,implementación,2.8123787564307907
+Enmascarado,3,implementar,2.1192315758708453
+Enmascarado,3,independiente,3.2823823856765264
+Enmascarado,3,industria,2.6945957207744073
+Enmascarado,3,información,1.3953127366441465
+Enmascarado,3,información comunicaciones,2.8123787564307907
+Enmascarado,3,información comunicación,2.9459101490553135
+Enmascarado,3,infraestructura,3.2823823856765264
+Enmascarado,3,ingeniero,1.5596157879354227
+Enmascarado,3,ingeniero computación,2.4939250253122562
+Enmascarado,3,ingeniero universidad,2.9459101490553135
+Enmascarado,3,ingenieros,3.2823823856765264
+Enmascarado,3,ingeniería,1.3654597734944653
+Enmascarado,3,ingeniería aplicada,3.2823823856765264
+Enmascarado,3,ingeniería ciencias,3.2823823856765264
+Enmascarado,3,ingeniería computación,3.2823823856765264
+Enmascarado,3,ingeniería software,2.406913648322626
+Enmascarado,3,inglés,2.8123787564307907
+Enmascarado,3,ingreso,3.793208009442517
+Enmascarado,3,innovación,1.8472978603872037
+Enmascarado,3,innovación emprendimiento,3.2823823856765264
+Enmascarado,3,innovación tecnológica,3.2823823856765264
+Enmascarado,3,innovador,3.793208009442517
+Enmascarado,3,innovadoras,2.406913648322626
+Enmascarado,3,institucionales,3.2823823856765264
+Enmascarado,3,instituciones,2.9459101490553135
+Enmascarado,3,instituciones públicas,3.2823823856765264
+Enmascarado,3,institución,3.505525936990736
+Enmascarado,3,instituto,3.505525936990736
+Enmascarado,3,integra,3.1000608288825715
+Enmascarado,3,integración,3.1000608288825715
+Enmascarado,3,integral,2.3268709406490897
+Enmascarado,3,integrar,2.8123787564307907
+Enmascarado,3,inteligencia,2.252762968495368
+Enmascarado,3,inteligencia artificial,2.4939250253122562
+Enmascarado,3,interdisciplinarios,2.9459101490553135
+Enmascarado,3,investigación,2.9459101490553135
+Enmascarado,3,jefe,3.1000608288825715
+Enmascarado,3,junto,2.9459101490553135
+Enmascarado,3,laboral,3.2823823856765264
+Enmascarado,3,lenguajes,2.9459101490553135
+Enmascarado,3,lenguajes programación,3.1000608288825715
+Enmascarado,3,liderar,2.589235205116581
+Enmascarado,3,liderar equipos,3.1000608288825715
+Enmascarado,3,liderazgo,2.406913648322626
+Enmascarado,3,manager,3.793208009442517
+Enmascarado,3,manera,2.252762968495368
+Enmascarado,3,mantención,3.1000608288825715
+Enmascarado,3,mediante,2.6945957207744073
+Enmascarado,3,medio,2.6945957207744073
+Enmascarado,3,medio ambiente,3.2823823856765264
+Enmascarado,3,mejora,2.4939250253122562
+Enmascarado,3,mejora continua,3.1000608288825715
+Enmascarado,3,metodologías,2.6945957207744073
+Enmascarado,3,modelos,3.505525936990736
+Enmascarado,3,multidisciplinarios,2.1837700970084164
+Enmascarado,3,mundo,2.589235205116581
+Enmascarado,3,mundo vida,3.505525936990736
+Enmascarado,3,nacional,3.2823823856765264
+Enmascarado,3,necesidades,2.252762968495368
+Enmascarado,3,negocio,3.1000608288825715
+Enmascarado,3,negocios,2.8123787564307907
+Enmascarado,3,nivel,2.4939250253122562
+Enmascarado,3,normas,3.1000608288825715
+Enmascarado,3,nuevas,2.9459101490553135
+Enmascarado,3,objetivos,3.2823823856765264
+Enmascarado,3,oportunidades,3.1000608288825715
+Enmascarado,3,organizacionales,2.589235205116581
+Enmascarado,3,organizaciones,1.756326082181477
+Enmascarado,3,organización,2.4939250253122562
+Enmascarado,3,país,3.1000608288825715
+Enmascarado,3,pensamiento,2.8123787564307907
+Enmascarado,3,pensamiento crítico,3.1000608288825715
+Enmascarado,3,perfil,2.0586069540544107
+Enmascarado,3,perfil egreso,2.589235205116581
+Enmascarado,3,perfil profesional,3.1000608288825715
+Enmascarado,3,permanente,2.589235205116581
+Enmascarado,3,permitan,2.8123787564307907
+Enmascarado,3,permite,1.8960880245566356
+Enmascarado,3,persona,2.9459101490553135
+Enmascarado,3,persona humana,3.2823823856765264
+Enmascarado,3,personas,2.406913648322626
+Enmascarado,3,plan,3.505525936990736
+Enmascarado,3,planificar,2.9459101490553135
+Enmascarado,3,planificar evaluar,3.793208009442517
+Enmascarado,3,plataformas,2.8123787564307907
+Enmascarado,3,posee,2.0586069540544107
+Enmascarado,3,principios,2.3268709406490897
+Enmascarado,3,principios éticos,3.2823823856765264
+Enmascarado,3,privadas,2.8123787564307907
+Enmascarado,3,problemas,1.756326082181477
+Enmascarado,3,problemas complejos,2.6945957207744073
+Enmascarado,3,problemáticas,3.1000608288825715
+Enmascarado,3,procesos,1.713766467762681
+Enmascarado,3,productos,2.4939250253122562
+Enmascarado,3,profesional,1.2282586519809802
+Enmascarado,3,profesional capaz,3.1000608288825715
+Enmascarado,3,profesional integral,3.1000608288825715
+Enmascarado,3,profesionales,2.3268709406490897
+Enmascarado,3,profesionales capaces,3.793208009442517
+Enmascarado,3,profesión,2.9459101490553135
+Enmascarado,3,programa,2.9459101490553135
+Enmascarado,3,programación,2.8123787564307907
+Enmascarado,3,programador,3.505525936990736
+Enmascarado,3,programas,3.505525936990736
+Enmascarado,3,promoción,3.2823823856765264
+Enmascarado,3,promoción bien,3.505525936990736
+Enmascarado,3,promueve,3.2823823856765264
+Enmascarado,3,propios,2.8123787564307907
+Enmascarado,3,proyectos,1.2809023854664021
+Enmascarado,3,proyectos ingeniería,3.1000608288825715
+Enmascarado,3,proyectos tecnológicos,3.2823823856765264
+Enmascarado,3,prácticas,2.9459101490553135
+Enmascarado,3,puede,2.8123787564307907
+Enmascarado,3,puede desempeñarse,3.2823823856765264
+Enmascarado,3,públicas,2.8123787564307907
+Enmascarado,3,públicas privadas,2.8123787564307907
+Enmascarado,3,quehacer,2.9459101490553135
+Enmascarado,3,quehacer profesional,3.2823823856765264
+Enmascarado,3,reconoce,3.505525936990736
+Enmascarado,3,recursos,2.406913648322626
+Enmascarado,3,redes,2.4939250253122562
+Enmascarado,3,relacionados,2.9459101490553135
+Enmascarado,3,requerimientos,2.8123787564307907
+Enmascarado,3,resolución,3.2823823856765264
+Enmascarado,3,resolver,1.8960880245566356
+Enmascarado,3,resolver problemas,2.1192315758708453
+Enmascarado,3,respeto,2.9459101490553135
+Enmascarado,3,respeto dignidad,3.505525936990736
+Enmascarado,3,responsabilidad,2.1192315758708453
+Enmascarado,3,responsabilidad social,2.3268709406490897
+Enmascarado,3,responsable,3.1000608288825715
+Enmascarado,3,resultados,3.505525936990736
+Enmascarado,3,riesgos,3.2823823856765264
+Enmascarado,3,rol,3.505525936990736
+Enmascarado,3,sector,3.2823823856765264
+Enmascarado,3,seguridad,2.1192315758708453
+Enmascarado,3,seguridad información,2.589235205116581
+Enmascarado,3,según,2.589235205116581
+Enmascarado,3,sello,2.8123787564307907
+Enmascarado,3,sentido,2.589235205116581
+Enmascarado,3,servicios,2.252762968495368
+Enmascarado,3,siendo,3.1000608288825715
+Enmascarado,3,siendo capaz,3.1000608288825715
+Enmascarado,3,sistemas,1.5245244681241528
+Enmascarado,3,sistemas computacionales,2.9459101490553135
+Enmascarado,3,sistemas información,2.406913648322626
+Enmascarado,3,situaciones,3.1000608288825715
+Enmascarado,3,social,1.8007778447523106
+Enmascarado,3,sociales,2.8123787564307907
+Enmascarado,3,sociedad,2.589235205116581
+Enmascarado,3,software,1.3953127366441465
+Enmascarado,3,soluciones,1.4260843953109001
+Enmascarado,3,soluciones eficientes,3.2823823856765264
+Enmascarado,3,soluciones software,3.1000608288825715
+Enmascarado,3,soluciones tecnológicas,2.4939250253122562
+Enmascarado,3,sostenible,2.589235205116581
+Enmascarado,3,superior,3.2823823856765264
+Enmascarado,3,sólida,2.4939250253122562
+Enmascarado,3,sólida formación,2.589235205116581
+Enmascarado,3,tecnología,2.6945957207744073
+Enmascarado,3,tecnologías,1.2809023854664021
+Enmascarado,3,tecnologías información,1.6337237600891445
+Enmascarado,3,tecnológica,2.1837700970084164
+Enmascarado,3,tecnológicas,2.252762968495368
+Enmascarado,3,tecnológico,2.4939250253122562
+Enmascarado,3,tecnológicos,2.1192315758708453
+Enmascarado,3,telecomunicaciones,3.2823823856765264
+Enmascarado,3,tic,2.9459101490553135
+Enmascarado,3,titulado,3.1000608288825715
+Enmascarado,3,toma,2.4939250253122562
+Enmascarado,3,toma decisiones,2.4939250253122562
+Enmascarado,3,trabajar,2.8123787564307907
+Enmascarado,3,trabajo,1.8007778447523106
+Enmascarado,3,transformación,2.406913648322626
+Enmascarado,3,transformación digital,2.6945957207744073
+Enmascarado,3,través,2.1837700970084164
+Enmascarado,3,trayectoria,3.2823823856765264
+Enmascarado,3,técnicas,3.1000608288825715
+Enmascarado,3,técnico,3.1000608288825715
+Enmascarado,3,técnicos,3.1000608288825715
+Enmascarado,3,título,3.505525936990736
+Enmascarado,3,universidad,1.4260843953109001
+Enmascarado,3,universidad católica,2.6945957207744073
+Enmascarado,3,universidad frontera,3.793208009442517
+Enmascarado,3,universitario,3.505525936990736
+Enmascarado,3,uso,2.4939250253122562
+Enmascarado,3,utilizando,3.1000608288825715
+Enmascarado,3,valor,2.6945957207744073
+Enmascarado,3,valores,3.2823823856765264
+Enmascarado,3,vanguardia,3.505525936990736
+Enmascarado,3,vida,2.589235205116581
+Enmascarado,3,vida según,3.2823823856765264
+Enmascarado,3,visión,2.3268709406490897
+Enmascarado,3,visión cristiana,3.2823823856765264
+Enmascarado,3,ámbito,2.4939250253122562
+Enmascarado,3,ámbitos,2.8123787564307907
+Enmascarado,3,área,2.8123787564307907
+Enmascarado,3,áreas,2.3268709406490897
+Enmascarado,3,énfasis,3.505525936990736
+Enmascarado,3,ética,2.406913648322626
+Enmascarado,3,ético,2.589235205116581
+Enmascarado,3,éticos,2.589235205116581
+Enmascarado,4,000,3.505525936990736
+Enmascarado,4,000 arancel,3.793208009442517
+Enmascarado,4,10,3.1000608288825715
+Enmascarado,4,2026,3.505525936990736
+Enmascarado,4,25,3.793208009442517
+Enmascarado,4,acciones,3.2823823856765264
+Enmascarado,4,acreditación,3.793208009442517
+Enmascarado,4,actualización,2.9459101490553135
+Enmascarado,4,acuerdo,2.9459101490553135
+Enmascarado,4,adaptarse,3.1000608288825715
+Enmascarado,4,además,2.1837700970084164
+Enmascarado,4,admisión,3.505525936990736
+Enmascarado,4,ambiental,2.9459101490553135
+Enmascarado,4,ambientes,3.2823823856765264
+Enmascarado,4,analista,3.2823823856765264
+Enmascarado,4,analista sistemas,3.505525936990736
+Enmascarado,4,analizar,2.8123787564307907
+Enmascarado,4,analítica,2.9459101490553135
+Enmascarado,4,análisis,2.8123787564307907
+Enmascarado,4,análisis datos,3.2823823856765264
+Enmascarado,4,aplica,3.1000608288825715
+Enmascarado,4,aplicaciones,3.2823823856765264
+Enmascarado,4,aplicación,2.6945957207744073
+Enmascarado,4,aplicada,2.9459101490553135
+Enmascarado,4,aplicando,2.589235205116581
+Enmascarado,4,aplicando conocimientos,3.2823823856765264
+Enmascarado,4,aplicar,2.8123787564307907
+Enmascarado,4,apoyar,3.1000608288825715
+Enmascarado,4,aprendizaje,2.406913648322626
+Enmascarado,4,arancel,3.793208009442517
+Enmascarado,4,artificial,2.589235205116581
+Enmascarado,4,asimismo,2.9459101490553135
+Enmascarado,4,asociados,3.1000608288825715
+Enmascarado,4,así,2.589235205116581
+Enmascarado,4,autónoma,2.9459101490553135
+Enmascarado,4,año,3.2823823856765264
+Enmascarado,4,años,3.793208009442517
+Enmascarado,4,basadas,3.2823823856765264
+Enmascarado,4,base,2.9459101490553135
+Enmascarado,4,bases,2.6945957207744073
+Enmascarado,4,bases datos,2.8123787564307907
+Enmascarado,4,bien,2.8123787564307907
+Enmascarado,4,bien común,2.9459101490553135
+Enmascarado,4,buenas,3.1000608288825715
+Enmascarado,4,buenas prácticas,3.1000608288825715
+Enmascarado,4,básicas,2.3268709406490897
+Enmascarado,4,básicas ciencias,3.1000608288825715
+Enmascarado,4,básicas ingeniería,3.1000608288825715
+Enmascarado,4,calidad,2.252762968495368
+Enmascarado,4,calidad seguridad,3.1000608288825715
+Enmascarado,4,cambio,3.2823823856765264
+Enmascarado,4,campo,3.1000608288825715
+Enmascarado,4,campus,3.505525936990736
+Enmascarado,4,capaces,2.589235205116581
+Enmascarado,4,capacidad,1.8472978603872037
+Enmascarado,4,capacidad trabajar,2.9459101490553135
+Enmascarado,4,capacidades,2.9459101490553135
+Enmascarado,4,capacitado,3.1000608288825715
+Enmascarado,4,capaz,2.001448540214462
+Enmascarado,4,capaz concebir,3.505525936990736
+Enmascarado,4,carrera,1.9473813189441862
+Enmascarado,4,carrera universidad,2.9459101490553135
+Enmascarado,4,carreras,3.505525936990736
+Enmascarado,4,católica,2.6945957207744073
+Enmascarado,4,chile,3.2823823856765264
+Enmascarado,4,ciberseguridad,3.505525936990736
+Enmascarado,4,ciclo,3.2823823856765264
+Enmascarado,4,ciclo vida,3.505525936990736
+Enmascarado,4,ciencia,2.6945957207744073
+Enmascarado,4,ciencia datos,3.1000608288825715
+Enmascarado,4,ciencias,1.713766467762681
+Enmascarado,4,ciencias básicas,2.3268709406490897
+Enmascarado,4,ciencias ingeniería,2.4939250253122562
+Enmascarado,4,competencias,2.0586069540544107
+Enmascarado,4,complejos,2.589235205116581
+Enmascarado,4,comprometido,2.8123787564307907
+Enmascarado,4,compromiso,2.3268709406490897
+Enmascarado,4,compromiso ético,3.1000608288825715
+Enmascarado,4,computacionales,2.9459101490553135
+Enmascarado,4,computación,2.1837700970084164
+Enmascarado,4,computación universidad,3.1000608288825715
+Enmascarado,4,computadores,3.505525936990736
+Enmascarado,4,comunicaciones,2.8123787564307907
+Enmascarado,4,comunicación,2.001448540214462
+Enmascarado,4,comunicación efectiva,2.8123787564307907
+Enmascarado,4,comunicarse,2.8123787564307907
+Enmascarado,4,comunicarse efectivamente,3.2823823856765264
+Enmascarado,4,común,2.6945957207744073
+Enmascarado,4,común partir,3.505525936990736
+Enmascarado,4,concebir,3.2823823856765264
+Enmascarado,4,concebir diseñar,3.2823823856765264
+Enmascarado,4,concepción,3.2823823856765264
+Enmascarado,4,conocimiento,2.9459101490553135
+Enmascarado,4,conocimientos,1.756326082181477
+Enmascarado,4,considerando,2.6945957207744073
+Enmascarado,4,considerando impacto,3.793208009442517
+Enmascarado,4,constante,3.1000608288825715
+Enmascarado,4,consultor,3.1000608288825715
+Enmascarado,4,contexto,2.406913648322626
+Enmascarado,4,contexto global,3.505525936990736
+Enmascarado,4,contextos,2.3268709406490897
+Enmascarado,4,continua,2.589235205116581
+Enmascarado,4,contribuir,3.1000608288825715
+Enmascarado,4,contribuyendo,2.9459101490553135
+Enmascarado,4,cristiana,3.1000608288825715
+Enmascarado,4,criterios,3.2823823856765264
+Enmascarado,4,crítico,2.6945957207744073
+Enmascarado,4,cualquier,3.1000608288825715
+Enmascarado,4,datos,1.5959834321062976
+Enmascarado,4,decisiones,2.252762968495368
+Enmascarado,4,desafíos,2.9459101490553135
+Enmascarado,4,desarrolla,2.589235205116581
+Enmascarado,4,desarrollar,2.001448540214462
+Enmascarado,4,desarrollar soluciones,2.9459101490553135
+Enmascarado,4,desarrollo,1.5245244681241528
+Enmascarado,4,desarrollo software,2.6945957207744073
+Enmascarado,4,desempeña,3.2823823856765264
+Enmascarado,4,desempeñarse,2.3268709406490897
+Enmascarado,4,desempeño,2.8123787564307907
+Enmascarado,4,desenvolverse,2.9459101490553135
+Enmascarado,4,diferentes,3.1000608288825715
+Enmascarado,4,digital,2.589235205116581
+Enmascarado,4,digitales,2.589235205116581
+Enmascarado,4,director,3.793208009442517
+Enmascarado,4,disciplina,2.8123787564307907
+Enmascarado,4,disciplinar,3.2823823856765264
+Enmascarado,4,diseña,2.9459101490553135
+Enmascarado,4,diseñar,2.0586069540544107
+Enmascarado,4,diseñar implementar,2.589235205116581
+Enmascarado,4,diseño,2.3268709406490897
+Enmascarado,4,distintas,2.8123787564307907
+Enmascarado,4,diversa,3.1000608288825715
+Enmascarado,4,diversa índole,3.2823823856765264
+Enmascarado,4,diversas,3.1000608288825715
+Enmascarado,4,diversidad,3.1000608288825715
+Enmascarado,4,diversos,2.589235205116581
+Enmascarado,4,económico,3.2823823856765264
+Enmascarado,4,educación,3.793208009442517
+Enmascarado,4,efectiva,2.406913648322626
+Enmascarado,4,efectivamente,3.1000608288825715
+Enmascarado,4,eficiencia,2.4939250253122562
+Enmascarado,4,egresado,2.1837700970084164
+Enmascarado,4,egreso,2.406913648322626
+Enmascarado,4,ello,3.2823823856765264
+Enmascarado,4,emergentes,2.9459101490553135
+Enmascarado,4,emprendimiento,2.8123787564307907
+Enmascarado,4,emprendimientos,2.9459101490553135
+Enmascarado,4,empresarial,3.505525936990736
+Enmascarado,4,empresariales,3.793208009442517
+Enmascarado,4,empresas,2.9459101490553135
+Enmascarado,4,entorno,2.6945957207744073
+Enmascarado,4,equipo,2.9459101490553135
+Enmascarado,4,equipos,1.5959834321062976
+Enmascarado,4,equipos multidisciplinarios,2.3268709406490897
+Enmascarado,4,equipos trabajo,2.406913648322626
+Enmascarado,4,especialidad,3.1000608288825715
+Enmascarado,4,especialización,3.2823823856765264
+Enmascarado,4,estrategias,3.2823823856765264
+Enmascarado,4,está,3.2823823856765264
+Enmascarado,4,estándares,2.4939250253122562
+Enmascarado,4,estándares calidad,3.505525936990736
+Enmascarado,4,evaluación,2.6945957207744073
+Enmascarado,4,evaluar,2.4939250253122562
+Enmascarado,4,evaluar gestionar,3.1000608288825715
+Enmascarado,4,evolución,2.8123787564307907
+Enmascarado,4,experiencia,3.793208009442517
+Enmascarado,4,fin,3.505525936990736
+Enmascarado,4,forma,1.9473813189441862
+Enmascarado,4,formación,1.5959834321062976
+Enmascarado,4,formación ciencias,2.9459101490553135
+Enmascarado,4,formación permite,2.9459101490553135
+Enmascarado,4,función,3.505525936990736
+Enmascarado,4,generación,3.1000608288825715
+Enmascarado,4,generando,3.1000608288825715
+Enmascarado,4,generar,2.6945957207744073
+Enmascarado,4,generar soluciones,3.1000608288825715
+Enmascarado,4,gestiona,3.2823823856765264
+Enmascarado,4,gestionar,2.001448540214462
+Enmascarado,4,gestionar proyectos,2.589235205116581
+Enmascarado,4,gestión,1.9473813189441862
+Enmascarado,4,gestión información,3.505525936990736
+Enmascarado,4,gestión proyectos,2.6945957207744073
+Enmascarado,4,global,2.8123787564307907
+Enmascarado,4,habilidades,2.406913648322626
+Enmascarado,4,hardware,2.6945957207744073
+Enmascarado,4,herramientas,2.252762968495368
+Enmascarado,4,humana,3.2823823856765264
+Enmascarado,4,identificar,3.1000608288825715
+Enmascarado,4,idioma,3.1000608288825715
+Enmascarado,4,idioma inglés,3.1000608288825715
+Enmascarado,4,impacto,3.1000608288825715
+Enmascarado,4,implementa,3.1000608288825715
+Enmascarado,4,implementación,2.589235205116581
+Enmascarado,4,implementando,3.505525936990736
+Enmascarado,4,implementar,2.1192315758708453
+Enmascarado,4,implementar sistemas,3.2823823856765264
+Enmascarado,4,implementar soluciones,3.1000608288825715
+Enmascarado,4,incorporando,3.2823823856765264
+Enmascarado,4,independiente,3.505525936990736
+Enmascarado,4,industria,2.589235205116581
+Enmascarado,4,información,1.3083013596545165
+Enmascarado,4,información comunicaciones,2.9459101490553135
+Enmascarado,4,información comunicación,2.9459101490553135
+Enmascarado,4,infraestructura,3.2823823856765264
+Enmascarado,4,ingeniero,1.672944473242426
+Enmascarado,4,ingeniero computación,2.6945957207744073
+Enmascarado,4,ingeniero universidad,3.1000608288825715
+Enmascarado,4,ingeniería,1.5245244681241528
+Enmascarado,4,ingeniería software,2.3268709406490897
+Enmascarado,4,inglés,2.8123787564307907
+Enmascarado,4,iniciativas,3.2823823856765264
+Enmascarado,4,innovación,1.756326082181477
+Enmascarado,4,innovación emprendimiento,3.1000608288825715
+Enmascarado,4,innovador,3.505525936990736
+Enmascarado,4,innovadoras,2.406913648322626
+Enmascarado,4,instituciones,2.9459101490553135
+Enmascarado,4,instituciones públicas,3.1000608288825715
+Enmascarado,4,institución,3.505525936990736
+Enmascarado,4,instituto,3.1000608288825715
+Enmascarado,4,instituto profesional,3.505525936990736
+Enmascarado,4,integración,2.9459101490553135
+Enmascarado,4,integral,2.589235205116581
+Enmascarado,4,integrales,3.2823823856765264
+Enmascarado,4,inteligencia,2.3268709406490897
+Enmascarado,4,inteligencia artificial,2.589235205116581
+Enmascarado,4,interdisciplinarios,3.1000608288825715
+Enmascarado,4,internacionales,3.505525936990736
+Enmascarado,4,investigación,2.8123787564307907
+Enmascarado,4,jefe,3.2823823856765264
+Enmascarado,4,junto,3.2823823856765264
+Enmascarado,4,laboral,3.2823823856765264
+Enmascarado,4,legal,3.505525936990736
+Enmascarado,4,legal vigente,3.505525936990736
+Enmascarado,4,lenguajes,2.9459101490553135
+Enmascarado,4,lenguajes programación,3.1000608288825715
+Enmascarado,4,liderando,3.505525936990736
+Enmascarado,4,liderar,2.3268709406490897
+Enmascarado,4,liderar equipos,2.589235205116581
+Enmascarado,4,liderazgo,2.6945957207744073
+Enmascarado,4,manager,3.793208009442517
+Enmascarado,4,manejo,3.2823823856765264
+Enmascarado,4,manera,2.6945957207744073
+Enmascarado,4,mantención,3.1000608288825715
+Enmascarado,4,marco,3.1000608288825715
+Enmascarado,4,marcos,3.793208009442517
+Enmascarado,4,mediante,2.9459101490553135
+Enmascarado,4,medio,2.589235205116581
+Enmascarado,4,mejora,2.4939250253122562
+Enmascarado,4,mejora continua,3.1000608288825715
+Enmascarado,4,metodologías,2.4939250253122562
+Enmascarado,4,modelos,3.2823823856765264
+Enmascarado,4,multidisciplinarios,1.9473813189441862
+Enmascarado,4,mundo,2.6945957207744073
+Enmascarado,4,nacional,3.1000608288825715
+Enmascarado,4,necesidades,2.1837700970084164
+Enmascarado,4,negocios,2.6945957207744073
+Enmascarado,4,nivel,2.406913648322626
+Enmascarado,4,normativa,3.2823823856765264
+Enmascarado,4,normativa legal,3.505525936990736
+Enmascarado,4,nuevas,2.9459101490553135
+Enmascarado,4,objetivos,2.9459101490553135
+Enmascarado,4,organizacionales,2.589235205116581
+Enmascarado,4,organizaciones,1.756326082181477
+Enmascarado,4,organización,2.252762968495368
+Enmascarado,4,partir,2.9459101490553135
+Enmascarado,4,país,2.8123787564307907
+Enmascarado,4,pensamiento,2.8123787564307907
+Enmascarado,4,pensamiento crítico,2.9459101490553135
+Enmascarado,4,perfil,2.1192315758708453
+Enmascarado,4,perfil egreso,2.406913648322626
+Enmascarado,4,permanente,2.589235205116581
+Enmascarado,4,permitan,2.8123787564307907
+Enmascarado,4,permite,2.0586069540544107
+Enmascarado,4,persona,2.8123787564307907
+Enmascarado,4,personas,2.4939250253122562
+Enmascarado,4,plan,3.1000608288825715
+Enmascarado,4,planificar,3.1000608288825715
+Enmascarado,4,plataformas,2.9459101490553135
+Enmascarado,4,podrá,3.505525936990736
+Enmascarado,4,posee,2.252762968495368
+Enmascarado,4,presencial,3.2823823856765264
+Enmascarado,4,principios,2.252762968495368
+Enmascarado,4,principios éticos,3.2823823856765264
+Enmascarado,4,privadas,2.9459101490553135
+Enmascarado,4,privado,3.1000608288825715
+Enmascarado,4,problemas,1.8472978603872037
+Enmascarado,4,problemas complejos,2.9459101490553135
+Enmascarado,4,problemáticas,2.9459101490553135
+Enmascarado,4,procesos,1.8472978603872037
+Enmascarado,4,productivo,3.793208009442517
+Enmascarado,4,profesional,1.1782482314063187
+Enmascarado,4,profesional capaz,3.1000608288825715
+Enmascarado,4,profesionales,2.252762968495368
+Enmascarado,4,profesionales capaces,3.2823823856765264
+Enmascarado,4,profesión,3.1000608288825715
+Enmascarado,4,programa,2.6945957207744073
+Enmascarado,4,programación,2.6945957207744073
+Enmascarado,4,promoción,3.2823823856765264
+Enmascarado,4,promoción bien,3.2823823856765264
+Enmascarado,4,propios,3.1000608288825715
+Enmascarado,4,proyectos,1.336472236621213
+Enmascarado,4,proyectos tecnologías,3.1000608288825715
+Enmascarado,4,proyectos tecnológicos,2.8123787564307907
+Enmascarado,4,prácticas,2.9459101490553135
+Enmascarado,4,prácticas industria,3.505525936990736
+Enmascarado,4,públicas,2.9459101490553135
+Enmascarado,4,públicas privadas,2.9459101490553135
+Enmascarado,4,público,3.2823823856765264
+Enmascarado,4,quehacer,3.2823823856765264
+Enmascarado,4,quehacer profesional,3.2823823856765264
+Enmascarado,4,recursos,2.4939250253122562
+Enmascarado,4,redes,2.6945957207744073
+Enmascarado,4,región,3.505525936990736
+Enmascarado,4,relacionados,3.1000608288825715
+Enmascarado,4,requerimientos,2.9459101490553135
+Enmascarado,4,resolución,3.2823823856765264
+Enmascarado,4,resolver,2.0586069540544107
+Enmascarado,4,resolver problemas,2.3268709406490897
+Enmascarado,4,respetando,3.1000608288825715
+Enmascarado,4,respeto,3.1000608288825715
+Enmascarado,4,responsabilidad,2.252762968495368
+Enmascarado,4,responsabilidad social,2.406913648322626
+Enmascarado,4,responsable,3.1000608288825715
+Enmascarado,4,resultados,3.505525936990736
+Enmascarado,4,rol,3.505525936990736
+Enmascarado,4,sector,3.1000608288825715
+Enmascarado,4,sector público,3.2823823856765264
+Enmascarado,4,sede,3.505525936990736
+Enmascarado,4,seguridad,2.1192315758708453
+Enmascarado,4,seguridad información,2.9459101490553135
+Enmascarado,4,según,2.6945957207744073
+Enmascarado,4,sello,2.589235205116581
+Enmascarado,4,semestres,3.2823823856765264
+Enmascarado,4,sentido,3.1000608288825715
+Enmascarado,4,servicios,2.3268709406490897
+Enmascarado,4,siendo,2.9459101490553135
+Enmascarado,4,siendo capaz,3.1000608288825715
+Enmascarado,4,sistemas,1.4578330936254802
+Enmascarado,4,sistemas computacionales,3.2823823856765264
+Enmascarado,4,sistemas información,2.589235205116581
+Enmascarado,4,sistemas redes,3.1000608288825715
+Enmascarado,4,social,1.8472978603872037
+Enmascarado,4,social económico,3.793208009442517
+Enmascarado,4,sociales,3.2823823856765264
+Enmascarado,4,sociedad,2.4939250253122562
+Enmascarado,4,software,1.4578330936254802
+Enmascarado,4,software hardware,3.1000608288825715
+Enmascarado,4,soluciones,1.3654597734944653
+Enmascarado,4,soluciones innovadoras,3.2823823856765264
+Enmascarado,4,soluciones integrales,3.2823823856765264
+Enmascarado,4,soluciones software,3.505525936990736
+Enmascarado,4,soluciones tecnológicas,2.589235205116581
+Enmascarado,4,sostenible,3.1000608288825715
+Enmascarado,4,superior,3.2823823856765264
+Enmascarado,4,sólida,2.589235205116581
+Enmascarado,4,sólida formación,2.589235205116581
+Enmascarado,4,sólidos,3.1000608288825715
+Enmascarado,4,tecnología,2.8123787564307907
+Enmascarado,4,tecnologías,1.2809023854664021
+Enmascarado,4,tecnologías información,1.5596157879354227
+Enmascarado,4,tecnológica,2.406913648322626
+Enmascarado,4,tecnológicas,2.252762968495368
+Enmascarado,4,tecnológico,2.9459101490553135
+Enmascarado,4,tecnológicos,2.1837700970084164
+Enmascarado,4,telecomunicaciones,3.1000608288825715
+Enmascarado,4,tic,2.9459101490553135
+Enmascarado,4,toma,2.406913648322626
+Enmascarado,4,toma decisiones,2.406913648322626
+Enmascarado,4,trabajar,2.6945957207744073
+Enmascarado,4,trabajo,1.672944473242426
+Enmascarado,4,transformación,2.3268709406490897
+Enmascarado,4,transformación digital,2.589235205116581
+Enmascarado,4,través,2.1192315758708453
+Enmascarado,4,trayectoria,3.2823823856765264
+Enmascarado,4,técnicas,3.1000608288825715
+Enmascarado,4,técnico,3.1000608288825715
+Enmascarado,4,técnicos,3.2823823856765264
+Enmascarado,4,título,3.1000608288825715
+Enmascarado,4,título profesional,3.2823823856765264
+Enmascarado,4,universidad,1.4578330936254802
+Enmascarado,4,universidad católica,2.6945957207744073
+Enmascarado,4,universitario,3.505525936990736
+Enmascarado,4,uso,2.6945957207744073
+Enmascarado,4,utilizando,2.9459101490553135
+Enmascarado,4,utilizando herramientas,3.505525936990736
+Enmascarado,4,valor,2.589235205116581
+Enmascarado,4,vida,2.8123787564307907
+Enmascarado,4,vida según,3.2823823856765264
+Enmascarado,4,vigente,3.1000608288825715
+Enmascarado,4,visión,2.4939250253122562
+Enmascarado,4,visión cristiana,3.2823823856765264
+Enmascarado,4,ámbito,2.589235205116581
+Enmascarado,4,ámbitos,2.8123787564307907
+Enmascarado,4,área,2.6945957207744073
+Enmascarado,4,áreas,2.4939250253122562
+Enmascarado,4,énfasis,3.2823823856765264
+Enmascarado,4,ética,2.1837700970084164
+Enmascarado,4,ético,2.4939250253122562
+Enmascarado,4,éticos,2.9459101490553135
+Enmascarado,4,índole,3.2823823856765264

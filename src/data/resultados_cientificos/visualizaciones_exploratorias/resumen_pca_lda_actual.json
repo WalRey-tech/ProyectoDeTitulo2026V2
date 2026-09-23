@@ -1,0 +1,45 @@
+{
+    "fecha_ejecucion_utc": "2026-09-22T23:40:01.915712+00:00",
+    "random_state": 42,
+    "corpus": {
+        "seleccion": "actual",
+        "archivo_entrada": "C:\\Users\\Brayan\\Desktop\\Proyecto_Titulo_V2_Final\\ProyectoDeTitulo2026V2\\src\\data\\processed\\perfiles_egreso_etiquetado_actual_corregido.csv",
+        "sha256": "dc822ace9d53064eab3bc5279f82bc43a608d034750601af10321036918af59b",
+        "filas_descartadas": 0,
+        "total": 63,
+        "distribucion": {
+            "Civil": 32,
+            "Informática": 26,
+            "Ejecución": 5
+        }
+    },
+    "representacion": {
+        "metodo": "TF-IDF",
+        "max_features": 400,
+        "ngram_range": [
+            1,
+            2
+        ],
+        "min_df": 2,
+        "max_df": 0.9,
+        "sublinear_tf": true,
+        "features_generadas": 400
+    },
+    "pca": {
+        "tipo": "no supervisado",
+        "varianza_explicada_componente_1": 0.051097,
+        "varianza_explicada_componente_2": 0.045977,
+        "varianza_explicada_total_2d": 0.097074
+    },
+    "lda": {
+        "tipo": "supervisado",
+        "uso": "Visualización exploratoria de separabilidad entre clases.",
+        "advertencia": "LDA utiliza las etiquetas reales; no debe interpretarse como rendimiento predictivo.",
+        "varianza_discriminante": [
+            0.878301,
+            0.121699
+        ]
+    },
+    "grupos_perfil_repetidos": {},
+    "alcance": "PCA y LDA ajustados al corpus completo para exploración. Este script no realiza particiones ni validación predictiva. Los grupos de perfiles deben tratarse en la validación posterior."
+}

@@ -1,0 +1,16 @@
+﻿feature,tfidf_mean,tfidf_std,tokens_proxy_potenciales,es_proxy_potencial
+informática,0.0639096858651883,0.0358319356158766,informatica,True
+civil,0.0472811824673911,0.0569146696075895,civil,True
+ingeniería civil,0.0329678204289269,0.0620238976009222,civil,True
+informática universidad,0.0292447530164652,0.0448732246123331,informatica,True
+ingeniero civil,0.0281354909612265,0.049259213737924,civil,True
+proyectos informáticos,0.0259206945328511,0.0463294477897259,informaticos,True
+sistemas informáticos,0.0233761475470565,0.0477219726727728,informaticos,True
+civil computación,0.0219825701644867,0.056487020541515,civil,True
+ingeniero informática,0.0189616382230485,0.0466318201568482,informatica,True
+soluciones informáticas,0.0182908133623921,0.0418867221442165,informaticas,True
+ejecución,0.018147345865067,0.0609937493520924,ejecucion,True
+informático,0.0178621290400414,0.0432297615831733,informatico,True
+ingeniero ejecución,0.0132347040182749,0.0460217455847503,ejecucion,True
+civil informático,0.0131196106049636,0.0412611602811223,civil; informatico,True
+informático universidad,0.0122117038589675,0.0398607258241479,informatico,True

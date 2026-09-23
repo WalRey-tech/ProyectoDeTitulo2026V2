@@ -1,0 +1,3 @@
+﻿Modelo,n_features,F1_media,F1_std,n_folds,alcance
+Baseline (400 feat),400,0.6357752018936229,0.22026968356869908,4,exploratorio
+GWO (279 feat),279,0.8360133194692018,0.10486084354223417,4,exploratorio

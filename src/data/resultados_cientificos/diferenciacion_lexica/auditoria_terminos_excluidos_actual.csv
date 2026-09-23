@@ -1,0 +1,370 @@
+﻿grado,termino,log2_ratio_prevalencia,documentos_grado,total_documentos_grado,documentos_resto,total_documentos_resto,prevalencia_grado,prevalencia_resto,motivo_exclusion
+Civil,academico,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,actualizacion,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,adaptarse,-0.4069641987431617,3,32,4,31,0.09375,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,ademas,-0.2048587915516995,8,32,9,31,0.25,0.2903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,ambito,-0.4918530963296749,5,32,7,31,0.15625,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,ambitos,-0.04439411935845356,4,32,4,31,0.125,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,analisis datos,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,analitica,-1.1818976431083883,2,32,5,31,0.0625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,analizar,-0.28540221886224837,5,32,6,31,0.15625,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,aplicacion,-0.3339007365534385,4,32,5,31,0.125,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,aplicaciones,-0.4069641987431617,3,32,4,31,0.09375,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,aplicando,-1.1439297929093677,3,32,7,31,0.09375,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,apoyar,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,aprendizaje,-0.22496636500027437,7,32,8,31,0.21875,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,area,-0.7813597135246597,4,32,7,31,0.125,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,asimismo,-1.1818976431083883,2,32,5,31,0.0625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,asociados,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,autonoma,-0.4069641987431617,3,32,4,31,0.09375,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,bajo,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,basadas,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,bases,-1.8099288657214305,2,32,8,31,0.0625,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,bases datos,-1.6293566200796095,2,32,7,31,0.0625,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,basicas ingenieria,1.8300749985576876,5,32,1,31,0.15625,0.03225806451612903,denominacion_grado
+Civil,bien,-0.9374789154419416,3,32,6,31,0.09375,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,bien comun,-0.6964708159381465,3,32,5,31,0.09375,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,calidad,-1.2019353963449335,6,32,14,31,0.1875,0.45161290322580644,prevalencia_suavizada_no_superior_al_resto
+Civil,campo,-0.04439411935845356,4,32,4,31,0.125,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,capacidad,-0.5652262826598938,11,32,16,31,0.34375,0.5161290322580645,prevalencia_suavizada_no_superior_al_resto
+Civil,capacidad trabajar,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,capacidades,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,capacitado,-0.5749088360572334,4,32,6,31,0.125,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,carrera ingenieria,0.16205675810897274,7,32,6,31,0.21875,0.1935483870967742,denominacion_grado
+Civil,catolica,-0.9374789154419416,3,32,6,31,0.09375,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,chile,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,contexto_institucional_geografico
+Civil,ciclo,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,ciencia datos,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,ciencias ingenieria,2.3885652879176527,13,32,2,31,0.40625,0.06451612903225806,denominacion_grado
+Civil,civil,4.203533394085132,28,32,1,31,0.875,0.03225806451612903,denominacion_grado
+Civil,civil computacion,4.203533394085132,9,32,0,31,0.28125,0.0,denominacion_grado
+Civil,civil informatica,5.0,16,32,0,31,0.5,0.0,denominacion_grado
+Civil,civil informatico,3.656045598782639,6,32,0,31,0.1875,0.0,denominacion_grado
+Civil,colaborativamente,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,competencias genericas,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,comprometido,-0.4069641987431617,3,32,4,31,0.09375,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,computacion informatica,-0.04439411935845356,6,32,6,31,0.1875,0.1935483870967742,denominacion_grado
+Civil,comun,-0.04439411935845356,5,32,5,31,0.15625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,comunicacion efectiva,-0.9374789154419416,3,32,6,31,0.09375,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,comunicaciones,-0.5749088360572334,4,32,6,31,0.125,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,conocimiento,-0.3339007365534385,4,32,5,31,0.125,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,conocimientos,-0.23080724358933477,14,32,16,31,0.4375,0.5161290322580645,prevalencia_suavizada_no_superior_al_resto
+Civil,considerando,-0.04439411935845356,6,32,6,31,0.1875,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,construir,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,contexto,-0.8328900141647417,5,32,9,31,0.15625,0.2903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,contextos,-0.9772799234999165,5,32,10,31,0.15625,0.3225806451612903,prevalencia_suavizada_no_superior_al_resto
+Civil,continua,-0.9374789154419416,3,32,6,31,0.09375,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,crear,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,criterios,-1.1818976431083883,2,32,5,31,0.0625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,critico,-0.5749088360572334,4,32,6,31,0.125,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,datos,-0.6470586218130684,13,32,20,31,0.40625,0.6451612903225806,prevalencia_suavizada_no_superior_al_resto
+Civil,decisiones,-0.3854310371935204,7,32,9,31,0.21875,0.2903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,desarrolla,-0.28540221886224837,5,32,6,31,0.15625,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,desarrollar,-1.0013253974665675,8,32,16,31,0.25,0.5161290322580645,prevalencia_suavizada_no_superior_al_resto
+Civil,desarrollo,-0.04439411935845356,18,32,18,31,0.5625,0.5806451612903226,prevalencia_suavizada_no_superior_al_resto
+Civil,desarrollo software,-1.6293566200796095,2,32,7,31,0.0625,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,desempeno,-1.1439297929093677,3,32,7,31,0.09375,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,diferentes,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,digital,-0.7813597135246597,4,32,7,31,0.125,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,digitales,-0.7813597135246597,4,32,7,31,0.125,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,disciplinar,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,disenar,-0.16468835307616514,11,32,12,31,0.34375,0.3870967741935484,prevalencia_suavizada_no_superior_al_resto
+Civil,diseno,-0.044394119358453395,8,32,8,31,0.25,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,distintos,-1.4229057426121832,2,32,6,31,0.0625,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,diversidad,-0.6964708159381465,3,32,5,31,0.09375,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,efectiva,-0.25084499682587985,6,32,7,31,0.1875,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,eficiencia,-0.4314172424677008,6,32,8,31,0.1875,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,eficientes,-1.1818976431083883,2,32,5,31,0.0625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,egresado,-1.2667865406949015,4,32,10,31,0.125,0.3225806451612903,prevalencia_suavizada_no_superior_al_resto
+Civil,egreso,-0.5918819146609469,6,32,9,31,0.1875,0.2903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,ejercicio,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,ello,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,emergentes,-0.04439411935845356,4,32,4,31,0.125,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,emprendimientos,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,enfoque,-0.04439411935845356,4,32,4,31,0.125,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,entorno,-0.7813597135246597,4,32,7,31,0.125,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,equipo,-0.04439411935845356,4,32,4,31,0.125,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,equipos,-0.21948082591654464,15,32,17,31,0.46875,0.5483870967741935,prevalencia_suavizada_no_superior_al_resto
+Civil,equipos multidisciplinarios,-0.22496636500027437,7,32,8,31,0.21875,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,equipos trabajo,-0.4918530963296749,5,32,7,31,0.15625,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,especialidad,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,estandares,-2.1147834472498515,2,32,10,31,0.0625,0.3225806451612903,prevalencia_suavizada_no_superior_al_resto
+Civil,estrategias,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,eticos,-0.3339007365534385,4,32,5,31,0.125,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,evaluar,-0.28540221886224837,5,32,6,31,0.15625,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,evaluar gestionar,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,evolucion,-0.3339007365534385,4,32,5,31,0.125,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,fin,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,forma,-0.2959328863544178,10,32,12,31,0.3125,0.3870967741935484,prevalencia_suavizada_no_superior_al_resto
+Civil,formacion permite,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,generacion,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,generando,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,generar,-1.6293566200796095,2,32,7,31,0.0625,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,generar soluciones,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,genericas,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,gestion,-0.14748761232255694,13,32,14,31,0.40625,0.45161290322580644,prevalencia_suavizada_no_superior_al_resto
+Civil,gestion proyectos,-0.04439411935845356,5,32,5,31,0.15625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,gestionar proyectos,-1.1439297929093677,3,32,7,31,0.09375,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,hardware,-1.4229057426121832,2,32,6,31,0.0625,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,herramientas,-0.8675163572743742,6,32,11,31,0.1875,0.3548387096774194,prevalencia_suavizada_no_superior_al_resto
+Civil,implementar,-0.6007874678828387,8,32,12,31,0.25,0.3870967741935484,prevalencia_suavizada_no_superior_al_resto
+Civil,implementar operar,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,industria,-1.8099288657214305,2,32,8,31,0.0625,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,informacion,-0.23283920877156378,21,32,24,31,0.65625,0.7741935483870968,prevalencia_suavizada_no_superior_al_resto
+Civil,informacion comunicacion,-0.3339007365534385,4,32,5,31,0.125,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,informacion comunicaciones,-0.04439411935845356,4,32,4,31,0.125,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,informatica,-0.14936367895999597,26,32,28,31,0.8125,0.9032258064516129,denominacion_grado
+Civil,informatica universidad,0.231240323254974,11,32,9,31,0.34375,0.2903225806451613,denominacion_grado
+Civil,informaticas,-0.9772799234999165,5,32,10,31,0.15625,0.3225806451612903,denominacion_grado
+Civil,informatico,0.4861205973403262,6,32,4,31,0.1875,0.12903225806451613,denominacion_grado
+Civil,informatico universidad,0.8036027871964965,4,32,2,31,0.125,0.06451612903225806,denominacion_grado
+Civil,informaticos,0.1306925871996377,17,32,15,31,0.53125,0.4838709677419355,denominacion_grado
+Civil,ingeniera,0.8036027871964965,4,32,2,31,0.125,0.06451612903225806,denominacion_grado
+Civil,ingenieria,0.3317543665267954,30,32,23,31,0.9375,0.7419354838709677,denominacion_grado
+Civil,ingenieria civil,5.0,16,32,0,31,0.5,0.0,denominacion_grado
+Civil,ingenieria informatica,-1.2019353963449335,6,32,14,31,0.1875,0.45161290322580644,denominacion_grado
+Civil,ingenieria software,0.5030936759440401,9,32,6,31,0.28125,0.1935483870967742,denominacion_grado
+Civil,ingeniero,-0.11654390511428867,19,32,20,31,0.59375,0.6451612903225806,denominacion_grado
+Civil,ingeniero civil,3.415037499278844,16,32,1,31,0.5,0.03225806451612903,denominacion_grado
+Civil,ingenieros,1.8300749985576876,5,32,1,31,0.15625,0.03225806451612903,denominacion_grado
+Civil,innovadoras,-0.22496636500027437,7,32,8,31,0.21875,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,instituciones,-0.4069641987431617,3,32,4,31,0.09375,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,integracion,-0.4069641987431617,3,32,4,31,0.09375,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,integrales,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,inteligencia,-0.044394119358453395,8,32,8,31,0.25,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,interdisciplinarios,-1.1818976431083883,2,32,5,31,0.0625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,jefe,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,liderar equipos,-0.3339007365534385,4,32,5,31,0.125,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,mediante,-0.04439411935845356,5,32,5,31,0.15625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,mejora,-0.28540221886224837,5,32,6,31,0.15625,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,modelos,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,multidisciplinarios,-0.17563865263670603,10,32,11,31,0.3125,0.3548387096774194,prevalencia_suavizada_no_superior_al_resto
+Civil,mundo,-0.4918530963296749,5,32,7,31,0.15625,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,nacional,-1.1818976431083883,2,32,5,31,0.0625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,necesidades,-0.1887840286936281,9,32,10,31,0.28125,0.3225806451612903,prevalencia_suavizada_no_superior_al_resto
+Civil,negocios,-0.04439411935845356,5,32,5,31,0.15625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,objetivos,-1.1818976431083883,2,32,5,31,0.0625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,operar,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,oportunidades,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,organizacion,-0.5918819146609469,6,32,9,31,0.1875,0.2903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,organizacionales,-0.04439411935845356,6,32,6,31,0.1875,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,organizaciones,-0.354734239970604,12,32,15,31,0.375,0.4838709677419355,prevalencia_suavizada_no_superior_al_resto
+Civil,otros,-0.6964708159381465,3,32,5,31,0.09375,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,partir,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,pensamiento,-0.3339007365534385,4,32,5,31,0.125,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,pensamiento critico,-0.4069641987431617,3,32,4,31,0.09375,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,perfil,-0.17563865263670603,10,32,11,31,0.3125,0.3548387096774194,prevalencia_suavizada_no_superior_al_resto
+Civil,perfil egreso,-0.8328900141647417,5,32,9,31,0.15625,0.2903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,permanente,-0.9619319591664807,4,32,8,31,0.125,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,permitan,-1.6293566200796095,2,32,7,31,0.0625,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,permite,-0.044394119358453395,11,32,11,31,0.34375,0.3548387096774194,prevalencia_suavizada_no_superior_al_resto
+Civil,persona,-0.04439411935845356,4,32,4,31,0.125,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,planificar,-1.4229057426121832,2,32,6,31,0.0625,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,plataformas,-1.4229057426121832,2,32,6,31,0.0625,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,posee,-0.1887840286936281,9,32,10,31,0.28125,0.3225806451612903,prevalencia_suavizada_no_superior_al_resto
+Civil,privadas,-0.6964708159381465,3,32,5,31,0.09375,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,privado,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,procesos,-0.5652262826598938,11,32,16,31,0.34375,0.5161290322580645,prevalencia_suavizada_no_superior_al_resto
+Civil,profesional capaz,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,profesionales,-0.3200285619718807,9,32,11,31,0.28125,0.3548387096774194,prevalencia_suavizada_no_superior_al_resto
+Civil,profesionales capaces,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,promocion,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,propios,-0.04439411935845356,4,32,4,31,0.125,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,proyectos informaticos,-0.3854310371935204,7,32,9,31,0.21875,0.2903225806451613,denominacion_grado
+Civil,proyectos ingenieria,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,denominacion_grado
+Civil,proyectos software,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,publicas,-0.6964708159381465,3,32,5,31,0.09375,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,publicas privadas,-0.6964708159381465,3,32,5,31,0.09375,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,puede,-0.4069641987431617,3,32,4,31,0.09375,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,quehacer,-0.4069641987431617,3,32,4,31,0.09375,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,recursos,-0.8328900141647417,5,32,9,31,0.15625,0.2903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,redes,-0.04439411935845356,6,32,6,31,0.1875,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,relacionados,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,requerimientos,-1.4229057426121832,2,32,6,31,0.0625,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,resolucion,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,riesgos,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,sector,-0.04439411935845356,4,32,4,31,0.125,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,segun,-1.8099288657214305,2,32,8,31,0.0625,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,seguridad,-0.480493234165127,8,32,11,31,0.25,0.3548387096774194,prevalencia_suavizada_no_superior_al_resto
+Civil,seguridad informacion,-0.6964708159381465,3,32,5,31,0.09375,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,sello,-0.04439411935845356,5,32,5,31,0.15625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,sentido,-0.3339007365534385,4,32,5,31,0.125,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,servicios,-0.2048587915516995,8,32,9,31,0.25,0.2903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,siendo capaz,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,sistemas,-0.1852566551983029,19,32,21,31,0.59375,0.6774193548387096,prevalencia_suavizada_no_superior_al_resto
+Civil,sistemas informacion,-0.4314172424677008,6,32,8,31,0.1875,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,sistemas informaticos,-0.25084499682587985,6,32,7,31,0.1875,0.22580645161290322,denominacion_grado
+Civil,sociales,-0.6964708159381465,3,32,5,31,0.09375,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,software,-0.26120550843160173,18,32,21,31,0.5625,0.6774193548387096,prevalencia_suavizada_no_superior_al_resto
+Civil,soluciones informaticas,-1.3245020385511888,3,32,8,31,0.09375,0.25806451612903225,denominacion_grado
+Civil,soluciones innovadoras,-0.8923910259134035,2,32,4,31,0.0625,0.12903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,soluciones software,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,soluciones tecnologicas,-0.9619319591664807,4,32,8,31,0.125,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,sustentable,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,tecnico,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,tecnicos,-1.1818976431083883,2,32,5,31,0.0625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,tecnologia,-0.04439411935845356,5,32,5,31,0.15625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,tecnologicas,-0.8675163572743742,6,32,11,31,0.1875,0.3548387096774194,prevalencia_suavizada_no_superior_al_resto
+Civil,tecnologicos,-0.9878105909920859,6,32,12,31,0.1875,0.3870967741935484,prevalencia_suavizada_no_superior_al_resto
+Civil,ti,-0.3339007365534385,4,32,5,31,0.125,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,tic,-0.6964708159381465,3,32,5,31,0.09375,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,toma,-0.4918530963296749,5,32,7,31,0.15625,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,toma decisiones,-0.4918530963296749,5,32,7,31,0.15625,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,trabajar,-0.5749088360572334,4,32,6,31,0.125,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,trabajo,-0.14060943461775657,14,32,15,31,0.4375,0.4838709677419355,prevalencia_suavizada_no_superior_al_resto
+Civil,trabajo equipo,-0.044394119358453395,3,32,3,31,0.09375,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,transformacion,-0.5918819146609469,6,32,9,31,0.1875,0.2903225806451613,prevalencia_suavizada_no_superior_al_resto
+Civil,transformacion digital,-0.7813597135246597,4,32,7,31,0.125,0.22580645161290322,prevalencia_suavizada_no_superior_al_resto
+Civil,traves,-0.34924870088687426,8,32,10,31,0.25,0.3225806451612903,prevalencia_suavizada_no_superior_al_resto
+Civil,universidad,-0.044394119358453395,19,32,19,31,0.59375,0.6129032258064516,contexto_institucional_geografico
+Civil,universidad catolica,-0.9374789154419416,3,32,6,31,0.09375,0.1935483870967742,contexto_institucional_geografico
+Civil,uso,-0.6724253419714956,5,32,8,31,0.15625,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Civil,utilizando,-1.1818976431083883,2,32,5,31,0.0625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,valor,-0.04439411935845356,6,32,6,31,0.1875,0.1935483870967742,prevalencia_suavizada_no_superior_al_resto
+Civil,vida,-0.04439411935845356,5,32,5,31,0.15625,0.16129032258064516,prevalencia_suavizada_no_superior_al_resto
+Civil,vigente,-0.5298209465286953,2,32,3,31,0.0625,0.0967741935483871,prevalencia_suavizada_no_superior_al_resto
+Civil,vision,-0.4314172424677008,6,32,8,31,0.1875,0.25806451612903225,prevalencia_suavizada_no_superior_al_resto
+Ejecución,computacion informatica,1.8571079572547038,3,5,9,58,0.6,0.15517241379310345,denominacion_grado
+Ejecución,ejecucion,5.172149666556826,5,5,1,58,1.0,0.017241379310344827,denominacion_grado
+Ejecución,formacion,-0.357671279971869,2,5,31,58,0.4,0.5344827586206896,prevalencia_suavizada_no_superior_al_resto
+Ejecución,informatica,0.12775554719837268,5,5,49,58,1.0,0.8448275862068966,denominacion_grado
+Ejecución,informatica universidad,0.4101552778990976,2,5,18,58,0.4,0.3103448275862069,denominacion_grado
+Ejecución,informaticos,0.22239242133644802,3,5,29,58,0.6,0.5,denominacion_grado
+Ejecución,ingenieria,-0.5531760120535056,3,5,50,58,0.6,0.8620689655172413,denominacion_grado
+Ejecución,ingenieria informatica,0.4101552778990976,2,5,18,58,0.4,0.3103448275862069,denominacion_grado
+Ejecución,ingeniero,0.6485877104998131,5,5,34,58,1.0,0.5862068965517241,denominacion_grado
+Ejecución,ingeniero ejecucion,6.757112167277982,5,5,0,58,1.0,0.0,denominacion_grado
+Ejecución,instituto,2.449683642085735,2,5,4,58,0.4,0.06896551724137931,contexto_institucional_geografico
+Ejecución,problemas,-0.16175106999661204,2,5,27,58,0.4,0.46551724137931033,prevalencia_suavizada_no_superior_al_resto
+Ejecución,profesional,-0.04018909011569885,4,5,45,58,0.8,0.7758620689655172,prevalencia_suavizada_no_superior_al_resto
+Ejecución,proyectos,-0.3379080251504391,3,5,43,58,0.6,0.7413793103448276,prevalencia_suavizada_no_superior_al_resto
+Ejecución,sistemas informaticos,1.712718047919529,3,5,10,58,0.6,0.1724137931034483,denominacion_grado
+Ejecución,social,-0.10831181103515172,2,5,26,58,0.4,0.4482758620689655,prevalencia_suavizada_no_superior_al_resto
+Ejecución,soluciones,-0.6841721046490553,2,5,39,58,0.4,0.6724137931034483,prevalencia_suavizada_no_superior_al_resto
+Ejecución,trabajo,-0.16175106999661204,2,5,27,58,0.4,0.46551724137931033,prevalencia_suavizada_no_superior_al_resto
+Ejecución,universidad,0.3590810933048283,4,5,34,58,0.8,0.5862068965517241,contexto_institucional_geografico
+Ejecución,universidad catolica,2.404595752557197,3,5,6,58,0.6,0.10344827586206896,contexto_institucional_geografico
+Informática,ambiental,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,ambitos,-0.885471611973613,2,26,6,37,0.07692307692307693,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,analisis,-0.2439255828860894,4,26,7,37,0.15384615384615385,0.1891891891891892,prevalencia_suavizada_no_superior_al_resto
+Informática,aplicada,-0.6064956622707975,3,26,7,37,0.11538461538461539,0.1891891891891892,prevalencia_suavizada_no_superior_al_resto
+Informática,aplicar,-0.4244978285279103,4,26,8,37,0.15384615384615385,0.21621621621621623,prevalencia_suavizada_no_superior_al_resto
+Informática,areas,-0.7293524100563313,4,26,10,37,0.15384615384615385,0.2702702702702703,prevalencia_suavizada_no_superior_al_resto
+Informática,artificial,-0.13499121133292535,5,26,8,37,0.19230769230769232,0.21621621621621623,prevalencia_suavizada_no_superior_al_resto
+Informática,asi,-0.7293524100563313,4,26,10,37,0.15384615384615385,0.2702702702702703,prevalencia_suavizada_no_superior_al_resto
+Informática,base,-0.6064956622707975,3,26,7,37,0.11538461538461539,0.1891891891891892,prevalencia_suavizada_no_superior_al_resto
+Informática,basicas,-1.6538013770491544,3,26,15,37,0.11538461538461539,0.40540540540540543,prevalencia_suavizada_no_superior_al_resto
+Informática,bien comun,-0.15903668529957632,3,26,5,37,0.11538461538461539,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,capacidades,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,capacitado,-0.03747470541866304,4,26,6,37,0.15384615384615385,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,capaz,-0.7607165809656662,6,26,15,37,0.23076923076923078,0.40540540540540543,prevalencia_suavizada_no_superior_al_resto
+Informática,carrera ingenieria,0.28658913381269047,6,26,7,37,0.23076923076923078,0.1891891891891892,denominacion_grado
+Informática,catolica,-0.4000447848033713,3,26,6,37,0.11538461538461539,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,chile,1.341036917835067,4,26,2,37,0.15384615384615385,0.05405405405405406,contexto_institucional_geografico
+Informática,ciencia,-0.2439255828860894,4,26,7,37,0.15384615384615385,0.1891891891891892,prevalencia_suavizada_no_superior_al_resto
+Informática,ciencias,-1.4212301146939992,6,26,24,37,0.23076923076923078,0.6486486486486487,prevalencia_suavizada_no_superior_al_resto
+Informática,ciencias basicas,-1.6538013770491544,3,26,15,37,0.11538461538461539,0.40540540540540543,prevalencia_suavizada_no_superior_al_resto
+Informática,ciencias ingenieria,-1.9399193959959893,2,26,13,37,0.07692307692307693,0.35135135135135137,denominacion_grado
+Informática,competencias,-0.11701347040386972,9,26,14,37,0.34615384615384615,0.3783783783783784,prevalencia_suavizada_no_superior_al_resto
+Informática,complejos,-1.0919224894410395,3,26,10,37,0.11538461538461539,0.2702702702702703,prevalencia_suavizada_no_superior_al_resto
+Informática,comprometido,-0.644463512469818,2,26,5,37,0.07692307692307693,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,compromiso,-0.05444778402237646,6,26,9,37,0.23076923076923078,0.24324324324324326,prevalencia_suavizada_no_superior_al_resto
+Informática,computacion,-1.0919224894410393,5,26,16,37,0.19230769230769232,0.43243243243243246,prevalencia_suavizada_no_superior_al_resto
+Informática,computacion informatica,-0.9475325801058645,3,26,9,37,0.11538461538461539,0.24324324324324326,denominacion_grado
+Informática,computacionales,-0.9475325801058645,3,26,9,37,0.11538461538461539,0.24324324324324326,prevalencia_suavizada_no_superior_al_resto
+Informática,comun,-0.6064956622707975,3,26,7,37,0.11538461538461539,0.1891891891891892,prevalencia_suavizada_no_superior_al_resto
+Informática,comunicacion,-0.303426594634751,9,26,16,37,0.34615384615384615,0.43243243243243246,prevalencia_suavizada_no_superior_al_resto
+Informática,comunicarse,-0.885471611973613,2,26,6,37,0.07692307692307693,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,conocimientos,-0.07255716457410814,12,26,18,37,0.46153846153846156,0.4864864864864865,prevalencia_suavizada_no_superior_al_resto
+Informática,construir,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,cristiana,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,cuenta,-0.885471611973613,2,26,6,37,0.07692307692307693,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,desafios,-0.4000447848033713,3,26,6,37,0.11538461538461539,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,desempenarse,-0.4398457928613464,5,26,10,37,0.19230769230769232,0.2702702702702703,prevalencia_suavizada_no_superior_al_resto
+Informática,desenvolverse,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,disena,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,disenar,-0.11701347040386972,9,26,14,37,0.34615384615384615,0.3783783783783784,prevalencia_suavizada_no_superior_al_resto
+Informática,disenar implementar,-0.7870679079126183,3,26,8,37,0.11538461538461539,0.21621621621621623,prevalencia_suavizada_no_superior_al_resto
+Informática,diseno,-0.5710903261395986,5,26,11,37,0.19230769230769232,0.2972972972972973,prevalencia_suavizada_no_superior_al_resto
+Informática,emergentes,-0.15903668529957632,3,26,5,37,0.11538461538461539,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,emprendimiento,-0.6064956622707975,3,26,7,37,0.11538461538461539,0.1891891891891892,prevalencia_suavizada_no_superior_al_resto
+Informática,empresas,-0.6064956622707975,3,26,7,37,0.11538461538461539,0.1891891891891892,prevalencia_suavizada_no_superior_al_resto
+Informática,equipo,-0.15903668529957632,3,26,5,37,0.11538461538461539,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,etica,-0.8024158722460543,5,26,13,37,0.19230769230769232,0.35135135135135137,prevalencia_suavizada_no_superior_al_resto
+Informática,evaluacion,-0.885471611973613,2,26,6,37,0.07692307692307693,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,formacion,-0.4752511289925447,11,26,22,37,0.4230769230769231,0.5945945945945946,prevalencia_suavizada_no_superior_al_resto
+Informática,formar,-0.644463512469818,2,26,5,37,0.07692307692307693,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,gestion,-0.02779215202132365,11,26,16,37,0.4230769230769231,0.43243243243243246,prevalencia_suavizada_no_superior_al_resto
+Informática,habilidades,-0.5710903261395986,5,26,11,37,0.19230769230769232,0.2972972972972973,prevalencia_suavizada_no_superior_al_resto
+Informática,identificar,-0.644463512469818,2,26,5,37,0.07692307692307693,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,impacto,-0.644463512469818,2,26,5,37,0.07692307692307693,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,implementacion,-0.03747470541866304,4,26,6,37,0.15384615384615385,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,informatica,0.07034893945783782,23,26,31,37,0.8846153846153846,0.8378378378378378,denominacion_grado
+Informática,informatica universidad,-0.3549568952748331,7,26,13,37,0.2692307692307692,0.35135135135135137,denominacion_grado
+Informática,informaticas,1.0405278065826102,9,26,6,37,0.34615384615384615,0.16216216216216217,denominacion_grado
+Informática,informatico,-0.03747470541866304,4,26,6,37,0.15384615384615385,0.16216216216216217,denominacion_grado
+Informática,informatico universidad,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,denominacion_grado
+Informática,informaticos,-0.2206558035632421,12,26,20,37,0.46153846153846156,0.5405405405405406,denominacion_grado
+Informática,ingeniera,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,denominacion_grado
+Informática,ingenieria,-0.21549717455957165,20,26,33,37,0.7692307692307693,0.8918918918918919,denominacion_grado
+Informática,ingenieria informatica,1.0494333598045023,12,26,8,37,0.46153846153846156,0.21621621621621623,denominacion_grado
+Informática,ingenieria software,-0.4398457928613464,5,26,10,37,0.19230769230769232,0.2702702702702703,denominacion_grado
+Informática,ingeniero,-0.16747352244821603,15,26,24,37,0.5769230769230769,0.6486486486486487,denominacion_grado
+Informática,ingeniero informatica,4.885357434058878,10,26,0,37,0.38461538461538464,0.0,denominacion_grado
+Informática,innovacion,-0.388315492221264,9,26,17,37,0.34615384615384615,0.4594594594594595,prevalencia_suavizada_no_superior_al_resto
+Informática,instituciones,-0.644463512469818,2,26,5,37,0.07692307692307693,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,instituto,1.341036917835067,4,26,2,37,0.15384615384615385,0.05405405405405406,contexto_institucional_geografico
+Informática,integral,-0.29545588352617136,5,26,9,37,0.19230769230769232,0.24324324324324326,prevalencia_suavizada_no_superior_al_resto
+Informática,inteligencia,-0.19883769335755144,6,26,10,37,0.23076923076923078,0.2702702702702703,prevalencia_suavizada_no_superior_al_resto
+Informática,inteligencia artificial,-0.13499121133292535,5,26,8,37,0.19230769230769232,0.21621621621621623,prevalencia_suavizada_no_superior_al_resto
+Informática,investigacion,-0.15903668529957632,3,26,5,37,0.11538461538461539,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,liderazgo,-0.13499121133292535,5,26,8,37,0.19230769230769232,0.21621621621621623,prevalencia_suavizada_no_superior_al_resto
+Informática,manera,-0.05444778402237646,6,26,9,37,0.23076923076923078,0.24324324324324326,prevalencia_suavizada_no_superior_al_resto
+Informática,medio,-0.03747470541866304,4,26,6,37,0.15384615384615385,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,negocios,-0.6064956622707975,3,26,7,37,0.11538461538461539,0.1891891891891892,prevalencia_suavizada_no_superior_al_resto
+Informática,nivel,-0.5849625007211563,4,26,9,37,0.15384615384615385,0.24324324324324326,prevalencia_suavizada_no_superior_al_resto
+Informática,nuevas,-0.15903668529957632,3,26,5,37,0.11538461538461539,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,operar,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,pais,-0.885471611973613,2,26,6,37,0.07692307692307693,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,permite,-0.27747814259711573,8,26,14,37,0.3076923076923077,0.3783783783783784,prevalencia_suavizada_no_superior_al_resto
+Informática,persona,-0.885471611973613,2,26,6,37,0.07692307692307693,0.16216216216216217,prevalencia_suavizada_no_superior_al_resto
+Informática,principios,-0.7293524100563313,4,26,10,37,0.15384615384615385,0.2702702702702703,prevalencia_suavizada_no_superior_al_resto
+Informática,privadas,-0.15903668529957632,3,26,5,37,0.11538461538461539,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,problemas,-0.4000447848033713,10,26,19,37,0.38461538461538464,0.5135135135135135,prevalencia_suavizada_no_superior_al_resto
+Informática,problemas complejos,-1.2724947350828604,2,26,8,37,0.07692307692307693,0.21621621621621623,prevalencia_suavizada_no_superior_al_resto
+Informática,profesion,-0.644463512469818,2,26,5,37,0.07692307692307693,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,profesional,-0.15229510742052105,19,26,30,37,0.7307692307692307,0.8108108108108109,prevalencia_suavizada_no_superior_al_resto
+Informática,profesional ingeniero,2.078002512001273,4,26,1,37,0.15384615384615385,0.02702702702702703,denominacion_grado
+Informática,programa,-0.7870679079126183,3,26,8,37,0.11538461538461539,0.21621621621621623,prevalencia_suavizada_no_superior_al_resto
+Informática,proyectos,-0.0029174833822943314,19,26,27,37,0.7307692307692307,0.7297297297297297,prevalencia_suavizada_no_superior_al_resto
+Informática,proyectos informaticos,0.493040011280117,8,26,8,37,0.3076923076923077,0.21621621621621623,denominacion_grado
+Informática,proyectos ingenieria,0.493040011280117,3,26,3,37,0.11538461538461539,0.08108108108108109,denominacion_grado
+Informática,publicas,-0.15903668529957632,3,26,5,37,0.11538461538461539,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,publicas privadas,-0.15903668529957632,3,26,5,37,0.11538461538461539,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,resolver,-0.46389126682799703,8,26,16,37,0.3076923076923077,0.43243243243243246,prevalencia_suavizada_no_superior_al_resto
+Informática,resolver problemas,-0.5614077727422595,6,26,13,37,0.23076923076923078,0.35135135135135137,prevalencia_suavizada_no_superior_al_resto
+Informática,responsabilidad,-0.9055093652101579,5,26,14,37,0.19230769230769232,0.3783783783783784,prevalencia_suavizada_no_superior_al_resto
+Informática,responsabilidad social,-0.8605969433345836,4,26,11,37,0.15384615384615385,0.2972972972972973,prevalencia_suavizada_no_superior_al_resto
+Informática,sello,-1.2724947350828604,2,26,8,37,0.07692307692307693,0.21621621621621623,prevalencia_suavizada_no_superior_al_resto
+Informática,semestres,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,siendo,-0.644463512469818,2,26,5,37,0.07692307692307693,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,siendo capaz,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,sistemas,-0.0772757134766377,16,26,24,37,0.6153846153846154,0.6486486486486487,prevalencia_suavizada_no_superior_al_resto
+Informática,sistemas informaticos,-0.5849625007211563,4,26,9,37,0.15384615384615385,0.24324324324324326,denominacion_grado
+Informática,social,-0.5444346941385461,9,26,19,37,0.34615384615384615,0.5135135135135135,prevalencia_suavizada_no_superior_al_resto
+Informática,sociedad,-0.4244978285279103,4,26,8,37,0.15384615384615385,0.21621621621621623,prevalencia_suavizada_no_superior_al_resto
+Informática,software,-0.01715472103906701,16,26,23,37,0.6153846153846154,0.6216216216216216,prevalencia_suavizada_no_superior_al_resto
+Informática,solidos,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,soluciones informaticas,1.2300056054463233,7,26,4,37,0.2692307692307692,0.10810810810810811,denominacion_grado
+Informática,sostenible,-1.2724947350828604,2,26,8,37,0.07692307692307693,0.21621621621621623,prevalencia_suavizada_no_superior_al_resto
+Informática,tecnicas,-0.15903668529957632,3,26,5,37,0.11538461538461539,0.13513513513513514,prevalencia_suavizada_no_superior_al_resto
+Informática,tecnico,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,tecnologias,-0.05444778402237646,19,26,28,37,0.7307692307692307,0.7567567567567568,prevalencia_suavizada_no_superior_al_resto
+Informática,tecnologias informacion,-0.24392558288608904,13,26,22,37,0.5,0.5945945945945946,prevalencia_suavizada_no_superior_al_resto
+Informática,telecomunicaciones,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,titulo,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,trabajo equipo,-0.3549568952748331,2,26,4,37,0.07692307692307693,0.10810810810810811,prevalencia_suavizada_no_superior_al_resto
+Informática,universidad,-0.10735253001064538,15,26,23,37,0.5769230769230769,0.6216216216216216,contexto_institucional_geografico
+Informática,universidad catolica,-0.4000447848033713,3,26,6,37,0.11538461538461539,0.16216216216216217,contexto_institucional_geografico
+Informática,vida,-0.6064956622707975,3,26,7,37,0.11538461538461539,0.1891891891891892,prevalencia_suavizada_no_superior_al_resto
+Informática,vision,-0.29545588352617136,5,26,9,37,0.19230769230769232,0.24324324324324326,prevalencia_suavizada_no_superior_al_resto
