@@ -26,10 +26,10 @@ unidad_024;24;1;Civil;Universidad Tecnica Federico Santa Maria;Ingenieria Civil 
 unidad_025;25;1;Informática;Universidad Tecnica Federico Santa Maria;Ingenieria Informatica;https://usm.cl/admision/carreras/ingenieria-en-informatica/;;perfil individual
 unidad_026;26;1;Informática;Universidad Catolica del Norte;Ingenieria en Computacion e Informatica;https://admision.ucn.cl/carreras/tecnologia-computacion/ingenieria-en-computacion-e-informatica/;;perfil individual
 unidad_027;27;1;Civil;Universidad Catolica del Norte;Ingenieria Civil en Computacion e Informatica;https://admision.ucn.cl/carreras/tecnologia-computacion/ingenieria-civil-en-computacion-e-informatica/;;perfil individual
-unidad_028;28;1;Civil;Universidad de la Santisima Concepcion;Ingenieria Civil Informatica;https://ingenieria.ucsc.cl/carreras/ingenieria-civil-informatica/;;perfil individual
-unidad_029;29;2;Ejecución;Universidad de la Santisima Concepcion;Ingenieria de Ejecucion en Informatica;https://it.ucsc.cl/carreras/ingenieria-de-ejecucion-en-informatica/;;"modalidades UCSC documentadas; grupo:ucsc_ejecucion_informatica"
+unidad_028;28;1;Civil;Universidad Católica de la Santísima Concepción;Ingenieria Civil Informatica;https://ingenieria.ucsc.cl/carreras/ingenieria-civil-informatica/;;perfil individual
+unidad_029;29;2;Ejecución;Universidad Católica de la Santísima Concepción;Ingenieria de Ejecucion en Informatica;https://it.ucsc.cl/carreras/ingenieria-de-ejecucion-en-informatica/;ucsc_ejecucion_informatica;"modalidades UCSC documentadas; grupo:ucsc_ejecucion_informatica; grupo:ucsc_ejecucion_informatica"
 unidad_030;30;1;Civil;Universidad Catolica de Temuco;Ingenieria Civil en Informatica;https://admision.uct.cl/ing-civil-informatica/;;perfil individual
-unidad_031;31;1;Informática;Universidad de las Américas;Ingenieria en Informatica;https://ingenieria.udla.cl/carreras/ingenieria-en-informatica/;;perfil individual
+unidad_031;31;1;Informática;Universidad de las Américas;Ingenieria en Informatica;https://admision.udla.cl/wp-content/uploads/2025/10/UDLA_PE_202510_81_0.pdf;;perfil individual
 unidad_032;32;1;Informática;Universidad Andres Bello;Ingenieria en Computacion e Informatica;https://admision.unab.cl/carreras/ingenieria-en-computacion-e-informatica/;;perfil individual
 unidad_033;33;1;Civil;Universidad Autonoma de Chile;Ingenieria Civil Informatica;https://admision.uautonoma.cl/carreras/ingenieria-civil-informatica/;;perfil individual
 unidad_034;34;1;Informática;Universidad Autonoma de Chile;Ingenieria en Informatica;https://admision.uautonoma.cl/carreras/ingenieria-en-informatica-online-regular/;;perfil individual
@@ -54,7 +54,7 @@ unidad_052;52;1;Informática;IACC;Ingenieria en Informatica;https://www.iacc.cl/
 unidad_053;53;1;Informática;Iplacex;Ingenieria en Informatica;https://www.iplacex.cl/carreras/carreras-100-online/ingenieria-en-informatica/;;perfil individual
 unidad_054;54;1;Informática;IP Los Leones;Ingenieria en Informatica y Ciberseguridad;https://ipleones.cl/carreras/ingenieria-en-informatica-y-ciberseguridad/;;perfil individual
 unidad_055;55;1;Ejecución;Universidad Catolica del Maule;Ingenieria Ejecucion en Computacion e Informatica;https://files.griddo.ucm.cl/ingenieria-de-ejecucion-en-computacion-e-informatica.pdf;;perfil individual
-unidad_029;56;2;Ejecución;Universidad Catolica de la Santisima Concepción;Ingenieria de Ejecucion en Informatica;https://advance.ucsc.cl/carreras/ingenieria-de-ejecucion-en-informatica/;;"modalidades UCSC documentadas; grupo:ucsc_ejecucion_informatica"
+unidad_029;56;2;Ejecución;Universidad Católica de la Santísima Concepción;Ingenieria de Ejecucion en Informatica;https://advance.ucsc.cl/carreras/ingenieria-de-ejecucion-en-informatica/;ucsc_ejecucion_informatica;"modalidades UCSC documentadas; grupo:ucsc_ejecucion_informatica; grupo:ucsc_ejecucion_informatica"
 unidad_056;57;1;Informática;IP Chile;Ingenieria en Informatica;https://www.ipchile.cl/carreras/ingenieria-en-informatica/;;perfil individual
 unidad_057;58;1;Civil;Universidad Austral de Chile;Ingenieria Civil en Informatica;https://www.uach.cl/admision/valdivia/ingenieria-civil-en-informatica;;perfil individual
 unidad_058;59;1;Informática;Instituto profesional Virginio Gomez;Ingenieria en Informatica;https://admision.virginiogomez.cl/carreras/ingenieria-en-informatica/;;perfil individual

@@ -1,13 +1,13 @@
 {
   "version": "2.0",
   "protocolo": "complementnb_smote_titulos_enmascarados_grupos_v1",
-  "fecha_generacion_utc": "2026-09-23T01:18:29.292029+00:00",
+  "fecha_generacion_utc": "2026-09-23T04:19:57.022446+00:00",
   "estado": "evaluacion_modelo_robusto_parametros_fijos",
-  "sha256_entrada": "dc822ace9d53064eab3bc5279f82bc43a608d034750601af10321036918af59b",
+  "sha256_entrada": "e08cdeb4dc61a499009f259654161fff68cc3f61365ae99f9f1ba171369ee5a8",
   "sha256_script": "298c1cbb85c6e8ef6fe834ba4f5c70350a4265ef977f7a53bc544f9977bb0641",
   "corpus": {
     "seleccion": "actual",
-    "archivo": "C:\\Users\\Brayan\\Desktop\\Proyecto_Titulo_V2_Final\\ProyectoDeTitulo2026V2\\src\\data\\processed\\perfiles_egreso_etiquetado_actual_corregido.csv",
+    "archivo": "C:\\Users\\walte\\Documents\\Proyecto_Titulo_2026\\src\\data\\processed\\perfiles_egreso_etiquetado_actual_corregido.csv",
     "total_perfiles": 63,
     "total_grupos": 62,
     "distribucion": {
@@ -25,7 +25,7 @@
     ],
     "documentos_con_titulos_enmascarados": 40,
     "documentos_modificados": 40,
-    "denominaciones_enmascaradas": 68,
+    "denominaciones_enmascaradas": 76,
     "nota": "Se conservan términos aislados e instituciones; no es anonimización completa."
   },
   "representacion": {
@@ -821,39 +821,39 @@
     ]
   },
   "resultados_principales": {
-    "f1_macro_media_folds": 0.4552203708743956,
-    "f1_macro_std_folds": 0.12474420906751311,
-    "accuracy_media_folds": 0.6190563725490197,
-    "f1_macro_oof": 0.4981481481481482,
-    "accuracy_oof": 0.6190476190476191
+    "f1_macro_media_folds": 0.6275522250367451,
+    "f1_macro_std_folds": 0.15538904998439232,
+    "accuracy_media_folds": 0.6504289215686274,
+    "f1_macro_oof": 0.6135296628254374,
+    "accuracy_oof": 0.6507936507936508
   },
   "metricas_oof": {
-    "F1_macro": 0.4981481481481482,
-    "Accuracy": 0.6190476190476191,
-    "Precision_macro": 0.5197368421052632,
-    "Recall_macro": 0.49374999999999997,
-    "Balanced_accuracy": 0.49374999999999997,
-    "F1_Civil": 0.6944444444444444,
-    "F1_Ejecucion": 0.2222222222222222,
-    "F1_Informatica": 0.5777777777777777
+    "F1_macro": 0.6135296628254374,
+    "Accuracy": 0.6507936507936508,
+    "Precision_macro": 0.6210826210826211,
+    "Recall_macro": 0.6270833333333333,
+    "Balanced_accuracy": 0.6270833333333333,
+    "F1_Civil": 0.704225352112676,
+    "F1_Ejecucion": 0.5454545454545454,
+    "F1_Informatica": 0.5909090909090909
   },
   "metricas_oof_por_clase": {
     "Civil": {
-      "precision": 0.625,
+      "precision": 0.6410256410256411,
       "recall": 0.78125,
-      "f1_score": 0.6944444444444444,
+      "f1_score": 0.704225352112676,
       "support": 32
     },
     "Ejecución": {
-      "precision": 0.25,
-      "recall": 0.2,
-      "f1_score": 0.2222222222222222,
+      "precision": 0.5,
+      "recall": 0.6,
+      "f1_score": 0.5454545454545454,
       "support": 5
     },
     "Informática": {
-      "precision": 0.6842105263157895,
+      "precision": 0.7222222222222222,
       "recall": 0.5,
-      "f1_score": 0.5777777777777777,
+      "f1_score": 0.5909090909090909,
       "support": 26
     }
   },
@@ -870,9 +870,9 @@
         5
       ],
       [
+        2,
         3,
-        1,
-        1
+        0
       ],
       [
         12,
@@ -887,7 +887,7 @@
     "scipy": "1.16.3",
     "scikit-learn": "1.7.2",
     "imbalanced-learn": "0.14.0",
-    "python": "3.12.4"
+    "python": "3.12.10"
   },
   "interpretacion": {
     "resultado_principal": "Evaluación con títulos explícitos enmascarados y parámetros fijos.",

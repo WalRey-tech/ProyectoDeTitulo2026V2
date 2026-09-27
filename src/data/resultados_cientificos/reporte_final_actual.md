@@ -1,6 +1,6 @@
 # Reporte de resultados — corpus actual
 
-Generado: 2026-09-23T01:24:08.035957+00:00
+Generado: 2026-09-23T04:27:49.833187+00:00
 
 **63 perfiles; 62 grupos de validación.**
 
@@ -16,11 +16,11 @@ F1 macro entre 0 y 1. OOF reúne una predicción de prueba por perfil. La desvia
 
 | Paso y modelo | Folds | F1 medio | Desv. folds | F1 OOF | Accuracy OOF |
 |---|---:|---:|---:|---:|---:|
-| 05 — TF-IDF completo + SMOTE + ComplementNB | 4 | 0.5605 | 0.2515 | 0.5815 | 0.6667 |
-| 05 — GWO + SMOTE + ComplementNB | 4 | 0.7221 | 0.1345 | 0.7111 | 0.7302 |
-| 06 — Títulos enmascarados + SMOTE + ComplementNB | 4 | 0.4552 | 0.1247 | 0.4981 | 0.6190 |
+| 05 — TF-IDF completo + SMOTE + ComplementNB | 4 | 0.7363 | 0.0797 | 0.7218 | 0.7302 |
+| 05 — GWO + SMOTE + ComplementNB | 4 | 0.7252 | 0.0844 | 0.7187 | 0.7302 |
+| 06 — Títulos enmascarados + SMOTE + ComplementNB | 4 | 0.6276 | 0.1554 | 0.6135 | 0.6508 |
 
-GWO menos baseline: **+0.1616** en F1 medio. Enmascarado menos baseline: **-0.1053**. Son diferencias descriptivas; no prueban superioridad estadística.
+GWO menos baseline: **-0.0111** en F1 medio. Enmascarado menos baseline: **-0.1087**. Son diferencias descriptivas; no prueban superioridad estadística.
 
 El paso 05 repite la selección de características dentro de cada entrenamiento externo. El paso 06 evalúa un modelo fijo con títulos enmascarados, sin selección GWO.
 
@@ -30,8 +30,8 @@ Búsqueda GWO del paso 05: 100 iteraciones y 30 lobos por entrenamiento externo.
 
 | Modelo | Características | F1 medio exploratorio |
 |---|---:|---:|
-| Baseline | 400 | 0.6358 |
-| GWO | 279 | 0.8360 |
+| Baseline | 400 | 0.7785 |
+| GWO | 339 | 0.7878 |
 
 Búsqueda exploratoria: 100 iteraciones y 30 lobos.
 
@@ -39,29 +39,29 @@ Estas cifras usan un vocabulario global y una selección previa a la comparació
 
 ## Estructura del corpus
 
-PCA, varianza explicada en dos componentes: 9.71%. LDA utiliza las etiquetas y su gráfico es exploratorio.
+PCA, varianza explicada en dos componentes: 9.65%. LDA utiliza las etiquetas y su gráfico es exploratorio.
 
-Test de permutación: p = **0.00599880**, 5000 permutaciones; 62 unidades del test. Alcanza el umbral declarado α = 0.05. El resultado describe asociación bajo este protocolo; no demuestra igualdad o equivalencia de competencias.
+Test de permutación: p = **0.00159968**, 5000 permutaciones; 62 unidades del test. Alcanza el umbral declarado α = 0.05. El resultado describe asociación bajo este protocolo; no demuestra igualdad o equivalencia de competencias.
 
 ### Similitud coseno entre centroides
 
 | Grados | Similitud |
 |---|---:|
-| Civil–Ejecución | 0.6480 |
-| Civil–Informática | 0.8350 |
-| Ejecución–Informática | 0.6387 |
+| Civil–Ejecución | 0.6721 |
+| Civil–Informática | 0.8365 |
+| Ejecución–Informática | 0.6611 |
 
 ### Vocabulario distintivo
 
 Hasta cinco términos por grado, ordenados por la razón de prevalencia del paso 03. No implican competencias exclusivas.
 
-- **Civil:** estudios, destacan, fundamentos, basicas ciencias, disciplina.
-- **Ejecución:** cristiana, desenvolverse, respeto, concepcion, lenguajes programacion.
+- **Civil:** fundamentos, destacan, todas, basicas ciencias, formacion ciencias.
+- **Ejecución:** desenvolverse, cristiana, respeto, humana, instituciones publicas.
 - **Informática:** laboral, buenas, buenas practicas, componentes, contribuyendo.
 
 ## Enmascaramiento
 
-Se eliminaron 68 menciones de títulos en 40 perfiles. La auditoría del paso 06 conserva los textos originales y transformados.
+Se eliminaron 76 menciones de títulos en 40 perfiles. La auditoría del paso 06 conserva los textos originales y transformados.
 
 ## Alcance y límites
 
@@ -81,6 +81,6 @@ Se eliminaron 68 menciones de títulos en 40 perfiles. La auditoría del paso 06
 
 ## Procedencia
 
-SHA-256 del corpus: `dc822ace9d53064eab3bc5279f82bc43a608d034750601af10321036918af59b`.
+SHA-256 del corpus: `e08cdeb4dc61a499009f259654161fff68cc3f61365ae99f9f1ba171369ee5a8`.
 
 Se verificaron el corpus de los seis resúmenes, la cobertura de predicciones y la concordancia de métricas con sus CSV. El JSON conserva los resúmenes completos y las rutas y huellas de todos los archivos leídos. Esta comprobación no sustituye la revisión de la extracción y las etiquetas del corpus.
