@@ -3,34 +3,34 @@
 2,grupo_002,Civil,perfil individual,2,Universidad de Santiago de Chile,Ingeniería Civil en Informática,https://admision.usach.cl/carreras/ingenieria-civil-en-informatica-plan-comun,,,2,Civil,Civil
 3,grupo_003,Informática,perfil individual,3,Universidad de Valparaíso,Ingeniería en Informática,https://admision.uv.cl/carreras/ingenieria-en-informatica,,,1,Ejecución,Ejecución
 4,grupo_004,Civil,perfil individual,4,Universidad de Valparaíso,Ingeniería Civil en Informática,https://admision.uv.cl/carreras/ingenieria-civil-informatica,,,3,Informática,Informática
-5,grupo_005,Civil,perfil individual,5,Universidad de Chile,Ingeniería Civil en Computación,https://admisionuchile.cl/career/ingenieria-civil-en-computacion/,,,4,Informática,Civil
+5,grupo_005,Civil,perfil individual,5,Universidad de Chile,Ingeniería Civil en Computación,https://admisionuchile.cl/career/ingenieria-civil-en-computacion/,,,4,Informática,Informática
 6,grupo_006,Civil,perfil individual,6,Universidad de Atacama,Ingeniería Civil en Computación e Informática,https://admision.uda.cl/index.php/ingenieria-civil-en-computacion-e-informatica/,,,4,Civil,Civil
 7,grupo_007,Civil,perfil individual,7,Universidad de la Serena,Ingeniería Civil en Computación e Informática,https://admision.userena.cl/carreras/ingenieria-civil-en-computacion-e-informatica,,,2,Civil,Civil
 8,grupo_008,Civil,perfil individual,8,Universidad de Talca,Ingeniería Civil en Computación,https://admision.utalca.cl/carreras/ingenieria-civil-en-computacion/,,,4,Civil,Civil
 9,grupo_009,Informática,perfil individual,9,Universidad de Talca,Ingeniería en Informática Empresarial,https://admision.utalca.cl/carreras/ingenieria-en-informatica-empresarial/,,,1,Informática,Informática
 10,grupo_010,Civil,perfil individual,10,Universidad del Biobío,Ingeniería Civil en Informática,https://ubiobio.cl/admision/Todas_las_Carreras/17/Ingenieria_Civil_en_Informatica_Concepcion/,,,3,Civil,Civil
 11,grupo_011,Ejecución,perfil individual,11,Universidad del Biobío,Ingenieria de Ejecución en Computación e Informática,https://ubiobio.cl/admision/Ciencias_Empresariales/21/Ingenieria_de_Ejecucion_en_Computacion_e_Informatica/,,,4,Ejecución,Ejecución
-12,grupo_012,Informática,perfil individual,12,Universidad de la Frontera,Ingenieria Informática,https://admision.ufro.cl/ingenieria-informatica/,,,4,Civil,Civil
+12,grupo_012,Informática,perfil individual,12,Universidad de la Frontera,Ingenieria Informática,https://admision.ufro.cl/ingenieria-informatica/,,,4,Civil,Ejecución
 13,grupo_013,Civil,perfil individual,13,Universidad de la Frontera,Ingenieria Civil Informatica,https://admision.ufro.cl/ingenieria-civil-informatica/,,,2,Civil,Civil
 14,grupo_014,Civil,perfil individual,14,Universidad de los Lagos,Ingenieria Civil en Informatica,https://admision.ulagos.cl/Carreras/ingenieria-civil-en-informatica/,,,2,Civil,Civil
 15,grupo_015,Informática,perfil individual,15,Universidad de Magallanes,Ingenieria en Computacion e Informatica,https://admision.umag.cl/?page_id=35,,,2,Civil,Informática
 16,grupo_016,Civil,perfil individual,16,Universidad de Magallanes,Ingenieria Civil en Computacion e Informatica,https://admision.umag.cl/?page_id=27,,,2,Civil,Civil
-17,grupo_017,Informática,perfil individual,17,Universidad Tecnologica Metropolitana,Ingenieria en Informatica,https://conocetucarrera.utem.cl/ingenieria-en-informatica/,,,4,Civil,Civil
+17,grupo_017,Informática,perfil individual,17,Universidad Tecnologica Metropolitana,Ingenieria en Informatica,https://conocetucarrera.utem.cl/ingenieria-en-informatica/,,,4,Civil,Ejecución
 18,grupo_018,Civil,perfil individual,18,Universidad Tecnologica Metropolitana,Ingenieria Civil en Computacion mencion Informatica,https://conocetucarrera.utem.cl/ingenieria-civil-en-computacion-mencion-informatica/,,,1,Civil,Civil
 19,grupo_019,Civil,perfil individual,19,Universidad de Ohiggins,Ingenieria Civil en Computacion,https://www.uoh.cl/escuela-de-ingenieria/carreras/ingenieria-civil-en-computacion/,,,1,Civil,Civil
 20,grupo_020,Informática,perfil individual,20,Universidad de Bernardo Ohiggins,Ingenieria Informatica,https://www.ubo.cl/facultades/facultad-de-ingenieria-ciencia-y-tecnologia/ingenieria-en-informatica/,,,2,Civil,Civil
 21,grupo_021,Civil,perfil individual,21,Universidad de Aysen,Ingenieria Civil Informatica,https://uaysen.cl/departamentos/ciencias-naturales-y-tecnologia/ingenieria-civil-informatica/,,,3,Civil,Civil
 22,grupo_022,Informática,perfil individual,22,Pontificia Universidad Catolica de Valparaiso,Ingenieria en Informatica,https://www.pucv.cl/pucv/pregrado/ingenieria-en-informatica,,,4,Civil,Civil
 23,grupo_023,Civil,perfil individual,23,Universidad de Concepcion,Ingenieria Civil Informatica,https://admision.udec.cl/ingenieria-civil-informatica/,,,3,Civil,Civil
-24,grupo_024,Civil,perfil individual,24,Universidad Tecnica Federico Santa Maria,Ingenieria Civil Informatica,https://usm.cl/admision/carreras/ingenieria-civil-informatica/,,,1,Informática,Informática
-25,grupo_025,Informática,perfil individual,25,Universidad Tecnica Federico Santa Maria,Ingenieria Informatica,https://usm.cl/admision/carreras/ingenieria-en-informatica/,,,4,Civil,Civil
+24,grupo_024,Civil,perfil individual,24,Universidad Tecnica Federico Santa Maria,Ingenieria Civil Informatica,https://usm.cl/admision/carreras/ingenieria-civil-informatica/,,,1,Informática,Civil
+25,grupo_025,Informática,perfil individual,25,Universidad Tecnica Federico Santa Maria,Ingenieria Informatica,https://usm.cl/admision/carreras/ingenieria-en-informatica/,,,4,Civil,Informática
 26,grupo_026,Informática,perfil individual,26,Universidad Catolica del Norte,Ingenieria en Computacion e Informatica,https://admision.ucn.cl/carreras/tecnologia-computacion/ingenieria-en-computacion-e-informatica/,,,2,Civil,Civil
 27,grupo_027,Civil,perfil individual,27,Universidad Catolica del Norte,Ingenieria Civil en Computacion e Informatica,https://admision.ucn.cl/carreras/tecnologia-computacion/ingenieria-civil-en-computacion-e-informatica/,,,2,Civil,Civil
 28,grupo_028,Civil,perfil individual,28,Universidad Católica de la Santísima Concepción,Ingenieria Civil Informatica,https://ingenieria.ucsc.cl/carreras/ingenieria-civil-informatica/,,,2,Ejecución,Ejecución
-29,grupo_029,Ejecución,grupo:ucsc_ejecucion_informatica; grupo:ucsc_ejecucion_informatica,29,Universidad Católica de la Santísima Concepción,Ingenieria de Ejecucion en Informatica,https://it.ucsc.cl/carreras/ingenieria-de-ejecucion-en-informatica/,Presencial; diurna; 8 semestres,ucsc_ejecucion_informatica,1,Ejecución,Ejecución
+29,grupo_029,Ejecución,grupo:ucsc_ejecucion_informatica; grupo:ucsc_ejecucion_informatica,29,Universidad Católica de la Santísima Concepción,Ingenieria de Ejecucion en Informatica,https://it.ucsc.cl/carreras/ingenieria-de-ejecucion-en-informatica/,Presencial; diurna; 8 semestres,ucsc_ejecucion_informatica,1,Civil,Civil
 30,grupo_030,Civil,perfil individual,30,Universidad Catolica de Temuco,Ingenieria Civil en Informatica,https://admision.uct.cl/ing-civil-informatica/,,,1,Civil,Civil
-31,grupo_031,Informática,perfil individual,31,Universidad de las Américas,Ingenieria en Informatica,https://admision.udla.cl/wp-content/uploads/2025/10/UDLA_PE_202510_81_0.pdf,,,2,Informática,Civil
-32,grupo_032,Informática,perfil individual,32,Universidad Andres Bello,Ingenieria en Computacion e Informatica,https://admision.unab.cl/carreras/ingenieria-en-computacion-e-informatica/,,,4,Informática,Civil
+31,grupo_031,Informática,perfil individual,31,Universidad de las Américas,Ingenieria en Informatica,https://admision.udla.cl/wp-content/uploads/2025/10/UDLA_PE_202510_81_0.pdf,,,2,Civil,Informática
+32,grupo_032,Informática,perfil individual,32,Universidad Andres Bello,Ingenieria en Computacion e Informatica,https://admision.unab.cl/carreras/ingenieria-en-computacion-e-informatica/,,,4,Informática,Informática
 33,grupo_033,Civil,perfil individual,33,Universidad Autonoma de Chile,Ingenieria Civil Informatica,https://admision.uautonoma.cl/carreras/ingenieria-civil-informatica/,,,1,Civil,Civil
 34,grupo_034,Informática,perfil individual,34,Universidad Autonoma de Chile,Ingenieria en Informatica,https://admision.uautonoma.cl/carreras/ingenieria-en-informatica-online-regular/,,,1,Informática,Informática
 35,grupo_035,Civil,perfil individual,35,Universidad Central de Chile,Ingenieria Civil en Computacion e Informatica,https://admision.ucentral.cl/carrera/ingenieria-civil-en-computacion-e-informatica/,,,4,Civil,Civil

@@ -1,6 +1,6 @@
 {
   "version_analisis": "gwo_exploratorio_grupos_v1",
-  "fecha_utc": "2026-09-23T03:54:49.872878+00:00",
+  "fecha_utc": "2026-09-27T02:05:55.997335+00:00",
   "corpus": {
     "seleccion": "actual",
     "archivo": "C:\\Users\\walte\\Documents\\Proyecto_Titulo_2026\\src\\data\\processed\\perfiles_egreso_etiquetado_actual_corregido.csv",
@@ -184,15 +184,15 @@
     "poblacion": 30,
     "transformacion": "abs(2/pi*arctan(pi/2*x)) > 0.5; determinista",
     "penalizacion": "fitness 0 para máscara vacía o completa",
-    "segundos": 51.884955499999705,
-    "mascaras_validas_evaluadas": 2921
+    "segundos": 53.762961799999175,
+    "mascaras_validas_evaluadas": 2748
   },
   "seleccion": {
     "features_entrada": 400,
-    "features_seleccionadas": 339,
-    "reduccion_porcentaje": 15.249999999999996,
-    "fitness_busqueda": 0.8714209102444396,
-    "baseline_busqueda": 0.7500797888440909
+    "features_seleccionadas": 318,
+    "reduccion_porcentaje": 20.499999999999996,
+    "fitness_busqueda": 0.8976220923151869,
+    "baseline_busqueda": 0.8105114638447972
   },
   "cv": {
     "metodo": "StratifiedKFold sobre grupos homogéneos, expandido a documentos",
@@ -775,26 +775,26 @@
       }
     ],
     "f1_baseline_comparacion": [
-      0.9107142857142857,
+      0.8634920634920635,
       0.6037037037037037,
       0.9027777777777778,
-      0.6967320261437909
+      0.7925925925925926
     ],
     "f1_gwo_comparacion": [
-      0.9547511312217195,
-      0.6037037037037037,
+      0.8666666666666667,
+      0.6678362573099416,
       0.7563131313131312,
-      0.8362573099415204
+      0.8962962962962964
     ],
     "smote": "Solo train; k=min(2, mínimo de perfiles por clase en train - 1)",
     "barras_error": "desviación estándar entre folds; no intervalo de confianza"
   },
   "versiones": {
-    "numpy": "1.26.0",
+    "numpy": "2.4.4",
     "pandas": "2.3.3",
-    "scikit-learn": "1.7.2",
-    "imbalanced-learn": "0.14.0",
-    "mealpy": "3.0.3"
+    "scikit-learn": "1.8.0",
+    "imbalanced-learn": "0.14.2",
+    "mealpy": "3.0.2"
   },
   "limitaciones": [
     "El vocabulario y los IDF usan el corpus completo: hay información global en las particiones.",

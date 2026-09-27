@@ -39,7 +39,7 @@
 38,grupo_038,Civil,perfil individual,,38,Universidad Mayor,Ingenieria Civil en Computacion e Informatica,https://www.umayor.cl/um/carreras/ingenieria-civil-en-computacion-e-informatica-santiago,,,1,Civil,Informática,False
 39,grupo_039,Civil,perfil individual,,39,Universidad Diego Portales,Ingenieria Civil en Informatica y Telecomunicaciones,https://admision.udp.cl/carrera/ingenieria-civil-en-informatica-y-telecomunicaciones/,,,4,Civil,Civil,True
 40,grupo_040,Informática,perfil individual,,40,Universidad Diego Portales,Ingenieria en Informatica y Gestion,https://admision.udp.cl/carrera/ingenieria-en-informatica-y-gestion/,,,2,Informática,Informática,True
-41,grupo_041,Civil,perfil individual,,41,Universidad Adolfo Ibanez,Ingenieria Civil Informatica,https://www.uai.cl/admision/carreras/ingenieria-civil-informatica,,,3,Civil,Civil,True
+41,grupo_041,Civil,perfil individual,,41,Universidad Adolfo Ibanez,Ingenieria Civil Informatica,https://www.uai.cl/admision/carreras/ingenieria-civil-informatica,,,3,Civil,Informática,False
 42,grupo_042,Civil,perfil individual,,42,Universidad del Desarrollo,Ingenieria Civil en Informatica e Innovacion Tecnologica,https://ingenieria.udd.cl/carrera/ingenieria-civil-en-informatica-e-innovacion-tecnologica/perfil-del-alumno/,,,4,Civil,Civil,True
 43,grupo_043,Civil,perfil individual,,43,Universidad del Desarrollo,Ingenieria Civil en Informatica e Inteligencia Artificial,https://ingenieria.udd.cl/carrera/ingenieria-civil-en-informatica-e-inteligencia-artificial/malla/,,,3,Civil,Civil,True
 44,grupo_044,Civil,perfil individual,,44,Universidad Finis Terrae,Ingenieria Civil en Informatica y Telecomunicaciones,https://admision.finis.cl/carrera/ingenieria-civil-informatica-y-telecomunicaciones/,,,3,Civil,Civil,True
@@ -61,4 +61,4 @@
 60,grupo_059,Civil,perfil individual,,60,Universidad de Playa Ancha,Ingenieria Civil en Informatica,https://www.upla.cl/admision/carreras-profesionales/facultad-de-ingenieria/ingenieria-civil-informatica/,,,1,Civil,Civil,True
 61,grupo_060,Informática,perfil individual,,61,Universidad de Los Lagos,Ingeniería en Informática para Técnicos de Nivel Superior,https://admision.ulagos.cl/sin-licenciatura/ingenieria-en-informatica-para-tecnicos-de-nivel-superior/,,,3,Informática,Civil,False
 62,grupo_061,Informática,perfil individual,,62,Universidad Gabriela Mistral,Ingenieria en Computacion e Informatica,https://advance.ugm.cl/carrera/ingenieria-en-computacion/,,,2,Informática,Civil,False
-63,grupo_062,Civil,perfil individual,,63,Universidad San Sebastian,Ingeniería Civil Informática,https://admision.uss.cl/carreras/ingenieria-civil-informatica,,,2,Civil,Ejecución,False
+63,grupo_062,Civil,perfil individual,,63,Universidad San Sebastian,Ingeniería Civil Informática,https://admision.uss.cl/carreras/ingenieria-civil-informatica,,,2,Civil,Civil,True

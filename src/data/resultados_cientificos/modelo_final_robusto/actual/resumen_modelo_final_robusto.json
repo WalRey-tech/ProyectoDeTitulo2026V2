@@ -1,7 +1,7 @@
 {
   "version": "2.0",
   "protocolo": "complementnb_smote_titulos_enmascarados_grupos_v1",
-  "fecha_generacion_utc": "2026-09-23T04:19:57.022446+00:00",
+  "fecha_generacion_utc": "2026-09-27T02:13:09.541209+00:00",
   "estado": "evaluacion_modelo_robusto_parametros_fijos",
   "sha256_entrada": "e08cdeb4dc61a499009f259654161fff68cc3f61365ae99f9f1ba171369ee5a8",
   "sha256_script": "298c1cbb85c6e8ef6fe834ba4f5c70350a4265ef977f7a53bc544f9977bb0641",
@@ -821,21 +821,21 @@
     ]
   },
   "resultados_principales": {
-    "f1_macro_media_folds": 0.6275522250367451,
-    "f1_macro_std_folds": 0.15538904998439232,
-    "accuracy_media_folds": 0.6504289215686274,
-    "f1_macro_oof": 0.6135296628254374,
+    "f1_macro_media_folds": 0.6359649122807017,
+    "f1_macro_std_folds": 0.12159902281897716,
+    "accuracy_media_folds": 0.6493872549019608,
+    "f1_macro_oof": 0.6273343766301512,
     "accuracy_oof": 0.6507936507936508
   },
   "metricas_oof": {
-    "F1_macro": 0.6135296628254374,
+    "F1_macro": 0.6273343766301512,
     "Accuracy": 0.6507936507936508,
-    "Precision_macro": 0.6210826210826211,
+    "Precision_macro": 0.6417453891138102,
     "Recall_macro": 0.6270833333333333,
     "Balanced_accuracy": 0.6270833333333333,
     "F1_Civil": 0.704225352112676,
-    "F1_Ejecucion": 0.5454545454545454,
-    "F1_Informatica": 0.5909090909090909
+    "F1_Ejecucion": 0.6,
+    "F1_Informatica": 0.5777777777777777
   },
   "metricas_oof_por_clase": {
     "Civil": {
@@ -845,15 +845,15 @@
       "support": 32
     },
     "Ejecución": {
-      "precision": 0.5,
+      "precision": 0.6,
       "recall": 0.6,
-      "f1_score": 0.5454545454545454,
+      "f1_score": 0.6,
       "support": 5
     },
     "Informática": {
-      "precision": 0.7222222222222222,
+      "precision": 0.6842105263157895,
       "recall": 0.5,
-      "f1_score": 0.5909090909090909,
+      "f1_score": 0.5777777777777777,
       "support": 26
     }
   },
@@ -866,8 +866,8 @@
     "valores": [
       [
         25,
-        2,
-        5
+        1,
+        6
       ],
       [
         2,
@@ -882,12 +882,12 @@
     ]
   },
   "versiones": {
-    "numpy": "1.26.0",
+    "numpy": "2.4.4",
     "pandas": "2.3.3",
-    "scipy": "1.16.3",
-    "scikit-learn": "1.7.2",
-    "imbalanced-learn": "0.14.0",
-    "python": "3.12.10"
+    "scipy": "1.17.1",
+    "scikit-learn": "1.8.0",
+    "imbalanced-learn": "0.14.2",
+    "python": "3.13.7"
   },
   "interpretacion": {
     "resultado_principal": "Evaluación con títulos explícitos enmascarados y parámetros fijos.",

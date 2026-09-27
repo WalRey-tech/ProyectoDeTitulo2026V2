@@ -1,6 +1,6 @@
 # Reporte de resultados — corpus actual
 
-Generado: 2026-09-23T04:27:49.833187+00:00
+Generado: 2026-09-27T02:15:51.983937+00:00
 
 **63 perfiles; 62 grupos de validación.**
 
@@ -16,11 +16,11 @@ F1 macro entre 0 y 1. OOF reúne una predicción de prueba por perfil. La desvia
 
 | Paso y modelo | Folds | F1 medio | Desv. folds | F1 OOF | Accuracy OOF |
 |---|---:|---:|---:|---:|---:|
-| 05 — TF-IDF completo + SMOTE + ComplementNB | 4 | 0.7363 | 0.0797 | 0.7218 | 0.7302 |
-| 05 — GWO + SMOTE + ComplementNB | 4 | 0.7252 | 0.0844 | 0.7187 | 0.7302 |
-| 06 — Títulos enmascarados + SMOTE + ComplementNB | 4 | 0.6276 | 0.1554 | 0.6135 | 0.6508 |
+| 05 — TF-IDF completo + SMOTE + ComplementNB | 4 | 0.6744 | 0.1456 | 0.6621 | 0.6984 |
+| 05 — GWO + SMOTE + ComplementNB | 4 | 0.6982 | 0.1217 | 0.6876 | 0.7619 |
+| 06 — Títulos enmascarados + SMOTE + ComplementNB | 4 | 0.6360 | 0.1216 | 0.6273 | 0.6508 |
 
-GWO menos baseline: **-0.0111** en F1 medio. Enmascarado menos baseline: **-0.1087**. Son diferencias descriptivas; no prueban superioridad estadística.
+GWO menos baseline: **+0.0237** en F1 medio. Enmascarado menos baseline: **-0.0385**. Son diferencias descriptivas; no prueban superioridad estadística.
 
 El paso 05 repite la selección de características dentro de cada entrenamiento externo. El paso 06 evalúa un modelo fijo con títulos enmascarados, sin selección GWO.
 
@@ -30,8 +30,8 @@ Búsqueda GWO del paso 05: 100 iteraciones y 30 lobos por entrenamiento externo.
 
 | Modelo | Características | F1 medio exploratorio |
 |---|---:|---:|
-| Baseline | 400 | 0.7785 |
-| GWO | 339 | 0.7878 |
+| Baseline | 400 | 0.7906 |
+| GWO | 318 | 0.7968 |
 
 Búsqueda exploratoria: 100 iteraciones y 30 lobos.
 
@@ -55,9 +55,9 @@ Test de permutación: p = **0.00159968**, 5000 permutaciones; 62 unidades del te
 
 Hasta cinco términos por grado, ordenados por la razón de prevalencia del paso 03. No implican competencias exclusivas.
 
-- **Civil:** fundamentos, destacan, todas, basicas ciencias, formacion ciencias.
-- **Ejecución:** desenvolverse, cristiana, respeto, humana, instituciones publicas.
-- **Informática:** laboral, buenas, buenas practicas, componentes, contribuyendo.
+- **Civil:** soluciones computacionales, forma colaborativa, formacion profesional, calidad de vida, cambio tecnologico.
+- **Ejecución:** automatizando procesos, recursos digitales, inteligencia de negocios, instituciones publicas, lenguajes de programacion.
+- **Informática:** buenas practicas, mejora de procesos, gestion de proyectos tecnologicos, mercado laboral, practicas de la industria.
 
 ## Enmascaramiento
 
