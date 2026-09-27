@@ -156,7 +156,12 @@ SITES = [
         "url": "https://admision.ufro.cl/ingenieria-civil-informatica/",
         "tipo_extraccion": "css",
         "tipo_selector": "css",
-        "selector": ".elementor-widget-container p"
+        "selector": ".elementor-widget-container p",
+        "longitud_minima": 150,
+        "marcadores_requeridos": [
+            "Ingeniero",
+            "informática"
+        ]
     },
     {
         "universidad": "Universidad de los Lagos",
@@ -351,14 +356,15 @@ SITES = [
         "tipo_institucion": "Universidad",
         "carrera": "Ingenieria en Informatica",
         "tipo_carrera": "Profesional",
-        "url": "https://ingenieria.udla.cl/carreras/ingenieria-en-informatica/",
-        "tipo_extraccion": "selenium",
-        "tipo_selector": "css",
-        "selector": "#perfil-egreso",
-        "requiere_revision": True,
-        "motivo_revision": "El HTML mezcla denominaciones y contenido de periodismo; el PDF oficial enlazado devuelve 404. Pendiente obtener documento vigente.",
-        "marcadores_prohibidos": [
-            "periodísticos"
+        "url": "https://admision.udla.cl/wp-content/uploads/2025/10/UDLA_PE_202510_81_0.pdf",
+        "tipo_extraccion": "pdf",
+        "tipo_selector": "pdf",
+        "selector": "",
+        "pdf_paginas": [4, 5, 6],
+        "pdf_marcadores": [
+            "PERFIL DE EGRESO",
+            "INGENIERÍA EN INFORMÁTICA",
+            "Universidad de Las Américas"
         ],
         "longitud_minima": 150
     },

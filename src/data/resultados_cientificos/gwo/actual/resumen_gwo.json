@@ -1,10 +1,10 @@
 {
   "version_analisis": "gwo_exploratorio_grupos_v1",
-  "fecha_utc": "2026-09-23T01:09:42.502696+00:00",
+  "fecha_utc": "2026-09-23T03:54:49.872878+00:00",
   "corpus": {
     "seleccion": "actual",
-    "archivo": "C:\\Users\\Brayan\\Desktop\\Proyecto_Titulo_V2_Final\\ProyectoDeTitulo2026V2\\src\\data\\processed\\perfiles_egreso_etiquetado_actual_corregido.csv",
-    "sha256": "dc822ace9d53064eab3bc5279f82bc43a608d034750601af10321036918af59b",
+    "archivo": "C:\\Users\\walte\\Documents\\Proyecto_Titulo_2026\\src\\data\\processed\\perfiles_egreso_etiquetado_actual_corregido.csv",
+    "sha256": "e08cdeb4dc61a499009f259654161fff68cc3f61365ae99f9f1ba171369ee5a8",
     "total": 63,
     "distribucion": {
       "Civil": 32,
@@ -184,15 +184,15 @@
     "poblacion": 30,
     "transformacion": "abs(2/pi*arctan(pi/2*x)) > 0.5; determinista",
     "penalizacion": "fitness 0 para máscara vacía o completa",
-    "segundos": 56.24409250000008,
-    "mascaras_validas_evaluadas": 2841
+    "segundos": 51.884955499999705,
+    "mascaras_validas_evaluadas": 2921
   },
   "seleccion": {
     "features_entrada": 400,
-    "features_seleccionadas": 279,
-    "reduccion_porcentaje": 30.25,
-    "fitness_busqueda": 0.8597496706192359,
-    "baseline_busqueda": 0.5831105541631857
+    "features_seleccionadas": 339,
+    "reduccion_porcentaje": 15.249999999999996,
+    "fitness_busqueda": 0.8714209102444396,
+    "baseline_busqueda": 0.7500797888440909
   },
   "cv": {
     "metodo": "StratifiedKFold sobre grupos homogéneos, expandido a documentos",
@@ -775,16 +775,16 @@
       }
     ],
     "f1_baseline_comparacion": [
-      0.6984126984126985,
-      0.5604288499025342,
+      0.9107142857142857,
+      0.6037037037037037,
       0.9027777777777778,
-      0.3814814814814815
+      0.6967320261437909
     ],
     "f1_gwo_comparacion": [
-      0.9074074074074074,
-      0.6836007130124777,
-      0.9027777777777778,
-      0.8502673796791443
+      0.9547511312217195,
+      0.6037037037037037,
+      0.7563131313131312,
+      0.8362573099415204
     ],
     "smote": "Solo train; k=min(2, mínimo de perfiles por clase en train - 1)",
     "barras_error": "desviación estándar entre folds; no intervalo de confianza"
